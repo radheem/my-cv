@@ -1,0 +1,58 @@
+# Candidate profile — fictional demo persona "John Doe".
+# Used by the generation engine for contact block, summary, skills ordering,
+# and the cover-letter narrative. No real personal data.
+
+name: John Doe
+tagline: Distributed Systems & Cloud-Native Engineer
+location: Ilmenau, Germany
+email: john.doe@example.com
+phone: "+49 1512 3456789"
+links:
+  portfolio: https://johndoe.github.io/cv-tailor
+  github: https://github.com/johndoe
+  linkedin: https://www.linkedin.com/in/johndoe
+
+summary: >
+  Software engineer with 5 years of experience across distributed systems,
+  cloud-native platforms, and data-driven backends. Delivered microservices,
+  event-driven pipelines, and ML infrastructure using Go, Python, and Kubernetes.
+
+# Spoken languages — always rendered first in the skills block (house rule).
+languages:
+  - "English (fluent)"
+  - "Deutsch (A2)"
+
+# Canonical programming-languages line — second in the skills block.
+programming_languages:
+  - Go
+  - Python
+  - TypeScript
+  - JavaScript
+  - PHP
+
+# Technical skill groups. The engine selects + orders the 1-3 most relevant
+# groups per job (after Languages and Programming Languages), leading each line
+# with the job's must-haves. Tags drive that relevance scoring.
+skill_groups:
+  - name: Distributed Systems
+    items: ["gRPC", "NATS JetStream", "NATS KV", "Hatchet", "Kafka", "Dapr", "MCP"]
+    tags: ["distributed", "microservices", "event-driven", "messaging", "grpc", "backend"]
+  - name: Cloud-Native & Infra
+    items: ["Kubernetes", "kustomize", "Skaffold", "Helm", "Cilium", "Docker", "Terraform", "external-dns"]
+    tags: ["kubernetes", "cloud", "devops", "infra", "gitops", "platform", "sre"]
+  - name: Databases & Persistence
+    items: ["PostgreSQL", "MySQL", "MongoDB/DocumentDB", "Dgraph", "DynamoDB", "BigQuery", "Snowflake", "pgvector"]
+    tags: ["database", "sql", "data", "postgres", "persistence", "etl"]
+  - name: Observability & Reliability
+    items: ["OpenTelemetry", "VictoriaMetrics", "Prometheus", "Grafana"]
+    tags: ["observability", "monitoring", "reliability", "metrics", "tracing", "sre"]
+  - name: AI / ML Integration
+    items: ["MCP", "Kubeflow", "KServe", "scikit-learn", "TensorFlow/Keras", "pgvector", "llama.cpp"]
+    tags: ["ml", "ai", "llm", "rag", "mlops", "kubeflow", "data-science"]
+  - name: Web & API
+    items: ["ReactJS", "NodeJS", "NestJS", "Django", "Protocol Buffers", "REST", "OpenAPI"]
+    tags: ["web", "frontend", "api", "react", "node", "fullstack"]
+
+# Logistics for the cover-letter close (kept generic for the demo).
+availability: "Available full-time; open to working-student / part-time."
+relocation: "Based in Germany; flexible within Germany."
