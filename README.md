@@ -64,6 +64,23 @@ cv-tailor new path/to/job.txt --provider ollama \
   --ollama-url http://localhost:11434/v1 --model qwen3.5:35b
 ```
 
+#### Model support
+
+One provider per run, selected with `--provider` (or `CV_TAILOR_PROVIDER`); pick a model with
+`--model` (or `CV_TAILOR_MODEL`).
+
+| Provider | Install | Default model | Auth |
+|---|---|---|---|
+| **Anthropic** (default) | `.[generate]` | `claude-sonnet-4-6` | `ANTHROPIC_API_KEY` |
+| **Ollama** / OpenAI-compatible | `.[ollama]` | `qwen3.5:35b` | none (local) |
+
+```bash
+cv-tailor new path/to/job.txt --model claude-opus-4-8        # Anthropic, Opus
+cv-tailor new path/to/job.txt --provider ollama --model llama3.1:70b
+```
+
+See the **[CLI reference](docs/cli.md)** for every flag, env var, and more examples.
+
 ### 2. Build + gate locally
 
 ```bash

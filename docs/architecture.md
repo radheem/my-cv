@@ -39,8 +39,10 @@ flowchart TB
 
 Keeping them apart means API cost and a human review stay out of CI, and CI never holds a
 model key. The provider lives behind `engine/llm.py`: **Anthropic** by default (the
-`anthropic` SDK), or a local **Ollama** / OpenAI-compatible endpoint (the `openai` SDK)
-with `--provider ollama`. `jobspec.py` and `render.py` are provider-agnostic.
+`anthropic` SDK, `claude-sonnet-4-6`), or a local **Ollama** / OpenAI-compatible endpoint
+(the `openai` SDK, `qwen3.5:35b`) with `--provider ollama`. One provider per run, model
+chosen with `--model`; `jobspec.py` and `render.py` are provider-agnostic. See the
+[CLI reference](cli.md) for the full flag/env surface.
 
 ## Generation pipeline
 

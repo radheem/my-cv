@@ -55,6 +55,20 @@ Equivalently via env: `CV_TAILOR_PROVIDER=ollama`,
 `CV_TAILOR_OLLAMA_BASE_URL=http://localhost:11434/v1`, `CV_TAILOR_MODEL=qwen3.5:35b`. Point
 `--ollama-url` at your own host. CI never generates, so no provider config is needed there.
 
+One provider per run; pick the model with `--model` (or `CV_TAILOR_MODEL`):
+
+| Provider | Install | Default model | Auth |
+|---|---|---|---|
+| **Anthropic** (default) | `.[generate]` | `claude-sonnet-4-6` | `ANTHROPIC_API_KEY` |
+| **Ollama** / OpenAI-compatible | `.[ollama]` | `qwen3.5:35b` | none (local) |
+
+```bash
+cv-tailor new path/to/job.txt --model claude-opus-4-8        # Anthropic, Opus
+cv-tailor new path/to/job.txt --provider ollama --model llama3.1:70b
+```
+
+The **[CLI reference](cli.md)** lists every flag, env var, and sample command.
+
 The cover letter is rendered as a real letter (letterhead → date → salutation → body →
 sign-off, no title). `--recipient` sets `Dear Jane Smith,`; omit it for `Dear Hiring Team,`.
 You can also edit `recipient:` in the generated `cover-letter.md` front matter later.
