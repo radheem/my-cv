@@ -257,6 +257,27 @@
   justify-content: space-between;
   gap: 0.6rem;
 }
+.vault-title {
+  flex: 1 1 auto;
+}
+/* Meta row on the right of each application: cluster chips + status badge. */
+.vault-meta {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+/* Cluster chip — outlined pill, visually distinct from the solid status badge. */
+.vault-chip {
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--md-default-fg-color--lighter, rgba(0, 0, 0, 0.2));
+  color: var(--md-default-fg-color--light, rgba(0, 0, 0, 0.6));
+}
 /* Application-status badge (lifecycle: draft → applied → interview → offer /
    rejected / withdrawn). Visible only inside the gated list. */
 .vault-badge {

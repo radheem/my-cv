@@ -42,7 +42,7 @@ extra_css:
 extra_javascript:
   # Bump ?v= when vault.js changes so browsers don't serve a stale cached copy
   # (GitHub Pages sends Cache-Control: max-age=600 with no fingerprinting).
-  - assets/vault.js?v=2
+  - assets/vault.js?v=3
 
 markdown_extensions:
   - admonition

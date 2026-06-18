@@ -127,14 +127,22 @@
     var list = el("div", { class: "vault-actions vault-list" });
     apps.forEach(function (a) {
       var link = el("a", { class: "md-button", href: a.url });
-      link.appendChild(document.createTextNode(a.title + (a.company ? " · " + a.company : "")));
+      link.appendChild(
+        el("span", { class: "vault-title" }, a.title + (a.company ? " · " + a.company : ""))
+      );
+      // Meta row: cluster chips (taxonomy domains) + status badge.
+      var meta = el("span", { class: "vault-meta" });
+      (a.clusters || []).forEach(function (c) {
+        meta.appendChild(el("span", { class: "vault-chip" }, c));
+      });
       if (a.status) {
         // Status drives a CSS class; restrict to a safe token to avoid markup.
         var token = String(a.status).toLowerCase().replace(/[^a-z]/g, "");
-        link.appendChild(
+        meta.appendChild(
           el("span", { class: "vault-badge vault-badge--" + token }, a.status)
         );
       }
+      if (meta.childNodes.length) link.appendChild(meta);
       list.appendChild(link);
     });
     app.appendChild(list);
