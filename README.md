@@ -79,6 +79,36 @@ Push to `main` and GitHub Actions renders, gates, and deploys. Prefer local gene
 → **Every CLI flag, env var, and model option:** **[docs/cli.md](docs/cli.md)**
 → **Agent / contributor workflow + application lifecycle:** **[CLAUDE.md](CLAUDE.md)**
 
+## Make targets
+
+A `Makefile` wraps the whole workflow. Run `make` (or `make help`) for the full,
+self-documenting list. The common ones:
+
+```bash
+make help                 # list every target with a description
+make install-all          # base + generate + fetch + ollama + dev (uv venv)
+make playwright           # install Chromium (only needed to fetch job URLs)
+
+# Generate a tailored application (the cv-tailor CLI):
+make new SOURCE=path/to/job.txt
+make new SOURCE=job.txt SLUG=acme-senior-engineer RECIPIENT="Jane Smith"
+make new SOURCE=job.txt PROVIDER=ollama OLLAMA_URL=http://localhost:11434/v1 MODEL=qwen3.5:35b
+
+# Move an application along its lifecycle (edits the hub's status: front matter):
+make status SLUG=acme-senior-engineer STATUS=applied   # draft→applied→interview→offer/rejected/withdrawn
+
+# Build, preview, test:
+make build                # render + AES-seal the gated site into ./site (GATE_PASSWORD=test)
+make serve                # live MkDocs preview (ungated) at http://localhost:8000
+make preview              # build the gated site AND serve it — to test the password gate
+make test                 # unit tests (ranking logic; no browser, no API key)
+make check                # tests + a full gated build (pre-push sanity)
+make clean                # remove site/, caches, *.egg-info
+```
+
+Overridable variables: `SOURCE`, `SLUG`, `RECIPIENT`, `PROVIDER`, `MODEL`, `OLLAMA_URL`
+(for `new`), `SLUG`/`STATUS` (for `status`), plus `PORT` and `GATE_PASSWORD`.
+
 ## Layout
 
 | Path | What |
@@ -92,5 +122,5 @@ Push to `main` and GitHub Actions renders, gates, and deploys. Prefer local gene
 ## Tests
 
 ```bash
-pytest -q        # ranking logic — no browser, no API key
+make test        # (or: pytest -q) — ranking logic, no browser, no API key
 ```
