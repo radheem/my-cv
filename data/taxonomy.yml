@@ -1,0 +1,39 @@
+# Controlled vocabulary for the relevance ranker (engine/rank.py).
+#
+# Shared by PROJECTS (data/projects.yml) and JOB applications so both get
+# classified into the same named CLUSTERS — an agent can read a job's clusters
+# (written into docs/jobs/<slug>/index.md front matter) and pull the correlating
+# projects directly, instead of relying on brittle token overlap.
+#
+# This file is OPTIONAL. If it is absent the ranker falls back to plain
+# token-overlap matching (no aliasing, no clusters) — exactly the original
+# behavior. Edit it to teach the ranker your synonyms and domains.
+
+# Alias normalization: every variant token (right) is rewritten to its canonical
+# form (left key) before matching, so k8s / golang / postgres all line up with
+# kubernetes / go / postgresql. Variants must be single lowercase tokens, and a
+# variant may belong to only one canonical (the loader raises on a collision).
+aliases:
+  kubernetes: [k8s, k3s, k3d]
+  go: [golang]
+  postgresql: [postgres, pgsql]
+  javascript: [js, vanilla-js]
+  typescript: [ts]
+
+# Clusters: named groups of canonical tags. A project or job belongs to a cluster
+# when its (alias-normalized) token set intersects that cluster's tags.
+clusters:
+  platform-cloud-native:
+    tags: [kubernetes, cilium, ebpf, helm, docker, gitops, devops, infra, platform, sre, networking, dns, cert-manager, cloud]
+  distributed-systems:
+    tags: [distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend]
+  ml-ai:
+    tags: [ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, data-science]
+  5g-oran:
+    tags: [5g, oran, ric, telecom, sdn, multus]
+  web-api:
+    tags: [web, frontend, api, react, node, fullstack, static-site, canvas, game, dashboard]
+  data-persistence:
+    tags: [database, sql, postgresql, data, persistence, etl, analytics, charts]
+  observability:
+    tags: [observability, monitoring, metrics, tracing, reliability]

@@ -4,6 +4,7 @@ search:
 job_title: "Platform Engineer"
 company: "Northwind Cloud"
 status: "applied"
+clusters: ["platform-cloud-native", "distributed-systems"]
 ---
 
 # Tailored Application :material-lock:

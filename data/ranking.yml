@@ -1,0 +1,30 @@
+# User-authored knobs for the relevance ranker (engine/rank.py) — the selection
+# counterpart to data/guides/ (which steer the CV/cover-letter *prose*). Tune
+# these to set your preferences for WHICH projects get featured and how skills
+# are weighted.
+#
+# Every key is OPTIONAL. Any key you delete falls back to the engine default, so
+# an empty (or absent) file reproduces the original ranking behavior — EXCEPT
+# `cluster_affinity`, which we ship at 2.0 below so clustering is active. Set it
+# to 0 to disable cluster scoring and rank purely on token overlap.
+
+# How much each JobSpec field contributes when a project/skill term matches it.
+field_weights:
+  must_haves: 3.0      # hard requirements — strongest signal
+  stack: 2.0           # concrete technologies named in the posting
+  nice_to_haves: 1.5   # preferred / bonus skills
+  keywords: 1.0        # salient domain terms
+  title: 1.0           # the job title
+
+# Score added per CLUSTER shared between the job and a project (see taxonomy.yml).
+# 0 = ignore clusters. ~2.0 makes "same domain" roughly as strong as a stack hit.
+cluster_affinity: 2.0
+
+# How many projects to feature and how many tailored skill lines to emit.
+top_projects: 3
+max_skill_groups: 3
+
+# Preferences. Leave empty for none.
+prefer_clusters: []    # nudge projects in these clusters up, e.g. [platform-cloud-native]
+pinned: []             # project ids ALWAYS featured (front of the list), e.g. [irs]
+excluded: []           # project ids to NEVER feature, e.g. [stickman]

@@ -3,10 +3,17 @@
 # carries `tags` and `stack` used to score against a JobSpec; `summary` is the
 # one-line used in a tailored CV's Projects section. `doc` points at the public
 # write-up under docs/projects/.
+#
+# Optional ranking knobs per project:
+#   weight:   float, default 1.0. Multiplies the project's relevance score so a
+#             flagship outranks an incidental match (see data/ranking.yml).
+#   clusters: [..]  override the taxonomy-derived clusters (data/taxonomy.yml)
+#             for the rare project the tag-derivation mislabels. Usually omit.
 
 projects:
   - id: irs
     name: "IRS Platform (Stealth)"
+    weight: 1.4
     doc: projects/irs.md
     url: ""
     summary: "Distributed Go microservices on native NATS (JetStream + KV) and gRPC, with MCP tooling for LLM agents and a Hatchet-orchestrated ETL pipeline."
@@ -16,6 +23,7 @@ projects:
 
   - id: second-brain
     name: "Second Brain (Document RAG)"
+    weight: 1.2
     doc: projects/second-brain.md
     url: "https://github.com/johndoe/my-notebook"
     summary: "Self-hosted RAG document-intelligence service: durable Hatchet ingestion, local llama.cpp inference, pgvector semantic search, NATS JetStream progress streaming on a k3d homelab."

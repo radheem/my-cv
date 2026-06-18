@@ -73,6 +73,7 @@ def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> dict
     title = str(meta.get("job_title") or slug)
     company = str(meta.get("company") or "")
     status = str(meta.get("status") or "draft")
+    clusters = meta.get("clusters") or []
     vault = SITE / "jobs" / slug / "vault"
     vault.mkdir(parents=True, exist_ok=True)
     manifest = []
@@ -115,6 +116,7 @@ def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> dict
         "title": title,
         "company": company,
         "status": status,
+        "clusters": clusters,
         "url": f"../jobs/{slug}/",
     }
 

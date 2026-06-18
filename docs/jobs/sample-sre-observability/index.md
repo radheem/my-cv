@@ -4,6 +4,7 @@ search:
 job_title: "Site Reliability Engineer"
 company: "Harborview Systems"
 status: "interview"
+clusters: ["platform-cloud-native", "observability"]
 ---
 
 # Tailored Application :material-lock:

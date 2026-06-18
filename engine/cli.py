@@ -25,13 +25,23 @@ DATA = ROOT / "data"
 JOBS = ROOT / "docs" / "jobs"
 
 
-def _load_data() -> tuple[dict, list, str, str, str]:
+def _load_optional_yaml(path: pathlib.Path) -> dict:
+    """Load a YAML mapping, or {} when the file is absent (optional config)."""
+    if not path.exists():
+        return {}
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def _load_data() -> tuple[dict, list, str, str, str, dict, dict]:
     profile = yaml.safe_load((DATA / "profile.yml").read_text(encoding="utf-8"))
     projects = yaml.safe_load((DATA / "projects.yml").read_text(encoding="utf-8"))["projects"]
     master_cv = (DATA / "master-cv.md").read_text(encoding="utf-8")
     cv_guide = (DATA / "guides" / "how-to-write-a-cv.md").read_text(encoding="utf-8")
     cl_guide = (DATA / "guides" / "how-to-write-a-cover-letter.md").read_text(encoding="utf-8")
-    return profile, projects, master_cv, cv_guide, cl_guide
+    # Optional, user-authored ranking config (engine/rank.py reads these).
+    taxonomy = _load_optional_yaml(DATA / "taxonomy.yml")
+    ranking = _load_optional_yaml(DATA / "ranking.yml")
+    return profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking
 
 
 # Keep gated pages out of the public search index (build.py also scrubs it).
@@ -54,16 +64,23 @@ def _slugify(*parts: str) -> str:
 _STATUSES = ("draft", "applied", "interview", "offer", "rejected", "withdrawn")
 
 
-def _hub_page(title: str, company: str, slug: str, status: str = "draft") -> str:
+def _hub_page(
+    title: str, company: str, slug: str, status: str = "draft", clusters: tuple = ()
+) -> str:
     # Generic heading + search-excluded so a direct URL leaks no role/company.
-    # job_title/company/status ride in the front matter (NOT the special `title`
-    # key, which MkDocs would render into the page <title>) for build.py to read
-    # into the encrypted landing manifest.
+    # job_title/company/status/clusters ride in the front matter (NOT the special
+    # `title` key, which MkDocs would render into the page <title>) for build.py to
+    # read into the encrypted landing manifest. `clusters` (taxonomy domains this
+    # role maps to) lets an agent correlate the job with matching projects.
+    clusters_line = ""
+    if clusters:
+        clusters_line = "clusters: [" + ", ".join(_yaml(c) for c in clusters) + "]\n"
     return (
         "---\nsearch:\n  exclude: true\n"
         f"job_title: {_yaml(title)}\n"
         f"company: {_yaml(company)}\n"
-        f"status: {_yaml(status)}\n---\n\n"
+        f"status: {_yaml(status)}\n"
+        f"{clusters_line}---\n\n"
         "# Tailored Application :material-lock:\n\n"
         "These documents are tailored for a specific role and protected by a "
         "password. If you reached this page directly, enter the password to view "
@@ -84,7 +101,7 @@ def _apply_provider_flags(args: argparse.Namespace) -> None:
 
 def cmd_new(args: argparse.Namespace) -> int:
     _apply_provider_flags(args)
-    profile, projects, master_cv, cv_guide, cl_guide = _load_data()
+    profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking = _load_data()
 
     print(f"Fetching job from {args.source} ...", file=sys.stderr)
     job_text = fetch.fetch_job_text(args.source)
@@ -92,7 +109,8 @@ def cmd_new(args: argparse.Namespace) -> int:
     print("Extracting JobSpec ...", file=sys.stderr)
     spec = jobspec_mod.extract_jobspec(job_text)
 
-    tailoring = rank.tailor(spec, profile, projects)
+    tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
+    clusters = rank.job_clusters(spec, taxonomy, rank.invert_aliases(taxonomy.get("aliases", {})))
 
     slug = args.slug or _slugify(spec.get("company", ""), spec.get("title", ""))
     out = JOBS / slug
@@ -119,12 +137,16 @@ def cmd_new(args: argparse.Namespace) -> int:
         encoding="utf-8",
     )
     (out / "index.md").write_text(
-        _hub_page(spec.get("title", "Role"), spec.get("company", ""), slug),
+        _hub_page(
+            spec.get("title", "Role"), spec.get("company", ""), slug, clusters=clusters
+        ),
         encoding="utf-8",
     )
 
     print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
+    if clusters:
+        print("Clusters:", ", ".join(clusters))
     print(
         "\nNo nav edit needed: the build auto-lists this application in the "
         "encrypted manifest behind the single 'Tailored' sign-in page. Review + commit."
