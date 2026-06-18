@@ -6,12 +6,12 @@ Committed Markdown is the handoff between the two.
 
 ```mermaid
 flowchart TB
-    subgraph local["Local — generation (needs ANTHROPIC_API_KEY)"]
+    subgraph local["Local — generation (Anthropic key or Ollama)"]
       JD[Job URL / file] -->|fetch.py| TXT[clean text]
-      TXT -->|jobspec.py · Claude API| SPEC[JobSpec]
+      TXT -->|jobspec.py · llm| SPEC[JobSpec]
       SPEC --> RANK[rank.py · pure]
       DATA[(data/ — profile.yml,\nprojects.yml, master-cv.md)] --> RANK
-      RANK -->|render.py · Claude API| OUT[docs/jobs/&lt;slug&gt;/\ncv.md · cover-letter.md\njob-description.md · index.md]
+      RANK -->|render.py · llm| OUT[docs/jobs/&lt;slug&gt;/\ncv.md · cover-letter.md\njob-description.md · index.md]
     end
 
     subgraph ci["GitHub Actions — render + gate + deploy (no API key)"]
@@ -33,25 +33,27 @@ flowchart TB
 | | Generation (`engine/`) | Render + gate (`build.py`, CI) |
 |---|---|---|
 | Runs | locally, on demand | in GitHub Actions on push |
-| Needs | `ANTHROPIC_API_KEY` | `GATE_PASSWORD` secret |
+| Needs | Anthropic key **or** local Ollama | `GATE_PASSWORD` secret |
 | Input | a job posting | committed Markdown under `docs/` |
 | Output | tailored Markdown | the deployed, gated site |
 
-Keeping them apart means API cost and a human review stay out of CI, and CI never holds
-your Anthropic key.
+Keeping them apart means API cost and a human review stay out of CI, and CI never holds a
+model key. The provider lives behind `engine/llm.py`: **Anthropic** by default (the
+`anthropic` SDK), or a local **Ollama** / OpenAI-compatible endpoint (the `openai` SDK)
+with `--provider ollama`. `jobspec.py` and `render.py` are provider-agnostic.
 
 ## Generation pipeline
 
 `cv-tailor new <job-url-or-file>`:
 
 1. **`fetch.py`** → clean job text (URL via Playwright, or read a pasted `.txt`/`.md`).
-2. **`jobspec.py`** → a structured **JobSpec** via the Claude API (`output_config.format`).
-   This is the contract between the LLM half and the pure half.
+2. **`jobspec.py`** → a structured **JobSpec** via `llm.structured_json` (json-schema
+   constrained). This is the contract between the LLM half and the pure half.
 3. **`rank.py`** → the **top-3 projects** and the ordered **skills block**. This is a
    pure function — no I/O, no LLM — so it is unit-tested with fixtures
    ([tests/test_rank.py](https://github.com/johndoe/cv-tailor)).
-4. **`render.py`** → tailored `cv.md` + `cover-letter.md` via the Claude API, writing prose
-   *around* the already-chosen projects/skills. It never picks them.
+4. **`render.py`** → tailored `cv.md` + `cover-letter.md` via `llm.stream_text`, writing
+   prose *around* the already-chosen projects/skills. It never picks them.
 
 ```mermaid
 flowchart LR

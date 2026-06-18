@@ -24,9 +24,12 @@ locally, then deploy to GitHub Pages.
 # Site build + gate only (mkdocs-material, weasyprint, cryptography, pyyaml):
 pip install -e .
 
-# Add the generation pipeline (Claude API) and the optional URL fetcher:
+# Add the generation pipeline (Anthropic backend) and the optional URL fetcher:
 pip install -e '.[generate,fetch]'
 playwright install chromium        # only needed to fetch job URLs
+
+# Or the local Ollama / OpenAI-compatible backend instead of Anthropic:
+pip install -e '.[ollama]'
 ```
 
 ## 1. Generate a tailored application (local)
@@ -37,6 +40,20 @@ cv-tailor new path/to/job.txt          # a pasted .txt/.md file …
 cv-tailor new https://example.com/job  # … or a job URL (needs Playwright)
 cv-tailor new path/to/job.txt --recipient "Jane Smith"   # personalize the salutation
 ```
+
+### Generation provider
+
+Generation defaults to **Anthropic** (`ANTHROPIC_API_KEY`). To run against a **local Ollama**
+(or any OpenAI-compatible server) instead — offline, no API key:
+
+```bash
+cv-tailor new path/to/job.txt --provider ollama \
+  --ollama-url http://localhost:11434/v1 --model qwen3.5:35b
+```
+
+Equivalently via env: `CV_TAILOR_PROVIDER=ollama`,
+`CV_TAILOR_OLLAMA_BASE_URL=http://localhost:11434/v1`, `CV_TAILOR_MODEL=qwen3.5:35b`. Point
+`--ollama-url` at your own host. CI never generates, so no provider config is needed there.
 
 The cover letter is rendered as a real letter (letterhead → date → salutation → body →
 sign-off, no title). `--recipient` sets `Dear Jane Smith,`; omit it for `Dear Hiring Team,`.
@@ -49,7 +66,7 @@ This writes `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-descriptio
 flowchart LR
     A["cv-tailor new &lt;job&gt;"] --> B[JobSpec]
     B --> C[rank: top-3 + skills]
-    C --> D[Claude API writes\ncv.md + cover-letter.md]
+    C --> D[LLM writes (Anthropic / Ollama)\ncv.md + cover-letter.md]
     D --> E[docs/jobs/&lt;slug&gt;/]
     E --> F[review · edit · commit]
 ```
@@ -65,22 +82,22 @@ Then:
 3. **Commit** it.
 
 !!! tip "Model"
-    Generation defaults to Claude Sonnet 4.6. Use Opus for harder reasoning:
+    The Anthropic backend defaults to Claude Sonnet 4.6. Use Opus for harder reasoning:
     ```bash
-    CV_TAILOR_MODEL=claude-opus-4-8 cv-tailor new path/to/job.txt
+    cv-tailor new path/to/job.txt --model claude-opus-4-8
     ```
 
 ## 2. Build + test the gate locally
 
 ```bash
-GATE_PASSWORD=test CV_TAILOR_BASE_URL=/ python build.py
+GATE_PASSWORD=test python build.py
 python -m http.server -d site 8000
 # open http://localhost:8000/
 ```
 
 - `GATE_PASSWORD` seals the gated documents (use anything for local testing).
-- `CV_TAILOR_BASE_URL=/` makes the gated HTML's relative links resolve when you serve
-  `site/` at the web root. In production this defaults to `site_url` from `mkdocs.yml`.
+- The gated CV/cover-letter HTML is self-contained (CSS inlined), so it renders the same in
+  the unlock iframe and the PDF — no base-URL configuration needed.
 
 What to verify:
 
@@ -121,9 +138,11 @@ in CI — generation is always a local step.
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | local generation | authenticates the Claude API |
-| `CV_TAILOR_MODEL` | local generation | override the model (default `claude-sonnet-4-6`) |
+| `ANTHROPIC_API_KEY` | local generation | authenticates the Anthropic backend |
+| `CV_TAILOR_PROVIDER` | local generation | `anthropic` (default) or `ollama` |
+| `CV_TAILOR_MODEL` | local generation | model override (default: `claude-sonnet-4-6` / `qwen3.5:35b`) |
+| `CV_TAILOR_OLLAMA_BASE_URL` | local generation | OpenAI-compatible base URL (default `http://localhost:11434/v1`) |
+| `CV_TAILOR_OLLAMA_API_KEY` | local generation | key for that endpoint (default `ollama`) |
 | `GATE_PASSWORD` | build (local + CI secret) | seals/unlocks the gated documents |
-| `CV_TAILOR_BASE_URL` | build | `<base href>` for gated HTML (default: `site_url`; use `/` locally) |
 
 See [Architecture](architecture.md) for how the pieces fit together.

@@ -13,7 +13,7 @@ general portfolio stays public.
 
 ```mermaid
 flowchart TB
-    subgraph local["Local CLI (needs ANTHROPIC_API_KEY)"]
+    subgraph local["Local CLI (Anthropic API key or local Ollama)"]
       JD[Job URL / file] --> SPEC[JobSpec] --> RANK[rank: top-3 projects + skills]
       RANK --> OUT[docs/jobs/&lt;slug&gt;/ cv.md · cover-letter.md · job-description.md]
     end
@@ -47,8 +47,8 @@ reachable at a public URL.
 ### 1. Generate a tailored application (local)
 
 ```bash
-pip install -e '.[generate,fetch]'
-export ANTHROPIC_API_KEY=...            # generation only
+pip install -e '.[generate,fetch]'      # Anthropic backend (+ URL fetch)
+export ANTHROPIC_API_KEY=...
 cv-tailor new path/to/job.txt           # or a URL (needs: playwright install chromium)
 ```
 
@@ -56,11 +56,19 @@ Writes `docs/jobs/<slug>/` (cv, cover-letter, job-description, and the unlock hu
 and edit it, add the printed nav line to `mkdocs.yml`, and commit. Set
 `CV_TAILOR_MODEL=claude-opus-4-8` to use Opus instead of the default Sonnet 4.6.
 
+**Local Ollama (no API key):** install `pip install -e '.[ollama]'` and point at any
+OpenAI-compatible endpoint:
+
+```bash
+cv-tailor new path/to/job.txt --provider ollama \
+  --ollama-url http://localhost:11434/v1 --model qwen3.5:35b
+```
+
 ### 2. Build + gate locally
 
 ```bash
-pip install -e .                        # mkdocs-material, weasyprint, cryptography, pyyaml
-GATE_PASSWORD=test CV_TAILOR_BASE_URL=/ python build.py
+pip install -e .                        # mkdocs-material, weasyprint, cryptography, pyyaml, markdown
+GATE_PASSWORD=test python build.py
 python -m http.server -d site 8000      # open http://localhost:8000/
 ```
 
