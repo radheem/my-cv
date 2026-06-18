@@ -1,0 +1,112 @@
+"""cv-tailor CLI — generate a tailored application from a job posting.
+
+    cv-tailor new <job-url-or-file> [--slug NAME]
+
+Runs locally (needs ANTHROPIC_API_KEY). Writes docs/jobs/<slug>/ with cv.md,
+cover-letter.md, job-description.md, and index.md (the gated unlock hub). Review
+the output, commit it, and let CI render + encrypt + deploy.
+"""
+
+from __future__ import annotations
+
+import argparse
+import pathlib
+import re
+import sys
+
+import yaml
+
+from . import fetch, jobspec as jobspec_mod, rank, render
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
+JOBS = ROOT / "docs" / "jobs"
+
+
+def _load_data() -> tuple[dict, list, str, str, str]:
+    profile = yaml.safe_load((DATA / "profile.yml").read_text(encoding="utf-8"))
+    projects = yaml.safe_load((DATA / "projects.yml").read_text(encoding="utf-8"))["projects"]
+    master_cv = (DATA / "master-cv.md").read_text(encoding="utf-8")
+    cv_guide = (DATA / "guides" / "how-to-write-a-cv.md").read_text(encoding="utf-8")
+    cl_guide = (DATA / "guides" / "how-to-write-a-cover-letter.md").read_text(encoding="utf-8")
+    return profile, projects, master_cv, cv_guide, cl_guide
+
+
+# Keep gated pages out of the public search index (build.py also scrubs it).
+_NO_INDEX = "---\nsearch:\n  exclude: true\n---\n\n"
+
+
+def _slugify(*parts: str) -> str:
+    raw = "-".join(p for p in parts if p)
+    slug = re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")
+    return slug or "tailored-application"
+
+
+def _hub_page(title: str, company: str, slug: str) -> str:
+    heading = f"{title}" + (f" · {company}" if company else "")
+    return (
+        f"# {heading} — Tailored Application :material-lock:\n\n"
+        "These documents are tailored for this specific role and protected by a "
+        "password. Enter it to view or download the CV and cover letter.\n\n"
+        f'<div id="vault-app" data-slug="{slug}"></div>\n'
+    )
+
+
+def cmd_new(args: argparse.Namespace) -> int:
+    profile, projects, master_cv, cv_guide, cl_guide = _load_data()
+
+    print(f"Fetching job from {args.source} ...", file=sys.stderr)
+    job_text = fetch.fetch_job_text(args.source)
+
+    print("Extracting JobSpec ...", file=sys.stderr)
+    spec = jobspec_mod.extract_jobspec(job_text)
+
+    tailoring = rank.tailor(spec, profile, projects)
+
+    slug = args.slug or _slugify(spec.get("company", ""), spec.get("title", ""))
+    out = JOBS / slug
+    out.mkdir(parents=True, exist_ok=True)
+
+    print("Rendering CV ...", file=sys.stderr)
+    cv_md = render.render_cv(spec, tailoring, master_cv, cv_guide)
+    print("Rendering cover letter ...", file=sys.stderr)
+    cl_md = render.render_cover_letter(
+        spec, tailoring, profile.get("summary", ""), job_text, cl_guide
+    )
+
+    (out / "cv.md").write_text(_NO_INDEX + cv_md, encoding="utf-8")
+    (out / "cover-letter.md").write_text(_NO_INDEX + cl_md, encoding="utf-8")
+    (out / "job-description.md").write_text(
+        _NO_INDEX
+        + f"# Job Description — {spec.get('title')}\n\n```\n{job_text.strip()}\n```\n",
+        encoding="utf-8",
+    )
+    (out / "index.md").write_text(
+        _hub_page(spec.get("title", "Role"), spec.get("company", ""), slug),
+        encoding="utf-8",
+    )
+
+    print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index).")
+    print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
+    print(
+        f"\nAdd to mkdocs.yml nav under 'Tailored':\n"
+        f"      - {spec.get('title','Role')} (locked): jobs/{slug}/index.md"
+    )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="cv-tailor")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p_new = sub.add_parser("new", help="generate a tailored application from a job")
+    p_new.add_argument("source", help="job posting URL, or path to a .txt/.md file")
+    p_new.add_argument("--slug", help="output dir name under docs/jobs/", default=None)
+    p_new.set_defaults(func=cmd_new)
+
+    args = parser.parse_args(argv)
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
