@@ -65,8 +65,13 @@ def _render_gated_html(name: str, meta: dict, body: str, profile: dict) -> str:
     return documents.render_plain_html("", body)
 
 
-def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> None:
+def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> tuple[str, str]:
+    """Seal a job's gated docs, inject its hub config, and return (title, company)
+    read from the hub's front matter for the encrypted landing manifest."""
     src = DOCS_JOBS / slug
+    meta, _ = documents.split_front_matter((src / "index.md").read_text(encoding="utf-8"))
+    title = str(meta.get("job_title") or slug)
+    company = str(meta.get("company") or "")
     vault = SITE / "jobs" / slug / "vault"
     vault.mkdir(parents=True, exist_ok=True)
     manifest = []
@@ -95,16 +100,21 @@ def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> None
 
         manifest.append(entry)
 
-    _inject_config(SITE / "jobs" / slug / "index.html", salt, manifest)
+    _inject_config(
+        SITE / "jobs" / slug / "index.html",
+        {
+            "salt": encrypt.b64(salt),
+            "iterations": encrypt.PBKDF2_ITERATIONS,
+            "assets": manifest,
+        },
+    )
     print(f"  sealed jobs/{slug}/ ({len(manifest)} docs)", file=sys.stderr)
+    return title, company
 
 
-def _inject_config(hub_html: pathlib.Path, salt: bytes, manifest: list) -> None:
-    config = {
-        "salt": encrypt.b64(salt),
-        "iterations": encrypt.PBKDF2_ITERATIONS,
-        "assets": manifest,
-    }
+def _inject_config(hub_html: pathlib.Path, config: dict) -> None:
+    """Inject a vault-config JSON blob (per-job `assets` or landing `index`) into
+    a built hub page before </body>."""
     script = (
         '<script id="vault-config" type="application/json">'
         + json.dumps(config)
@@ -112,6 +122,29 @@ def _inject_config(hub_html: pathlib.Path, salt: bytes, manifest: list) -> None:
     )
     html = hub_html.read_text(encoding="utf-8")
     hub_html.write_text(html.replace("</body>", script + "</body>", 1), encoding="utf-8")
+
+
+def _seal_index(key: bytes, salt: bytes, app_list: list) -> None:
+    """Seal the landing manifest (application titles live only here, so nothing
+    leaks pre-sign-in) and wire it into the single Tailored landing page."""
+    hub = SITE / "tailored" / "index.html"
+    if not hub.exists():
+        print("  ! site/tailored/index.html missing — skipping landing manifest", file=sys.stderr)
+        return
+    vault = SITE / "tailored" / "vault"
+    vault.mkdir(parents=True, exist_ok=True)
+    (vault / "index.enc").write_text(
+        encrypt.seal(json.dumps(app_list).encode("utf-8"), key), encoding="ascii"
+    )
+    _inject_config(
+        hub,
+        {
+            "salt": encrypt.b64(salt),
+            "iterations": encrypt.PBKDF2_ITERATIONS,
+            "index": "index.enc",
+        },
+    )
+    print(f"  sealed tailored/ landing manifest ({len(app_list)} apps)", file=sys.stderr)
 
 
 def _public_cv_pdf(profile: dict) -> None:
@@ -154,9 +187,14 @@ def main() -> int:
     slugs = [d.name for d in sorted(DOCS_JOBS.glob("*")) if (d / "index.md").exists()]
     if not slugs:
         print("No applications under docs/jobs/ — nothing to gate.", file=sys.stderr)
+    app_list = []
     for slug in slugs:
-        _seal_application(slug, key, salt, profile)
+        title, company = _seal_application(slug, key, salt, profile)
+        app_list.append(
+            {"slug": slug, "title": title, "company": company, "url": f"../jobs/{slug}/"}
+        )
 
+    _seal_index(key, salt, app_list)
     _scrub_search_index(slugs)
     print("Build complete.", file=sys.stderr)
     return 0

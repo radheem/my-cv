@@ -3,8 +3,18 @@
  * The gated CV / cover-letter / job-description pages are AES-256-GCM sealed at
  * build time (see encrypt.py / build.py). This script asks for the password,
  * derives the key with PBKDF2-SHA256 via Web Crypto, and decrypts each blob in
- * memory: HTML is shown in a sandboxed iframe, PDFs download as a Blob. The
- * password and derived key never leave the browser and are never stored.
+ * memory: HTML is shown in a sandboxed iframe, PDFs download as a Blob.
+ *
+ * Two modes (dispatched on #vault-app data attributes):
+ *   - Landing (data-mode="index"): decrypt an encrypted manifest of applications
+ *     (titles live only in the ciphertext, so nothing leaks pre-sign-in) and
+ *     render the list of links.
+ *   - Per-job (data-slug=...): decrypt that application's CV / cover-letter / PDF.
+ *
+ * Sign in once: on a successful unlock the password is cached in sessionStorage
+ * (salt-scoped, per tab) so the per-job hubs auto-unlock without re-prompting.
+ * The derived key never leaves the browser. A direct visit to a per-job URL with
+ * no cached password still shows its own prompt.
  *
  * Blob format (base64): iv[12] || ciphertext||GCM-tag — matching encrypt.seal().
  */
@@ -97,7 +107,53 @@
     app.appendChild(viewer);
   }
 
-  function renderForm(app, config) {
+  // Sign-in-once: cache the password per tab, scoped by build salt (one salt is
+  // shared across the landing manifest and every per-job hub in a build), so the
+  // hubs auto-unlock from the landing sign-in. Caching the password (not the raw
+  // key) keeps the key non-extractable and re-derives per page. Demo polish.
+  function pwKey(config) { return "cvtailor.pw." + config.salt; }
+  function cachePassword(config, pw) {
+    try { sessionStorage.setItem(pwKey(config), pw); } catch (e) { /* ignore */ }
+  }
+  function getCachedPassword(config) {
+    try { return sessionStorage.getItem(pwKey(config)); } catch (e) { return null; }
+  }
+  function clearCachedPassword(config) {
+    try { sessionStorage.removeItem(pwKey(config)); } catch (e) { /* ignore */ }
+  }
+
+  function renderList(app, apps) {
+    app.innerHTML = "";
+    var list = el("div", { class: "vault-actions vault-list" });
+    apps.forEach(function (a) {
+      var label = a.title + (a.company ? " · " + a.company : "");
+      list.appendChild(el("a", { class: "md-button", href: a.url }, label));
+    });
+    app.appendChild(list);
+  }
+
+  // Decrypt the landing manifest and render the application list.
+  async function unlockIndex(app, config, password) {
+    var key = await deriveKey(password, b64ToBytes(config.salt), config.iterations);
+    var buf = await decryptBlob(key, await fetchEnc(config.index));
+    var apps = JSON.parse(new TextDecoder().decode(buf));
+    cachePassword(config, password);
+    renderList(app, apps);
+  }
+
+  // Decrypt a single application's assets and render its viewer.
+  async function unlockJob(app, config, password) {
+    var key = await deriveKey(password, b64ToBytes(config.salt), config.iterations);
+    // Validate by decrypting the first asset — a wrong password fails the GCM
+    // auth tag and throws.
+    await decryptBlob(key, await fetchEnc(config.assets[0].html));
+    cachePassword(config, password);
+    renderUnlocked(app, key, config.assets);
+  }
+
+  // Build the sign-in form. `unlock(password)` decrypts + renders, or throws on a
+  // wrong password.
+  function renderForm(app, unlock) {
     var form = el("form", { class: "vault-form" });
     var input = el("input", {
       type: "password",
@@ -119,12 +175,7 @@
       submit.disabled = true;
       submit.textContent = "Unlocking…";
       try {
-        var salt = b64ToBytes(config.salt);
-        var key = await deriveKey(input.value, salt, config.iterations);
-        // Validate by decrypting the first asset — a wrong password fails the
-        // GCM auth tag and throws.
-        await decryptBlob(key, await fetchEnc(config.assets[0].html));
-        renderUnlocked(app, key, config.assets);
+        await unlock(input.value);
       } catch (e) {
         submit.disabled = false;
         submit.textContent = "Unlock";
@@ -134,17 +185,37 @@
     });
   }
 
+  // Try a cached password first (auto-unlock); fall back to the form.
+  async function gate(app, config, unlock) {
+    var cached = getCachedPassword(config);
+    if (cached) {
+      try { await unlock(cached); return; }
+      catch (e) { clearCachedPassword(config); }
+    }
+    renderForm(app, function (pw) { return unlock(pw); });
+  }
+
   function init() {
     var app = document.getElementById("vault-app");
     var cfgEl = document.getElementById("vault-config");
     if (!app || !cfgEl) return;
     var config;
     try { config = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+
+    if (app.dataset.mode === "index") {
+      if (!config.index) {
+        app.textContent = "No protected documents are available yet.";
+        return;
+      }
+      gate(app, config, function (pw) { return unlockIndex(app, config, pw); });
+      return;
+    }
+
     if (!config.assets || !config.assets.length) {
       app.textContent = "No protected documents are available yet.";
       return;
     }
-    renderForm(app, config);
+    gate(app, config, function (pw) { return unlockJob(app, config, pw); });
   }
 
   if (document.readyState === "loading") {

@@ -245,6 +245,14 @@
   flex-wrap: wrap;
   margin: 1rem 0;
 }
+/* The landing application list: stack links so titles read top-to-bottom. */
+.vault-list {
+  flex-direction: column;
+  align-items: stretch;
+}
+.vault-list .md-button {
+  text-align: left;
+}
 .vault-viewer {
   margin-top: 1rem;
 }

@@ -50,11 +50,18 @@ def _slugify(*parts: str) -> str:
 
 
 def _hub_page(title: str, company: str, slug: str) -> str:
-    heading = f"{title}" + (f" · {company}" if company else "")
+    # Generic heading + search-excluded so a direct URL leaks no role/company.
+    # job_title/company ride in the front matter (NOT the special `title` key,
+    # which MkDocs would render into the page <title>) for build.py to read into
+    # the encrypted landing manifest.
     return (
-        f"# {heading} — Tailored Application :material-lock:\n\n"
-        "These documents are tailored for this specific role and protected by a "
-        "password. Enter it to view or download the CV and cover letter.\n\n"
+        "---\nsearch:\n  exclude: true\n"
+        f"job_title: {_yaml(title)}\n"
+        f"company: {_yaml(company)}\n---\n\n"
+        "# Tailored Application :material-lock:\n\n"
+        "These documents are tailored for a specific role and protected by a "
+        "password. If you reached this page directly, enter the password to view "
+        "the CV and cover letter.\n\n"
         f'<div id="vault-app" data-slug="{slug}"></div>\n'
     )
 
@@ -113,8 +120,8 @@ def cmd_new(args: argparse.Namespace) -> int:
     print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
     print(
-        f"\nAdd to mkdocs.yml nav under 'Tailored':\n"
-        f"      - {spec.get('title','Role')} (locked): jobs/{slug}/index.md"
+        "\nNo nav edit needed: the build auto-lists this application in the "
+        "encrypted manifest behind the single 'Tailored' sign-in page. Review + commit."
     )
     return 0
 

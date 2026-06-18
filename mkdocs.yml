@@ -97,8 +97,7 @@ nav:
       - Sheet Dashboard (Google Sheets): projects/csv-dashboard.md
       - Gitpress (Zero-Server Blog): projects/gitpress.md
   - CV: cv.md
-  - Tailored:
-      - Sample · Platform Engineer (locked): jobs/sample-platform-engineer/index.md
+  - Tailored: tailored/index.md
   - Project:
       - Architecture: architecture.md
       - Setup: setup.md
