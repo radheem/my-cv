@@ -19,6 +19,9 @@ external tool.
 - **Tailored, not generic.** A pure, unit-tested ranker picks your top-3 most relevant
   projects and orders your skills per posting; the LLM only writes prose around those facts —
   so it never fabricates experience.
+- **You steer the selection.** A controlled tag **taxonomy** clusters projects and jobs into
+  shared domains, per-project **weights** favor your flagships, and `data/ranking.yml` lets you
+  set preferences (weights, pins/excludes) — the selection counterpart to the prose guides.
 - **Every application is versioned.** Each role is a folder of Markdown under git. Diff a CV
   across roles, roll back an edit, see exactly what you sent and when.
 - **A real lifecycle, tracked in git.** Mark an application
@@ -80,8 +83,8 @@ Push to `main` and GitHub Actions renders, gates, and deploys. Prefer local gene
 
 | Path | What |
 |---|---|
-| `data/` | `master-cv.md`, `profile.yml`, `projects.yml`, guides — the source of truth |
-| `engine/` | generation pipeline (`rank` is pure; `jobspec`/`render` call the LLM) |
+| `data/` | `master-cv.md`, `profile.yml`, `projects.yml`, `guides/`, and ranking config (`taxonomy.yml`, `ranking.yml`) — the source of truth |
+| `engine/` | generation pipeline (`rank` is pure: token + alias + cluster scoring; `jobspec`/`render` call the LLM) |
 | `docs/` | MkDocs content; `docs/jobs/<slug>/` are the gated applications |
 | `build.py` / `encrypt.py` | render + AES-seal the gated content and the manifest |
 | `docs/assets/vault.js` | in-browser PBKDF2 + AES-GCM decryptor + status dashboard |

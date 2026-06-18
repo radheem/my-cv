@@ -53,7 +53,12 @@ chosen with `--model`; `jobspec.py` and `render.py` are provider-agnostic. See t
    constrained). This is the contract between the LLM half and the pure half.
 3. **`rank.py`** → the **top-3 projects** and the ordered **skills block**. This is a
    pure function — no I/O, no LLM — so it is unit-tested with fixtures
-   ([tests/test_rank.py](https://github.com/johndoe/cv-tailor)).
+   ([tests/test_rank.py](https://github.com/johndoe/cv-tailor)). It scores projects by token
+   overlap (with tag **aliasing**, e.g. `k8s→kubernetes`), **cluster affinity**, and a
+   per-project **weight**, all steered by version-controlled `data/taxonomy.yml` +
+   `data/ranking.yml`. The same taxonomy classifies the JobSpec into `clusters`, written into
+   the job hub's front matter so jobs and projects share one vocabulary. All config is optional
+   and **default-inert** — absent files reproduce the original token-overlap ranking.
 4. **`render.py`** → tailored `cv.md` + `cover-letter.md` via `llm.stream_text`, writing
    prose *around* the already-chosen projects/skills. It never picks them.
 

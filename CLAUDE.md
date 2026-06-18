@@ -24,7 +24,8 @@ Two halves that never blur:
 - **Generation** (`engine/`) runs **locally**, costs money, needs review, and commits
   Markdown. `engine/rank.py` is pure + unit-tested (picks top-3 projects, orders skills);
   only `jobspec`/`render` call an LLM. Source of truth lives in `data/`
-  (`master-cv.md`, `profile.yml`, `projects.yml`, `guides/`).
+  (`master-cv.md`, `profile.yml`, `projects.yml`, `guides/`, and the ranking config
+  `taxonomy.yml` + `ranking.yml` — see **Ranking & tailoring** below).
 - **Render + gate + deploy** (`build.py`, `encrypt.py`, `.github/workflows/deploy.yml`) runs
   in **CI with no API key**. It builds the site, makes PDFs, and AES-256-GCM encrypts the
   gated documents — and the manifest of applications — before deploy.
@@ -64,6 +65,30 @@ draft → applied → interview → offer | rejected | withdrawn
   `docs/stylesheets/extra.css`.
 - Keep to the vocabulary above (`engine/cli.py:_STATUSES`); an unknown value still renders,
   just with the neutral default badge.
+
+## Ranking & tailoring
+
+`engine/rank.py` is the **pure, deterministic** core that picks the top-3 projects and orders
+the skills block. It scores projects by token overlap against the LLM-extracted JobSpec, plus
+**cluster affinity** and a **per-project weight**. Two user-authored `data/` files steer it
+(the selection counterpart to `data/guides/`, which steer prose) — both optional, both
+default-inert:
+
+- **`data/taxonomy.yml`** — a controlled vocabulary: an `aliases` map (`k8s→kubernetes`,
+  `golang→go`…) normalized before matching, and `clusters` (named groups of canonical tags).
+  Both **projects** and **job applications** are classified into the same clusters, so an agent
+  can read a job's clusters and pull the correlating projects directly.
+- **`data/ranking.yml`** — knobs: `field_weights`, `cluster_affinity`, `top_projects`,
+  `max_skill_groups`, `prefer_clusters`, `pinned` (always-include ids), `excluded`.
+- **`data/projects.yml`** per-project `weight:` (default 1.0) multiplies a project's score to
+  favor flagships; optional `clusters:` overrides the tag-derived clusters.
+
+Clusters for a **job** are computed deterministically from the JobSpec at `cv-tailor new` time
+(`rank.job_clusters`) and written into the hub front matter as `clusters: [...]` — git-visible
+alongside `status:`, and carried (passthrough) into the encrypted manifest by `build.py`. The
+ranker never runs in CI. When changing scoring, keep it **pure** (taxonomy/ranking passed as
+args) and **backward-compatible** (absent files reproduce the original token-overlap behavior —
+`tests/test_rank.py:test_defaults_reproduce_current_behavior` guards this).
 
 ## Repo conventions
 

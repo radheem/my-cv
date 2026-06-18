@@ -29,9 +29,23 @@ Generate a tailored application from a job posting.
 | `--ollama-url URL` | `http://localhost:11434/v1` | OpenAI-compatible base URL (only with `--provider ollama`). |
 
 **Output:** `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-description.md`, and
-`index.md` (the gated unlock hub, with `status: draft` in its front matter). The command
-prints the featured projects. **No `mkdocs.yml` edit is needed** — the build auto-lists the
-application in the encrypted manifest behind the single **Tailored** sign-in page.
+`index.md` (the gated unlock hub, with `status: draft` and the role's `clusters:` in its front
+matter). The command prints the featured projects and the job's clusters. **No `mkdocs.yml`
+edit is needed** — the build auto-lists the application in the encrypted manifest behind the
+single **Tailored** sign-in page.
+
+## Tuning which projects get picked
+
+Project selection is steered by version-controlled `data/` config (the selection counterpart to
+`data/guides/`, which steer the prose). All optional — absent files reproduce the default
+token-overlap ranking:
+
+- **`data/taxonomy.yml`** — tag `aliases` (`k8s→kubernetes`…) and `clusters` (named tag groups).
+  Both projects and jobs are classified into the same clusters, so a role's `clusters:` front
+  matter correlates it with matching projects.
+- **`data/ranking.yml`** — `field_weights`, `cluster_affinity`, `top_projects`,
+  `max_skill_groups`, `prefer_clusters`, `pinned` (always feature), `excluded` (never feature).
+- **`data/projects.yml`** — a per-project `weight:` (default 1.0) to favor flagships.
 
 ## Model support
 
