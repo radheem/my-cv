@@ -1,0 +1,103 @@
+site_name: John Doe
+site_description: Distributed Systems Engineer — portfolio, projects, and CV
+site_author: John Doe
+site_url: https://johndoe.github.io/cv-tailor/
+
+# NOTE: this is a public DEMO project. The persona "John Doe" and all contact
+# details are fictional; projects/circumstances are kept for realism. Do not
+# add real personal information here.
+
+theme:
+  name: material
+  font:
+    text: DM Sans
+    code: JetBrains Mono
+  features:
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - assets/vault.js
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/johndoe
+    - icon: fontawesome/solid/envelope
+      link: mailto:john.doe@example.com
+
+# Gated per-job pages live under jobs/<slug>/. Only the hub (index.md) is in the
+# nav; cv/cover-letter/job-description are encrypted at build time and removed.
+not_in_nav: |
+  jobs/*/cv.md
+  jobs/*/cover-letter.md
+  jobs/*/job-description.md
+
+validation:
+  nav:
+    omitted_files: ignore
+
+nav:
+  - Home: index.md
+  - Projects:
+      - Overview: projects/index.md
+      - IRS Platform (Stealth): projects/irs.md
+      - Second Brain (Document RAG): projects/second-brain.md
+      - HA K3s Cluster Platform (k3d + Cilium): projects/k3d.md
+      - Homelab (Zero-Touch LAN DNS): projects/homelab.md
+      - O-RAN AIML Framework: projects/oran-aiml.md
+      - 5G srsRAN + O-RAN RIC (Docker): projects/srsran-docker.md
+      - 5G srsRAN Testbed (Kubernetes): projects/5g-testbed.md
+      - Infinite Stickman (Arcade Runner): projects/stickman.md
+      - Sheet Dashboard (Google Sheets): projects/csv-dashboard.md
+      - Gitpress (Zero-Server Blog): projects/gitpress.md
+  - CV: cv.md
+  - Tailored:
+      - Sample · Platform Engineer (locked): jobs/sample-platform-engineer/index.md
+  - Project:
+      - Architecture: architecture.md
+      - Setup: setup.md

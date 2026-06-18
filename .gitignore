@@ -1,0 +1,13 @@
+# build output
+/site/
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+# local secrets — never commit
+.env
+# generated PDFs (built in CI / locally)
+*.pdf

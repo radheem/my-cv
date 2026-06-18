@@ -1,0 +1,39 @@
+[project]
+name = "cv-tailor"
+version = "0.1.0"
+description = "Generate job-tailored CVs + cover letters, render an MkDocs site to GitHub Pages, and soft-gate the per-job documents behind a client-side encrypted password gate."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+# Runtime split in two:
+#  - site build + gate (CI-safe, no API key):   mkdocs-material, weasyprint, cryptography, pyyaml
+#  - content generation (local only, needs key): anthropic, jinja2, (playwright optional)
+dependencies = [
+    "mkdocs-material>=9.5",
+    "weasyprint>=62",
+    "cryptography>=42",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+generate = [
+    "anthropic>=0.40",
+    "jinja2>=3.1",
+]
+fetch = [
+    "playwright>=1.45",
+]
+dev = [
+    "pytest>=8",
+]
+
+[project.scripts]
+cv-tailor = "engine.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["engine"]
