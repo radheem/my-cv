@@ -1,16 +1,16 @@
-# Candidate profile — fictional demo persona "John Doe".
+# Candidate profile — Radheem Bin Razi (real data; private repo).
 # Used by the generation engine for contact block, summary, skills ordering,
-# and the cover-letter narrative. No real personal data.
+# and the cover-letter narrative.
 
-name: John Doe
+name: Radheem Bin Razi
 tagline: Distributed Systems & Cloud-Native Engineer
 location: Ilmenau, Germany
-email: john.doe@example.com
-phone: "+49 1512 3456789"
+email: sheikh.radheem@gmail.com
+phone: "+49 155 60115132"
 links:
-  portfolio: https://johndoe.github.io/cv-tailor
-  github: https://github.com/johndoe
-  linkedin: https://www.linkedin.com/in/johndoe
+  portfolio: https://radheem.github.io/my-cv
+  github: https://github.com/radheem
+  linkedin: https://www.linkedin.com/in/radheem-razi
 
 summary: >
   Software engineer with 5 years of experience across distributed systems,
@@ -53,6 +53,6 @@ skill_groups:
     items: ["ReactJS", "NodeJS", "NestJS", "Django", "Protocol Buffers", "REST", "OpenAPI"]
     tags: ["web", "frontend", "api", "react", "node", "fullstack"]
 
-# Logistics for the cover-letter close (kept generic for the demo).
-availability: "Available full-time; open to working-student / part-time."
-relocation: "Based in Germany; flexible within Germany."
+# Logistics for the cover-letter close.
+availability: "Available full-time now; also open to working-student / part-time."
+relocation: "Based in Germany; can relocate within Germany in ~2-3 weeks. Blue Card-ready — for a qualifying offer the employer only issues the contract; no sponsorship overhead."

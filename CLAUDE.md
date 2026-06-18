@@ -13,9 +13,11 @@ The product idea, in one line: **git + GitHub are the application-tracking syste
 agent drafts each application, commits are the audit trail, and a `status` field drives the
 lifecycle. There is no external tracker (no spreadsheet, no Trello, no GitHub Projects).
 
-> **Public demo repo — fictional persona.** Ships no real personal data: "John Doe",
-> `john.doe@example.com`, `github.com/johndoe`, and all employer names are invented. Never
-> commit real names, emails, phone numbers, or personal links.
+> **Private repo — real data.** This is Radheem Bin Razi's personal CV repo (`radheem/my-cv`).
+> `data/` holds real contact details, employers, and projects. The **public GitHub Pages site**
+> shows the portfolio + master CV; per-job documents stay behind the password gate. Keep the
+> gate strong — never let a tailored CV/cover-letter or company name leak into the plaintext
+> site or search index (verify per **Build / test** below).
 
 ## The hard boundary
 
@@ -93,8 +95,9 @@ args) and **backward-compatible** (absent files reproduce the original token-ove
 ## Repo conventions
 
 - **Commits: omit the Claude `Co-Authored-By` footer** in this repo.
-- **Public demo, no real PII** (see persona note above). Generated job Markdown stays
-  committed in plaintext — it's the fake John Doe sample.
+- **Private repo, real data** (see note above). Generated job Markdown is committed in
+  plaintext in the repo but is **excluded from the built site** and AES-sealed by `build.py`
+  before deploy — so the private GitHub repo holds the source, the public site stays gated.
 - **Bump `?v=` on `assets/vault.js`** in `mkdocs.yml` whenever you change `vault.js`. GitHub
   Pages serves assets with `Cache-Control: max-age=600` and no fingerprinting, so a stale
   cached `vault.js` will otherwise break the gate for returning visitors.

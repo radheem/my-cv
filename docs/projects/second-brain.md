@@ -5,7 +5,7 @@ A personal **document-intelligence** service that ingests your PDFs, articles, a
 !!! abstract "At a glance"
     **Role**: Full-stack / backend + platform engineer &nbsp;·&nbsp; **Scope**: FastAPI backend, Hatchet ingestion workflow, Next.js UI, hybrid Postgres/FerretDB persistence, local LLM inference, and a kustomize deploy onto a k3d cluster.
 
-    **Repo**: [github.com/johndoe/my-notebook](https://github.com/johndoe/my-notebook) &nbsp;·&nbsp; **Live (LAN-only)**: `notebook.home.lan` on the [Homelab](homelab.md) cluster
+    **Repo**: [github.com/radheem/my-notebook](https://github.com/radheem/my-notebook) &nbsp;·&nbsp; **Live (LAN-only)**: `notebook.home.lan` on the [Homelab](homelab.md) cluster
 
 ## Architecture
 

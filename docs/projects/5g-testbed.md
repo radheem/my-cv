@@ -3,7 +3,7 @@
 A Kubernetes-orchestrated, end-to-end 5G standalone testbed integrating **srsRAN** (RAN) and **Open5GS** (core), with multi-homed pod networking, an integrated **O-RAN Near-RT RIC**, host-based UEs over virtual RF, and an SDN-managed transport network.
 
 !!! abstract "At a glance"
-    **Domain**: 5G network virtualization / NFV &nbsp;·&nbsp; **Repo**: [github.com/johndoe-corp/srsRAN-dep-zmq](https://github.com/johndoe-corp/srsRAN-dep-zmq) &nbsp;·&nbsp; **Result**: 50+ Mbps TCP throughput, validated UE-to-UE hairpin routing via UPF &nbsp;·&nbsp; **Reference**: [sulaimanalmani/k8s_srsran_open5gs](https://github.com/sulaimanalmani/k8s_srsran_open5gs)
+    **Domain**: 5G network virtualization / NFV &nbsp;·&nbsp; **Repo**: [github.com/radheemCorp/srsRAN-dep-zmq](https://github.com/radheemCorp/srsRAN-dep-zmq) &nbsp;·&nbsp; **Result**: 50+ Mbps TCP throughput, validated UE-to-UE hairpin routing via UPF &nbsp;·&nbsp; **Reference**: [sulaimanalmani/k8s_srsran_open5gs](https://github.com/sulaimanalmani/k8s_srsran_open5gs)
 
 > A single-host Docker-Compose sibling of this testbed is documented in [5G srsRAN + O-RAN RIC (Docker)](srsran-docker.md). This page covers the **Kubernetes** orchestration with Multus CNI, ONOS SDN, and host-UE bridging.
 

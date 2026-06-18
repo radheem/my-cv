@@ -3,7 +3,7 @@
 A reproducible, single-host 5G standalone lab packaged as Docker containers: a real srsRAN gNB, an Open5GS core, and an **O-RAN SC Near-RT RIC** with Python **xApps** that monitor and control the RAN in real time over the **E2 interface**. It runs in two RF modes — **ZMQ virtual RF** (no hardware) for development, and **UHD over-the-air RF** on a **USRP B210 SDR** for real radio-layer work.
 
 !!! abstract "At a glance"
-    **Domain**: O-RAN / 5G RAN intelligence &nbsp;·&nbsp; **Repo**: [github.com/johndoe-corp/srsran-docker](https://github.com/johndoe-corp/srsran-docker) &nbsp;·&nbsp; **Companion**: the [Kubernetes testbed](5g-testbed.md) &nbsp;·&nbsp; **Reference**: [ocudu/ocudu](https://gitlab.com/ocudu/ocudu)
+    **Domain**: O-RAN / 5G RAN intelligence &nbsp;·&nbsp; **Repo**: [github.com/radheemCorp/srsran-docker](https://github.com/radheemCorp/srsran-docker) &nbsp;·&nbsp; **Companion**: the [Kubernetes testbed](5g-testbed.md) &nbsp;·&nbsp; **Reference**: [ocudu/ocudu](https://gitlab.com/ocudu/ocudu)
 
 ## What it is
 A Dockerized end-to-end 5G SA testbed that brings up, on one Linux host:

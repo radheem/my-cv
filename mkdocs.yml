@@ -1,11 +1,7 @@
-site_name: John Doe
-site_description: Distributed Systems Engineer — portfolio, projects, and CV
-site_author: John Doe
-site_url: https://johndoe.github.io/cv-tailor/
-
-# NOTE: this is a public DEMO project. The persona "John Doe" and all contact
-# details are fictional; projects/circumstances are kept for realism. Do not
-# add real personal information here.
+site_name: Radheem Bin Razi
+site_description: Distributed Systems & Cloud-Native Engineer — portfolio, projects, and CV
+site_author: Radheem Bin Razi
+site_url: https://radheem.github.io/my-cv/
 
 theme:
   name: material
@@ -68,9 +64,9 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/johndoe
+      link: https://github.com/radheem
     - icon: fontawesome/solid/envelope
-      link: mailto:john.doe@example.com
+      link: mailto:sheikh.radheem@gmail.com
 
 # Gated per-job pages live under jobs/<slug>/. Only the hub (index.md) is built;
 # cv/cover-letter/job-description are excluded from the site entirely and instead

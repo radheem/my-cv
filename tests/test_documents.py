@@ -9,11 +9,11 @@ import datetime
 from engine import documents
 
 PROFILE = {
-    "name": "John Doe",
+    "name": "Radheem Bin Razi",
     "tagline": "Distributed Systems Engineer",
     "location": "Ilmenau, Germany",
-    "email": "john.doe@example.com",
-    "links": {"portfolio": "https://johndoe.github.io/cv-tailor", "github": "https://github.com/johndoe"},
+    "email": "sheikh.radheem@gmail.com",
+    "links": {"portfolio": "https://radheem.github.io/my-cv", "github": "https://github.com/radheem"},
 }
 
 
@@ -49,7 +49,7 @@ def test_letter_has_no_title_but_has_letterhead_and_signoff():
         "Body paragraph.", {}, PROFILE, today=datetime.date(2026, 6, 18)
     )
     assert 'class="letter"' in html
-    assert "John Doe" in html          # letterhead name
+    assert "Radheem Bin Razi" in html          # letterhead name
     assert "Sincerely," in html        # sign-off
     assert "<h1" not in html           # a letter has no title
     assert "2026" in html              # date rendered
@@ -62,9 +62,9 @@ def test_cv_header_composed_from_profile_and_tagline():
         PROFILE,
     )
     assert 'class="cv"' in html
-    assert "John Doe" in html                 # name from profile
+    assert "Radheem Bin Razi" in html                 # name from profile
     assert "Platform Engineer" in html        # tailored tagline
-    assert "john.doe@example.com" in html      # contact from profile
+    assert "sheikh.radheem@gmail.com" in html      # contact from profile
     assert "<h2" in html                       # section heading present
 
 

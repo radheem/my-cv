@@ -5,7 +5,7 @@ locally, then deploy to GitHub Pages.
 
 !!! warning "Public repo — fictional persona"
     This project is public and ships **no real personal data**. The identity
-    ("John Doe", `john.doe@example.com`, `github.com/johndoe`) and employer names are
+    ("Radheem Bin Razi", `sheikh.radheem@gmail.com`, `github.com/radheem`) and employer names are
     invented; the projects are kept for realism. Never commit real names, emails, phone
     numbers, or personal links.
 
@@ -116,7 +116,7 @@ What to verify:
 - The nav shows a single **Tailored** entry → a sign-in page. Wrong password → error; the
   correct password reveals the **application list** with working links and a **status badge**
   per role (`draft → applied → interview → offer / rejected / withdrawn`; see
-  [CLAUDE.md](https://github.com/johndoe/cv-tailor/blob/main/CLAUDE.md)).
+  [CLAUDE.md](https://github.com/radheem/cv-tailor/blob/main/CLAUDE.md)).
 - **One unlock, then browse:** click an application → its `jobs/<slug>/` hub auto-unlocks (no
   second prompt), renders the CV / cover letter in an iframe, and downloads the decrypted PDF.
 - **Direct-visit fallback:** a fresh tab opening a `jobs/<slug>/` URL still shows its own
@@ -150,7 +150,7 @@ One-time repo configuration:
    is the password visitors will use to unlock the gated documents.
 
 Every push to `main` then renders, gates, and deploys via
-[`.github/workflows/deploy.yml`](https://github.com/johndoe/cv-tailor). No API key is used
+[`.github/workflows/deploy.yml`](https://github.com/radheem/cv-tailor). No API key is used
 in CI — generation is always a local step.
 
 ## Environment variables

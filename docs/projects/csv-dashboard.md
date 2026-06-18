@@ -5,7 +5,7 @@ A static, **zero-backend web app** that turns any public Google Sheet into a liv
 !!! abstract "At a glance"
     **Role**: Full-stack engineer (solo) &nbsp;·&nbsp; **Stack**: Vanilla JS · Chart.js · Tailwind CSS · GitHub Pages &nbsp;·&nbsp; **Hosting cost**: $0
 
-    **Live**: [johndoe.github.io/csv-dashboard](https://johndoe.github.io/csv-dashboard/) &nbsp;·&nbsp; **Repo**: [github.com/johndoe/csv-dashboard](https://github.com/johndoe/csv-dashboard)
+    **Live**: [radheem.github.io/csv-dashboard](https://radheem.github.io/csv-dashboard/) &nbsp;·&nbsp; **Repo**: [github.com/radheem/csv-dashboard](https://github.com/radheem/csv-dashboard)
 
 ## Architecture
 

@@ -1,5 +1,5 @@
 # Structured project catalogue for relevance ranking (engine/rank.py).
-# Real projects, deidentified links (fictional "johndoe" handles). Each entry
+# Real projects with real repo links. Each entry
 # carries `tags` and `stack` used to score against a JobSpec; `summary` is the
 # one-line used in a tailored CV's Projects section. `doc` points at the public
 # write-up under docs/projects/.
@@ -25,7 +25,7 @@ projects:
     name: "Second Brain (Document RAG)"
     weight: 1.2
     doc: projects/second-brain.md
-    url: "https://github.com/johndoe/my-notebook"
+    url: "https://github.com/radheem/my-notebook"
     summary: "Self-hosted RAG document-intelligence service: durable Hatchet ingestion, local llama.cpp inference, pgvector semantic search, NATS JetStream progress streaming on a k3d homelab."
     domains: ["ml", "backend", "platform"]
     tags: ["python", "rag", "llm", "ml", "ai", "pgvector", "fastapi", "hatchet", "nats", "kubernetes", "vector-search", "data", "backend"]
@@ -34,7 +34,7 @@ projects:
   - id: k3d
     name: "HA K3s Cluster Platform (k3d + Cilium)"
     doc: projects/k3d.md
-    url: "https://github.com/johndoe/home-lab"
+    url: "https://github.com/radheem/home-lab"
     summary: "Reboot-resilient HA K3s clusters in Docker, kube-proxy-free in eBPF mode with Cilium L2 LoadBalancer, a sequential-boot orchestrator, and self-healing CNI."
     domains: ["platform", "devops", "infra"]
     tags: ["kubernetes", "cloud", "devops", "infra", "platform", "cilium", "ebpf", "networking", "sre", "docker", "gitops"]
@@ -43,7 +43,7 @@ projects:
   - id: homelab
     name: "Homelab (Zero-Touch LAN DNS)"
     doc: projects/homelab.md
-    url: "https://github.com/johndoe/home-lab"
+    url: "https://github.com/radheem/home-lab"
     summary: "Declarative k3d home lab where a Service + HTTPRoute with a *.home.lan host is reachable by name with automatic HTTPS — ExternalDNS + authoritative CoreDNS, Cilium Gateway, cert-manager."
     domains: ["platform", "devops", "infra"]
     tags: ["kubernetes", "devops", "infra", "platform", "dns", "gitops", "networking", "cilium", "cert-manager", "sre"]
@@ -52,7 +52,7 @@ projects:
   - id: oran-aiml
     name: "O-RAN AIML Framework"
     doc: projects/oran-aiml.md
-    url: "https://github.com/johndoe-corp/O-RAN-AIML-deployment"
+    url: "https://github.com/radheemCorp/O-RAN-AIML-deployment"
     summary: "End-to-end AI/ML platform for O-RAN 5G networks (Kubeflow + KServe) driven by a custom Python client/SDK. 15-credit research project, graded 1.0 (A)."
     domains: ["ml", "platform", "telecom"]
     tags: ["ml", "ai", "mlops", "kubeflow", "kserve", "python", "kubernetes", "5g", "oran", "telecom", "data-science", "research"]
@@ -61,7 +61,7 @@ projects:
   - id: srsran-docker
     name: "5G srsRAN + O-RAN RIC (Docker)"
     doc: projects/srsran-docker.md
-    url: "https://github.com/johndoe-corp/srsran-docker"
+    url: "https://github.com/radheemCorp/srsran-docker"
     summary: "Dockerized 5G SA lab with an integrated O-RAN Near-RT RIC and Python xApps controlling the RAN over E2 (KPM / RC / CCC), with a Telegraf → InfluxDB → Grafana pipeline."
     domains: ["telecom", "infra"]
     tags: ["5g", "oran", "telecom", "docker", "python", "networking", "observability", "ric", "research"]
@@ -70,7 +70,7 @@ projects:
   - id: 5g-testbed
     name: "5G srsRAN Testbed (Kubernetes)"
     doc: projects/5g-testbed.md
-    url: "https://github.com/johndoe-corp/srsRAN-dep-zmq"
+    url: "https://github.com/radheemCorp/srsRAN-dep-zmq"
     summary: "Kubernetes 5G testbed (srsRAN + Open5GS) with Multus CNI, an O-RAN RIC over E2, ONOS SDN, and 50+ Mbps throughput."
     domains: ["telecom", "platform", "infra"]
     tags: ["5g", "oran", "telecom", "kubernetes", "networking", "multus", "sdn", "research", "infra"]
@@ -79,7 +79,7 @@ projects:
   - id: stickman
     name: "Infinite Stickman (Arcade Runner)"
     doc: projects/stickman.md
-    url: "https://github.com/johndoe/stickman"
+    url: "https://github.com/radheem/stickman"
     summary: "Endless monochrome arcade runner in vanilla JS + HTML5 Canvas — no framework, no build step — with a Google Sheets + Apps Script global leaderboard."
     domains: ["frontend", "web"]
     tags: ["javascript", "frontend", "web", "canvas", "game", "vanilla-js", "zero-backend"]
@@ -88,7 +88,7 @@ projects:
   - id: csv-dashboard
     name: "Sheet Dashboard (Google Sheets)"
     doc: projects/csv-dashboard.md
-    url: "https://github.com/johndoe/csv-dashboard"
+    url: "https://github.com/radheem/csv-dashboard"
     summary: "Zero-backend web app that turns any link-shared Google Sheet into a live dashboard — client-side CSV parsing, KPI cards, charts, and an extensible data-type registry."
     domains: ["frontend", "web", "data"]
     tags: ["javascript", "frontend", "web", "dashboard", "data", "charts", "zero-backend", "analytics"]
@@ -97,7 +97,7 @@ projects:
   - id: gitpress
     name: "Gitpress (Zero-Server Blog)"
     doc: projects/gitpress.md
-    url: "https://github.com/johndoe/gitpress"
+    url: "https://github.com/radheem/gitpress"
     summary: "Static blog CMS with no servers or databases — Google Docs as content source, GitHub Actions build pipeline, GitHub Pages hosting, Apps Script for forms/analytics."
     domains: ["web", "platform"]
     tags: ["web", "frontend", "static-site", "github-actions", "ci-cd", "zero-backend", "automation"]

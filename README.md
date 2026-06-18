@@ -10,9 +10,10 @@ you're chasing — sit behind one password. **Git is the application tracker:** 
 audit trail, and a `status` field drives each application's lifecycle. No spreadsheet, no
 external tool.
 
-> **Public demo — fictional persona.** This repo ships no real personal data. The identity
-> ("John Doe", `john.doe@example.com`, `github.com/johndoe`) and employer names are invented;
-> the *projects* and career structure are kept for realism. Don't commit real personal data.
+> **Private repo — real data.** This is Radheem Bin Razi's personal CV repo. The public GitHub
+> Pages site shows the portfolio and master CV; per-job applications (and even the list of which
+> roles are being chased) sit behind the password gate and are AES-sealed before deploy. Keep
+> the repo private and the gate strong.
 
 ## Why use it
 

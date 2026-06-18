@@ -3,7 +3,7 @@
 A comprehensive AI/ML framework for O-RAN compatible 5G networks, enabling end-to-end machine-learning workflows for network optimization and analytics — from feature ingestion through training to live model serving — driven by a custom Python client.
 
 !!! abstract "At a glance"
-    **Context**: 15-credit research project, Integrated Communication Systems group, TU Ilmenau &nbsp;·&nbsp; **Grade**: 1.0 / A (German system) &nbsp;·&nbsp; **Repo**: [github.com/johndoe-corp/O-RAN-AIML-deployment](https://github.com/johndoe-corp/O-RAN-AIML-deployment)
+    **Context**: 15-credit research project, Integrated Communication Systems group, TU Ilmenau &nbsp;·&nbsp; **Grade**: 1.0 / A (German system) &nbsp;·&nbsp; **Repo**: [github.com/radheemCorp/O-RAN-AIML-deployment](https://github.com/radheemCorp/O-RAN-AIML-deployment)
 
 ## Architecture
 

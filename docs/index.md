@@ -1,4 +1,4 @@
-# John Doe { .hero-title }
+# Radheem Bin Razi { .hero-title }
 
 ## Distributed Systems & Cloud-Native Engineer
 
@@ -8,7 +8,7 @@ Currently a Master of Research student in **Computer Systems & Engineering at TU
 
 [View Projects](projects/index.md){ .md-button .md-button--primary }
 [Read CV](cv.md){ .md-button }
-[:material-download: Download CV (PDF)](assets/cv.pdf){ .md-button download="John-Doe-CV.pdf" }
+[:material-download: Download CV (PDF)](assets/cv.pdf){ .md-button download="Radheem-Bin-Razi-CV.pdf" }
 
 ---
 
@@ -89,6 +89,6 @@ Currently a Master of Research student in **Computer Systems & Engineering at TU
 
 ---
 
-:material-email: [john.doe@example.com](mailto:john.doe@example.com) &nbsp;·&nbsp;
-:material-github: [github.com/johndoe](https://github.com/johndoe) &nbsp;·&nbsp;
+:material-email: [sheikh.radheem@gmail.com](mailto:sheikh.radheem@gmail.com) &nbsp;·&nbsp;
+:material-github: [github.com/radheem](https://github.com/radheem) &nbsp;·&nbsp;
 :material-map-marker: Ilmenau, Germany

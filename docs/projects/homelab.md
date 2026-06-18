@@ -5,7 +5,7 @@ A clean, declarative **k3d home lab** where shipping a service is the whole cont
 !!! abstract "At a glance"
     **Role**: Cloud-native / platform engineer &nbsp;·&nbsp; **Scope**: one-click installer, two-plane DNS with automatic record publishing, a shared Cilium Gateway with wildcard TLS, a selectable add-on component stack (monitoring / messaging / workflow / DB), and an optional in-cluster image registry.
 
-    **Live docs**: [johndoe.github.io/home-lab](https://johndoe.github.io/home-lab/) &nbsp;·&nbsp; **Repo**: [github.com/johndoe/home-lab](https://github.com/johndoe/home-lab)
+    **Live docs**: [radheem.github.io/home-lab](https://radheem.github.io/home-lab/) &nbsp;·&nbsp; **Repo**: [github.com/radheem/home-lab](https://github.com/radheem/home-lab)
 
 ## Architecture
 

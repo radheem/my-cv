@@ -5,7 +5,7 @@ A static blog CMS with **no servers, no databases, and no monthly bills** — bu
 !!! abstract "At a glance"
     **Role**: Full-stack engineer (solo) &nbsp;·&nbsp; **Stack**: Node.js build pipeline · Google APIs (Drive, Docs, Sheets, Apps Script) · GitHub Actions · GitHub Pages · Tailwind CSS &nbsp;·&nbsp; **Hosting cost**: $0
 
-    **Repo**: [github.com/johndoe/gitpress](https://github.com/johndoe/gitpress) &nbsp;·&nbsp; **Example**: [johndoe.github.io/github-blogs](https://johndoe.github.io/github-blogs/) &nbsp;·&nbsp; **Template**: deploy your own blog in minutes — no server required
+    **Repo**: [github.com/radheem/gitpress](https://github.com/radheem/gitpress) &nbsp;·&nbsp; **Example**: [radheem.github.io/github-blogs](https://radheem.github.io/github-blogs/) &nbsp;·&nbsp; **Template**: deploy your own blog in minutes — no server required
 
 ## Architecture
 
@@ -78,7 +78,7 @@ sequenceDiagram
   GA->>GA: convert Docs → HTML<br/>download & self-host images<br/>render templates (Tailwind)
   GA->>GP: deploy static site artifact
   deactivate GA
-  GP-->>Author: live at johndoe.github.io/...
+  GP-->>Author: live at radheem.github.io/...
 ```
 
 ### Visitor form + admin dashboard

@@ -8,7 +8,7 @@ Go microservices ecosystem on native NATS (JetStream + KV) and direct gRPC, with
 [:octicons-arrow-right-24: Read more](irs.md)
 
 ## :material-brain: Second Brain — Self-Hosted Document RAG
-A personal **document-intelligence** service that ingests PDFs, articles, and notes through a durable **Hatchet** pipeline (extract → chunk → embed → summarize → index), then serves **semantic search and grounded RAG chat over your own documents** — running entirely on a **k3d homelab** with local `llama.cpp` inference (no cloud calls). Uses **pgvector** (HNSW) for similarity search and **NATS JetStream + SSE** for real-time ingestion progress. ([repo](https://github.com/johndoe/my-notebook))
+A personal **document-intelligence** service that ingests PDFs, articles, and notes through a durable **Hatchet** pipeline (extract → chunk → embed → summarize → index), then serves **semantic search and grounded RAG chat over your own documents** — running entirely on a **k3d homelab** with local `llama.cpp` inference (no cloud calls). Uses **pgvector** (HNSW) for similarity search and **NATS JetStream + SSE** for real-time ingestion progress. ([repo](https://github.com/radheem/my-notebook))
 
 [:octicons-arrow-right-24: Read more](second-brain.md)
 
@@ -18,7 +18,7 @@ Fully automated, reboot-resilient high-availability K3s clusters in Docker (k3d)
 [:octicons-arrow-right-24: Read more](k3d.md)
 
 ## :material-home-assistant: Homelab — Declarative k8s with Zero-Touch LAN DNS
-A declarative **k3d home lab** where deploying a `Service` + `HTTPRoute` with a `*.home.lan` hostname makes it reachable **by name with automatic HTTPS** from any LAN device — no manual DNS edits. **ExternalDNS** publishes records into an authoritative **CoreDNS** (etcd/skydns), a shared **Cilium Gateway** terminates a **cert-manager** wildcard cert, a selectable component stack adds monitoring/messaging/workflow/DB, and an optional in-cluster image registry lets you `docker push registry.home.lan/...` and have the nodes pull it. Single-node-focused — the deliberate trade-off vs the HA platform is no multi-node reboot resilience. ([live docs](https://johndoe.github.io/home-lab/) · [repo](https://github.com/johndoe/home-lab))
+A declarative **k3d home lab** where deploying a `Service` + `HTTPRoute` with a `*.home.lan` hostname makes it reachable **by name with automatic HTTPS** from any LAN device — no manual DNS edits. **ExternalDNS** publishes records into an authoritative **CoreDNS** (etcd/skydns), a shared **Cilium Gateway** terminates a **cert-manager** wildcard cert, a selectable component stack adds monitoring/messaging/workflow/DB, and an optional in-cluster image registry lets you `docker push registry.home.lan/...` and have the nodes pull it. Single-node-focused — the deliberate trade-off vs the HA platform is no multi-node reboot resilience. ([live docs](https://radheem.github.io/home-lab/) · [repo](https://github.com/radheem/home-lab))
 
 [:octicons-arrow-right-24: Read more](homelab.md)
 
@@ -28,26 +28,26 @@ End-to-end AI/ML framework for O-RAN compatible 5G networks on Kubernetes + Helm
 [:octicons-arrow-right-24: Read more](oran-aiml.md)
 
 ## :material-radio-tower: 5G srsRAN + O-RAN RIC Testbed (Docker)
-Single-host Dockerized 5G SA lab: srsRAN gNB (ZMQ/UHD), Open5GS core, and an integrated **O-RAN SC Near-RT RIC** with Python **xApps** controlling the RAN over E2 (E2SM-KPM / RC / CCC), plus a Telegraf → InfluxDB → Grafana metrics pipeline. ([repo](https://github.com/johndoe-corp/srsran-docker))
+Single-host Dockerized 5G SA lab: srsRAN gNB (ZMQ/UHD), Open5GS core, and an integrated **O-RAN SC Near-RT RIC** with Python **xApps** controlling the RAN over E2 (E2SM-KPM / RC / CCC), plus a Telegraf → InfluxDB → Grafana metrics pipeline. ([repo](https://github.com/radheemCorp/srsran-docker))
 
 [:octicons-arrow-right-24: Read more](srsran-docker.md)
 
 ## :material-run-fast: Infinite Stickman — Arcade Runner
-An endlessly scrolling monochrome arcade runner built with **Vanilla JS and HTML5 Canvas** — no framework, no build step, zero dependencies. Jump, double-jump, and duck under procedurally generated obstacles as the world gets faster. A global leaderboard is powered by **Google Sheets + Apps Script**: scores are submitted as a `text/plain` POST (no CORS preflight) and fetched as JSON — no backend to host. ([play](https://johndoe.github.io/stickman/) · [repo](https://github.com/johndoe/stickman))
+An endlessly scrolling monochrome arcade runner built with **Vanilla JS and HTML5 Canvas** — no framework, no build step, zero dependencies. Jump, double-jump, and duck under procedurally generated obstacles as the world gets faster. A global leaderboard is powered by **Google Sheets + Apps Script**: scores are submitted as a `text/plain` POST (no CORS preflight) and fetched as JSON — no backend to host. ([play](https://radheem.github.io/stickman/) · [repo](https://github.com/radheem/stickman))
 
 [:octicons-arrow-right-24: Read more](stickman.md)
 
 ## :material-chart-bar: Sheet Dashboard — Google Sheets → Live Dashboard
-A static, **zero-backend web app** that turns any link-shared Google Sheet into a live dashboard — instantly. Paste a Sheet link, select a data type, and the browser fetches the CSV directly from Google, parses it client-side, and renders KPI cards, six interactive charts, and a searchable, sortable table. No server, no sign-in, no build step. Built with an **extensible data-type registry** so new data sources (e.g. Google Analytics, Shopify) can be added by appending a single object. v1 targets Meta Ads analytics. ([live](https://johndoe.github.io/csv-dashboard/) · [repo](https://github.com/johndoe/csv-dashboard))
+A static, **zero-backend web app** that turns any link-shared Google Sheet into a live dashboard — instantly. Paste a Sheet link, select a data type, and the browser fetches the CSV directly from Google, parses it client-side, and renders KPI cards, six interactive charts, and a searchable, sortable table. No server, no sign-in, no build step. Built with an **extensible data-type registry** so new data sources (e.g. Google Analytics, Shopify) can be added by appending a single object. v1 targets Meta Ads analytics. ([live](https://radheem.github.io/csv-dashboard/) · [repo](https://github.com/radheem/csv-dashboard))
 
 [:octicons-arrow-right-24: Read more](csv-dashboard.md)
 
 ## :material-newspaper-variant-outline: Gitpress — Zero-Server Blog on Google + GitHub
-A static blog CMS with **no servers, no databases, and no hosting costs** — built entirely on **Google** (Docs, Sheets, Apps Script) and **GitHub** (Pages, Actions). Authors write posts in Google Docs; GitHub Actions pulls them via Google APIs, converts them to static HTML, and deploys to GitHub Pages. Visitor lead and feedback forms POST to a Google Apps Script web app that writes to Sheets and emails the owner. An optional admin dashboard reads live analytics from the same script. ([repo](https://github.com/johndoe/gitpress))
+A static blog CMS with **no servers, no databases, and no hosting costs** — built entirely on **Google** (Docs, Sheets, Apps Script) and **GitHub** (Pages, Actions). Authors write posts in Google Docs; GitHub Actions pulls them via Google APIs, converts them to static HTML, and deploys to GitHub Pages. Visitor lead and feedback forms POST to a Google Apps Script web app that writes to Sheets and emails the owner. An optional admin dashboard reads live analytics from the same script. ([repo](https://github.com/radheem/gitpress))
 
 [:octicons-arrow-right-24: Read more](gitpress.md)
 
 ## :material-server-network: 5G srsRAN Testbed — Network Virtualization (Kubernetes)
-Kubernetes-orchestrated end-to-end 5G testbed (srsRAN + Open5GS) with **Multus CNI** multi-homed networking (N2/N3/N6), ZeroMQ virtual RF, host-based UEs, an integrated **O-RAN Near-RT RIC** over E2, an **ONOS SDN** transport network, and Prometheus/Grafana. Achieved 50+ Mbps TCP throughput. ([repo](https://github.com/johndoe-corp/srsRAN-dep-zmq))
+Kubernetes-orchestrated end-to-end 5G testbed (srsRAN + Open5GS) with **Multus CNI** multi-homed networking (N2/N3/N6), ZeroMQ virtual RF, host-based UEs, an integrated **O-RAN Near-RT RIC** over E2, an **ONOS SDN** transport network, and Prometheus/Grafana. Achieved 50+ Mbps TCP throughput. ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
 
 [:octicons-arrow-right-24: Read more](5g-testbed.md)

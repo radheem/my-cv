@@ -5,17 +5,17 @@ An endlessly scrolling monochrome arcade runner built with **Vanilla JS and HTML
 !!! abstract "At a glance"
     **Role**: Full-stack engineer (solo) &nbsp;·&nbsp; **Stack**: Vanilla JS · HTML5 Canvas · Google Apps Script · Google Sheets · GitHub Pages &nbsp;·&nbsp; **Hosting cost**: $0
 
-    **Play**: [johndoe.github.io/stickman](https://johndoe.github.io/stickman/) &nbsp;·&nbsp; **Repo**: [github.com/johndoe/stickman](https://github.com/johndoe/stickman)
+    **Play**: [radheem.github.io/stickman](https://radheem.github.io/stickman/) &nbsp;·&nbsp; **Repo**: [github.com/radheem/stickman](https://github.com/radheem/stickman)
 
 ## Screenshots
 
-![Title screen](https://raw.githubusercontent.com/johndoe/stickman/main/assets/pictures/01.init_game.png)
+![Title screen](https://raw.githubusercontent.com/radheem/stickman/main/assets/pictures/01.init_game.png)
 *Enter your name — it goes on the global leaderboard.*
 
-![Gameplay](https://raw.githubusercontent.com/johndoe/stickman/main/assets/pictures/02.play.png)
+![Gameplay](https://raw.githubusercontent.com/radheem/stickman/main/assets/pictures/02.play.png)
 *Jump gaps, clear obstacles, duck under overhead pillars. Speed climbs the longer you survive.*
 
-![Game over and leaderboard](https://raw.githubusercontent.com/johndoe/stickman/main/assets/pictures/03.leaderboard.png)
+![Game over and leaderboard](https://raw.githubusercontent.com/radheem/stickman/main/assets/pictures/03.leaderboard.png)
 *Die and your score is submitted instantly. A new personal best is marked ★. Your row is highlighted on the board.*
 
 ## Architecture
