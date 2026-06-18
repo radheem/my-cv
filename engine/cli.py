@@ -1,15 +1,17 @@
 """cv-tailor CLI — generate a tailored application from a job posting.
 
-    cv-tailor new <job-url-or-file> [--slug NAME]
+    cv-tailor new <job-url-or-file> [--slug NAME] [--provider anthropic|ollama]
 
-Runs locally (needs ANTHROPIC_API_KEY). Writes docs/jobs/<slug>/ with cv.md,
-cover-letter.md, job-description.md, and index.md (the gated unlock hub). Review
-the output, commit it, and let CI render + encrypt + deploy.
+Runs locally. Generation uses Anthropic by default (ANTHROPIC_API_KEY) or a local
+Ollama / OpenAI-compatible endpoint with --provider ollama. Writes docs/jobs/<slug>/
+with cv.md, cover-letter.md, job-description.md, and index.md (the gated unlock hub).
+Review the output, commit it, and let CI render + encrypt + deploy.
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import pathlib
 import re
 import sys
@@ -57,7 +59,18 @@ def _hub_page(title: str, company: str, slug: str) -> str:
     )
 
 
+def _apply_provider_flags(args: argparse.Namespace) -> None:
+    """Map provider flags onto the env vars that engine.llm.resolve() reads."""
+    if args.provider:
+        os.environ["CV_TAILOR_PROVIDER"] = args.provider
+    if args.model:
+        os.environ["CV_TAILOR_MODEL"] = args.model
+    if args.ollama_url:
+        os.environ["CV_TAILOR_OLLAMA_BASE_URL"] = args.ollama_url
+
+
 def cmd_new(args: argparse.Namespace) -> int:
+    _apply_provider_flags(args)
     profile, projects, master_cv, cv_guide, cl_guide = _load_data()
 
     print(f"Fetching job from {args.source} ...", file=sys.stderr)
@@ -118,6 +131,21 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="recipient name for the cover-letter salutation (e.g. 'Jane Smith'); "
         "omit for 'Dear Hiring Team,'",
+    )
+    p_new.add_argument(
+        "--provider",
+        choices=["anthropic", "ollama"],
+        default=None,
+        help="generation backend (default: anthropic; ollama = OpenAI-compatible endpoint)",
+    )
+    p_new.add_argument(
+        "--model", default=None, help="model id override (e.g. claude-opus-4-8, qwen3.5:35b)"
+    )
+    p_new.add_argument(
+        "--ollama-url",
+        default=None,
+        help="OpenAI-compatible base URL for --provider ollama "
+        "(default: http://localhost:11434/v1)",
     )
     p_new.set_defaults(func=cmd_new)
 
