@@ -105,6 +105,18 @@ Key points:
 - Blob format is `base64( iv[12] || ciphertext‖GCM-tag )`, matching `encrypt.seal()` and
   `vault.js` byte-for-byte.
 
+## Document rendering
+
+The CV and cover letter are **not** rendered through the MkDocs Material theme — that
+produced web-styled, multi-page output and leaked theme chrome into the unlock iframe.
+Instead, `engine/documents.py` renders each gated document as **standalone HTML with
+`docs/assets/doc.css` inlined**: a classic one-column CV (small-caps ruled headings,
+two-line entries) and a minimal business letter (letterhead → date → salutation → body →
+sign-off, no title). The cover-letter salutation is `Dear {recipient},` when a recipient is
+set, else `Dear Hiring Team,`. The **same** self-contained HTML feeds both the WeasyPrint
+PDF and the in-browser view, so they match and need no external assets. The gated sources
+are excluded from the mkdocs build (`exclude_docs`) so nothing themed is ever produced.
+
 ## Repository layout
 
 | Path | Role |
@@ -114,6 +126,7 @@ Key points:
 | `engine/jobspec.py`, `engine/render.py` | Claude API calls (local only) |
 | `engine/cli.py`, `engine/fetch.py` | `cv-tailor new` entrypoint + job fetcher |
 | `docs/` | MkDocs content; `docs/jobs/<slug>/` is gated |
+| `engine/documents.py`, `docs/assets/doc.css` | standalone, theme-independent CV/letter HTML + print CSS |
 | `build.py`, `encrypt.py` | render PDFs + AES-seal the gated content |
 | `docs/assets/vault.js` | in-browser PBKDF2 + AES-GCM decryptor |
 | `.github/workflows/deploy.yml` | render → gate → deploy to Pages |

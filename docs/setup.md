@@ -35,7 +35,12 @@ playwright install chromium        # only needed to fetch job URLs
 export ANTHROPIC_API_KEY=...
 cv-tailor new path/to/job.txt          # a pasted .txt/.md file …
 cv-tailor new https://example.com/job  # … or a job URL (needs Playwright)
+cv-tailor new path/to/job.txt --recipient "Jane Smith"   # personalize the salutation
 ```
+
+The cover letter is rendered as a real letter (letterhead → date → salutation → body →
+sign-off, no title). `--recipient` sets `Dear Jane Smith,`; omit it for `Dear Hiring Team,`.
+You can also edit `recipient:` in the generated `cover-letter.md` front matter later.
 
 This writes `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-description.md`, and
 `index.md` (the gated unlock hub). The flow:
