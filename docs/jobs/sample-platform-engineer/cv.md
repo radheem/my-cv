@@ -1,13 +1,8 @@
 ---
 search:
   exclude: true
+tagline: Platform & Cloud-Native Engineer
 ---
-
-# John Doe
-
-## Platform & Cloud-Native Engineer
-
-Ilmenau, Germany | [john.doe@example.com](mailto:john.doe@example.com) | [portfolio](https://johndoe.github.io/cv-tailor) | [github](https://github.com/johndoe)
 
 ## Experience
 
@@ -44,12 +39,9 @@ Ilmenau, Germany | [john.doe@example.com](mailto:john.doe@example.com) | [portfo
 - **IRS Platform (Stealth)** — Distributed Go microservices on native NATS (JetStream + KV) and gRPC, deployed via Kubernetes, kustomize, Skaffold, and Cilium.
 
 ## Skills
+
 - **Languages** — English (fluent), Deutsch (A2)
 - **Programming Languages** — Go, Python, TypeScript, JavaScript, PHP
 - **Cloud-Native & Infra** — Kubernetes, Cilium, Docker, kustomize, Skaffold, Helm, Terraform, external-dns
 - **Observability & Reliability** — Prometheus, Grafana, OpenTelemetry, VictoriaMetrics
 - **Distributed Systems** — gRPC, NATS JetStream, Hatchet
-
----
-
-*This is a fictional demo CV (persona "John Doe"). References available upon request.*

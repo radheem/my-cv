@@ -36,6 +36,11 @@ def _load_data() -> tuple[dict, list, str, str, str]:
 _NO_INDEX = "---\nsearch:\n  exclude: true\n---\n\n"
 
 
+def _yaml(value: str) -> str:
+    """Quote a scalar for a YAML front-matter value."""
+    return '"' + str(value).replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
 def _slugify(*parts: str) -> str:
     raw = "-".join(p for p in parts if p)
     slug = re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")
@@ -68,14 +73,20 @@ def cmd_new(args: argparse.Namespace) -> int:
     out.mkdir(parents=True, exist_ok=True)
 
     print("Rendering CV ...", file=sys.stderr)
-    cv_md = render.render_cv(spec, tailoring, master_cv, cv_guide)
+    tagline, cv_body = render.render_cv(spec, tailoring, master_cv, cv_guide)
     print("Rendering cover letter ...", file=sys.stderr)
-    cl_md = render.render_cover_letter(
+    cl_body = render.render_cover_letter(
         spec, tailoring, profile.get("summary", ""), job_text, cl_guide
     )
 
-    (out / "cv.md").write_text(_NO_INDEX + cv_md, encoding="utf-8")
-    (out / "cover-letter.md").write_text(_NO_INDEX + cl_md, encoding="utf-8")
+    cv_fm = f"---\nsearch:\n  exclude: true\ntagline: {_yaml(tagline)}\n---\n\n"
+    cl_fm = (
+        "---\nsearch:\n  exclude: true\n"
+        f"recipient: {_yaml(args.recipient or '')}\n"
+        f"company: {_yaml(spec.get('company', ''))}\n---\n\n"
+    )
+    (out / "cv.md").write_text(cv_fm + cv_body, encoding="utf-8")
+    (out / "cover-letter.md").write_text(cl_fm + cl_body, encoding="utf-8")
     (out / "job-description.md").write_text(
         _NO_INDEX
         + f"# Job Description — {spec.get('title')}\n\n```\n{job_text.strip()}\n```\n",
@@ -102,6 +113,12 @@ def main(argv: list[str] | None = None) -> int:
     p_new = sub.add_parser("new", help="generate a tailored application from a job")
     p_new.add_argument("source", help="job posting URL, or path to a .txt/.md file")
     p_new.add_argument("--slug", help="output dir name under docs/jobs/", default=None)
+    p_new.add_argument(
+        "--recipient",
+        default=None,
+        help="recipient name for the cover-letter salutation (e.g. 'Jane Smith'); "
+        "omit for 'Dear Hiring Team,'",
+    )
     p_new.set_defaults(func=cmd_new)
 
     args = parser.parse_args(argv)

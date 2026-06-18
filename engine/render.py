@@ -24,27 +24,35 @@ def _projects_block(projects: list[dict[str, Any]]) -> str:
 
 
 _CV_SYSTEM = (
-    "You write a tailored, one-page CV in GitHub-flavored Markdown. Rules:\n"
+    "You write a tailored, one-page CV body in GitHub-flavored Markdown. Rules:\n"
     "- TRUTH ONLY: use only facts from the provided master CV. Never invent "
     "roles, employers, dates, skills, or metrics.\n"
     "- Reorder and reword experience bullets to foreground what the job needs.\n"
     "- Use exactly the provided top-3 projects and the provided skills block "
     "(do not add or drop projects/skill lines).\n"
-    "- Start the page with an H1 of the candidate name, then a one-line role "
-    "tagline retitled to fit the job (only if honest), then a one-line contact.\n"
-    "- Sections in order: Experience, Education, Projects, Skills. Keep it tight "
-    "(about one page). Output Markdown only — no code fences, no commentary."
+    "- Do NOT include the candidate name or contact line — those are added by the "
+    "template. The VERY FIRST line of your output must be exactly "
+    "'tagline: <role tagline>' (a short role title retitled to fit the job, only "
+    "if honest), then a blank line.\n"
+    "- After that, the CV body with sections in this order, each an H2 "
+    "(## Experience, ## Education, ## Projects, ## Skills). Use '### Org — Role' "
+    "for each entry followed by an italic '*Location · dates*' line, then bullets.\n"
+    "- Keep it tight (about one page). Output Markdown only — no code fences, no "
+    "commentary."
 )
 
 _COVER_SYSTEM = (
-    "You write a tailored cover letter in GitHub-flavored Markdown, ~4 paragraphs, "
-    "250-400 words, for a non-technical first reader. Rules:\n"
+    "You write the BODY of a tailored cover letter in GitHub-flavored Markdown — "
+    " just the paragraphs, ~3-4 of them, 250-400 words, for a non-technical first "
+    "reader. Rules:\n"
     "- TRUTH ONLY: no invented experience, skills, metrics, or dates.\n"
-    "- Structure: a light, genuine opening hook naming the role and a real 'why "
-    "this company'; 2-3 body paragraphs with concrete proof that complement (not "
-    "repeat) the CV; a closing with availability.\n"
-    "- One idea per sentence; salutation 'Dear Hiring Team,'; never 'To Whom it "
-    "May Concern'. Output Markdown only — no code fences, no commentary."
+    "- Do NOT write a title/heading, a salutation ('Dear ...'), or a sign-off "
+    "('Sincerely ...') — the letter template adds the letterhead, salutation, and "
+    "signature. Output the body paragraphs ONLY.\n"
+    "- A light, genuine opening that names the role and a real 'why this company'; "
+    "1-2 body paragraphs of concrete proof that complement (not repeat) the CV; a "
+    "closing paragraph with availability.\n"
+    "- One idea per sentence. Output Markdown only — no code fences, no commentary."
 )
 
 
@@ -74,11 +82,19 @@ def render_cv(
     tailoring: dict[str, Any],
     master_cv: str,
     guide: str,
-) -> str:
+) -> tuple[str, str]:
+    """Return (tagline, cv_body_markdown). The body starts at '## Experience';
+    the name/contact header is composed by the template from profile.yml."""
     user = _context(jobspec, tailoring, master_cv, guide) + (
         "\n\nWrite the tailored CV now."
     )
-    return llm.stream_text(_CV_SYSTEM, user, max_tokens=16000).strip() + "\n"
+    text = llm.stream_text(_CV_SYSTEM, user, max_tokens=16000).strip()
+    tagline = ""
+    lines = text.splitlines()
+    if lines and lines[0].lower().startswith("tagline:"):
+        tagline = lines[0].split(":", 1)[1].strip()
+        text = "\n".join(lines[1:]).lstrip("\n")
+    return tagline, text + "\n"
 
 
 def render_cover_letter(
