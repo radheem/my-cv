@@ -76,8 +76,10 @@ weighted highest), and a skills block ordered **Languages → Programming Langua
 ## The gate (static-safe)
 
 GitHub Pages serves only static files, so the password can't be a server secret — anything
-shipped is inspectable. Instead the gated documents are **encrypted at build time** and
-decrypted **in the browser**:
+shipped is inspectable. Instead the entire Tailored section sits behind **one sign-in page**:
+the gated documents — and the very list of applications — are **encrypted at build time** and
+decrypted **in the browser**. The only public "Tailored" entry is the landing page; it leaks
+no role or company names because the manifest of applications is itself ciphertext.
 
 ```mermaid
 sequenceDiagram
@@ -87,17 +89,26 @@ sequenceDiagram
     participant U as Visitor
 
     CI->>CI: PBKDF2-SHA256(GATE_PASSWORD, salt) → key
-    CI->>CI: AES-256-GCM seal each gated HTML + PDF
-    CI->>Pages: ship *.enc + salt/iterations (public)<br/>strip plaintext + scrub search index
-    U->>JS: enter password
-    JS->>JS: PBKDF2(password, salt) → key
-    JS->>Pages: fetch cv.html.enc / cv.pdf.enc
-    JS->>JS: AES-GCM decrypt (wrong pw → auth-tag fail)
+    CI->>CI: AES-256-GCM seal the manifest + each gated HTML/PDF
+    CI->>Pages: ship *.enc + salt/iterations (public)<br/>generic hub titles + scrub search index
+    U->>JS: open /tailored/ · enter password
+    JS->>JS: PBKDF2(password, salt) → key · cache password (sessionStorage)
+    JS->>Pages: fetch index.enc → decrypt → application list
+    JS->>U: render list of links
+    U->>JS: click an application → jobs/<slug>/
+    JS->>JS: re-derive key from cached password (no prompt)
+    JS->>Pages: fetch cv.html.enc / cv.pdf.enc → AES-GCM decrypt
     JS->>U: render CV in iframe · download decrypted PDF
 ```
 
 Key points:
 
+- **One sign-in, then browse.** The password is cached in `sessionStorage` (salt-scoped, per
+  tab — never the raw key) so each per-job hub auto-unlocks. A direct visit to a per-job URL
+  with no cached password still shows its own prompt.
+- **Nothing leaks pre-sign-in.** Application titles/companies live only inside the encrypted
+  manifest; the landing page and the per-job hubs carry a generic heading and `search:
+  exclude`, so neither the HTML nor the search index exposes which roles exist.
 - **The password is never in the bundle** — only ciphertext, the salt, and the iteration
   count ship. Brute-force resistance rests on password strength + PBKDF2 iterations.
 - **PDFs are encrypted too.** Because WeasyPrint pre-renders them, an unencrypted PDF would

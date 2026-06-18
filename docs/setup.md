@@ -88,12 +88,9 @@ flowchart LR
 Then:
 
 1. **Review and edit** the generated Markdown — it is the source of truth for the deploy.
-2. **Add it to the nav** in `mkdocs.yml` (the CLI prints the exact line), e.g.:
-   ```yaml
-   - Tailored:
-       - Platform Engineer (locked): jobs/sample-platform-engineer/index.md
-   ```
-3. **Commit** it.
+2. **Commit** it. No nav edit is needed: the build auto-lists every application in the
+   encrypted manifest behind the single **Tailored** sign-in page, so new roles never appear
+   in `mkdocs.yml` or leak in plaintext.
 
 !!! tip "Model"
     The Anthropic backend defaults to Claude Sonnet 4.6. Use Opus for harder reasoning:
@@ -116,9 +113,15 @@ python -m http.server -d site 8000
 What to verify:
 
 - The public portfolio and general CV load freely; the general CV's **Download PDF** works.
-- A `jobs/<slug>/` page shows a password prompt. The correct password renders the CV /
-  cover letter in an iframe and downloads the decrypted PDF; a **wrong password fails**.
-- Nothing gated leaks: `grep -rl "<some gated phrase>" site/ | grep -v '\.enc$'` is empty.
+- The nav shows a single **Tailored** entry → a sign-in page. Wrong password → error; the
+  correct password reveals the **application list** with working links.
+- **One unlock, then browse:** click an application → its `jobs/<slug>/` hub auto-unlocks (no
+  second prompt), renders the CV / cover letter in an iframe, and downloads the decrypted PDF.
+- **Direct-visit fallback:** a fresh tab opening a `jobs/<slug>/` URL still shows its own
+  password prompt.
+- Nothing leaks pre-sign-in: no role/company appears in plaintext —
+  `grep -rl "Platform Engineer" site/ | grep -v '\.enc$'` and the same against
+  `site/search/search_index.json` are both empty.
 
 ## 3. Run the tests
 
