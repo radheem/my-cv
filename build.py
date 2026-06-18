@@ -26,11 +26,10 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
-
-import yaml
 
 import encrypt
 
@@ -54,8 +53,12 @@ def _run_mkdocs() -> None:
 
 
 def _site_url() -> str:
-    cfg = yaml.safe_load((ROOT / "mkdocs.yml").read_text(encoding="utf-8"))
-    return (cfg.get("site_url") or "/").rstrip("/") + "/"
+    # Read the site_url line directly — mkdocs.yml carries Material's
+    # !!python/name: tags that yaml.safe_load rejects.
+    text = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+    m = re.search(r"^site_url:\s*(\S+)", text, re.MULTILINE)
+    base = (m.group(1) if m else "/").strip().strip("\"'")
+    return base.rstrip("/") + "/"
 
 
 def _render_pdf(html_path: pathlib.Path, pdf_path: pathlib.Path) -> None:
