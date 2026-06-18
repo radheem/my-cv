@@ -29,8 +29,9 @@ Generate a tailored application from a job posting.
 | `--ollama-url URL` | `http://localhost:11434/v1` | OpenAI-compatible base URL (only with `--provider ollama`). |
 
 **Output:** `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-description.md`, and
-`index.md` (the gated unlock hub). The command prints the featured projects and the exact
-`mkdocs.yml` nav line to add.
+`index.md` (the gated unlock hub, with `status: draft` in its front matter). The command
+prints the featured projects. **No `mkdocs.yml` edit is needed** — the build auto-lists the
+application in the encrypted manifest behind the single **Tailored** sign-in page.
 
 ## Model support
 
@@ -88,7 +89,10 @@ the deploy workflow.
 ## After generating
 
 1. **Review and edit** the generated Markdown — it is the source of truth for the deploy.
-2. **Add the printed nav line** to `mkdocs.yml` under `Tailored:`.
-3. **Commit** it; the push triggers render → gate → deploy.
+2. **Commit** it; the push triggers render → gate → deploy. No nav edit is needed.
+3. **Track the lifecycle.** The hub starts at `status: draft`. As the application progresses,
+   edit `status:` in `docs/jobs/<slug>/index.md`
+   (`draft → applied → interview → offer / rejected / withdrawn`) and commit — the gated list
+   shows a status badge and git history is the audit trail. See [CLAUDE.md](../CLAUDE.md).
 
 See [Setup](setup.md) for the full end-to-end flow.

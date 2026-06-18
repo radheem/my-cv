@@ -114,7 +114,9 @@ What to verify:
 
 - The public portfolio and general CV load freely; the general CV's **Download PDF** works.
 - The nav shows a single **Tailored** entry → a sign-in page. Wrong password → error; the
-  correct password reveals the **application list** with working links.
+  correct password reveals the **application list** with working links and a **status badge**
+  per role (`draft → applied → interview → offer / rejected / withdrawn`; see
+  [CLAUDE.md](https://github.com/johndoe/cv-tailor/blob/main/CLAUDE.md)).
 - **One unlock, then browse:** click an application → its `jobs/<slug>/` hub auto-unlocks (no
   second prompt), renders the CV / cover letter in an iframe, and downloads the decrypted PDF.
 - **Direct-visit fallback:** a fresh tab opening a `jobs/<slug>/` URL still shows its own
