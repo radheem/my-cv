@@ -3,7 +3,7 @@ search:
   exclude: true
 job_title: "Senior Software Engineer"
 company: "Aroundhome"
-status: "draft"
+status: "applied"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 ---
 
