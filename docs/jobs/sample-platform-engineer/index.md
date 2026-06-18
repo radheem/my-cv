@@ -3,6 +3,7 @@ search:
   exclude: true
 job_title: "Platform Engineer"
 company: "Northwind Cloud"
+status: "applied"
 ---
 
 # Tailored Application :material-lock:

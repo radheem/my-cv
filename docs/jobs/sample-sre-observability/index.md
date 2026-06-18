@@ -3,6 +3,7 @@ search:
   exclude: true
 job_title: "Site Reliability Engineer"
 company: "Harborview Systems"
+status: "interview"
 ---
 
 # Tailored Application :material-lock:

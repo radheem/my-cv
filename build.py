@@ -65,13 +65,14 @@ def _render_gated_html(name: str, meta: dict, body: str, profile: dict) -> str:
     return documents.render_plain_html("", body)
 
 
-def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> tuple[str, str]:
-    """Seal a job's gated docs, inject its hub config, and return (title, company)
-    read from the hub's front matter for the encrypted landing manifest."""
+def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> dict:
+    """Seal a job's gated docs, inject its hub config, and return the manifest
+    entry (slug, title, company, status, url) read from the hub front matter."""
     src = DOCS_JOBS / slug
     meta, _ = documents.split_front_matter((src / "index.md").read_text(encoding="utf-8"))
     title = str(meta.get("job_title") or slug)
     company = str(meta.get("company") or "")
+    status = str(meta.get("status") or "draft")
     vault = SITE / "jobs" / slug / "vault"
     vault.mkdir(parents=True, exist_ok=True)
     manifest = []
@@ -108,8 +109,14 @@ def _seal_application(slug: str, key: bytes, salt: bytes, profile: dict) -> tupl
             "assets": manifest,
         },
     )
-    print(f"  sealed jobs/{slug}/ ({len(manifest)} docs)", file=sys.stderr)
-    return title, company
+    print(f"  sealed jobs/{slug}/ ({len(manifest)} docs, status={status})", file=sys.stderr)
+    return {
+        "slug": slug,
+        "title": title,
+        "company": company,
+        "status": status,
+        "url": f"../jobs/{slug}/",
+    }
 
 
 def _inject_config(hub_html: pathlib.Path, config: dict) -> None:
@@ -187,12 +194,7 @@ def main() -> int:
     slugs = [d.name for d in sorted(DOCS_JOBS.glob("*")) if (d / "index.md").exists()]
     if not slugs:
         print("No applications under docs/jobs/ — nothing to gate.", file=sys.stderr)
-    app_list = []
-    for slug in slugs:
-        title, company = _seal_application(slug, key, salt, profile)
-        app_list.append(
-            {"slug": slug, "title": title, "company": company, "url": f"../jobs/{slug}/"}
-        )
+    app_list = [_seal_application(slug, key, salt, profile) for slug in slugs]
 
     _seal_index(key, salt, app_list)
     _scrub_search_index(slugs)

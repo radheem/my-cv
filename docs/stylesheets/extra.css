@@ -252,7 +252,29 @@
 }
 .vault-list .md-button {
   text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
 }
+/* Application-status badge (lifecycle: draft → applied → interview → offer /
+   rejected / withdrawn). Visible only inside the gated list. */
+.vault-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.08));
+  color: var(--md-default-fg-color--light, rgba(0, 0, 0, 0.6));
+}
+.vault-badge--applied { background: #e3f0ff; color: #0b5cad; }
+.vault-badge--interview { background: #fff2d6; color: #8a5a00; }
+.vault-badge--offer { background: #def7e5; color: #1b6e36; }
+.vault-badge--rejected { background: #fde2e2; color: #a11; }
+.vault-badge--withdrawn { background: #ececec; color: #666; }
 .vault-viewer {
   margin-top: 1rem;
 }

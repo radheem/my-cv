@@ -49,15 +49,21 @@ def _slugify(*parts: str) -> str:
     return slug or "tailored-application"
 
 
-def _hub_page(title: str, company: str, slug: str) -> str:
+# Application lifecycle. Edit `status:` in the hub front matter (and commit) as a
+# role progresses; the build surfaces it as a badge in the gated list. See CLAUDE.md.
+_STATUSES = ("draft", "applied", "interview", "offer", "rejected", "withdrawn")
+
+
+def _hub_page(title: str, company: str, slug: str, status: str = "draft") -> str:
     # Generic heading + search-excluded so a direct URL leaks no role/company.
-    # job_title/company ride in the front matter (NOT the special `title` key,
-    # which MkDocs would render into the page <title>) for build.py to read into
-    # the encrypted landing manifest.
+    # job_title/company/status ride in the front matter (NOT the special `title`
+    # key, which MkDocs would render into the page <title>) for build.py to read
+    # into the encrypted landing manifest.
     return (
         "---\nsearch:\n  exclude: true\n"
         f"job_title: {_yaml(title)}\n"
-        f"company: {_yaml(company)}\n---\n\n"
+        f"company: {_yaml(company)}\n"
+        f"status: {_yaml(status)}\n---\n\n"
         "# Tailored Application :material-lock:\n\n"
         "These documents are tailored for a specific role and protected by a "
         "password. If you reached this page directly, enter the password to view "
@@ -122,6 +128,10 @@ def cmd_new(args: argparse.Namespace) -> int:
     print(
         "\nNo nav edit needed: the build auto-lists this application in the "
         "encrypted manifest behind the single 'Tailored' sign-in page. Review + commit."
+    )
+    print(
+        "Status starts at 'draft'. Edit `status:` in the hub front matter and commit "
+        f"as it progresses ({' → '.join(_STATUSES[:3])} → offer/rejected/withdrawn)."
     )
     return 0
 

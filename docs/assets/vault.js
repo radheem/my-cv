@@ -126,8 +126,16 @@
     app.innerHTML = "";
     var list = el("div", { class: "vault-actions vault-list" });
     apps.forEach(function (a) {
-      var label = a.title + (a.company ? " · " + a.company : "");
-      list.appendChild(el("a", { class: "md-button", href: a.url }, label));
+      var link = el("a", { class: "md-button", href: a.url });
+      link.appendChild(document.createTextNode(a.title + (a.company ? " · " + a.company : "")));
+      if (a.status) {
+        // Status drives a CSS class; restrict to a safe token to avoid markup.
+        var token = String(a.status).toLowerCase().replace(/[^a-z]/g, "");
+        link.appendChild(
+          el("span", { class: "vault-badge vault-badge--" + token }, a.status)
+        );
+      }
+      list.appendChild(link);
     });
     app.appendChild(list);
   }
