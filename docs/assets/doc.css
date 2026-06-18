@@ -1,0 +1,174 @@
+/* Document-grade stylesheet for generated CVs and cover letters.
+ *
+ * Theme-independent (no MkDocs Material variables). documents.py inlines this
+ * into the standalone HTML used for BOTH the WeasyPrint PDF and the in-browser
+ * unlock view, so the two always match. Designed for A4 print first; it also
+ * renders cleanly on screen inside the gate iframe.
+ */
+
+@page {
+  size: A4;
+  margin: 1.6cm 1.9cm;
+}
+
+html {
+  font-size: 10.5pt;
+}
+
+body {
+  margin: 0;
+  color: #1a1a1a;
+  background: #fff;
+  font-family: "Latin Modern Roman", Georgia, "Times New Roman", serif;
+  line-height: 1.4;
+}
+
+a {
+  color: #00549f;
+  text-decoration: none;
+}
+
+/* On screen (iframe view), give the page a paper frame; print ignores this. */
+@media screen {
+  body {
+    max-width: 21cm;
+    margin: 1rem auto;
+    padding: 1.6cm 1.9cm;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* ===================================================================== CV === */
+.cv .cv-name {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-align: center;
+}
+.cv .cv-tagline {
+  text-align: center;
+  font-size: 1.05rem;
+  color: #333;
+  margin: 0.15rem 0 0;
+}
+.cv .cv-contact {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #444;
+  margin: 0.35rem 0 0.2rem;
+}
+.cv .cv-rule {
+  border: none;
+  border-top: 1px solid #999;
+  margin: 0.55rem 0 0.2rem;
+}
+
+/* Section headings: small-caps with a full-width hairline rule. */
+.cv h2 {
+  font-size: 0.86rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: lowercase; /* small-caps renders the lowercase as caps */
+  border-bottom: 1px solid #bbb;
+  padding-bottom: 1px;
+  margin: 0.9rem 0 0.35rem;
+}
+
+/* Two-line entries: "### Org — Role" then an italic dates line. h3 carries the
+ * org; the date is emphasised text the markdown puts on the same logical line. */
+.cv h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0;
+}
+.cv h3 + p em,
+.cv .entry-meta {
+  font-style: italic;
+  color: #444;
+  font-size: 0.85rem;
+}
+.cv h3 + p {
+  margin: 0.05rem 0 0.2rem;
+}
+
+.cv ul {
+  margin: 0.15rem 0 0.3rem;
+  padding-left: 1.1rem;
+}
+.cv li {
+  margin: 0.08rem 0;
+}
+.cv p {
+  margin: 0.2rem 0;
+}
+
+/* Keep an entry (heading + its bullets) from splitting across a page. */
+.cv h2,
+.cv h3 {
+  break-after: avoid;
+}
+.cv li {
+  break-inside: avoid;
+}
+
+/* ================================================================= LETTER === */
+.letter .letterhead {
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+.letter .lh-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+.letter .lh-tagline {
+  font-size: 1rem;
+  color: #333;
+  margin: 0.1rem 0 0;
+}
+.letter .lh-contact {
+  font-size: 0.82rem;
+  color: #444;
+  margin: 0.3rem 0 0;
+}
+.letter .lh-rule {
+  border: none;
+  border-top: 1px solid #999;
+  margin: 0.5rem 0 0.9rem;
+}
+.letter .date {
+  text-align: right;
+  color: #333;
+  margin: 0 0 1rem;
+}
+.letter .salutation {
+  margin: 0 0 0.8rem;
+}
+.letter .body p {
+  margin: 0 0 0.7rem;
+  text-align: left;
+}
+.letter .signoff {
+  margin-top: 1.4rem;
+  white-space: pre-line;
+}
+.letter .signoff .signer {
+  font-weight: 700;
+}
+
+/* ============================================================ PLAIN/JD === */
+.plain h1 {
+  font-size: 1.3rem;
+  margin: 0 0 0.6rem;
+}
+.plain pre {
+  white-space: pre-wrap;
+  font-family: "DejaVu Sans Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  background: #f6f6f4;
+  border: 1px solid #e2e2dc;
+  border-radius: 6px;
+  padding: 0.8rem;
+}

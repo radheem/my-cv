@@ -70,9 +70,10 @@ extra:
     - icon: fontawesome/solid/envelope
       link: mailto:john.doe@example.com
 
-# Gated per-job pages live under jobs/<slug>/. Only the hub (index.md) is in the
-# nav; cv/cover-letter/job-description are encrypted at build time and removed.
-not_in_nav: |
+# Gated per-job pages live under jobs/<slug>/. Only the hub (index.md) is built;
+# cv/cover-letter/job-description are excluded from the site entirely and instead
+# rendered + encrypted from source by build.py (engine/documents.py).
+exclude_docs: |
   jobs/*/cv.md
   jobs/*/cover-letter.md
   jobs/*/job-description.md
