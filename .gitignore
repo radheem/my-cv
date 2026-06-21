@@ -27,3 +27,4 @@ tests/experiments/_*.log
 *.fdb_latexmk
 *.synctex.gz
 applications/*/*.log
+*.out
