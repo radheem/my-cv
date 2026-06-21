@@ -85,7 +85,8 @@ def _now() -> str:
 
 
 def _hub_page(
-    title: str, company: str, status: str = "draft", clusters: tuple = (), date_found: str = ""
+    title: str, company: str, status: str = "draft", clusters: tuple = (),
+    date_found: str = "", job_url: str = ""
 ) -> str:
     """The application's metadata record (front matter drives status + the tracker)."""
     clusters_line = ""
@@ -95,6 +96,7 @@ def _hub_page(
         "---\n"
         f"job_title: {_yaml(title)}\n"
         f"company: {_yaml(company)}\n"
+        f"job_url: {_yaml(job_url)}\n"
         f"status: {_yaml(status)}\n"
         f"{clusters_line}"
         f"date_found: {_yaml(date_found or _today())}\n"
@@ -188,6 +190,15 @@ def cmd_new(args: argparse.Namespace) -> int:
 
     print(f"Fetching job from {args.source} ...", file=sys.stderr)
     job_text = fetch.fetch_job_text(args.source)
+
+    # Posting URL: a URL source is itself the link; a captured JD file has a .json sidecar.
+    job_url = ""
+    if str(args.source).startswith(("http://", "https://")):
+        job_url = args.source
+    else:
+        sidecar = pathlib.Path(args.source).with_suffix(".json")
+        if sidecar.exists():
+            job_url = (json.loads(sidecar.read_text(encoding="utf-8")) or {}).get("url", "")
     print("Extracting JobSpec ...", file=sys.stderr)
     spec = jobspec_mod.extract_jobspec(job_text)
     tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
@@ -218,7 +229,8 @@ def cmd_new(args: argparse.Namespace) -> int:
         encoding="utf-8",
     )
     (out / "index.md").write_text(
-        _hub_page(spec.get("title", "Role"), spec.get("company", ""), clusters=clusters),
+        _hub_page(spec.get("title", "Role"), spec.get("company", ""),
+                  clusters=clusters, job_url=job_url),
         encoding="utf-8",
     )
     (out / "manifest.json").write_text(
@@ -322,14 +334,16 @@ def _write_tracker() -> pathlib.Path:
         "Status lifecycle: " + " → ".join(_STATUSES) + ".",
         "Tailored CVs/cover letters live in Google Drive (Drive column); this table is the tracker.",
         "",
-        "| Company | Role | Status | Found | Drive | Updated |",
-        "|---|---|---|---|---|---|",
+        "| Company | Role | Status | Found | Posting | Drive | Updated |",
+        "|---|---|---|---|---|---|---|",
     ]
     for r in rows:
         drive = f"[open]({r['drive_url']})" if r.get("drive_url") else "—"
-        out.append("| {c} | {t} | **{s}** | {f} | {d} | {u} |".format(
+        posting = f"[apply]({r['job_url']})" if r.get("job_url") else "—"
+        out.append("| {c} | {t} | **{s}** | {f} | {p} | {d} | {u} |".format(
             c=r.get("company", ""), t=r.get("job_title", ""), s=r.get("status", ""),
-            f=r.get("date_found", "") or "—", d=drive, u=r.get("drive_updated", "") or "—"))
+            f=r.get("date_found", "") or "—", p=posting, d=drive,
+            u=r.get("drive_updated", "") or "—"))
     path = jobs / "README.md"
     path.write_text("\n".join(out) + "\n", encoding="utf-8")
     return path

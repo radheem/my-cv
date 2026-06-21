@@ -6,6 +6,7 @@ clusters: ["data-persistence", "platform-cloud-native", "ml-ai"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1ykrHuIqJmYkVMo_GeGUEWpVEXq5V9Fkv"
 drive_updated: "2026-06-21T23:38:46+00:00"
+job_url: "https://www.linkedin.com/jobs/view/4429795933/"
 ---
 
 # Randstad Deutschland — Data Engineer (m/w/d)

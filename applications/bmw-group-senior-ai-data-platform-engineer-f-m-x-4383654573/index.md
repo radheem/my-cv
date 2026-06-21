@@ -6,6 +6,7 @@ clusters: ["ml-ai", "platform-cloud-native", "data-persistence", "distributed-sy
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc"
 drive_updated: "2026-06-21T23:38:05+00:00"
+job_url: "https://www.linkedin.com/jobs/view/4383654573/"
 ---
 
 # BMW Group — Senior AI & Data Platform Engineer (f/m/x)
