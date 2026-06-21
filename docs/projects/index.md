@@ -1,6 +1,6 @@
 # Projects
 
-Flagship projects spanning distributed backend systems, AI/ML platform engineering, and 5G / O-RAN network virtualization.
+Flagship projects spanning distributed backend systems, AI/ML platform engineering, LLM tooling, and 5G / O-RAN network virtualization.
 
 ## :material-sitemap: Information Retrieval System (IRS) — Stealth Project
 Go microservices ecosystem on native NATS (JetStream + KV) and direct gRPC, with an **MCP** integration for LLM agents, a per-user authenticated browser-session service, a vendor-adaptor contract, and a best-effort ETL pipeline into PostgreSQL (with DocumentDB cold archive). Deployed via Kubernetes, kustomize, Skaffold, and Cilium.
@@ -11,6 +11,11 @@ Go microservices ecosystem on native NATS (JetStream + KV) and direct gRPC, with
 A personal **document-intelligence** service that ingests PDFs, articles, and notes through a durable **Hatchet** pipeline (extract → chunk → embed → summarize → index), then serves **semantic search and grounded RAG chat over your own documents** — running entirely on a **k3d homelab** with local `llama.cpp` inference (no cloud calls). Uses **pgvector** (HNSW) for similarity search and **NATS JetStream + SSE** for real-time ingestion progress. ([repo](https://github.com/radheem/my-notebook))
 
 [:octicons-arrow-right-24: Read more](second-brain.md)
+
+## :material-file-document-edit: cv-tailor — LLM CV/Cover Tailoring + LinkedIn Automation
+A Python tool that turns a job posting into a **tailored CV + cover letter**: a **pure, unit-tested ranker** picks the top-3 relevant projects and orders skills, and the LLM (Anthropic or local **Ollama**) only writes prose around facts pinned in a master CV — so it never fabricates experience. Every application is versioned in **git** with a status lifecycle, published behind an **in-browser PBKDF2 + AES-256-GCM gate** (deployed by GitHub Actions with no API key), and an optional containerized **Playwright** LinkedIn flow ingests JDs and drafts applications end-to-end — always **stopping before submit**. ([repo](https://github.com/radheem/cv-tailor))
+
+[:octicons-arrow-right-24: Read more](cv-tailor.md)
 
 ## :material-kubernetes: HA K3s Cluster Platform — k3d + Cilium L2
 Fully automated, reboot-resilient high-availability K3s clusters in Docker (k3d), running **kube-proxy-free in eBPF mode** with **Cilium 1.18** as the sole CNI. Bare-metal `LoadBalancer` services via **L2 announcements + LB-IPAM**, a sequential-boot orchestrator for IP stability, a self-healing CNI fail-safe, self-managed CoreDNS, and Tailscale/Headscale ingress.
@@ -27,10 +32,10 @@ End-to-end AI/ML framework for O-RAN compatible 5G networks on Kubernetes + Helm
 
 [:octicons-arrow-right-24: Read more](oran-aiml.md)
 
-## :material-radio-tower: 5G srsRAN + O-RAN RIC Testbed (Docker)
-Single-host Dockerized 5G SA lab: srsRAN gNB (ZMQ/UHD), Open5GS core, and an integrated **O-RAN SC Near-RT RIC** with Python **xApps** controlling the RAN over E2 (E2SM-KPM / RC / CCC), plus a Telegraf → InfluxDB → Grafana metrics pipeline. ([repo](https://github.com/radheemCorp/srsran-docker))
+## :material-radio-tower: O-RAN Testbed — Open5GS + Near-RT RIC + OCUDU gNB (Docker)
+Composable single-host 5G SA testbed: an Open5GS core, an **O-RAN SC Near-RT RIC** with Python **xApps** controlling the RAN over E2 (E2SM-KPM / RC / CCC), and an **OCUDU** (srsRAN-heritage) gNB in one image for both **ZMQ** virtual RF and **UHD** over-the-air (USRP B210). The 5GC and RIC publish host ports so any number of gNBs can attach, and a **Kafka metrics pub/sub** fans per-UE KPM to InfluxDB, MongoDB, and an AIMLFW store. ([repo](https://github.com/radheemCorp/oran-testbed))
 
-[:octicons-arrow-right-24: Read more](srsran-docker.md)
+[:octicons-arrow-right-24: Read more](oran-testbed.md)
 
 ## :material-run-fast: Infinite Stickman — Arcade Runner
 An endlessly scrolling monochrome arcade runner built with **Vanilla JS and HTML5 Canvas** — no framework, no build step, zero dependencies. Jump, double-jump, and duck under procedurally generated obstacles as the world gets faster. A global leaderboard is powered by **Google Sheets + Apps Script**: scores are submitted as a `text/plain` POST (no CORS preflight) and fetched as JSON — no backend to host. ([play](https://radheem.github.io/stickman/) · [repo](https://github.com/radheem/stickman))

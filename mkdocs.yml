@@ -87,10 +87,11 @@ nav:
       - Overview: projects/index.md
       - IRS Platform (Stealth): projects/irs.md
       - Second Brain (Document RAG): projects/second-brain.md
+      - cv-tailor (LLM Tailoring + LinkedIn): projects/cv-tailor.md
       - HA K3s Cluster Platform (k3d + Cilium): projects/k3d.md
       - Homelab (Zero-Touch LAN DNS): projects/homelab.md
       - O-RAN AIML Framework: projects/oran-aiml.md
-      - 5G srsRAN + O-RAN RIC (Docker): projects/srsran-docker.md
+      - O-RAN Testbed (Docker · OCUDU + RIC): projects/oran-testbed.md
       - 5G srsRAN Testbed (Kubernetes): projects/5g-testbed.md
       - Infinite Stickman (Arcade Runner): projects/stickman.md
       - Sheet Dashboard (Google Sheets): projects/csv-dashboard.md

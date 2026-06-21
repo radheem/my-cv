@@ -44,10 +44,11 @@ See the [Projects](projects/index.md) section for detailed write-ups:
 
 - **[IRS Platform (Stealth)](projects/irs.md)** — distributed Go microservices, MCP integration & data pipelines.
 - **[Second Brain](projects/second-brain.md)** — self-hosted RAG document-intelligence service; durable Hatchet ingestion pipeline, local llama.cpp inference, pgvector semantic search & NATS JetStream progress streaming on a k3d homelab.
+- **[cv-tailor](projects/cv-tailor.md)** — LLM CV/cover-letter tailoring with a pure, unit-tested ranker (the LLM only writes prose, never invents facts); git-versioned applications behind an in-browser AES-256-GCM gate, plus a containerized stop-before-submit Playwright LinkedIn flow.
 - **[Gitpress](projects/gitpress.md)** — zero-server blog CMS; Google Docs as the content source, GitHub Actions build pipeline, GitHub Pages hosting & Google Apps Script for forms and analytics — no servers, no monthly bills.
 - **[HA K3s & Homelab Platform](https://radheem.github.io/home-lab/)** — declarative k3d clusters with kube-proxy-free Cilium eBPF networking, L2 LoadBalancer & zero-touch `*.home.lan` DNS (ExternalDNS + authoritative CoreDNS). Two versions: a public single-node [homelab](https://radheem.github.io/home-lab/) and a reboot-resilient high-availability variant (not publicly available).
 - **[O-RAN AIML Framework](projects/oran-aiml.md)** — AI/ML platform for 5G networks with a Python client, Kubeflow pipelines & KServe serving (research, grade 1.0/A).
-- **5G srsRAN + O-RAN RIC Testbed** — end-to-end 5G SA labs (srsRAN gNB + Open5GS) with an integrated O-RAN Near-RT RIC and Grafana monitoring, in [Docker](projects/srsran-docker.md) (single-host, ZMQ/UHD RF) and [Kubernetes](projects/5g-testbed.md) (Multus CNI, ONOS SDN, 50+ Mbps) variants — both featuring gNB, monitoring & O-RAN RIC.
+- **O-RAN / 5G SA Testbeds** — end-to-end 5G SA labs (gNB + Open5GS) with an integrated O-RAN Near-RT RIC and Grafana monitoring, in [Docker](projects/oran-testbed.md) (single-host, composable stacks, OCUDU gNB ZMQ/UHD, Kafka metrics pub/sub) and [Kubernetes](projects/5g-testbed.md) (Multus CNI, ONOS SDN, 50+ Mbps) variants — both featuring gNB, monitoring & O-RAN RIC.
 
 ## Skills
 - **System & API Design** — microservices, event-driven, and contract-first architecture; schema design and evolution. *(gRPC, Protocol Buffers, REST, CUE)*

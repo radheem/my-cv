@@ -52,6 +52,22 @@ projects:
     tags: ["python", "rag", "llm", "ml", "ai", "pgvector", "fastapi", "hatchet", "nats", "kubernetes", "vector-search", "data", "backend"]
     stack: ["Python", "FastAPI", "Hatchet", "NATS JetStream", "llama.cpp", "PostgreSQL", "pgvector", "Next.js", "Kubernetes (k3d)", "OpenTelemetry"]
 
+  - id: cv-tailor
+    name: "cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)"
+    weight: 1.1
+    doc: projects/cv-tailor.md
+    url: "https://github.com/radheem/cv-tailor"
+    summary: "Python tool that turns a job posting into a tailored CV + cover letter — a pure, unit-tested ranker picks projects/skills and the LLM only writes prose — versioned in git behind an in-browser AES-256-GCM gate, with a containerized stop-before-submit LinkedIn ingestion flow."
+    highlights:
+      - "Built a Python tool that turns a job posting into a tailored CV + cover letter: a pure, unit-tested ranker selects the top-3 relevant projects and orders skills, and the LLM (Anthropic API or local Ollama) only writes prose around pinned facts so it never fabricates experience."
+      - "Versioned every application in git as the application tracker, with a status lifecycle (draft -> applied -> interview -> offer/rejected/withdrawn) surfaced on a MkDocs site."
+      - "Gated per-job documents with in-browser PBKDF2 + AES-256-GCM encryption (the application list itself is encrypted, no API key in CI); GitHub Actions renders, seals, and deploys to GitHub Pages."
+      - "Added a containerized LinkedIn ingestion flow (Playwright, human-paced, VNC CAPTCHA hand-off) that captures job descriptions and generates applications end-to-end, stopping before submit for human review."
+      - "Made generation reproducible: each run writes a manifest of model/seed/prompt+input hashes, guarded by a quality-benchmark regression gate."
+    domains: ["ml", "backend", "platform", "web"]
+    tags: ["python", "llm", "ai", "automation", "playwright", "docker", "devops", "ci-cd", "cryptography", "mkdocs", "web", "github-actions", "ollama", "rag"]
+    stack: ["Python", "Playwright", "Docker", "MkDocs Material", "WeasyPrint", "GitHub Actions", "Anthropic API", "Ollama", "AES-256-GCM"]
+
   - id: k3d
     name: "HA K3s Cluster Platform (k3d + Cilium)"
     weight: 0.85
@@ -87,18 +103,19 @@ projects:
     tags: ["ml", "ai", "mlops", "kubeflow", "kserve", "python", "kubernetes", "5g", "oran", "telecom", "data-science", "research"]
     stack: ["Python", "Kubeflow", "KServe", "Kubernetes", "Helm", "TensorFlow/Keras", "scikit-learn", "InfluxDB"]
 
-  - id: srsran-docker
-    name: "5G srsRAN + O-RAN RIC (Docker)"
-    doc: projects/srsran-docker.md
-    url: "https://github.com/radheemCorp/srsran-docker"
-    summary: "Dockerized 5G SA lab with an integrated O-RAN Near-RT RIC and Python xApps controlling the RAN over E2 (KPM / RC / CCC), with a Telegraf → InfluxDB → Grafana pipeline."
+  - id: oran-testbed
+    name: "O-RAN Testbed (Open5GS + RIC + OCUDU gNB)"
+    doc: projects/oran-testbed.md
+    url: "https://github.com/radheemCorp/oran-testbed"
+    summary: "Composable single-host 5G SA testbed (Open5GS 5GC + O-RAN SC Near-RT RIC + OCUDU/srsRAN gNB, ZMQ/UHD) with Python xApps over E2 and a Kafka metrics pub/sub fan-out to InfluxDB, MongoDB, and an AIMLFW store."
     highlights:
-      - "Single-host Dockerized 5G SA lab: srsRAN gNB (ZMQ/UHD), Open5GS core, and an integrated O-RAN SC Near-RT RIC."
-      - "Integrated the RIC with the gNB over E2; Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC."
-      - "High-frequency telemetry pipeline (Telegraf → InfluxDB → Grafana) with a custom writer persisting per-UE KPM metrics at scale."
+      - "Consolidated a single-host 5G SA testbed into composable Docker Compose stacks (core, gNB ZMQ/UHD, RIC, monitoring, pub/sub) where the 5GC and Near-RT RIC publish host ports so any number of gNBs - local or remote - can attach over shared bridge networks."
+      - "Ran the gNB on the open-source OCUDU CU/DU (srsRAN heritage), building one image for both ZMQ virtual RF and UHD over-the-air on a USRP B210 SDR."
+      - "Integrated the O-RAN SC Near-RT RIC over E2 with Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC."
+      - "Built a Kafka metrics pub/sub pipeline: xApps publish per-UE KPM to Kafka and a consumer fans each message to InfluxDB 3 (Grafana), MongoDB, and an AIMLFW-compatible InfluxDB 2."
     domains: ["telecom", "infra", "data"]
-    tags: ["5g", "oran", "telecom", "docker", "python", "networking", "observability", "ric", "research", "etl", "pipeline", "data", "telemetry", "metrics"]
-    stack: ["Docker", "srsRAN", "Open5GS", "O-RAN RIC", "Python", "Telegraf", "InfluxDB", "Grafana"]
+    tags: ["5g", "oran", "telecom", "docker", "python", "networking", "observability", "ric", "research", "etl", "pipeline", "data", "telemetry", "metrics", "kafka", "event-driven", "messaging"]
+    stack: ["Docker", "Docker Compose", "OCUDU", "srsRAN", "Open5GS", "O-RAN SC RIC", "Python", "Kafka", "InfluxDB", "MongoDB", "Telegraf", "Grafana"]
 
   - id: 5g-testbed
     name: "5G srsRAN Testbed (Kubernetes)"

@@ -25,6 +25,13 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
 - Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
+### cv-tailor - LLM CV/Cover-Letter Tailoring + LinkedIn Automation ([repo](https://github.com/radheem/cv-tailor))
+- Built a Python tool that turns a job posting into a tailored CV + cover letter: a pure, unit-tested ranker selects the top-3 relevant projects and orders skills, and the LLM (Anthropic API or local Ollama) only writes prose around pinned facts so it never fabricates experience.
+- Versioned every application in git as the application tracker, with a status lifecycle (draft -> applied -> interview -> offer/rejected/withdrawn) surfaced on a MkDocs site.
+- Gated per-job documents with in-browser PBKDF2 + AES-256-GCM encryption (the application list itself is encrypted, no API key in CI); GitHub Actions renders, seals, and deploys to GitHub Pages.
+- Added a containerized LinkedIn ingestion flow (Playwright, human-paced, VNC CAPTCHA hand-off) that captures job descriptions and generates applications end-to-end, stopping before submit for human review.
+- Made generation reproducible: each run writes a manifest of model/seed/prompt+input hashes, guarded by a quality-benchmark regression gate.
+
 ### O-RAN OSC AIML Framework - AI/ML Platform Engineering ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
 - Deployed the end-to-end AIML framework on Kubernetes with Helm (training manager, model management, KF adapter, data-extraction, KServe).
 - Built a config-driven Python client/SDK automating the full ML lifecycle: feature group -> model -> pipeline -> training job -> inference.
@@ -32,10 +39,11 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Served models via KServe; wired InfluxDB feature sources, a Cassandra feature store, and MinIO/LeoFS (S3) artifact storage.
 - Delivered as a 15-credit research project in the integrated communications systems group (German grade 1.0).
 
-### 5G srsRAN + O-RAN RIC Testbed, Docker ([repo](https://github.com/radheemCorp/srsran-docker))
-- Built a single-host Dockerized 5G SA lab: srsRAN gNB (ZMQ/UHD), Open5GS core, and an integrated O-RAN SC Near-RT RIC.
-- Integrated the RIC platform with the gNB over E2 and developed Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC.
-- Built a Telegraf -> InfluxDB -> Grafana pipeline with a custom writer persisting per-UE KPM metrics.
+### O-RAN Testbed - Open5GS 5GC + Near-RT RIC + OCUDU/srsRAN gNB, Docker ([repo](https://github.com/radheemCorp/oran-testbed))
+- Consolidated a single-host 5G SA testbed into composable Docker Compose stacks (core, gNB ZMQ/UHD, RIC, monitoring, pub/sub) where the 5GC and Near-RT RIC publish host ports so any number of gNBs - local or remote - can attach over shared bridge networks.
+- Ran the gNB on the open-source OCUDU CU/DU (srsRAN heritage), building one image for both ZMQ virtual RF and UHD over-the-air on a USRP B210 SDR.
+- Integrated the O-RAN SC Near-RT RIC over E2 with Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC.
+- Built a Kafka metrics pub/sub pipeline: xApps publish per-UE KPM to Kafka and a consumer fans each message to InfluxDB 3 (Grafana), MongoDB, and an AIMLFW-compatible InfluxDB 2.
 
 ### 5G Testbed - srsRAN and Open5GS, Kubernetes ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
 - Built a Kubernetes-based end-to-end 5G testbed (kubeadm) running srsRAN gNB and Open5GS core as pods, with Multus CNI multi-homing (N2/N3/N6) and ZeroMQ virtual RF.

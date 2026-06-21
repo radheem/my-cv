@@ -57,12 +57,13 @@ Currently a Master of Research student in **Computer Systems & Engineering at TU
 
     [:octicons-arrow-right-24: Details](projects/oran-aiml.md)
 
--   :material-radio-tower: __5G srsRAN + O-RAN RIC (Docker)__
+-   :material-radio-tower: __O-RAN Testbed (Docker)__
 
-    Dockerized 5G SA lab with an integrated O-RAN Near-RT RIC and Python
-    xApps controlling the RAN over E2 (KPM / RC / CCC).
+    Composable 5G SA testbed: Open5GS core, O-RAN Near-RT RIC + Python xApps
+    over E2 (KPM / RC / CCC), an OCUDU gNB (ZMQ/UHD), and a Kafka metrics
+    pub/sub fan-out.
 
-    [:octicons-arrow-right-24: Details](projects/srsran-docker.md)
+    [:octicons-arrow-right-24: Details](projects/oran-testbed.md)
 
 -   :material-server-network: __5G srsRAN Testbed (Kubernetes)__
 
