@@ -79,6 +79,8 @@ _CV_SYSTEM = (
     "- Education entries are headers ONLY (org, degree, dates). Do NOT add coursework, "
     "GPA, focus areas, or bullet points under Education unless they appear verbatim in "
     "the master CV.\n"
+    "- Write organization and institution names EXACTLY as they appear in the master CV "
+    "(e.g. 'Technical University of Ilmenau', not 'TU Ilmenau'); do not abbreviate them.\n"
     "- Keep it tight (about one page). Output Markdown only — no code fences, no "
     "commentary."
 )
