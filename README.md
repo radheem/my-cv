@@ -65,6 +65,34 @@ leaks before sign-in.
 
 → **Full design & threat model:** **[docs/architecture.md](docs/architecture.md)**
 
+## End-to-end: LinkedIn → tailored application
+
+Beyond generating from a job file, this tool drives a **logged-in LinkedIn session from a
+container**, captures job descriptions, and tailors an application for each — all the way up to
+a ready-to-apply package. **It never submits**: every run stops at a package a human reviews and
+sends by hand (*stop-before-submit*).
+
+The session logs in at a human pace and, on a first login, hands off to a VNC viewer so you can
+solve LinkedIn's one-time security check:
+
+| The container drives the real sign-in… | …and pauses for you to solve the security check over VNC |
+|:---:|:---:|
+| ![LinkedIn sign-in driven by the container](docs/assets/runbooks/linkedin-login.png) | ![LinkedIn reCAPTCHA solved once over VNC](docs/assets/runbooks/linkedin-captcha.png) |
+
+After that one-time solve, the warm profile is a recognized device and later logins are silent:
+
+```bash
+make docker-build                                            # build the ingest image
+VNC_BIND=<tailnet-ip> VNC_PASSWORD=<pw> make docker-login    # 1· first login, solve CAPTCHA over VNC
+make docker-ingest KEYWORDS="platform engineer" LIMIT=5      # 2· capture JDs → vault/jds/
+make docker-generate SLUG=<slug>                             # 3· tailored CV + cover → vault/applications/
+make status SLUG=<slug> STATUS=applied                       # 4· you apply by hand, then record it
+```
+
+Captured JDs and generated applications stay in the gitignored `vault/` — never committed.
+
+→ **Step-by-step operational guides (all stages, with screenshots):** **[docs/runbooks.md](docs/runbooks.md)**
+
 ## Quick start
 
 ```bash

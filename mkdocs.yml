@@ -100,4 +100,5 @@ nav:
   - Project:
       - Architecture: architecture.md
       - Setup: setup.md
+      - Runbooks: runbooks.md
       - CLI: cli.md
