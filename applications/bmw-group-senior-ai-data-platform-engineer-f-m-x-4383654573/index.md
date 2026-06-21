@@ -4,8 +4,8 @@ company: "BMW Group"
 status: "draft"
 clusters: ["ml-ai", "platform-cloud-native", "data-persistence", "distributed-systems"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc"
+drive_updated: "2026-06-21T23:38:05+00:00"
 ---
 
 # BMW Group — Senior AI & Data Platform Engineer (f/m/x)

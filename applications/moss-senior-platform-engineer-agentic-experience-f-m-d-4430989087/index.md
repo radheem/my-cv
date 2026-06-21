@@ -4,8 +4,8 @@ company: "Moss"
 status: "draft"
 clusters: ["platform-cloud-native", "ml-ai", "distributed-systems", "observability"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1WcZF9oo1RfsfTnHwoSSGCzZpQtIA4Sdj"
+drive_updated: "2026-06-21T23:38:33+00:00"
 ---
 
 # Moss — Senior Platform Engineer (Agentic Experience) (f/m/d)

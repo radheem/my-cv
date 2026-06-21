@@ -4,8 +4,8 @@ company: "Nia Health GmbH"
 status: "draft"
 clusters: ["ml-ai", "platform-cloud-native", "data-persistence"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1ybGmKMnv1O0qn7gcf_TrfVqEWY1gwRxG"
+drive_updated: "2026-06-21T23:38:40+00:00"
 ---
 
 # Nia Health GmbH — Machine Learning Engineer (f/m/d)

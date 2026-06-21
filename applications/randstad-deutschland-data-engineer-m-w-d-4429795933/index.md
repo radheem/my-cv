@@ -4,8 +4,8 @@ company: "Randstad Deutschland"
 status: "draft"
 clusters: ["data-persistence", "platform-cloud-native", "ml-ai"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1ykrHuIqJmYkVMo_GeGUEWpVEXq5V9Fkv"
+drive_updated: "2026-06-21T23:38:46+00:00"
 ---
 
 # Randstad Deutschland — Data Engineer (m/w/d)

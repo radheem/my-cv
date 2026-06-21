@@ -5,14 +5,14 @@ Tailored CVs/cover letters live in Google Drive (Drive column); this table is th
 
 | Company | Role | Status | Found | Drive | Updated |
 |---|---|---|---|---|---|
-| BMW Group | Senior AI & Data Platform Engineer (f/m/x) | **draft** | 2026-06-21 | — | — |
-| charles | Platform Engineer (m/w/d) | **draft** | 2026-06-21 | — | — |
-| Findr | Senior Data Engineer / Data Scientist - AI & Machine Learning - €130,000 | **draft** | 2026-06-21 | — | — |
-| Genki | Mid-Level Backend Developer | **draft** | 2026-06-21 | — | — |
-| Haystack | Software Engineer | **draft** | 2026-06-21 | — | — |
-| Moss | Senior Platform Engineer (Agentic Experience) (f/m/d) | **draft** | 2026-06-21 | — | — |
-| Nia Health GmbH | Machine Learning Engineer (f/m/d) | **draft** | 2026-06-21 | — | — |
-| Randstad Deutschland | Data Engineer (m/w/d) | **draft** | 2026-06-21 | — | — |
-| Remerge | Machine Learning Engineer | **draft** | 2026-06-21 | — | — |
-| XpertDirect | Backend Engineer | **draft** | 2026-06-21 | — | — |
-| Aroundhome | Senior Software Engineer | **applied** | 2026-06-21 | — | — |
+| BMW Group | Senior AI & Data Platform Engineer (f/m/x) | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc) | 2026-06-21T23:38:05+00:00 |
+| charles | Platform Engineer (m/w/d) | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1t96leERDqV6e1LizOK7VF3XH16w7y08Z) | 2026-06-21T23:38:12+00:00 |
+| Findr | Senior Data Engineer / Data Scientist - AI & Machine Learning - €130,000 | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1sSquQFvYC2eeuhlTR593Cj4b77gqQwZh) | 2026-06-21T23:38:18+00:00 |
+| Genki | Mid-Level Backend Developer | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1cZ3wD2Bc00Hdakp7CFtGq8pnVf4XIeRk) | 2026-06-21T23:37:38+00:00 |
+| Haystack | Software Engineer | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/16zShf7Cz0m33bUEw42hwf_8qHRGpFuqf) | 2026-06-21T23:38:25+00:00 |
+| Moss | Senior Platform Engineer (Agentic Experience) (f/m/d) | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1WcZF9oo1RfsfTnHwoSSGCzZpQtIA4Sdj) | 2026-06-21T23:38:33+00:00 |
+| Nia Health GmbH | Machine Learning Engineer (f/m/d) | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1ybGmKMnv1O0qn7gcf_TrfVqEWY1gwRxG) | 2026-06-21T23:38:40+00:00 |
+| Randstad Deutschland | Data Engineer (m/w/d) | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1ykrHuIqJmYkVMo_GeGUEWpVEXq5V9Fkv) | 2026-06-21T23:38:46+00:00 |
+| Remerge | Machine Learning Engineer | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1Eg1A_ZQwExKNLxVGjlRsFNc0wzy32hHb) | 2026-06-21T23:38:53+00:00 |
+| XpertDirect | Backend Engineer | **draft** | 2026-06-21 | [open](https://drive.google.com/drive/folders/1czFEUfFnTj8qhaYYf88V3M1VB2Ymiz19) | 2026-06-21T23:38:59+00:00 |
+| Aroundhome | Senior Software Engineer | **applied** | 2026-06-21 | [open](https://drive.google.com/drive/folders/18lZvBbd8yePxUigc7aSgl-lT7dWTmexE) | 2026-06-21T23:37:57+00:00 |

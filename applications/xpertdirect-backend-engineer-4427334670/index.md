@@ -4,8 +4,8 @@ company: "XpertDirect"
 status: "draft"
 clusters: ["distributed-systems", "platform-cloud-native", "web-api", "observability"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1czFEUfFnTj8qhaYYf88V3M1VB2Ymiz19"
+drive_updated: "2026-06-21T23:38:59+00:00"
 ---
 
 # XpertDirect — Backend Engineer

@@ -4,8 +4,8 @@ company: "Remerge"
 status: "draft"
 clusters: ["ml-ai", "distributed-systems", "data-persistence"]
 date_found: "2026-06-21"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1Eg1A_ZQwExKNLxVGjlRsFNc0wzy32hHb"
+drive_updated: "2026-06-21T23:38:53+00:00"
 ---
 
 # Remerge — Machine Learning Engineer
