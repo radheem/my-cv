@@ -1,0 +1,10 @@
+# Train/test split for the cv-tailor benchmark (4 train, 2 test).
+# Iterate data/guides, prompts, and ranking on `train`; evaluate on `test`.
+train:
+  - aroundhome-senior-software-engineer
+  - redcare-pharmacy-data-engineer
+  - intershop-devops-engineer-monitoring
+  - t-systems-backend-engineer-container
+test:
+  - alignerr-software-engineer-ai-training
+  - teambank-model-monitoring-risk-controlling

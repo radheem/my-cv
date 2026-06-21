@@ -1,0 +1,44 @@
+(Senior) DevOps Engineer - Monitoring (m/w/d)
+
+About the job
+
+Deine Aufgaben
+
+Werde Teil unseres Platform-Engineering-Teams und gestalte Prozesse und Tools für den Betrieb komplexer E‑Commerce‑Umgebungen in der Azure‑Cloud aktiv mit. Durch Deine Arbeit unterstützt Du den Betrieb der Kunden auf unserer globalen Plattform.
+
+Entwurf, Implementierung und Weiterentwicklung eines Monitoringsystems für technische Komponenten sowie Geschäftsprozesse in einer DevOps-Umgebung
+Unterstützung beim Betrieb verschiedenster Web-Applikationen und Java-Anwendungen
+Kontinuierliche Pflege und Verbesserung der Monitoring-Umgebung:
+Analyse von wiederkehrenden Alarmen
+Finden optimaler Schwellwerte
+Datenaggregation in Dashboards
+Modellierung von Abhängigkeiten und Ableiten idealer Alarmierungsstrategien sowie Automatisierung wiederkehrender Prozesse in Zusammenarbeit mit Kunden und unserem Betriebsteam
+Verbesserung des Intershop-Plattformprodukts und entsprechender Toolketten in Zusammenarbeit in einem Plattform Engineering Team - für und gemeinsam mit anderen Teams
+Kommunikation mit internen Kunden und Partnern zur Verbesserung der Monitoring-Strategie
+
+Dein Profil
+
+Du verfügst über gute bis sehr gute Kenntnisse des Linux Betriebssystems und Kubernetes
+Gute Kenntnisse von IaaS-Infrastrukturdiensten und gute analytische Fähigkeiten zeichnen Dich aus
+Du kannst Hands-on Erfahrung von mit Cloud-Observability-Plattformen wir beispielsweise NewRelic, Datadog oder anderen Services vorweisen
+Du besitzt Kenntnisse im Umgang mit CI/CD-Tools wie Azure DevOps, GitLab, GitHub Actions
+Du hast Erfahrung mit dem verteilten Versionskontrollsystemen Git
+Gute Englischkenntnisse in Wort und Schrift runden Dein Profil ab
+
+Solltest Du darüber hinaus noch die ein oder andere Erfahrung mit
+
+dem Betrieb von Java-Applikationen und/oder im Konfigurationsmanagement und Infrastrukturautomatisierung (z.B. Terraform)
+OpenTelemetry und Jaeger Tracing
+Skriptsprachen
+
+haben, können wir es kaum erwarten, Dich kennenzulernen!
+
+Als Intershopper erwarten Dich...
+
+Abwechslungsreiche und anspruchsvolle Aufgaben — bei mehr als 300 Kunden, einem globalen Netzwerk an Partnern und einem internationalen Kollegium.
+Persönliche und fachliche Weiterbildung.
+Auslandserfahrung und internationale Projekte (San Francisco, Jena, Melbourne).
+Mitarbeit in einem motivierten und hochqualifizierten Team (über 300 Kollegen, über 30 Jahre E-Commerce-Erfahrung).
+Flache Hierarchien und eine offene Unternehmenskultur.
+Moderne Technologien und marktführende Produkte — der Pionier des E-Commerce.
+</content>

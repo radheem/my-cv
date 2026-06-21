@@ -1,0 +1,52 @@
+Software Engineer (AI Training)
+
+Nuremberg, Bavaria, Germany · 5 days ago (listing); role is fully remote
+
+About the job
+About The Role
+
+What if the code you write could directly shape how the next generation of AI understands and generates software? We're looking for Software Engineers to build, evaluate, and improve AI-generated code — helping train AI systems to think like real developers.
+
+You'll write solutions, review AI outputs, and provide the expert-level feedback that makes AI coding assistants smarter, safer, and more reliable. This is hands-on engineering work at the frontier of AI development — not theoretical, not bureaucratic, and not boring.
+
+This is a fully remote, flexible contract role. If you can write clean code and explain your reasoning, we want to hear from you.
+
+Organization: Alignerr
+Type: Hourly Contract
+Location: Remote
+Commitment: 10–40 hours/week
+
+What You'll Do
+- Write, debug, and optimize code across a range of languages, frameworks, and problem domains
+- Review and evaluate AI-generated code for correctness, efficiency, readability, and best practices
+- Identify bugs, logic errors, security issues, and performance bottlenecks in AI outputs
+- Provide structured, detailed feedback explaining why code works — or doesn't
+- Design challenging coding prompts and edge-case scenarios to stress-test AI capabilities
+- Compare and rank multiple AI-generated solutions based on engineering quality
+- Work independently and asynchronously — fully on your own schedule
+
+Who You Are
+- Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)
+- Solid understanding of data structures, algorithms, and software design principles
+- Able to read, write, and reason about code with clarity and precision
+- Strong problem-solving instincts and a systematic debugging approach
+- Clear written communicator — you can explain technical decisions in plain language
+- Self-motivated and reliable when working independently without supervision
+- Bachelor's degree in Computer Science, Software Engineering, or a related field — or equivalent practical experience
+
+Nice to Have
+- Experience across multiple languages or tech stacks (full-stack, backend, systems, data engineering)
+- Familiarity with AI/ML concepts, LLMs, or prompt engineering
+- Background in code review, technical writing, or mentoring junior developers
+- Experience with cloud platforms, DevOps, or distributed systems
+- Competitive programming, open-source contributions, or side projects that demonstrate your craft
+- Advanced degree in Computer Science or related discipline
+
+Why Join Us
+- Work on cutting-edge AI projects alongside leading research labs
+- Fully remote and flexible — set your own hours and work from anywhere
+- Freelance autonomy with intellectually stimulating, high-impact work
+- Directly influence how AI writes, understands, and reasons about code
+- Sharpen your own engineering skills by evaluating diverse problems daily
+- Potential for ongoing work and contract extension as new projects launch
+</content>

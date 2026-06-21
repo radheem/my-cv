@@ -1,0 +1,49 @@
+Data Engineer (m/f/d)
+
+Cologne, North Rhine-Westphalia, Germany · 1 week ago
+About the job
+About Redcare Pharmacy:
+
+As Europe’s No.1 e-pharmacy Redcare Pharmacy is powered by passionate teams and cutting-edge innovation. We strive to create a healthy collaborative work environment where every employee feels valued and inspired to contribute to our vision “Until every human has their health”. If you’re seeking a career that offers purpose and aligns with your values join us and start your #Redcareer today.
+
+About the role:
+
+Are you ready to take on the challenge of building robust data solutions for cutting-edge Data & AI initiatives? As a Data Engineer, you’ll be at the forefront of developing and optimizing data pipelines and architectures that enable Data & AI models to deliver transformative insights. Join us to shape the future of digital healthcare with data-driven innovation.
+
+Job Description
+
+About your tasks:
+
+Design and optimize scalable data pipelines and data architecture.
+Build cloud-native data solutions using Azure, Databricks (Unity Catalog & Delta Lake), and other big data technologies.
+Build and maintain DBT models and understand the data domains like finance, e-commerce, pharma, and supply chain.
+Collaborate with business stakeholders and analysts to deliver data-driven solutions.
+Apply CI/CD practices and continuously improve performance, scalability, and security.
+Contribute to a strong data culture through continuous learning and knowledge sharing.
+
+Qualifications
+
+About you:
+
+3+ years of experience in data engineering and data management.
+Hands-on experience with Azure or other public cloud platforms, building and maintaining scalable data pipelines and ensuring high data quality.
+Strong expertise in DBT and SQL for data modeling and analysis.
+Solid experience with Databricks (Spark, Unity Catalog).
+Proficient in at least one programming language (e.g., Python, Scala, or Java).
+Experience with CI/CD and DevOps practices is a plus.
+Understanding of business domains, ideally with an e-commerce background.
+Motivated to work in an innovative environment and continuously improve cloud-native and distributed systems.
+
+Additional Information
+
+About your Benefits:
+
+In order to provide our employees with the best possible support for their individual needs, we offer a wide range of benefits:
+
+Work from Home: If your job does not require you to be present in the office, we can arrange the place you work from individually - even for up to 20 days a year anywhere in the EU.
+Redcare events: We promote teambuilding through creative team events, and celebrate our successes together at regularly scheduled parties.
+Kindergarten Grant: We offer our employees who pay for childcare in kindergarten 100,00 € (total) per month.
+Mental health: Get quick professional help from psychologists from nilo if you feel overwhelmed in your personal or professional life. Anonymously and free of charge.
+Personal Development: We are all constantly learning. That's why we support and foster your career development through internal & external training and help you grow.
+Mobility: Your commute matters to us. We provide our employees with a fully costed Deutschland Ticket which can be used at any time.
+Sports & Health: Your well-being is our top priority. Therefore, we offer you a range of opportunities to improve your health. Profit from a membership (M) package at Urban Sports Club, providing a variety of sports offers tailored to your interests.

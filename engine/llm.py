@@ -26,6 +26,14 @@ DEFAULT_ANTHROPIC_MODEL = "claude-sonnet-4-6"
 DEFAULT_OLLAMA_MODEL = "qwen3.5:35b"
 DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434/v1"
 
+# Reasoning models (qwen3.x) emit a <think> block that is billed against
+# max_tokens BEFORE the visible answer. We keep thinking ENABLED (disabling it via
+# reasoning_effort="none" makes some Ollama builds ignore the JSON schema) and give
+# generous headroom so neither structured JSON nor long prose truncates to empty.
+# Override the floors with CV_TAILOR_MIN_JSON_TOKENS / CV_TAILOR_MIN_TEXT_TOKENS.
+OLLAMA_MIN_JSON_TOKENS = int(os.environ.get("CV_TAILOR_MIN_JSON_TOKENS", "12000"))
+OLLAMA_MIN_TEXT_TOKENS = int(os.environ.get("CV_TAILOR_MIN_TEXT_TOKENS", "24000"))
+
 _OLLAMA_ALIASES = {"ollama", "openai", "openai-compatible"}
 
 
@@ -114,20 +122,35 @@ def structured_json(
     cfg = resolve()
     if cfg["provider"] == "ollama":
         client = _openai_client(cfg)
-        resp = client.chat.completions.create(
-            model=cfg["model"],
-            max_tokens=max_tokens,
-            temperature=0,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {"name": "jobspec", "schema": schema, "strict": True},
-            },
-        )
-        return json.loads(_json_from_text(resp.choices[0].message.content or ""))
+
+        # Reasoning models (e.g. qwen3.x) emit a <think> block that is billed
+        # against max_tokens BEFORE the JSON. Too small a budget returns
+        # finish_reason="length" with empty content, so give generous headroom.
+        # Note: disabling thinking (reasoning_effort="none") makes some Ollama
+        # builds ignore the schema grammar, so we keep thinking on and pay tokens.
+        def _ask(mt: int) -> str:
+            resp = client.chat.completions.create(
+                model=cfg["model"],
+                max_tokens=mt,
+                temperature=0,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {"name": "jobspec", "schema": schema, "strict": True},
+                },
+            )
+            return resp.choices[0].message.content or ""
+
+        budget = max(max_tokens, OLLAMA_MIN_JSON_TOKENS)
+        raw = _ask(budget)
+        try:
+            return json.loads(_json_from_text(raw))
+        except (json.JSONDecodeError, ValueError):
+            # Most likely truncation (thinking ate the budget): retry once larger.
+            return json.loads(_json_from_text(_ask(budget * 2)))
 
     resp = _anthropic_client().messages.create(
         model=cfg["model"],
@@ -146,9 +169,11 @@ def stream_text(system: str, user: str, *, max_tokens: int = 16000) -> str:
     if cfg["provider"] == "ollama":
         client = _openai_client(cfg)
         parts: list[str] = []
+        # Thinking stays on; headroom so the prose isn't truncated after the
+        # <think> block (which _strip_think removes from the returned text).
         stream = client.chat.completions.create(
             model=cfg["model"],
-            max_tokens=max_tokens,
+            max_tokens=max(max_tokens, OLLAMA_MIN_TEXT_TOKENS),
             temperature=0.4,
             stream=True,
             messages=[
