@@ -1,167 +1,107 @@
 # Setup
 
-How to run cv-tailor end to end: generate a tailored application, build and test the gate
-locally, then deploy to GitHub Pages.
+How to run my-cv end to end: generate a tailored application, render bilingual PDFs, upload them
+to Google Drive, track status in git, and deploy the public portfolio.
 
-!!! warning "Public repo — fictional persona"
-    This project is public and ships **no real personal data**. The identity
-    ("Radheem Bin Razi", `sheikh.radheem@gmail.com`, `github.com/radheem`) and employer names are
-    invented; the projects are kept for realism. Never commit real names, emails, phone
-    numbers, or personal links.
+!!! note "Private repo — real data"
+    This repo holds real personal data (`data/`). The public site (`radheem.github.io/my-cv`)
+    publishes **only the portfolio**; `applications/` lives outside `docs/` and never reaches the
+    site. Keep the repo private and credentials out of commits.
 
 ## Prerequisites
 
 - **Python 3.11+**
-- **WeasyPrint native libraries** (for PDF rendering) — on Debian/Ubuntu:
-  ```bash
-  sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgdk-pixbuf-2.0-0
-  ```
-- An **Anthropic API key** — only for the generation step.
+- An **LLM** for generation: an **Anthropic API key**, or a local **Ollama** / OpenAI-compatible
+  endpoint.
+- **LaTeX** for PDF rendering: a local TeX Live (`latexmk`, `texlive-latex-recommended`,
+  `texlive-lang-german`, `lmodern`) **or** Docker (the build script falls back to the
+  `texlive/texlive` image — no local TeX needed).
+- **Google Drive** upload (optional): a deployed Apps Script web app — see
+  [apps-script/README.md](https://github.com/radheem/my-cv/blob/main/apps-script/README.md).
 
 ## Install
 
 ```bash
-# Site build + gate only (mkdocs-material, weasyprint, cryptography, pyyaml):
-pip install -e .
-
-# Add the generation pipeline (Anthropic backend) and the optional URL fetcher:
-pip install -e '.[generate,fetch]'
-playwright install chromium        # only needed to fetch job URLs
-
-# Or the local Ollama / OpenAI-compatible backend instead of Anthropic:
-pip install -e '.[ollama]'
+make install-all                    # uv venv + all extras
+# or, with pip:
+pip install -e '.[generate,fetch]'  # Anthropic backend + URL fetch
+pip install -e '.[ollama]'          # local Ollama / OpenAI-compatible backend
+playwright install chromium         # only to fetch job URLs / LinkedIn ingest
+cp .env.example .env                # then fill in keys (provider, Drive)
 ```
 
-## 1. Generate a tailored application (local)
+## 1. Generate a tailored application
 
 ```bash
 export ANTHROPIC_API_KEY=...
-cv-tailor new path/to/job.txt          # a pasted .txt/.md file …
-cv-tailor new https://example.com/job  # … or a job URL (needs Playwright)
-cv-tailor new path/to/job.txt --recipient "Jane Smith"   # personalize the salutation
+cv-tailor new path/to/job.txt                       # a pasted .txt/.md file …
+cv-tailor new https://example.com/job               # … or a job URL (Playwright)
+cv-tailor new path/to/job.txt --recipient "Jane Smith"
 ```
 
-### Generation provider
-
-Generation defaults to **Anthropic** (`ANTHROPIC_API_KEY`). To run against a **local Ollama**
-(or any OpenAI-compatible server) instead — offline, no API key:
-
-```bash
-cv-tailor new path/to/job.txt --provider ollama \
-  --ollama-url http://localhost:11434/v1 --model qwen3.5:35b
-```
-
-Equivalently via env: `CV_TAILOR_PROVIDER=ollama`,
-`CV_TAILOR_OLLAMA_BASE_URL=http://localhost:11434/v1`, `CV_TAILOR_MODEL=qwen3.5:35b`. Point
-`--ollama-url` at your own host. CI never generates, so no provider config is needed there.
-
-One provider per run; pick the model with `--model` (or `CV_TAILOR_MODEL`):
-
-| Provider | Install | Default model | Auth |
-|---|---|---|---|
-| **Anthropic** (default) | `.[generate]` | `claude-sonnet-4-6` | `ANTHROPIC_API_KEY` |
-| **Ollama** / OpenAI-compatible | `.[ollama]` | `qwen3.5:35b` | none (local) |
-
-```bash
-cv-tailor new path/to/job.txt --model claude-opus-4-8        # Anthropic, Opus
-cv-tailor new path/to/job.txt --provider ollama --model llama3.1:70b
-```
-
-The **[CLI reference](cli.md)** lists every flag, env var, and sample command.
-
-The cover letter is rendered as a real letter (letterhead → date → salutation → body →
-sign-off, no title). `--recipient` sets `Dear Jane Smith,`; omit it for `Dear Hiring Team,`.
-You can also edit `recipient:` in the generated `cover-letter.md` front matter later.
-
-This writes `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-description.md`, and
-`index.md` (the gated unlock hub). The flow:
+Defaults to Anthropic; for a local model: `--provider ollama --ollama-url http://host:11434/v1
+--model qwen3.5:35b` (or the `CV_TAILOR_*` env vars). `new` also writes the German translation by
+default (`--no-translate` to skip). See the **[CLI reference](cli.md)** for every flag.
 
 ```mermaid
 flowchart LR
-    A["cv-tailor new &lt;job&gt;"] --> B[JobSpec]
-    B --> C[rank: top-3 + skills]
-    C --> D[LLM writes (Anthropic / Ollama)\ncv.md + cover-letter.md]
-    D --> E[docs/jobs/&lt;slug&gt;/]
-    E --> F[review · edit · commit]
+    A["cv-tailor new &lt;job&gt;"] --> B[JobSpec] --> C[rank: top-3 + skills]
+    C --> D[LLM prose\ncv.md + cover-letter.md]
+    D --> E[+ German\ncv.de.md + cover-letter.de.md]
+    E --> F[applications/&lt;slug&gt;/ · review · commit]
 ```
 
-Then:
+This writes `applications/<slug>/` with `cv.md` (+ `cv.de.md`), `cover-letter.md` (+ `.de`),
+`job-description.md`, and `index.md` (metadata + `status: draft`). **Review and edit** the
+Markdown — it is the source of truth — and **have the German checked** before sending.
 
-1. **Review and edit** the generated Markdown — it is the source of truth for the deploy.
-2. **Commit** it. No nav edit is needed: the build auto-lists every application in the
-   encrypted manifest behind the single **Tailored** sign-in page, so new roles never appear
-   in `mkdocs.yml` or leak in plaintext.
-
-!!! tip "Model"
-    The Anthropic backend defaults to Claude Sonnet 4.6. Use Opus for harder reasoning:
-    ```bash
-    cv-tailor new path/to/job.txt --model claude-opus-4-8
-    ```
-
-## 2. Build + test the gate locally
+## 2. Render the bilingual PDFs
 
 ```bash
-GATE_PASSWORD=test python build.py
-python -m http.server -d site 8000
-# open http://localhost:8000/
+make pdf SLUG=<slug>      # cv.tex/cover-letter.tex → 2-page EN+DE cv.pdf / cover-letter.pdf
 ```
 
-- `GATE_PASSWORD` seals the gated documents (use anything for local testing).
-- The gated CV/cover-letter HTML is self-contained (CSS inlined), so it renders the same in
-  the unlock iframe and the PDF — no base-URL configuration needed.
+`engine/latex.py` renders the `.tex` (the LLM never emits LaTeX); `scripts/build-application.sh`
+compiles with local `latexmk` or the `texlive/texlive` Docker image. PDFs are gitignored.
 
-What to verify:
-
-- The public portfolio and general CV load freely; the general CV's **Download PDF** works.
-- The nav shows a single **Tailored** entry → a sign-in page. Wrong password → error; the
-  correct password reveals the **application list** with working links and a **status badge**
-  per role (`draft → applied → interview → offer / rejected / withdrawn`; see
-  [CLAUDE.md](https://github.com/radheem/cv-tailor/blob/main/CLAUDE.md)).
-- **One unlock, then browse:** click an application → its `jobs/<slug>/` hub auto-unlocks (no
-  second prompt), renders the CV / cover letter in an iframe, and downloads the decrypted PDF.
-- **Direct-visit fallback:** a fresh tab opening a `jobs/<slug>/` URL still shows its own
-  password prompt.
-- Nothing leaks pre-sign-in: no role/company appears in plaintext —
-  `grep -rl "Platform Engineer" site/ | grep -v '\.enc$'` and the same against
-  `site/search/search_index.json` are both empty.
-
-## 3. Run the tests
+## 3. Upload to Google Drive + track status
 
 ```bash
-pip install pytest
-pytest -q        # ranking logic — no browser, no API key
+make upload SLUG=<slug>                      # compile + push PDFs to Drive; writes drive_url
+make status SLUG=<slug> STATUS=applied       # advance lifecycle + refresh the tracker
+make track                                   # rebuild applications/README.md
 ```
 
-## 4. Deploy to GitHub Pages
+Upload needs `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` in `.env` (one-time Apps Script deploy — see
+its README). Status transitions are git commits; `applications/README.md` is the at-a-glance table.
+
+## 4. Run the tests
+
+```bash
+make test        # ranking + render + MD→LaTeX — no browser, no API key, no LaTeX
+```
+
+## 5. Deploy the public portfolio
 
 ```mermaid
 flowchart LR
     P[push to main] --> A[GitHub Actions]
-    A --> B[install deps +\nWeasyPrint libs]
-    B --> T[pytest]
-    T --> BUILD["build.py\n(GATE_PASSWORD secret)"]
-    BUILD --> D[deploy-pages]
+    A --> CV[latex-action: latex/resume.tex → docs/assets/cv.pdf]
+    CV --> B[mkdocs build]
+    B --> D[deploy-pages]
 ```
 
-One-time repo configuration:
-
-1. **Settings → Pages → Source: GitHub Actions.**
-2. **Settings → Secrets and variables → Actions →** add a **`GATE_PASSWORD`** secret. This
-   is the password visitors will use to unlock the gated documents.
-
-Every push to `main` then renders, gates, and deploys via
-[`.github/workflows/deploy.yml`](https://github.com/radheem/cv-tailor). No API key is used
-in CI — generation is always a local step.
+One-time: **Settings → Pages → Source: GitHub Actions**. No secrets are needed — CI only compiles
+the generic CV PDF and builds the portfolio (`.github/workflows/deploy.yml`). Generation, PDF
+rendering, and Drive upload are always local steps.
 
 ## Environment variables
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | local generation | authenticates the Anthropic backend |
-| `CV_TAILOR_PROVIDER` | local generation | `anthropic` (default) or `ollama` |
-| `CV_TAILOR_MODEL` | local generation | model override (default: `claude-sonnet-4-6` / `qwen3.5:35b`) |
-| `CV_TAILOR_OLLAMA_BASE_URL` | local generation | OpenAI-compatible base URL (default `http://localhost:11434/v1`) |
-| `CV_TAILOR_OLLAMA_API_KEY` | local generation | key for that endpoint (default `ollama`) |
-| `GATE_PASSWORD` | build (local + CI secret) | seals/unlocks the gated documents |
+| `ANTHROPIC_API_KEY` | local | Anthropic backend auth |
+| `CV_TAILOR_PROVIDER` / `CV_TAILOR_MODEL` | local | provider + model |
+| `CV_TAILOR_OLLAMA_BASE_URL` / `CV_TAILOR_OLLAMA_API_KEY` | local | local endpoint |
+| `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` / `GDRIVE_FOLDER_ID` | local | Google Drive upload |
 
 See [Architecture](architecture.md) for how the pieces fit together.
