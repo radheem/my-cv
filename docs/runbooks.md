@@ -9,8 +9,9 @@ prepare each application for submission.
     a human reviews and submits by hand. There is no auto-apply path anywhere in this repo.
 
 > **Private, real-data repo.** This drives the real account and produces usable applications.
-> Captured JDs and generated applications live only in the gitignored `vault/` and are never
-> committed; the public site shows only the gated, AES-sealed versions.
+> Captured JDs live in gitignored `vault/`; generated applications live in `applications/`
+> (Markdown + LaTeX, outside the published `docs/` tree). Tailored PDFs go to Google Drive. The
+> public site shows only the portfolio — no application ever reaches it.
 
 ## The end-to-end flow
 
@@ -21,7 +22,7 @@ flowchart LR
     INGEST --> GEN[3 · generate<br/>CV + cover → PDF]
     GEN --> REVIEW[4 · review<br/>+ advance status]
     REVIEW --> STOP((human applies<br/>stop-before-submit))
-    GEN -.optional.-> PUBLISH[5 · gated site<br/>build + deploy]
+    GEN -.optional.-> PUBLISH[5 · PDFs → Google Drive<br/>status tracked in git]
 ```
 
 Each container invocation is a one-shot `docker compose run` task (the `make docker-*` targets
@@ -143,17 +144,20 @@ Status lives in the hub front matter; `git log` is the audit trail. See
 
 ---
 
-## Runbook 5 — Publish the gated site (optional)
+## Runbook 5 — Render PDFs, push to Drive, track status
 
-To surface applications behind the password gate on GitHub Pages:
+The tailored CV + cover letter are rendered as **bilingual (EN+DE) PDFs** with the LaTeX template
+and stored in **Google Drive** — they are never published to the site (the public site is
+portfolio-only). Status lives in git.
 
 ```bash
-make build      # render + AES-256-GCM seal the gated content into ./site
-make preview    # build AND serve locally to test the password gate
+make pdf SLUG=<slug>             # render cv.tex/cover-letter.tex → bilingual PDFs (latexmk/Docker)
+make upload SLUG=<slug>          # compile + upload PDFs to Google Drive (see apps-script/README.md)
+make status SLUG=<slug> STATUS=applied   # advance lifecycle + refresh applications/README.md
 ```
 
-The application list itself is encrypted, so no role or company leaks before sign-in. Keep the
-repo private and the gate password strong.
+The public portfolio still ships via `make build` (`mkdocs build`) + CI; no company name ever
+reaches `site/` because `applications/` lives outside `docs/`.
 
 ---
 
