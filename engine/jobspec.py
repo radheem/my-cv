@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from . import llm
+from . import llm, prompts
 
 JOBSPEC_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -63,4 +63,6 @@ _SYSTEM = (
 def extract_jobspec(job_text: str) -> dict[str, Any]:
     """Extract a JobSpec dict from raw job-posting text."""
     user = f"Job posting:\n\n{job_text.strip()}\n\nExtract the JobSpec."
-    return llm.structured_json(_SYSTEM, user, JOBSPEC_SCHEMA, max_tokens=2000)
+    max_tokens = llm.resolve()["max_tokens"]["jobspec"]
+    system, _ = prompts.load("jobspec", _SYSTEM)
+    return llm.structured_json(system, user, JOBSPEC_SCHEMA, max_tokens=max_tokens)

@@ -78,7 +78,7 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ## Skills
 
 - Languages (spoken): English (fluent), German / Deutsch (A2)
-- Programming Languages: Go, Python, TypeScript, JavaScript, PHP
+- Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
 - Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
 - Cloud/Infra: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
 - Systems: gRPC, NATS (JetStream + KV), Hatchet, MCP, Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana

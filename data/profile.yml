@@ -26,8 +26,10 @@ languages:
 programming_languages:
   - Go
   - Python
+  - SQL
   - TypeScript
   - JavaScript
+  - Bash
   - PHP
 
 # Technical skill groups. The engine selects + orders the 1-3 most relevant

@@ -75,6 +75,7 @@ exclude_docs: |
   jobs/*/cv.md
   jobs/*/cover-letter.md
   jobs/*/job-description.md
+  jobs/*/manifest.json
 
 validation:
   nav:

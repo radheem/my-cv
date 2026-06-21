@@ -1,0 +1,18 @@
+# Quality floors for `evaluate.py --gate` — the regression guard that turns
+# "I improved the prompt" into "the change is allowed only if scores hold".
+#
+# Gate on `min_heuristic` (deterministic, pure metrics). `min_judge_mean` is
+# ADVISORY only — the LLM judge is stochastic, so it is reported but not enforced.
+# Run locally / in a manual workflow, never in the deploy CI (no API key there).
+#
+# Tune the floors just below your achieved scores so genuine regressions trip them
+# without flapping on run-to-run noise.
+
+min_heuristic:
+  train: 0.80
+  test: 0.80
+
+# advisory (printed, not enforced)
+min_judge_mean:
+  train: 3.5
+  test: 3.3

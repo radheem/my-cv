@@ -53,7 +53,7 @@ _JUDGE_SYSTEM = (
 
 
 def _judge(kind: str, jobspec: dict, gen: str, gold: str) -> dict | None:
-    from engine import llm
+    from engine import llm, prompts
 
     user = (
         f"## Job\nTitle: {jobspec.get('title')}\nCompany: {jobspec.get('company')}\n"
@@ -63,7 +63,9 @@ def _judge(kind: str, jobspec: dict, gen: str, gold: str) -> dict | None:
         f"Score the candidate {kind} against the gold."
     )
     try:
-        return llm.structured_json(_JUDGE_SYSTEM, user, _JUDGE_SCHEMA, max_tokens=1200)
+        system, _ = prompts.load("judge", _JUDGE_SYSTEM)
+        mt = llm.resolve()["max_tokens"]["judge"]
+        return llm.structured_json(system, user, _JUDGE_SCHEMA, max_tokens=mt)
     except Exception as e:  # endpoint may ignore json_schema, or be down
         return {"error": f"{type(e).__name__}: {e}"}
 
@@ -119,7 +121,30 @@ def evaluate(slugs: list[str], do_judge: bool) -> dict:
                 agg["judge_mean"] = _mean([r["judge_mean"] for r in g if "judge_mean" in r])
                 agg["judge_overall"] = _mean([r["judge_overall"] for r in g if "judge_overall" in r])
             by_split[sp] = agg
-    return {"rows": rows, "by_split": by_split, "judged": do_judge}
+
+    from engine import config, manifest
+    eff = config.load()
+    return {
+        "rows": rows,
+        "by_split": by_split,
+        "judged": do_judge,
+        "config_version": eff.get("version"),
+        "effective_config_sha256": manifest.sha256_of(json.dumps(eff, sort_keys=True)),
+    }
+
+
+def gate(result: dict, gates_file: pathlib.Path) -> list[str]:
+    """Return a list of gate violations (empty = pass). Enforces min_heuristic per
+    split; min_judge_mean is advisory (reported by the caller, not returned here)."""
+    import yaml
+    g = yaml.safe_load(gates_file.read_text(encoding="utf-8")) or {}
+    floors = g.get("min_heuristic", {})
+    violations = []
+    for sp, agg in result["by_split"].items():
+        floor = floors.get(sp)
+        if floor is not None and agg["heuristic"] < floor:
+            violations.append(f"{sp}: heuristic {agg['heuristic']} < floor {floor}")
+    return violations
 
 
 def _report_md(result: dict) -> str:
@@ -178,6 +203,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-judge", action="store_true", help="heuristics only, no LLM judge")
     ap.add_argument("--judge-model", default=None, help="model for the judge (default qwen3.6:35b)")
     ap.add_argument("--judge-url", default=None, help="OpenAI-compatible base URL for the judge")
+    ap.add_argument("--gate", action="store_true",
+                    help="exit non-zero if any split is below its floor in gates.yml")
     args = ap.parse_args(argv)
 
     if args.only:
@@ -202,6 +229,15 @@ def main(argv: list[str] | None = None) -> int:
         extra = f"  judge µ={agg.get('judge_mean')}" if do_judge else ""
         print(f"{sp:5}  n={agg['n']}  heuristic={agg['heuristic']}{extra}", file=sys.stderr)
     print(f"\nWrote {harness.RESULTS/'report.md'} and scores.json", file=sys.stderr)
+
+    if args.gate:
+        violations = gate(result, harness.HERE / "gates.yml")
+        if violations:
+            print("GATE FAILED:", file=sys.stderr)
+            for v in violations:
+                print(f"  - {v}", file=sys.stderr)
+            return 1
+        print("GATE PASSED (heuristic floors met)", file=sys.stderr)
     return 0
 
 

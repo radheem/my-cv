@@ -15,4 +15,4 @@ venv/
 # benchmark artifacts (regenerate with tests/experiments/run.py + evaluate.py)
 /tests/experiments/outputs/
 /tests/experiments/results/
-tests/experiments/_run_all.log
+tests/experiments/_*.log

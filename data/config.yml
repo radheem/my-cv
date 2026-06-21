@@ -1,0 +1,57 @@
+# cv-tailor configuration — the single place to steer generation.
+#
+# Every key is OPTIONAL and the values below are exactly the engine defaults, so
+# this file is documentation as much as configuration: delete it and nothing
+# changes. Precedence, highest first:
+#
+#     CLI flag  >  env var (CV_TAILOR_*)  >  this file  >  built-in default
+#
+# So the benchmark / CLI can still override per-run via env without editing here.
+# Loaded by engine/config.py; the effective, merged config is hashed into each
+# application's manifest.json for reproducibility.
+
+version: 1                       # bump by hand when you change knobs; rides in the manifest
+
+llm:
+  provider: anthropic            # anthropic | ollama   (env: CV_TAILOR_PROVIDER)
+  anthropic_model: claude-sonnet-4-6   # env: CV_TAILOR_MODEL
+  ollama_model: qwen3.5:35b            # env: CV_TAILOR_MODEL (when provider=ollama)
+
+  # Lower temperature ⇒ more reproducible prose. json stays 0 (deterministic
+  # extraction). Override text per-run with env CV_TAILOR_TEXT_TEMPERATURE.
+  temperature:
+    json: 0.0
+    text: 0.4
+
+  # Output budgets per call. Reasoning models (qwen3.x) bill their <think> block
+  # against these, so the ollama.min_*_tokens floors below add headroom.
+  max_tokens:
+    jobspec: 2000
+    cv: 16000
+    cover: 8000
+    judge: 1200
+
+  ollama:
+    base_url: http://localhost:11434/v1   # env: CV_TAILOR_OLLAMA_BASE_URL
+    api_key: ollama                        # env: CV_TAILOR_OLLAMA_API_KEY
+    min_json_tokens: 12000                 # env: CV_TAILOR_MIN_JSON_TOKENS
+    min_text_tokens: 24000                 # env: CV_TAILOR_MIN_TEXT_TOKENS
+
+  # Determinism: a seed is sent to the OpenAI-compatible (ollama) endpoint when set.
+  # Anthropic has no public seed param — its determinism comes from temperature: 0.
+  seed: null                     # env: CV_TAILOR_SEED
+
+# System prompts live in files so they are user-editable and version-pinned. An
+# absent file falls back to the in-code default prompt (engine/render.py etc.).
+prompts:
+  dir: data/prompts
+  cv: cv.md
+  cover: cover.md
+  jobspec: jobspec.md
+  judge: judge.md
+  fewshot: true                  # include the gold-derived style exemplars
+
+# Ranking inputs (the pure ranker reads these — see data/ranking.yml, taxonomy.yml).
+tailoring:
+  ranking_file: data/ranking.yml
+  taxonomy_file: data/taxonomy.yml

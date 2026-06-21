@@ -65,7 +65,18 @@ VIRTUAL_ENV=$PWD/.venv uv pip install -e '.[ollama]'
 # 2. score (heuristics + LLM judge; --no-judge for offline heuristics only)
 .venv/bin/python tests/experiments/evaluate.py --split all
 cat tests/experiments/results/report.md
+
+# 3. regression gate — non-zero exit if a split drops below gates.yml floors
+.venv/bin/python tests/experiments/evaluate.py --split all --gate
 ```
+
+Every generated case also writes `outputs/<slug>/manifest.json` (provider, model,
+temperature, token budgets, seed, prompt versions+hashes, and content hashes of the
+effective config + all data inputs) — so a score is attributable to an exact config
+snapshot. Two runs with the same `effective_config_sha256` + prompt hashes +
+provider/seed should reproduce within noise. Tune `gates.yml` floors just under your
+achieved scores; the gate enforces the deterministic heuristic and treats the LLM
+judge as advisory.
 
 Generation is ~3 min/case on the 35B (it is a reasoning model — the `<think>` block is
 billed against the token budget; `engine/llm.py` gives structured calls headroom and

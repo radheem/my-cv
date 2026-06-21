@@ -92,6 +92,34 @@ ranker never runs in CI. When changing scoring, keep it **pure** (taxonomy/ranki
 args) and **backward-compatible** (absent files reproduce the original token-overlap behavior —
 `tests/test_rank.py:test_defaults_reproduce_current_behavior` guards this).
 
+## Configuration, prompts & reproducibility
+
+The knobs are centralized so generation is **configurable and reproducible**, not a
+one-off. All three layers fall back to code defaults, so an absent file = today's
+behavior, and **env still overrides the file** (`CLI flag > env > data/config.yml >
+default`).
+
+- **`data/config.yml`** (`engine/config.py`) — provider/model, temperatures, token
+  budgets, the Ollama endpoint + reasoning-token floors, `seed`, prompt selection, and
+  the ranking/taxonomy file paths. `engine/llm.py:resolve()` is a thin shim over it.
+- **`data/prompts/{cv,cover,jobspec,judge}.md`** (`engine/prompts.py`) — the system
+  prompts, versioned via front-matter `version:`; editing them needs no code change. The
+  in-code constant in `render.py`/`jobspec.py` is the fallback when a file is absent.
+  `data/prompts/exemplars/cover.yml` carries gold-derived, style-only opener exemplars.
+- **`projects.yml` `highlights:`** — role-neutral facts (verbatim from `master-cv.md`)
+  that the CV renderer **re-angles per role** (ETL framing for a data role, observability
+  for devops). Without it the renderer falls back to the static `summary`.
+- **`manifest.json`** (`engine/manifest.py`) — written next to every application:
+  provider/model/temps/budgets/seed, prompt versions+hashes, and content hashes of the
+  effective config + all data inputs. Lets a result be re-derived and verified. It is
+  excluded from the built site (`mkdocs.yml exclude_docs`).
+- **Benchmark gate** — `tests/experiments/evaluate.py --gate` enforces the per-split
+  floors in `tests/experiments/gates.yml` (deterministic heuristic; judge advisory).
+  `tests/test_data_consistency.py` guards `profile.yml`↔`master-cv.md` drift.
+
+`master-cv.md` stays canonical for facts; `profile.yml` is the structured mirror the
+engine needs — keep them in sync (the drift test enforces it).
+
 ## Repo conventions
 
 - **Commits: omit the Claude `Co-Authored-By` footer** in this repo.

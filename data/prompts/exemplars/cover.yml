@@ -1,0 +1,12 @@
+# Style-only exemplar openings for cover letters, drawn from hand-written gold
+# (tests/experiments/cases/*/gold). They demonstrate the TONE to match — a single
+# genuine, specific idea, body-only, no salutation — NOT facts to copy. The
+# renderer appends these as a style block when prompts.fewshot is true (config.yml).
+# Keep each entry truthful to its source role; never let one role's specifics leak
+# into another's letter.
+- source: intershop (DevOps / monitoring)
+  opening: "A good monitoring system tells you what is wrong before a customer ever notices, and building that quiet kind of reliability is the part of operations I enjoy most."
+- source: aroundhome (senior backend)
+  opening: "The part of a system I most enjoy is the seam between an old design and a better one."
+- source: teambank (ML model monitoring)
+  opening: "Catching a model quietly drift — until predictions that once held no longer do — before it shows up in the numbers is the part of machine-learning work I find most satisfying."

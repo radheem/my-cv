@@ -11,6 +11,8 @@ Review the output, commit it, and let CI render + encrypt + deploy.
 from __future__ import annotations
 
 import argparse
+import datetime
+import json
 import os
 import pathlib
 import re
@@ -18,7 +20,7 @@ import sys
 
 import yaml
 
-from . import fetch, jobspec as jobspec_mod, rank, render
+from . import fetch, jobspec as jobspec_mod, manifest as manifest_mod, rank, render
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -120,7 +122,9 @@ def cmd_new(args: argparse.Namespace) -> int:
     tagline, cv_body = render.render_cv(spec, tailoring, master_cv, cv_guide)
     print("Rendering cover letter ...", file=sys.stderr)
     cl_body = render.render_cover_letter(
-        spec, tailoring, profile.get("summary", ""), job_text, cl_guide
+        spec, tailoring, profile.get("summary", ""), job_text, cl_guide,
+        availability=profile.get("availability", ""),
+        relocation=profile.get("relocation", ""),
     )
 
     cv_fm = f"---\nsearch:\n  exclude: true\ntagline: {_yaml(tagline)}\n---\n\n"
@@ -142,8 +146,23 @@ def cmd_new(args: argparse.Namespace) -> int:
         ),
         encoding="utf-8",
     )
+    (out / "manifest.json").write_text(
+        json.dumps(
+            manifest_mod.build(
+                decisions={
+                    "top_projects": [p["id"] for p in tailoring["top_projects"]],
+                    "clusters": list(clusters),
+                    "tagline": tagline,
+                },
+                generated_at=datetime.datetime.now(datetime.timezone.utc)
+                .isoformat(timespec="seconds"),
+            ),
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
-    print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index).")
+    print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index, manifest).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
     if clusters:
         print("Clusters:", ", ".join(clusters))

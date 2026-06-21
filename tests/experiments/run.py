@@ -43,7 +43,8 @@ def _select(args) -> list[str]:
 
 def generate_one(slug: str) -> dict:
     """Run the full pipeline for one case; write outputs/<slug>/. Returns a summary."""
-    from engine import cli, jobspec as jobspec_mod, rank, render, llm
+    import datetime
+    from engine import cli, jobspec as jobspec_mod, manifest as manifest_mod, rank, render, llm
 
     case = harness.load_case(slug)
     profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking = cli._load_data()
@@ -53,7 +54,9 @@ def generate_one(slug: str) -> dict:
     tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
     tagline, cv_body = render.render_cv(spec, tailoring, master_cv, cv_guide)
     cl_body = render.render_cover_letter(
-        spec, tailoring, profile.get("summary", ""), case.job_text, cl_guide
+        spec, tailoring, profile.get("summary", ""), case.job_text, cl_guide,
+        availability=profile.get("availability", ""),
+        relocation=profile.get("relocation", ""),
     )
     elapsed = round(time.time() - t0, 1)
 
@@ -73,14 +76,29 @@ def generate_one(slug: str) -> dict:
         ),
         encoding="utf-8",
     )
+    cfg = llm.resolve()
+    mani = manifest_mod.build(
+        decisions={
+            "tagline": tagline,
+            "top_projects": [p["id"] for p in tailoring["top_projects"]],
+            "clusters": rank.job_clusters(
+                spec, taxonomy, rank.invert_aliases(taxonomy.get("aliases", {}))
+            ),
+        },
+        generated_at=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+    )
+    (out / "manifest.json").write_text(json.dumps(mani, indent=2), encoding="utf-8")
     summary = {
         "slug": slug,
         "split": case.split,
         "ok": True,
-        "model": llm.model(),
+        "provider": cfg["provider"],
+        "model": cfg["model"],
+        "seed": cfg["seed"],
         "seconds": elapsed,
         "tagline": tagline,
         "top_projects": [p["id"] for p in tailoring["top_projects"]],
+        "effective_config_sha256": mani["effective_config_sha256"],
     }
     (out / "run.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
