@@ -1,0 +1,14 @@
+---
+search:
+  exclude: true
+recipient: ""
+company: Moss
+---
+
+Moss setzt bewusst auf KI-Tooling und sucht jemanden, der diese Wette in messbare Ergebnisse verwandelt — und genau das ist die Art von offener, von Grund auf zu konzipierender Arbeit, zu der es mich hinzieht. Ich bin ein Senior Software Engineer, der in den letzten Jahren verteilte Dienste für den Fintech-Bereich aufgebaut hat und zuletzt das agentenbasierte Tooling sowie die Leitplanken entwickelt hat, die es KI ermöglichen, sicher neben echter Engineering-Arbeit zu bestehen. Meine Stärken sind die drei Dinge, die diese Rolle gleichzeitig erfordert: praxisnahes Platform Engineering, fundierte Erfahrung mit MCP und LLM-Integrationen sowie das Urteilsvermögen, Produktivitätsgewinne gegen die Sicherheits- und Compliance-Anforderungen abzuwägen, die einem regulierten Unternehmen wichtig sind.
+
+Ein großer Teil meiner jüngsten Arbeit drehte sich darum, Systeme verantwortungsvoll für KI-Agenten zugänglich zu machen. Auf einer verteilten Go-Plattform habe ich MCP-Tooling entwickelt, das LLM-Agenten erlaubt, das System über klar definierte Schnittstellen statt über Ad-hoc-Zugriff zu steuern — dieselbe Art sicherer, geregelter Angriffsfläche, die Moss für IDE-Integrationen, MCP-Server und Modellintegrationen wie Claude und Codex anstrebt. Die tiefere Lektion daraus ist genau das, worum es bei Ihrer Verantwortung für die Leitplanken wirklich geht: KI ist nur so nützlich, wie die Grenzen um sie herum vertrauenswürdig sind.
+
+Ich habe den Kompromiss zwischen Produktivität und Sicherheit auch in einer kleineren, schärferen Form erlebt. Ich habe ein Python-Tool entwickelt, bei dem eine reine, unit-getestete Komponente alle folgenreichen Entscheidungen trifft und das LLM auf das Schreiben von Prosa beschränkt ist, sodass es keine Fakten erfinden kann. Es nutzt git und GitHub Actions als System of Record, ohne Secrets in der CI und mit einem verschlüsselten Gate über allem Sensiblen. Dieser Instinkt — KI die Arbeit beschleunigen zu lassen, während eine deterministische, beobachtbare Schicht sie ehrlich hält — ist das, was ich in Moss' Katalog freigegebener Modelle, Prompt-Logging und Usage-Observability einbringen würde. Zuvor habe ich als Design-Authority an einer Krypto-Börse mit hohem Durchsatz gelernt, teamübergreifend zu erkennen, was gelöst werden muss, und die Lösung mit deren Zustimmung voranzutreiben, anstatt auf ein Ticket zu warten.
+
+Ich würde die Gelegenheit begrüßen, diese Arbeit bei Moss zu leisten. Ich bin in Ilmenau, Deutschland, ansässig, ab sofort in Vollzeit verfügbar und kann innerhalb Deutschlands in etwa zwei bis drei Wochen umziehen. Ich bin Blue-Card-ready, sodass ein qualifizierendes Angebot nur den Vertrag benötigt — ohne Sponsoring-Aufwand. Vielen Dank, dass Sie meine Bewerbung in Betracht ziehen; ich würde mich freuen, zu besprechen, wie ich dazu beitragen kann, die KI-Einführung bei Moss sowohl schneller als auch sicherer zu gestalten.
