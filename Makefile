@@ -75,6 +75,54 @@ install-all: venv ## Install everything (base + generate + fetch + ollama + dev)
 playwright: ## Install the Playwright Chromium browser (needed to fetch job URLs)
 	$(BIN)/playwright install chromium
 
+# ---- LinkedIn ingest (Sprint 1) --------------------------------------------
+
+KEYWORDS ?= platform engineer
+LIMIT    ?= 5
+
+# Run containers as the invoking host user so vault/ files match host ownership.
+# (bash's $UID is readonly and not exported, so Compose can't see it — use our own vars.)
+DOCKER_UID := $(shell id -u)
+DOCKER_GID := $(shell id -g)
+export DOCKER_UID DOCKER_GID
+
+.PHONY: ingest
+ingest: ## Run ingest on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= LIMIT=]
+	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor ingest \
+	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT)
+
+.PHONY: docker-build
+docker-build: ## Build the ingest container image
+	docker compose build
+
+.PHONY: docker-ingest
+docker-ingest: ## Run ingest in the container: make docker-ingest KEYWORDS="..." [LOCATION= LIMIT=]
+	docker compose run --rm --service-ports ingest cv-tailor ingest \
+	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT)
+
+.PHONY: docker-login
+docker-login: ## First-time VNC login (long timeout to solve CAPTCHA): VNC_BIND=<ip> VNC_PASSWORD=<pw> make docker-login
+	docker compose run --rm --service-ports \
+	  -e LINKEDIN_CHALLENGE_TIMEOUT=$(or $(CHALLENGE_TIMEOUT),1200) \
+	  ingest cv-tailor ingest --keywords warmup --limit 0
+
+.PHONY: docker-vnc
+docker-vnc: ## Print VNC connect info (attach a viewer to solve OTP/CAPTCHA)
+	@echo "Run an ingest/login target first (the port only exists while it runs)."
+	@echo "Local : attach viewer to 127.0.0.1:5900 (default bind)."
+	@echo "Tailnet: VNC_BIND=<tailnet-ip> VNC_PASSWORD=<pw> make docker-login → connect to <tailnet-ip>:5900"
+
+.PHONY: docker-shell
+docker-shell: ## Open a shell in the ingest container
+	docker compose run --rm ingest bash
+
+.PHONY: docker-generate
+docker-generate: ## Generate a tailored application in-container from a captured JD → vault/applications/: make docker-generate SLUG=<slug>
+	@test -n "$(SLUG)" || { echo "SLUG required, e.g. make docker-generate SLUG=acme-platform-engineer-123"; exit 2; }
+	docker compose run --rm --no-deps \
+	  -e CV_TAILOR_JOBS_DIR=/app/vault/applications \
+	  ingest sh -lc 'cv-tailor new "/app/vault/jds/$(SLUG).txt" --slug "$(SLUG)" && cv-tailor pdf "$(SLUG)"'
+
 # ---- Generate (cv-tailor CLI) ----------------------------------------------
 
 .PHONY: new
@@ -90,11 +138,7 @@ new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIEN
 .PHONY: status
 status: ## Advance an application's lifecycle: make status SLUG=<slug> STATUS=applied
 	@test -n "$(SLUG)" -a -n "$(STATUS)" || { echo "Usage: make status SLUG=<slug> STATUS=draft|applied|interview|offer|rejected|withdrawn"; exit 2; }
-	@f=docs/jobs/$(SLUG)/index.md; \
-	 test -f "$$f" || { echo "no such hub: $$f"; exit 2; }; \
-	 grep -q '^status:' "$$f" || { echo "no status: field in $$f"; exit 2; }; \
-	 sed -i 's/^status:.*/status: "$(STATUS)"/' "$$f"; \
-	 echo "set $(SLUG) status -> $(STATUS)  (review the diff, then commit)"
+	$(BIN)/cv-tailor status "$(SLUG)" "$(STATUS)"
 
 # ---- Build & serve ---------------------------------------------------------
 

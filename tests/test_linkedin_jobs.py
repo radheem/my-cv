@@ -1,0 +1,65 @@
+"""Unit tests for engine.linkedin.jobs pure helpers — slug, job-id, JD cleaning,
+front-matter, dedup, and the write_jd file contract. No browser, no network."""
+
+import json
+
+from engine.linkedin.jobs import (
+    Job,
+    already_seen,
+    clean_jd_text,
+    extract_job_id,
+    jd_frontmatter,
+    load_seen,
+    save_seen,
+    slugify,
+    write_jd,
+)
+
+
+def test_slugify():
+    assert slugify("Acme Corp", "Senior Platform Engineer!", "12345") == (
+        "acme-corp-senior-platform-engineer-12345"
+    )
+    assert slugify("", "", "") == "job"
+    assert len(slugify("x" * 200, "y" * 200, "1")) <= 80
+
+
+def test_extract_job_id():
+    assert extract_job_id("https://www.linkedin.com/jobs/view/3899887766/") == "3899887766"
+    assert extract_job_id("/jobs/search/?currentJobId=42&keywords=x") == "42"
+    assert extract_job_id("https://example.com/none") is None
+
+
+def test_clean_jd_text_collapses_blanks():
+    raw = "  Title  \n\n\n  body line  \n\n\n\nend\n"
+    assert clean_jd_text(raw) == "Title\n\nbody line\n\nend"
+
+
+def test_jd_frontmatter_has_fields_and_escapes_quotes():
+    job = Job("1", 'Eng "X"', "Acme", "Remote", "https://x/jobs/view/1")
+    fm = jd_frontmatter(job, "2026-06-21T10:00:00+00:00")
+    assert fm.startswith("---\n") and fm.rstrip().endswith("---")
+    for key in ("source: linkedin", "company:", "title:", "job_id:", "captured_at:"):
+        assert key in fm
+    assert '\\"X\\"' in fm  # embedded quotes escaped
+
+
+def test_dedup_roundtrip(tmp_path):
+    p = tmp_path / ".seen.json"
+    assert load_seen(p) == {}
+    seen = {"1": "acme-eng-1"}
+    save_seen(p, seen)
+    assert already_seen("1", load_seen(p))
+    assert not already_seen("2", load_seen(p))
+
+
+def test_write_jd_emits_txt_and_sidecar(tmp_path):
+    job = Job("999", "Platform Engineer", "Acme Corp", "Remote", "https://x/jobs/view/999")
+    path = write_jd(job, "Some\n\n\nJD text", tmp_path, "2026-06-21T10:00:00+00:00")
+    assert path.name == "acme-corp-platform-engineer-999.txt"
+    body = path.read_text()
+    assert "source: linkedin" in body and "JD text" in body
+
+    sidecar = tmp_path / "acme-corp-platform-engineer-999.json"
+    meta = json.loads(sidecar.read_text())
+    assert meta["job_id"] == "999" and meta["slug"] == "acme-corp-platform-engineer-999"

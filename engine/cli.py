@@ -27,6 +27,18 @@ DATA = ROOT / "data"
 JOBS = ROOT / "docs" / "jobs"
 
 
+def _data_dir() -> pathlib.Path:
+    """CV source facts. Override with CV_TAILOR_DATA_DIR (default ./data = John Doe).
+    Real runs may mount a private data dir read-only and point this at it."""
+    return pathlib.Path(os.environ.get("CV_TAILOR_DATA_DIR") or DATA)
+
+
+def _jobs_dir() -> pathlib.Path:
+    """Application output. Override with CV_TAILOR_JOBS_DIR (default ./docs/jobs).
+    Real runs point this at gitignored vault/applications/ so nothing real is committed."""
+    return pathlib.Path(os.environ.get("CV_TAILOR_JOBS_DIR") or JOBS)
+
+
 def _load_optional_yaml(path: pathlib.Path) -> dict:
     """Load a YAML mapping, or {} when the file is absent (optional config)."""
     if not path.exists():
@@ -34,15 +46,16 @@ def _load_optional_yaml(path: pathlib.Path) -> dict:
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
-def _load_data() -> tuple[dict, list, str, str, str, dict, dict]:
-    profile = yaml.safe_load((DATA / "profile.yml").read_text(encoding="utf-8"))
-    projects = yaml.safe_load((DATA / "projects.yml").read_text(encoding="utf-8"))["projects"]
-    master_cv = (DATA / "master-cv.md").read_text(encoding="utf-8")
-    cv_guide = (DATA / "guides" / "how-to-write-a-cv.md").read_text(encoding="utf-8")
-    cl_guide = (DATA / "guides" / "how-to-write-a-cover-letter.md").read_text(encoding="utf-8")
+def _load_data(data: pathlib.Path | None = None) -> tuple[dict, list, str, str, str, dict, dict]:
+    data = data or _data_dir()
+    profile = yaml.safe_load((data / "profile.yml").read_text(encoding="utf-8"))
+    projects = yaml.safe_load((data / "projects.yml").read_text(encoding="utf-8"))["projects"]
+    master_cv = (data / "master-cv.md").read_text(encoding="utf-8")
+    cv_guide = (data / "guides" / "how-to-write-a-cv.md").read_text(encoding="utf-8")
+    cl_guide = (data / "guides" / "how-to-write-a-cover-letter.md").read_text(encoding="utf-8")
     # Optional, user-authored ranking config (engine/rank.py reads these).
-    taxonomy = _load_optional_yaml(DATA / "taxonomy.yml")
-    ranking = _load_optional_yaml(DATA / "ranking.yml")
+    taxonomy = _load_optional_yaml(data / "taxonomy.yml")
+    ranking = _load_optional_yaml(data / "ranking.yml")
     return profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking
 
 
@@ -115,7 +128,7 @@ def cmd_new(args: argparse.Namespace) -> int:
     clusters = rank.job_clusters(spec, taxonomy, rank.invert_aliases(taxonomy.get("aliases", {})))
 
     slug = args.slug or _slugify(spec.get("company", ""), spec.get("title", ""))
-    out = JOBS / slug
+    out = _jobs_dir() / slug
     out.mkdir(parents=True, exist_ok=True)
 
     print("Rendering CV ...", file=sys.stderr)
@@ -162,7 +175,7 @@ def cmd_new(args: argparse.Namespace) -> int:
         encoding="utf-8",
     )
 
-    print(f"\nWrote docs/jobs/{slug}/ (cv, cover-letter, job-description, index, manifest).")
+    print(f"\nWrote {out}/ (cv, cover-letter, job-description, index, manifest).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
     if clusters:
         print("Clusters:", ", ".join(clusters))
@@ -177,7 +190,128 @@ def cmd_new(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ingest(args: argparse.Namespace) -> int:
+    """Drive a logged-in LinkedIn session and capture JDs. Stop-before-submit (D4)."""
+    import logging
+
+    from playwright.sync_api import sync_playwright
+
+    from .linkedin import jobs as J
+    from .linkedin.humanize import human_pause
+    from .linkedin.session import FileInboxResolver, LinkedInSession, StdinResolver
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+
+    vault = os.environ.get("CV_TAILOR_VAULT", "vault")
+    user_data_dir = os.environ.get("LINKEDIN_USER_DATA_DIR", f"{vault}/profile")
+    out_dir = pathlib.Path(args.out)
+    seen_path = out_dir / ".seen.json"
+
+    challenge_timeout = float(os.environ.get("LINKEDIN_CHALLENGE_TIMEOUT", "300"))
+    resolver = (
+        StdinResolver()
+        if sys.stdin.isatty()
+        else FileInboxResolver(pathlib.Path(vault) / "challenges", timeout=challenge_timeout)
+    )
+    session = LinkedInSession(
+        user_data_dir=user_data_dir,
+        vault_dir=vault,
+        resolver=resolver,
+        challenge_timeout=challenge_timeout,
+    )
+
+    counts = {"captured": 0, "skipped": 0}
+
+    def run(page) -> None:
+        found = J.search(page, args.keywords, args.location, args.limit)
+        seen = J.load_seen(seen_path)
+        for job in found:
+            if J.already_seen(job.job_id, seen):
+                counts["skipped"] += 1
+                continue
+            try:
+                text = J.capture_jd(page, job)
+            except Exception as e:  # noqa: BLE001 — skip a bad card, keep going
+                print(f"  skip {job.url}: {e}", file=sys.stderr)
+                continue
+            captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+            path = J.write_jd(job, text, out_dir, captured_at)
+            seen[job.job_id] = J.slugify(job.company, job.title, job.job_id)
+            counts["captured"] += 1
+            print(f"  captured {path}")
+            human_pause(2.0, 5.0)  # human-paced gap between job opens
+        J.save_seen(seen_path, seen)
+
+    with sync_playwright() as p:
+        session.context(p)
+        try:
+            session.with_session(run)
+        finally:
+            session.close()
+
+    print(f"\ningest done: captured {counts['captured']}, skipped {counts['skipped']} (seen)")
+    return 0
+
+
+def cmd_pdf(args: argparse.Namespace) -> int:
+    """Render plain (unsealed) CV + cover-letter PDFs for an application — for uploading.
+
+    Unlike build.py (which AES-seals per-app PDFs for the gated public site), these are plain
+    files written next to the application's Markdown. Real apps live under gitignored vault/."""
+    from weasyprint import HTML
+
+    from . import documents
+
+    app = _jobs_dir() / args.slug
+    if not app.is_dir():
+        raise SystemExit(f"no such application: {app}")
+    profile, *_ = _load_data()
+
+    targets: list[tuple[str, str]] = []
+    cv_md = app / "cv.md"
+    if cv_md.exists():
+        meta, body = documents.split_front_matter(cv_md.read_text(encoding="utf-8"))
+        targets.append(("cv.pdf", documents.render_cv_html(body, meta.get("tagline", ""), profile)))
+    cl_md = app / "cover-letter.md"
+    if cl_md.exists():
+        meta, body = documents.split_front_matter(cl_md.read_text(encoding="utf-8"))
+        targets.append(("cover-letter.pdf", documents.render_letter_html(body, meta, profile)))
+    if not targets:
+        raise SystemExit(f"no cv.md / cover-letter.md in {app}")
+
+    for name, html in targets:
+        HTML(string=html).write_pdf(str(app / name))
+        print(f"  wrote {app / name}")
+    return 0
+
+
+def cmd_status(args: argparse.Namespace) -> int:
+    """Advance an application's lifecycle status by editing the hub front matter."""
+    hub = _jobs_dir() / args.slug / "index.md"
+    if not hub.exists():
+        raise SystemExit(f"no such application hub: {hub}")
+    if args.state not in _STATUSES:
+        print(
+            f"warning: '{args.state}' is not a standard status ({', '.join(_STATUSES)})",
+            file=sys.stderr,
+        )
+    text = hub.read_text(encoding="utf-8")
+    new, n = re.subn(r"(?m)^status:.*$", f"status: {_yaml(args.state)}", text)
+    if n == 0:
+        raise SystemExit(f"no 'status:' field in {hub}")
+    hub.write_text(new, encoding="utf-8")
+    print(f"set {args.slug} status -> {args.state}  (review the diff, then commit)")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv()  # env still wins (override=False) — consistent with engine.config
+    except ImportError:
+        pass
+
     parser = argparse.ArgumentParser(prog="cv-tailor")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -206,6 +340,24 @@ def main(argv: list[str] | None = None) -> int:
         "(default: http://localhost:11434/v1)",
     )
     p_new.set_defaults(func=cmd_new)
+
+    p_ingest = sub.add_parser(
+        "ingest", help="search LinkedIn and capture job descriptions to vault/jds/"
+    )
+    p_ingest.add_argument("--keywords", required=True, help="job search keywords")
+    p_ingest.add_argument("--location", default=None, help="location filter (e.g. 'Remote')")
+    p_ingest.add_argument("--limit", type=int, default=10, help="max JDs to capture")
+    p_ingest.add_argument("--out", default="vault/jds", help="output dir for JD files")
+    p_ingest.set_defaults(func=cmd_ingest)
+
+    p_pdf = sub.add_parser("pdf", help="render plain CV + cover-letter PDFs for an application")
+    p_pdf.add_argument("slug", help="application slug under the jobs dir")
+    p_pdf.set_defaults(func=cmd_pdf)
+
+    p_status = sub.add_parser("status", help="advance an application's lifecycle status")
+    p_status.add_argument("slug", help="application slug under the jobs dir")
+    p_status.add_argument("state", help="draft|applied|interview|offer|rejected|withdrawn")
+    p_status.set_defaults(func=cmd_status)
 
     args = parser.parse_args(argv)
     return args.func(args)

@@ -27,6 +27,7 @@ ollama = [
 ]
 fetch = [
     "playwright>=1.45",
+    "python-dotenv>=1.0",
 ]
 dev = [
     "pytest>=8",
@@ -40,4 +41,8 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["engine"]
+packages = ["engine", "engine.linkedin"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["vault", ".venv", "site", "build"]

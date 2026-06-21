@@ -7,8 +7,12 @@ __pycache__/
 venv/
 *.egg-info/
 .pytest_cache/
-# local secrets — never commit
+# local secrets — never commit (incl. backups like .env.bak.*)
 .env
+.env.*
+!.env.example
+# private runtime data (browser profile, captured JDs, challenge screenshots) — never commit
+/vault/
 # generated PDFs (built in CI / locally)
 *.pdf
 

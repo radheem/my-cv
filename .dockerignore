@@ -1,0 +1,13 @@
+.git
+.venv
+venv
+vault
+site
+__pycache__
+*.pyc
+.pytest_cache
+*.egg-info
+tests/experiments/outputs
+tests/experiments/results
+node_modules
+.env
