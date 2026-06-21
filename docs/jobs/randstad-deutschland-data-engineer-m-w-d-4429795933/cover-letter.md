@@ -1,0 +1,14 @@
+---
+search:
+  exclude: true
+recipient: ""
+company: Randstad Deutschland
+---
+
+Building data pipelines that survive worker crashes and still pass a data-quality gate is the part of engineering I keep returning to, so a Data Engineer role centered on robust ETL/ELT, Python, and Terraform on AWS speaks directly to how I already work. I would welcome the chance to bring that to your team's data platform.
+
+Most of my recent work has been pipeline engineering. In my Second Brain project I built a durable, retryable Hatchet ingestion pipeline — extract, chunk, embed, summarize, index — where every step retries independently and survives worker crashes, with NATS JetStream progress streaming and pgvector semantic search on top. On the IRS platform I built best-effort ETL that routes records into PostgreSQL, Dgraph, and DocumentDB via declarative routing, with a Ginkgo end-to-end data-quality gate guarding correctness before anything ships. Both run cloud-native on Kubernetes, provisioned as code.
+
+At Bluefin Exchange I was the design authority for core services of a high-throughput crypto exchange, where market and account data moved through Kafka into PostgreSQL and DynamoDB. I drove system-design improvements, owned design and code reviews, and ran Terraform-provisioned, Dockerized infrastructure under strict quality and security standards — the same Infrastructure-as-Code discipline this role asks for. Earlier, at Seed Labs, I cleaned, analyzed, and visualized data for stakeholders in Python, translating business questions into concrete data workflows — the requirements-to-solution translation that data engineering lives on.
+
+Python, SQL, ETL design, Terraform, and AWS are core tools for me, and I am comfortable owning scalable, secure data solutions end to end. I am based in Ilmenau, available full-time now and open to working-student or part-time arrangements, and can relocate within Germany in about two to three weeks. I am Blue Card-ready, so a contract is all that is needed — no sponsorship overhead. My working language is English and my German is at A2 and improving. I would be glad to discuss how I can contribute.

@@ -1,0 +1,14 @@
+---
+search:
+  exclude: true
+recipient: ""
+company: Nia Health
+---
+
+Building ML systems that actually reach people is what draws me to Nia Health. My master's research at TU Ilmenau produced an end-to-end AI/ML platform with Kubeflow training and retraining pipelines and KServe model serving — work graded 1.0 (A) — and your mission of putting AI-powered medical software into the hands of thousands of patients with chronic conditions is exactly the kind of real-world impact I want to build for next.
+
+On that O-RAN AIML research, I designed config-driven pipelines that train, retrain, and serve models in production: QoE prediction with TensorFlow/Keras and scikit-learn, a feature store, and S3-backed artifacts, all orchestrated on Kubernetes with Helm. It maps directly to your stack — model versioning, experiment tracking, retraining strategies against model drift, and serving behind clean APIs. I work daily in Python with NumPy, Pandas, and scikit-learn, and I am comfortable with Docker, CI/CD, and MLOps practices end to end.
+
+I also build the engineering scaffolding that keeps ML reliable. My Second Brain project is a durable, retryable pipeline — extract, chunk, embed, summarize, index — that survives worker crashes and serves embeddings with pgvector semantic search. My cv-tailor project pairs a unit-tested Python core with reproducible manifests gated by a benchmark, the same discipline your role asks for around datasets, experiment tracking, and automated testing. Across two Senior Software Engineer roles I owned code and design reviews, containerized services, and documentation, and I am used to presenting findings to both technical and non-technical stakeholders.
+
+I am based in Ilmenau, available full-time now, and open to working-student or part-time arrangements, and I can relocate within Germany in about two to three weeks. I am Blue Card-ready, so there is no sponsorship overhead — only the contract. I work in English and continue to improve my German (A2). I would welcome the chance to bring this work to your team in Kreuzberg.

@@ -1,0 +1,14 @@
+---
+search:
+  exclude: true
+recipient: ""
+company: BMW Group
+---
+
+The line in your posting that "new solutions emerge when thinking isn't hard-wired" is exactly why I am writing. Building the technical foundation for scalable, secure AI across an entire company is the work I have been doing in research and in production for the last five years — and it is the work I most want to do next. I would be glad to help drive the Data & AI transformation at BMW Group as a Senior AI & Data Platform Engineer.
+
+My strongest match to this role is platform building. For my Master's research I designed an end-to-end AI/ML platform on Kubernetes and Helm: Kubeflow pipelines for training and retraining, KServe for serving, an InfluxDB/Cassandra feature store and S3-backed artifacts, all driven by a config-driven Python SDK so data scientists could run the full lifecycle from data preparation to productive serving. The work was graded 1.0 (A). In parallel I have built distributed Go microservices over gRPC and NATS, with best-effort ETL into PostgreSQL and DocumentDB, deployed on Kubernetes with kustomize, Skaffold and Cilium — the same scalability, automation and operability concerns your platform demands.
+
+Across more than five years as a senior engineer at Bluefin Exchange and Al Hilal Invest, I owned the design and operation of secure, high-throughput backend services: provisioning infrastructure as code with Terraform, automating deployments with Docker and Kubernetes, and acting as design authority while leading code and system-design reviews. On the AI side I work hands-on with TensorFlow, scikit-learn and modern GenAI — I built a cloud-native RAG system (Second Brain) with llama.cpp inference and pgvector search over a durable Hatchet pipeline — so the LLM/RAG direction you are exploring is familiar ground rather than a learning curve.
+
+I am based in Ilmenau, available full-time now and open to working-student or part-time arrangements, and I can relocate anywhere in Germany — Munich included — within two to three weeks. I am Blue Card-ready, so you would only need to issue the contract with no sponsorship overhead. My working language is English, which the role uses as primary; my German is at A2 and steadily improving, and I would welcome the chance to grow it within the BMW AI Community. I would be delighted to discuss how I can contribute.
