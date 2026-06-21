@@ -1,172 +1,103 @@
-# CLAUDE.md — cv-tailor
+# CLAUDE.md — my-cv
 
-Working notes for agents (and humans) on this repo. Read this before generating
-applications or changing the gate.
+Working notes for agents (and humans). This repo is **two things**: a published **public
+portfolio** (MkDocs → GitHub Pages at `radheem.github.io/my-cv`) and a private
+**job-application workspace** (`applications/`). Remote: `radheem/my-cv`.
+
+> **Commits:** omit the Claude `Co-Authored-By` footer in this repo. Keep credentials / PII
+> out of commits. **Private, real data** — `data/` holds real contact details, employers, and
+> projects.
 
 ## What this is
 
-cv-tailor turns a **job posting** into a **tailored CV + cover letter**, versions every
-application in **git**, and publishes them as a gated **MkDocs site on GitHub Pages**. The
-public portfolio stays open; the per-job documents sit behind one password.
+`cv-tailor` turns a **job posting** into a **tailored CV + cover letter**, then:
+- renders them as **bilingual (English + German) PDFs** using a **LaTeX** template
+  (`latex/resume.cls` / `latex/coverletter.cls`), the same system as the `resume` repo;
+- stores those PDFs in **Google Drive** (one folder per application);
+- tracks each application's **status in git** (`applications/<slug>/index.md` front matter + the
+  `applications/README.md` table). Commits are the audit trail.
 
-The product idea, in one line: **git + GitHub are the application-tracking system** — the
-agent drafts each application, commits are the audit trail, and a `status` field drives the
-lifecycle. There is no external tracker (no spreadsheet, no Trello, no GitHub Projects).
+The **public site** publishes only the portfolio (Home, Projects, CV). `applications/` lives
+**outside `docs/`** and is never built into the site — so no company name leaks. The only public
+PDF is the generic CV (`latex/resume.tex` → `docs/assets/cv.pdf`, compiled in CI).
 
-> **Private repo — real data.** This is Radheem Bin Razi's personal CV repo (`radheem/my-cv`).
-> `data/` holds real contact details, employers, and projects. The **public GitHub Pages site**
-> shows the portfolio + master CV; per-job documents stay behind the password gate. Keep the
-> gate strong — never let a tailored CV/cover-letter or company name leak into the plaintext
-> site or search index (verify per **Build / test** below).
+## The pipeline
 
-## The hard boundary
+```
+cv-tailor ingest      → vault/jds/<slug>.txt        (LinkedIn capture; containerized)
+cv-tailor new <jd>    → applications/<slug>/         cv.md (+cv.de.md), cover-letter.md (+.de),
+                                                     job-description.md, index.md, manifest.json
+cv-tailor translate   → cv.de.md / cover-letter.de.md  (German, LLM; run inside `new` by default)
+cv-tailor pdf <slug>  → cv.tex/cover-letter.tex → cv.pdf/cover-letter.pdf  (engine/latex.py + latexmk)
+cv-tailor upload <slug> → Google Drive (Apps Script); writes drive_url into index.md
+cv-tailor status <slug> <state> → edits index.md + refreshes applications/README.md
+```
 
-Two halves that never blur:
+Generation (`new`/`translate`) needs an LLM (Anthropic key or local Ollama) and runs **locally**.
+PDF compile uses LaTeX — local `latexmk` or the `texlive/texlive` Docker image (auto-detected by
+`scripts/build-application.sh`). CI needs neither — it only builds the portfolio + the public CV.
 
-- **Generation** (`engine/`) runs **locally**, costs money, needs review, and commits
-  Markdown. `engine/rank.py` is pure + unit-tested (picks top-3 projects, orders skills);
-  only `jobspec`/`render` call an LLM. Source of truth lives in `data/`
-  (`master-cv.md`, `profile.yml`, `projects.yml`, `guides/`, and the ranking config
-  `taxonomy.yml` + `ranking.yml` — see **Ranking & tailoring** below).
-- **Render + gate + deploy** (`build.py`, `encrypt.py`, `.github/workflows/deploy.yml`) runs
-  in **CI with no API key**. It builds the site, makes PDFs, and AES-256-GCM encrypts the
-  gated documents — and the manifest of applications — before deploy.
+## How `.tex` is produced
 
-## New-application workflow
+The LLM writes structured **Markdown** (`cv.md` with `## Experience/Education/Projects/Skills`,
+`cover-letter.md` paragraphs). **`engine/latex.py`** deterministically converts that Markdown into
+LaTeX — it handles escaping, maps the structure onto the class macros (`\role`, `\edu`,
+`\project`, `\bullets`; letter `\senderblock`/`\recipient`/`\opening`/`\closing`), and assembles
+the **English-then-German** document. **The LLM never emits LaTeX.** German comes from a
+translation pass (`render.translate_markdown` → `cv.de.md` / `cover-letter.de.md`), a faithful
+translation of the approved English — **never invent facts in either language**.
 
-1. **Generate.** `cv-tailor new <job-url-or-file>` (see `docs/cli.md`). Writes
-   `docs/jobs/<slug>/` with `cv.md`, `cover-letter.md`, `job-description.md`, and `index.md`
-   (the gated hub). Slug derives from company + title; override with `--slug`.
-2. **Review + edit** the generated Markdown — it is the source of truth for the deploy.
-   **Never fabricate** experience, skills, metrics, or dates; if it isn't in
-   `data/master-cv.md` / `data/profile.yml`, it doesn't go in. Tailoring is reordering and
-   emphasis, not invention.
-3. **No nav edit.** The build auto-lists every `docs/jobs/<slug>/` in the encrypted landing
-   manifest behind the single **Tailored** sign-in page. New roles never touch `mkdocs.yml`
-   and never leak in plaintext.
-4. **Commit** the new application (one application = one logical commit).
-5. **Push** → CI renders, gates, and deploys.
+Bilingual rules (mirroring the `resume` repo): each language is **one page** (so each PDF is 2
+pages); **top-3 projects** most relevant first; skills order **Languages → Programming Languages →
+tailored tech**; German headings Berufserfahrung / Ausbildung / Projekte / Kenntnisse.
 
-## Application lifecycle (status tracking)
-
-Each hub `docs/jobs/<slug>/index.md` carries a `status:` field in its front matter. This is
-the lifecycle mechanism: **git history records every transition, and the gated list shows a
-status badge** (visible only after sign-in — status is inside the encrypted manifest, never
-public).
+## Status lifecycle
 
 ```
 draft → applied → interview → offer | rejected | withdrawn
 ```
+Edit via `cv-tailor status <slug> <state>` (regex-edits `index.md`, auto-refreshes the tracker),
+then **commit** — the message + date are the record. `applications/README.md` is the at-a-glance
+table (regenerate with `cv-tailor track`). One application = one logical commit.
 
-- A freshly generated application starts at `draft`.
-- To advance it, edit `status:` in the hub front matter and **commit** (e.g.
-  `git commit -m "Mark Northwind Platform Engineer as applied"`). The commit message + date
-  are the record; no separate tracking file is needed.
-- `build.py` reads `status` into the encrypted manifest; `docs/assets/vault.js` renders it as
-  a `.vault-badge` in the locked list. Status values map to badge colors in
-  `docs/stylesheets/extra.css`.
-- Keep to the vocabulary above (`engine/cli.py:_STATUSES`); an unknown value still renders,
-  just with the neutral default badge.
+## Layout
 
-## Ranking & tailoring
-
-`engine/rank.py` is the **pure, deterministic** core that picks the top-3 projects and orders
-the skills block. It scores projects by token overlap against the LLM-extracted JobSpec, plus
-**cluster affinity** and a **per-project weight**. Two user-authored `data/` files steer it
-(the selection counterpart to `data/guides/`, which steer prose) — both optional, both
-default-inert:
-
-- **`data/taxonomy.yml`** — a controlled vocabulary: an `aliases` map (`k8s→kubernetes`,
-  `golang→go`…) normalized before matching, and `clusters` (named groups of canonical tags).
-  Both **projects** and **job applications** are classified into the same clusters, so an agent
-  can read a job's clusters and pull the correlating projects directly.
-- **`data/ranking.yml`** — knobs: `field_weights`, `cluster_affinity`, `top_projects`,
-  `max_skill_groups`, `prefer_clusters`, `pinned` (always-include ids), `excluded`.
-- **`data/projects.yml`** per-project `weight:` (default 1.0) multiplies a project's score to
-  favor flagships; optional `clusters:` overrides the tag-derived clusters.
-
-Clusters for a **job** are computed deterministically from the JobSpec at `cv-tailor new` time
-(`rank.job_clusters`) and written into the hub front matter as `clusters: [...]` — git-visible
-alongside `status:`, and carried (passthrough) into the encrypted manifest by `build.py`. The
-ranker never runs in CI. When changing scoring, keep it **pure** (taxonomy/ranking passed as
-args) and **backward-compatible** (absent files reproduce the original token-overlap behavior —
-`tests/test_rank.py:test_defaults_reproduce_current_behavior` guards this).
-
-## Configuration, prompts & reproducibility
-
-The knobs are centralized so generation is **configurable and reproducible**, not a
-one-off. All three layers fall back to code defaults, so an absent file = today's
-behavior, and **env still overrides the file** (`CLI flag > env > data/config.yml >
-default`).
-
-- **`data/config.yml`** (`engine/config.py`) — provider/model, temperatures, token
-  budgets, the Ollama endpoint + reasoning-token floors, `seed`, prompt selection, and
-  the ranking/taxonomy file paths. `engine/llm.py:resolve()` is a thin shim over it.
-- **`data/prompts/{cv,cover,jobspec,judge}.md`** (`engine/prompts.py`) — the system
-  prompts, versioned via front-matter `version:`; editing them needs no code change. The
-  in-code constant in `render.py`/`jobspec.py` is the fallback when a file is absent.
-  `data/prompts/exemplars/cover.yml` carries gold-derived, style-only opener exemplars.
-- **`projects.yml` `highlights:`** — role-neutral facts (verbatim from `master-cv.md`)
-  that the CV renderer **re-angles per role** (ETL framing for a data role, observability
-  for devops). Without it the renderer falls back to the static `summary`.
-- **`manifest.json`** (`engine/manifest.py`) — written next to every application:
-  provider/model/temps/budgets/seed, prompt versions+hashes, and content hashes of the
-  effective config + all data inputs. Lets a result be re-derived and verified. It is
-  excluded from the built site (`mkdocs.yml exclude_docs`).
-- **Benchmark gate** — `tests/experiments/evaluate.py --gate` enforces the per-split
-  floors in `tests/experiments/gates.yml` (deterministic heuristic; judge advisory).
-  `tests/test_data_consistency.py` guards `profile.yml`↔`master-cv.md` drift.
-
-`master-cv.md` stays canonical for facts; `profile.yml` is the structured mirror the
-engine needs — keep them in sync (the drift test enforces it).
-
-## Repo conventions
-
-- **Commits: omit the Claude `Co-Authored-By` footer** in this repo.
-- **Private repo, real data** (see note above). Generated job Markdown is committed in
-  plaintext in the repo but is **excluded from the built site** and AES-sealed by `build.py`
-  before deploy — so the private GitHub repo holds the source, the public site stays gated.
-- **Bump `?v=` on `assets/vault.js`** in `mkdocs.yml` whenever you change `vault.js`. GitHub
-  Pages serves assets with `Cache-Control: max-age=600` and no fingerprinting, so a stale
-  cached `vault.js` will otherwise break the gate for returning visitors.
-- `mkdocs.yml` contains `!!python/name:` tags — never `yaml.safe_load` it raw (the deploy
-  workflow reads `site_url` via regex; `build.py` avoids loading it).
+| Path | What |
+|------|------|
+| `data/` | source of truth: `master-cv.md`, `profile.yml`, `projects.yml`, `guides/`, ranking config, prompts |
+| `engine/` | `rank` (pure top-3/skills), `jobspec`/`render` (LLM), `latex` (MD→LaTeX), `cli` |
+| `latex/` | `resume.cls`, `coverletter.cls`, `resume.tex` (public CV) — shared LaTeX style |
+| `applications/<slug>/` | one dir per application (md sources, .tex, index.md metadata); PDFs are gitignored (in Drive) |
+| `applications/README.md` | the status tracker table |
+| `apps-script/` | the Google Drive uploader (`Code.gs`) + setup runbook |
+| `scripts/build-application.sh` | compile an app's `.tex` → PDFs (latexmk / texlive Docker) |
+| `docs/` | published portfolio (Home, Projects, CV). Never put applications here. |
 
 ## Build / test
 
 ```bash
-GATE_PASSWORD=test python build.py        # mkdocs build → PDFs → AES-seal (use .venv/bin/python)
-python -m http.server -d site 8000        # then open http://localhost:8000/
-pytest -q                                 # ranking logic — no browser, no API key
+make build            # mkdocs build (public portfolio) → ./site
+make serve            # live preview
+make public-pdf       # compile latex/resume.tex → docs/assets/cv.pdf
+pytest -q             # rank + render + latex tests (no browser, no API key)
+
+# per application:
+make translate SLUG=<slug>     # German .de.md (LLM)
+make pdf SLUG=<slug>           # bilingual PDFs (LaTeX)
+make upload SLUG=<slug>        # → Google Drive (needs .env; see apps-script/README.md)
+make status SLUG=<slug> STATUS=applied
+make track                     # refresh applications/README.md
 ```
 
-Env gotchas (this machine): the venv is **uv**-managed and has **no pip** — install with
-`VIRTUAL_ENV=$PWD/.venv uv pip install ...`. `build.py` shells out to `mkdocs`, so put the
-venv on PATH: `PATH="$PWD/.venv/bin:$PATH" GATE_PASSWORD=test .venv/bin/python build.py`.
-WeasyPrint needs native libs (already installed here).
+## Conventions
 
-Verify a gate change end to end: build, then confirm nothing leaks pre-sign-in —
-`grep -rl "<gated company>" site/ | grep -v '\.enc$'` and the same against
-`site/search/search_index.json` are both empty.
-
-## Suggested improvements (roadmap)
-
-- **`cv-tailor status <slug> <state>` command** — flip the front-matter `status` and stage the
-  edit, instead of hand-editing YAML (mirrors the manual rule above).
-- **Status dates** — add `applied_on` / per-state timestamps to the front matter and badge so
-  the manifest shows "applied 2026-06-17"; git already has the dates, this surfaces them.
-- **Private notes file** — a `notes.md` per application (JD analysis, gaps, keywords-to-mirror)
-  like the `resume` repo's template; keep it out of `site/` (it's already not gated-rendered).
-- **Deadline / follow-up surfacing** — sort the gated list by status and flag stale `applied`
-  rows that need a follow-up.
-- **CI status summary** — have the deploy workflow print a per-status count to the run log.
-- **Provider robustness** — the Ollama branch in `engine/llm.py` `structured_json()` can hit a
-  `JSONDecodeError` when the endpoint ignores `json_schema` response-format; add a
-  `json_object` + schema-in-prompt fallback.
+- **Public site shows only the portfolio.** Don't move `applications/` under `docs/` or into the
+  mkdocs `nav:`. The privacy guarantee is structural (applications are outside `docs/`).
+- **Truthfulness first** — tailoring reorders and emphasizes facts from `data/`; never fabricates.
+- **PDFs are not committed** (`*.pdf` gitignored) — they live in Drive; `.tex` is committed.
+- Drive/Apps-Script secrets (`APPS_SCRIPT_URL`/`TOKEN`, `GDRIVE_FOLDER_ID`) live in `.env` only.
 
 ## Related repo
 
-The private **`radheem/portfolio`** (`/home/radr/pers/resume`) runs the same idea with LaTeX:
-per-job dirs under `applications/`, a `status:` front-matter field, a master status table, and
-git commits per transition. cv-tailor is the Markdown/MkDocs + encrypted-gate variant of that
-workflow.
+`radheem/portfolio` (`/home/radr/pers/resume`) is the LaTeX-only sibling this repo borrows the CV
+template + build from; `radheem/cv-tailor` is the public John-Doe demo of the generation engine.

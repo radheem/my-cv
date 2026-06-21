@@ -1,0 +1,132 @@
+\documentclass[11pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Data engineer building Python ETL/ELT pipelines on cloud-native infrastructure with Terraform IaC}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Design authority for core services of a high-throughput crypto exchange: drove system-design improvements for data-intensive services moving market and account data through Kafka pipelines into PostgreSQL and DynamoDB.
+  \item Built and reviewed Python and Go services with Terraform-provisioned, Dockerized infrastructure on Kubernetes — enforcing quality and security standards across release processes and documentation.
+  \item Mentored junior engineers and owned design/code reviews, translating service requirements into reliable, scalable data flows.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Analyzed, cleaned, and visualized data for stakeholders, translating business questions into Python data workflows with scikit-learn and TensorFlow.
+  \item Researched and proposed designs, delivering in small teams under mentorship on AWS EC2 with MongoDB and MySQL backends.
+\bulletsend
+\vspace{3pt}
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Built and documented new backend services, dockerizing them and improving deployment onto AWS (S3/EC2) and Kubernetes.
+  \item Led system-design and code reviews across NodeJS/TypeScript services backed by MySQL and MongoDB.
+\bulletsend
+\vspace{3pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems \& Engineering}{04/2024 – Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projects}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Durable, retryable Hatchet ETL pipeline (extract→chunk→embed→summarize→index) with per-step retries surviving worker crashes; NATS JetStream progress streaming and pgvector (HNSW) semantic search, cloud-native on k3d.}
+  \project{IRS Platform (Stealth)}{https://radheem.github.io/my-cv/projects/irs/}{Best-effort ETL into PostgreSQL (sqlc)/Dgraph/DocumentDB orchestrated by Hatchet with declarative routing, verified by a Ginkgo E2E data-quality gate; distributed Go microservices on NATS and gRPC, deployed on Kubernetes/Cilium.}
+  \project{cv-tailor (LLM CV Tailoring)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Python tool with a pure unit-tested ranker, git-based application tracking, GitHub Actions CI, and reproducible run manifests for verifiable, repeatable pipeline outputs.}
+\end{itemize}
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Languages:} English (fluent), Deutsch (A2)
+  \item \textbf{Programming Languages:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Data Pipelines \& Big Data:} ETL/ELT, Hatchet orchestration, Kafka, NATS JetStream, scikit-learn, TensorFlow/Keras
+  \item \textbf{Databases \& Persistence:} PostgreSQL, MySQL, BigQuery, Snowflake, DynamoDB, MongoDB/DocumentDB, pgvector
+  \item \textbf{Cloud-Native \& Infra:} AWS (S3/EC2), Terraform, Kubernetes, Docker, Helm, kustomize, Cilium
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Data engineer building Python ETL/ELT pipelines on cloud-native infrastructure with Terraform IaC}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Design authority for core services of a high-throughput crypto exchange: drove system-design improvements for data-intensive services moving market and account data through Kafka pipelines into PostgreSQL and DynamoDB.
+  \item Built and reviewed Python and Go services with Terraform-provisioned, Dockerized infrastructure on Kubernetes — enforcing quality and security standards across release processes and documentation.
+  \item Mentored junior engineers and owned design/code reviews, translating service requirements into reliable, scalable data flows.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Analyzed, cleaned, and visualized data for stakeholders, translating business questions into Python data workflows with scikit-learn and TensorFlow.
+  \item Researched and proposed designs, delivering in small teams under mentorship on AWS EC2 with MongoDB and MySQL backends.
+\bulletsend
+\vspace{3pt}
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Built and documented new backend services, dockerizing them and improving deployment onto AWS (S3/EC2) and Kubernetes.
+  \item Led system-design and code reviews across NodeJS/TypeScript services backed by MySQL and MongoDB.
+\bulletsend
+\vspace{3pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems \& Engineering}{04/2024 – Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projects}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Durable, retryable Hatchet ETL pipeline (extract→chunk→embed→summarize→index) with per-step retries surviving worker crashes; NATS JetStream progress streaming and pgvector (HNSW) semantic search, cloud-native on k3d.}
+  \project{IRS Platform (Stealth)}{https://radheem.github.io/my-cv/projects/irs/}{Best-effort ETL into PostgreSQL (sqlc)/Dgraph/DocumentDB orchestrated by Hatchet with declarative routing, verified by a Ginkgo E2E data-quality gate; distributed Go microservices on NATS and gRPC, deployed on Kubernetes/Cilium.}
+  \project{cv-tailor (LLM CV Tailoring)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Python tool with a pure unit-tested ranker, git-based application tracking, GitHub Actions CI, and reproducible run manifests for verifiable, repeatable pipeline outputs.}
+\end{itemize}
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Languages:} English (fluent), Deutsch (A2)
+  \item \textbf{Programming Languages:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Data Pipelines \& Big Data:} ETL/ELT, Hatchet orchestration, Kafka, NATS JetStream, scikit-learn, TensorFlow/Keras
+  \item \textbf{Databases \& Persistence:} PostgreSQL, MySQL, BigQuery, Snowflake, DynamoDB, MongoDB/DocumentDB, pgvector
+  \item \textbf{Cloud-Native \& Infra:} AWS (S3/EC2), Terraform, Kubernetes, Docker, Helm, kustomize, Cilium
+\end{itemize}
+
+\end{document}
