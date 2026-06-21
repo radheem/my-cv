@@ -182,3 +182,29 @@ def render_cover_letter(
     return llm.stream_text(
         system, user, max_tokens=llm.resolve()["max_tokens"]["cover"]
     ).strip() + "\n"
+
+
+_TRANSLATE_SYSTEM = (
+    "You are a professional German translator for job-application documents. Translate the "
+    "given Markdown into natural, professional German (Sie-Form where applicable). "
+    "STRICT RULES:\n"
+    "- Preserve the Markdown structure EXACTLY: the same headings (##/###), bullet lines, "
+    "bold (**...**), and blank lines, in the same order.\n"
+    "- Translate the CV section headings: Experience→Berufserfahrung, Education→Ausbildung, "
+    "Projects→Projekte, Skills→Kenntnisse. For skills: Languages→Sprachen, "
+    "Programming Languages→Programmiersprachen.\n"
+    "- Keep proper nouns, employer names, job titles, product/tech names, project names, URLs, "
+    "dates, and metrics UNCHANGED (do not translate or invent).\n"
+    "- Keep 'English (fluent), Deutsch (A2)' rendered as 'Englisch (fließend), Deutsch (A2)'.\n"
+    "- Output ONLY the translated Markdown — no preamble, no code fences."
+)
+
+
+def translate_markdown(markdown: str, kind: str = "cv") -> str:
+    """Translate tailored CV/cover Markdown into German, preserving structure.
+
+    A faithful translation of already-approved English (no new facts) — feeds the
+    bilingual LaTeX renderer (engine/latex.py). `kind` is 'cv' or 'cover'."""
+    budget = llm.resolve()["max_tokens"].get("cv" if kind == "cv" else "cover", 8000)
+    user = f"Translate this {kind} Markdown into German:\n\n{markdown.strip()}\n"
+    return llm.stream_text(_TRANSLATE_SYSTEM, user, max_tokens=budget).strip() + "\n"

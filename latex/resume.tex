@@ -1,0 +1,108 @@
+% =============================================================================
+% Résumé — Radheem Bin Razi
+% Clean single-column CV in the MIT CV / classic academic style.
+% Engine: pdfLaTeX.  Build:  latexmk -pdf resume.tex   (or: make / make docker)
+% Self-contained: no external .cls; only standard TeX Live packages.
+% =============================================================================
+% Style, packages, and helper macros (\role, \edu, \project, \bullets) live in
+% resume.cls (same directory). See latex/README.md.
+\documentclass[11pt,a4paper]{resume}
+
+% ---- Personal links (EDIT the LinkedIn handle) ------------------------------
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\GitHubText}{github}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\LinkedInText}{linkedin}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+\newcommand{\ProjBase}{https://radheem.github.io/my-cv/projects}
+
+\begin{document}
+
+% ============================================================== Header
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Distributed Systems \& Cloud-Native Engineer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{\LinkedInText} \,\textbar\,
+  \href{\GitHub}{\GitHubText}
+\end{center}
+\vspace{2pt}
+
+% ============================================================== Summary
+\noindent
+Backend and distributed-systems engineer with \textbf{5+ years} building scalable, resilient,
+cloud-native platforms in Go and Python. I design event-driven microservice systems end to
+end — protobuf-first APIs, NATS / gRPC messaging, Kubernetes delivery, and observability — and
+have led system-design reviews, mentored engineers, and shipped production services across
+fintech and 5G / Open-RAN research. Master of Research student at TU~Ilmenau.
+
+% ============================================================== Experience
+\section{Experience}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Owned new backend services end to end — design, documentation, and release — as a senior IC.
+  \item Led system-design and code reviews, setting architectural direction and quality standards.
+  \item Drove deployment-workflow improvements and containerization of backend services.
+\bulletsend
+\vspace{3pt}
+
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Design authority and system expert for core exchange services; reviewed code and designs for scale.
+  \item Identified system-design weaknesses and proposed, justified, and drove the solutions end to end.
+  \item Led and mentored junior engineers; owned release processes and docs for multiple production services.
+\bulletsend
+\vspace{3pt}
+
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Researched and proposed solution designs, delivered in small teams under senior mentorship.
+  \item Partnered with stakeholders, turning data analysis and visualization into decisions.
+\bulletsend
+
+% ============================================================== Education
+\section{Education}
+
+\edu{Technische Universit\"at Ilmenau, Germany}{M.Sc.\ (Research), Computer Systems \& Engineering}{04/2024 – Present}
+\vspace{2pt}
+\edu{National University of Computer \& Emerging Sciences (FAST)}{B.Sc.\ Computer Science}{06/2016 – 08/2020}
+
+% ============================================================== Projects
+\section{Projects}
+\textit{Detailed write-ups with architecture diagrams at} \href{\Portfolio}{\PortfolioText}.
+\vspace{3pt}
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{IRS Platform (Stealth)}{\ProjBase/irs/}{Go microservices on native NATS + gRPC,
+    MCP agent tooling, and a best-effort ETL pipeline.}
+  \project{HA K3s \& Homelab Platform}{https://radheem.github.io/home-lab/}{declarative k3d
+    clusters; kube-proxy-free Cilium eBPF networking, L2 LoadBalancer, and zero-touch
+    \texttt{*.home.lan} DNS. Two versions: a public single-node homelab and a reboot-resilient
+    HA variant (not publicly available).}
+  \project{O-RAN AI/ML Framework}{\ProjBase/oran-aiml/}{Kubernetes AI/ML lifecycle
+    (Kubeflow + KServe) via a Python SDK; QoE prediction (research, 1.0 / A).}
+  \project{5G srsRAN + O-RAN RIC Testbed}{\ProjBase/oran-testbed/}{end-to-end 5G~SA labs
+    (srsRAN + Open5GS) with a near-RT RIC and Grafana monitoring, in
+    \href{\ProjBase/oran-testbed/}{Docker} (ZMQ/UHD) and \href{\ProjBase/5g-testbed/}{Kubernetes}
+    (Multus CNI, ONOS SDN, 50+~Mbps) variants --- both with gNB, monitoring, and O-RAN RIC.}
+\end{itemize}
+
+% ============================================================== Skills
+\section{Skills}
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Programming Languages:} Go, Python, TypeScript / JavaScript, PHP.
+  \item \textbf{Languages:} English (fluent), German (A2).
+  \item \textbf{Distributed Systems \& APIs:} gRPC, Protocol Buffers, NATS (JetStream / KV),
+        Hatchet, Kafka; event-driven and contract-first design.
+  \item \textbf{Cloud-Native \& Observability:} Kubernetes, Helm, Cilium, Docker, Terraform;
+        OpenTelemetry, Prometheus, Grafana.
+  \item \textbf{Data \& AI/ML:} PostgreSQL, MongoDB / DocumentDB, Dgraph, InfluxDB; Kubeflow,
+        KServe, MCP.
+\end{itemize}
+
+\end{document}

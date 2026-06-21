@@ -20,3 +20,10 @@ venv/
 /tests/experiments/outputs/
 /tests/experiments/results/
 tests/experiments/_*.log
+
+# LaTeX build artefacts (PDFs go to Drive; .tex is committed)
+*.aux
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+applications/*/*.log

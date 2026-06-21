@@ -1,9 +1,8 @@
 name: Build & deploy to GitHub Pages
 
-# Renders the MkDocs site, generates PDFs (WeasyPrint), seals the gated per-job
-# documents (AES-GCM, key derived from the GATE_PASSWORD secret), and deploys.
-# No ANTHROPIC_API_KEY here — content generation is a local step; CI only
-# renders, gates, and ships committed Markdown.
+# Compiles the public 1-page CV (LaTeX → docs/assets/cv.pdf), builds the MkDocs
+# portfolio, and deploys. No gate, no secrets: tailored applications live in
+# applications/ (outside docs/) and are never published; their PDFs go to Drive.
 
 on:
   push:
@@ -25,26 +24,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Public CV PDF: compile latex/resume.tex (pdfLaTeX) → docs/assets/cv.pdf.
+      - name: Compile public CV PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: latex
+          root_file: resume.tex
+      - name: Stage CV PDF into docs
+        run: cp latex/resume.pdf docs/assets/cv.pdf
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # WeasyPrint needs the Pango/Cairo native libraries.
-      - name: Install system libraries (WeasyPrint)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgdk-pixbuf-2.0-0
-
-      - name: Install Python dependencies
+      - name: Install MkDocs
         run: pip install -e .
 
-      - name: Run ranking tests
+      - name: Run unit tests
         run: pip install pytest && pytest -q
 
-      - name: Build site (render + gate)
-        env:
-          GATE_PASSWORD: ${{ secrets.GATE_PASSWORD }}
-        run: python build.py
+      - name: Build site
+        run: mkdocs build --clean
 
       - uses: actions/upload-pages-artifact@v3
         with:

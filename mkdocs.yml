@@ -35,11 +35,6 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
-extra_javascript:
-  # Bump ?v= when vault.js changes so browsers don't serve a stale cached copy
-  # (GitHub Pages sends Cache-Control: max-age=600 with no fingerprinting).
-  - assets/vault.js?v=3
-
 markdown_extensions:
   - admonition
   - attr_list
@@ -68,14 +63,8 @@ extra:
     - icon: fontawesome/solid/envelope
       link: mailto:sheikh.radheem@gmail.com
 
-# Gated per-job pages live under jobs/<slug>/. Only the hub (index.md) is built;
-# cv/cover-letter/job-description are excluded from the site entirely and instead
-# rendered + encrypted from source by build.py (engine/documents.py).
-exclude_docs: |
-  jobs/*/cv.md
-  jobs/*/cover-letter.md
-  jobs/*/job-description.md
-  jobs/*/manifest.json
+# Job applications live OUTSIDE docs/ (in applications/) and are never built into
+# the public site — only this portfolio is published.
 
 validation:
   nav:
@@ -97,7 +86,6 @@ nav:
       - Sheet Dashboard (Google Sheets): projects/csv-dashboard.md
       - Gitpress (Zero-Server Blog): projects/gitpress.md
   - CV: cv.md
-  - Tailored: tailored/index.md
   - Project:
       - Architecture: architecture.md
       - Setup: setup.md

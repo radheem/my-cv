@@ -4,29 +4,26 @@
 # Conventions:
 #   * The venv is uv-managed (.venv) and has no pip — installs go through
 #     `uv pip install` (see $(UVPIP)).
-#   * build.py shells out to `mkdocs`, so the venv bin is prepended to PATH below.
-#   * GATE_PASSWORD defaults to "test" for local builds; the real value is a CI
-#     secret. Override per-invocation: `make build GATE_PASSWORD=hunter2`.
+#   * PDFs are rendered with LaTeX (latex/*.cls) via scripts/build-application.sh
+#     (local latexmk, else the texlive/texlive Docker image).
 #
 # Common overridable variables (make VAR=value target):
 #   SOURCE   job posting URL or .txt/.md path     (required by `new`)
-#   SLUG     output dir name under docs/jobs/      (new)
+#   SLUG     application slug under applications/  (new/translate/pdf/upload/status)
 #   RECIPIENT cover-letter salutation name         (new)
-#   PROVIDER  anthropic | ollama                   (new)
-#   MODEL     model id override                    (new)
-#   OLLAMA_URL OpenAI-compatible base URL          (new)
+#   PROVIDER  anthropic | ollama                   (new/translate)
+#   MODEL     model id override                    (new/translate)
+#   OLLAMA_URL OpenAI-compatible base URL          (new/translate)
 #   STATUS / SLUG  lifecycle update                (status)
 #   PORT     dev server port (default 8000)
-#   GATE_PASSWORD  seals the gated content (default "test")
 
 VENV    := .venv
 BIN     := $(VENV)/bin
 PYTHON  := $(BIN)/python
 UVPIP   := VIRTUAL_ENV=$(VENV) uv pip install
 PORT    ?= 8000
-GATE_PASSWORD ?= test
 
-# build.py runs `mkdocs` as a subprocess; make the venv tools resolvable.
+# mkdocs/cv-tailor run from the venv; make the venv tools resolvable.
 export PATH := $(abspath $(BIN)):$(PATH)
 
 .DEFAULT_GOAL := help
@@ -121,7 +118,8 @@ docker-generate: ## Generate a tailored application in-container from a captured
 	@test -n "$(SLUG)" || { echo "SLUG required, e.g. make docker-generate SLUG=acme-platform-engineer-123"; exit 2; }
 	docker compose run --rm --no-deps \
 	  -e CV_TAILOR_JOBS_DIR=/app/vault/applications \
-	  ingest sh -lc 'cv-tailor new "/app/vault/jds/$(SLUG).txt" --slug "$(SLUG)" && cv-tailor pdf "$(SLUG)"'
+	  ingest cv-tailor new "/app/vault/jds/$(SLUG).txt" --slug "$(SLUG)"
+	@echo "Generated Markdown (+ German). Render PDFs + upload on the host: make pdf SLUG=$(SLUG); make upload SLUG=$(SLUG)"
 
 # ---- Generate (cv-tailor CLI) ----------------------------------------------
 
@@ -135,6 +133,25 @@ new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIEN
 	  $(if $(MODEL),--model "$(MODEL)") \
 	  $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
 
+.PHONY: translate
+translate: ## Generate German cv.de.md / cover-letter.de.md: make translate SLUG=<slug>
+	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
+	$(BIN)/cv-tailor translate "$(SLUG)" $(if $(PROVIDER),--provider "$(PROVIDER)") $(if $(MODEL),--model "$(MODEL)") $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
+
+.PHONY: pdf
+pdf: ## Render the LaTeX CV + cover letter and compile to PDFs: make pdf SLUG=<slug>
+	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
+	$(BIN)/cv-tailor pdf "$(SLUG)"
+
+.PHONY: upload
+upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload SLUG=<slug>
+	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
+	$(BIN)/cv-tailor upload "$(SLUG)"
+
+.PHONY: track
+track: ## Regenerate the applications/README.md status table
+	$(BIN)/cv-tailor track
+
 .PHONY: status
 status: ## Advance an application's lifecycle: make status SLUG=<slug> STATUS=applied
 	@test -n "$(SLUG)" -a -n "$(STATUS)" || { echo "Usage: make status SLUG=<slug> STATUS=draft|applied|interview|offer|rejected|withdrawn"; exit 2; }
@@ -143,30 +160,27 @@ status: ## Advance an application's lifecycle: make status SLUG=<slug> STATUS=ap
 # ---- Build & serve ---------------------------------------------------------
 
 .PHONY: build
-build: ## Render + AES-seal the gated site into ./site (GATE_PASSWORD=test by default)
-	GATE_PASSWORD="$(GATE_PASSWORD)" $(PYTHON) build.py
-
-.PHONY: docs
-docs: ## Build the MkDocs site only (no gating) into ./site
+build: ## Build the public MkDocs portfolio into ./site (no gate)
 	$(BIN)/mkdocs build --clean
 
+docs: build ## Alias for build
+
 .PHONY: serve
-serve: ## Live-preview the docs (mkdocs serve; ungated) on localhost (PORT=8000)
+serve: ## Live-preview the portfolio (mkdocs serve) on localhost (PORT=8000)
 	$(BIN)/mkdocs serve -a localhost:$(PORT)
 
-.PHONY: preview
-preview: build ## Build the gated site, then serve ./site to test the password gate
-	@echo "Serving the GATED build at http://localhost:$(PORT) (Ctrl-C to stop)"
-	$(PYTHON) -m http.server -d site $(PORT)
+.PHONY: public-pdf
+public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → docs/assets/cv.pdf)
+	cd latex && $(MAKE) docker && cp resume.pdf ../docs/assets/cv.pdf && echo "wrote docs/assets/cv.pdf"
 
 # ---- Test & quality --------------------------------------------------------
 
 .PHONY: test
-test: ## Run the unit tests (ranking logic; no browser, no API key)
+test: ## Run the unit tests (ranking + render logic; no browser, no API key)
 	$(PYTHON) -m pytest -q
 
 .PHONY: check
-check: test build ## Pre-push sanity: run tests, then a full gated build
+check: test build ## Pre-push sanity: run tests, then build the portfolio
 
 # ---- Housekeeping ----------------------------------------------------------
 
