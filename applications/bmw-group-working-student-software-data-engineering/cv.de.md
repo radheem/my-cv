@@ -7,15 +7,14 @@ tagline: Werkstudent Softwareentwicklung mit KI-Tools · M.Sc.-Forschung, TU Ilm
 ### Bluefin Exchange — Senior Software Engineer
 *Pakistan · 06/2021 – 08/2023*
 
-- Aufbau und Betrieb von Backend- und Datendiensten in Go und Python für eine Krypto-Börse mit hohem Durchsatz; Tätigkeit als Design-Verantwortlicher sowie Review von Code und Architektur im Hinblick auf Skalierbarkeit und Zuverlässigkeit.
-- Eigenständige Identifikation von Verbesserungen am Systemdesign und deren durchgängige Umsetzung; Arbeit mit Kafka, PostgreSQL, Docker, Kubernetes und Terraform.
-- Mentoring von Nachwuchsentwicklern sowie Verantwortung für Release-Prozesse und Dokumentation produktiver Dienste.
+- Aufbau und Betrieb von Backend-Diensten in Go und Python für eine High-Throughput-Krypto-Börse; Design-Autorität und Code/Architektur-Reviews im Hinblick auf Skalierbarkeit und Zuverlässigkeit
+- Eigenständige Identifikation und durchgängige Umsetzung von Systemverbesserungen (Kafka, PostgreSQL, Docker, Kubernetes, Terraform)
+- Mentoring von Nachwuchsentwicklern; Verantwortung für Release-Prozesse und Dokumentation produktiver Dienste
 
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
 
-- Entwicklung und Dokumentation neuer Backend-Dienste und APIs; Leitung von Systemdesign- und Code-Reviews.
-- Verbesserung und Automatisierung des Deployments durch Dockerisierung von Backend-Diensten und deren Betrieb auf Kubernetes (NodeJS, TypeScript, AWS).
+- Entwicklung und Dokumentation neuer Backend-Dienste und APIs; Leitung von Systemdesign- und Code-Reviews; Dockerisierung und Kubernetes-Betrieb
 
 ### Seed Labs — Software Engineer
 *Pakistan · 06/2020 – 06/2021*
