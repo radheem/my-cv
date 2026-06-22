@@ -1,5 +1,5 @@
 ---
-tagline: "Werkstudent — Software & Data Engineering · M.Sc.-Forschung, TU Ilmenau"
+tagline: Werkstudent Softwareentwicklung mit KI-Tools · M.Sc.-Forschung, TU Ilmenau
 ---
 
 ## Berufserfahrung
@@ -32,7 +32,7 @@ tagline: "Werkstudent — Software & Data Engineering · M.Sc.-Forschung, TU Ilm
 
 ## Projekte
 
-- **IRS Platform (Stealth)** — Verteilte Go-Microservices über gRPC und NATS JetStream mit einer Best-Effort-ETL-Pipeline nach PostgreSQL/Dgraph/DocumentDB; Deployment auf Kubernetes (kustomize, Skaffold, Cilium).
+- **IRS Platform (Stealth)** — Migration einer Dapr-Sidecar-Architektur zu nativen Go-Microservices mit gRPC, NATS JetStream und NATS KV; Analyse und gezielte Umgestaltung bestehender architekturaler Strukturen für mehr Einfachheit und Leistung; eingesetzt mit Kubernetes (kustomize, Skaffold, Cilium).
 - **O-RAN AIML Framework** — Durchgängige KI-/ML-Plattform auf Kubernetes + Helm (Kubeflow-Trainings-/Retraining-Pipelines, KServe-Serving), gesteuert über ein konfigurationsgetriebenes Python-SDK; 15-Credit-Forschungsprojekt, deutsche Note 1,0 (A).
 - **Second Brain (Document RAG)** — Selbst gehosteter Daten-/ML-Dienst: robuste, wiederholbare Hatchet-Ingestion-Pipeline, lokale llama.cpp-Inferenz und semantische pgvector-Suche; cloud-native auf k3d.
 
@@ -40,5 +40,6 @@ tagline: "Werkstudent — Software & Data Engineering · M.Sc.-Forschung, TU Ilm
 
 - **Sprachen** — Englisch (fließend), Deutsch (A2)
 - **Programmiersprachen** — Python, Go, SQL, TypeScript, JavaScript, Bash
-- **Cloud-Native & Daten** — Kubernetes, Docker, Terraform, Helm, PostgreSQL, BigQuery, Snowflake, ETL-/ELT-Pipelines
-- **KI / ML & Observability** — Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, OpenTelemetry, Grafana
+- **Softwarearchitektur & Refactoring** — Erfahrung mit Analyse und Umgestaltung größerer Codebasen, Architekturentscheidungs- und Code-Reviews, modulare Architekturen, Anti-Corruption-Layer- und Adaptormuster
+- **KI-gestützte Entwicklung** — Nutze regelmäßig KI-Tools in eigenen Projekten (RAG, MCP, llama.cpp); Interesse an Vibe Coding und KI-unterstützten Entwicklungsprozessen
+- **Cloud-Native & DevOps** — Kubernetes, Docker, Terraform, Helm, CI/CD-Pipelines

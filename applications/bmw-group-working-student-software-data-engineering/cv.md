@@ -1,5 +1,5 @@
 ---
-tagline: Working Student — Software & Data Engineering · M.Sc. Research, TU Ilmenau
+tagline: Working Student — Software Development with AI Tools · M.Res. Research, TU Ilmenau
 ---
 
 ## Experience
@@ -32,7 +32,7 @@ tagline: Working Student — Software & Data Engineering · M.Sc. Research, TU I
 
 ## Projects
 
-- **IRS Platform (Stealth)** — Distributed Go microservices over gRPC and NATS JetStream with a best-effort ETL pipeline into PostgreSQL/Dgraph/DocumentDB; deployed on Kubernetes (kustomize, Skaffold, Cilium).
+- **IRS Platform (Stealth)** — Migrated a Dapr sidecar architecture to native Go microservices with gRPC, NATS JetStream, and NATS KV; analyzing and refactoring existing architectural patterns for simplicity and performance; deployed on Kubernetes (kustomize, Skaffold, Cilium).
 - **O-RAN AIML Framework** — End-to-end AI/ML platform on Kubernetes + Helm (Kubeflow training/retraining pipelines, KServe serving) driven by a config-driven Python SDK; 15-credit research project, German grade 1.0 (A).
 - **Second Brain (Document RAG)** — Self-hosted data/ML service: durable, retryable Hatchet ingestion pipeline, local llama.cpp inference, and pgvector semantic search; cloud-native on k3d.
 
@@ -40,5 +40,6 @@ tagline: Working Student — Software & Data Engineering · M.Sc. Research, TU I
 
 - **Languages** — English (fluent), Deutsch (A2)
 - **Programming Languages** — Python, Go, SQL, TypeScript, JavaScript, Bash
-- **Cloud-Native & Data** — Kubernetes, Docker, Terraform, Helm, PostgreSQL, BigQuery, Snowflake, ETL/ELT pipelines
-- **AI / ML & Observability** — Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, OpenTelemetry, Grafana
+- **Software Architecture & Refactoring** — Experience analyzing and refactoring larger codebases, architecture and code reviews, modular architectures, anti-corruption layer and adapter patterns
+- **AI-Assisted Development** — Regularly use AI tools in personal projects (RAG, MCP, llama.cpp); interest in vibe coding and AI-assisted development workflows
+- **Cloud-Native & DevOps** — Kubernetes, Docker, Terraform, Helm, CI/CD pipelines
