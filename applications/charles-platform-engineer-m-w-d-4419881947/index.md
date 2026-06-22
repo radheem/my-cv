@@ -1,7 +1,7 @@
 ---
 job_title: "Platform Engineer (m/w/d)"
 company: "charles"
-status: "draft"
+status: "applied"
 clusters: ["platform-cloud-native", "distributed-systems", "observability"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1t96leERDqV6e1LizOK7VF3XH16w7y08Z"

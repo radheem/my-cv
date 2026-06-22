@@ -1,7 +1,7 @@
 ---
 job_title: "Machine Learning Engineer"
 company: "Remerge"
-status: "draft"
+status: "applied"
 clusters: ["ml-ai", "distributed-systems", "data-persistence"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1Eg1A_ZQwExKNLxVGjlRsFNc0wzy32hHb"

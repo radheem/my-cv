@@ -3,7 +3,7 @@ job_title: "Werkstudent Softwareentwicklung mit KI-Tools"
 company: "BMW Group"
 location: "Munich"
 job_url: "https://www.bmwgroup.jobs/de/en/students/workingstudent.html"
-status: "draft"
+status: "applied"
 clusters: ["platform-cloud-native", "distributed-systems", "ml-ai"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1ZpYwZC0_bVlUaacHMOppm8y1QkkC09uS"

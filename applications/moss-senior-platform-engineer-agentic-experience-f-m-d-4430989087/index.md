@@ -1,7 +1,7 @@
 ---
 job_title: "Senior Platform Engineer (Agentic Experience) (f/m/d)"
 company: "Moss"
-status: "draft"
+status: "applied"
 clusters: ["platform-cloud-native", "ml-ai", "distributed-systems", "observability"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1WcZF9oo1RfsfTnHwoSSGCzZpQtIA4Sdj"
