@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "generated_at": "2026-06-22T20:13:06+00:00",
+  "config_version": 1,
+  "provider": "ollama",
+  "model": "qwen3.6:35b",
+  "temperature": {
+    "json": 0.0,
+    "text": 0.4
+  },
+  "max_tokens": {
+    "jobspec": 2000,
+    "cv": 16000,
+    "cover": 8000,
+    "judge": 1200
+  },
+  "seed": null,
+  "prompts": {
+    "cv": {
+      "version": 3,
+      "sha256": "5b7df06839eb",
+      "source": "data/prompts/cv.md"
+    },
+    "cover": {
+      "version": 1,
+      "sha256": "93d4f14c5ff8",
+      "source": "data/prompts/cover.md"
+    },
+    "jobspec": {
+      "version": 1,
+      "sha256": "6e93487e8b18",
+      "source": "data/prompts/jobspec.md"
+    }
+  },
+  "inputs_sha256": {
+    "data/config.yml": "b0ca71eb98b3",
+    "data/master-cv.md": "a02595fade32",
+    "data/profile.yml": "61b216490594",
+    "data/projects.yml": "a4aa5fc51197",
+    "data/taxonomy.yml": "065c4bd1655b",
+    "data/ranking.yml": "1da51796d17e",
+    "data/guides/how-to-write-a-cv.md": "3148f77eb3b2",
+    "data/guides/how-to-write-a-cover-letter.md": "2bf5e157e7ba",
+    "data/prompts/exemplars/cover.yml": "c85e0eeaa44a"
+  },
+  "effective_config_sha256": "74c5d26ea08c",
+  "decisions": {
+    "top_projects": [
+      "irs",
+      "cv-tailor",
+      "oran-testbed"
+    ],
+    "clusters": [
+      "data-persistence",
+      "distributed-systems",
+      "ml-ai",
+      "platform-cloud-native",
+      "web-api"
+    ],
+    "tagline": "Senior Go Backend Developer"
+  }
+}

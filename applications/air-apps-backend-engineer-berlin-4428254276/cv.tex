@@ -1,0 +1,136 @@
+\documentclass[11pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Backend Engineer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Developed and documented backend services and features using NodeJS, TypeScript, and ReactJS, improving deployment processes and dockerizing backend services on AWS EC2 and S3.
+  \item Led system design and code reviews to enforce clean code practices and architectural integrity across the team.
+  \item Improved deployment processes and dockerized backend services, leveraging MySQL and MongoDB for data persistence.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Identified system design improvements and proposed solutions for exchange services using NodeJS, Go, and TypeScript.
+  \item Reviewed code and design decisions as a system expert, mentoring junior engineers and leading teams on project initiatives.
+  \item Maintained release processes and documentation, leveraging PostgreSQL, DynamoDB, Kafka, and Terraform for cloud-native infrastructure.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Researched solutions and proposed designs for implementation using NodeJS and Python.
+  \item Delivered solutions in teams of three under mentorship, analyzing, cleaning, and visualizing data to present insights to stakeholders.
+  \item Analyzed, cleaned, and visualized data to present insights to stakeholders, utilizing AWS EC2, MongoDB, and MySQL.
+\bulletsend
+\vspace{3pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 – Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projects}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{IRS Platform (Stealth)}{https://radheem.github.io/my-cv/projects/irs/}{Built Go microservices with gRPC and gRPC-Gateway using Protobuf-first APIs, migrating off Dapr to native NATS JetStream for messaging and session state while orchestrating best-effort ETL pipelines into PostgreSQL (sqlc), Dgraph, and DocumentDB via Hatchet with declarative routing and Ginkgo E2E data-quality gates. Secured per-user browser sessions with Playwright, gateway consistent-hashing, and an AES-256-GCM credential vault, deploying the platform on Kubernetes with kustomize, Skaffold, and Cilium.}
+  \project{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Engineered a Python-based application with a unit-tested ranker and LLM integration, versioning every application in Git with a status lifecycle surfaced on a MkDocs site. Implemented robust CI/CD with GitHub Actions to render, seal, and deploy to GitHub Pages, gating per-job documents with in-browser PBKDF2 and AES-256-GCM encryption while ensuring no API keys in CI. Added a containerized LinkedIn ingestion flow via Playwright with human-paced automation and VNC CAPTCHA hand-off, generating reproducible outputs with model/seed/prompt hash manifests guarded by quality-benchmark regression gates.}
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Consolidated a 5G SA testbed into composable Docker Compose stacks for the core, gNB, RIC, and monitoring, enabling remote gNB attachment over shared bridge networks. Built a Kafka metrics pub/sub pipeline where xApps publish per-UE KPM data to Kafka, with consumers fanning messages to InfluxDB 3 (Grafana), MongoDB, and an AIMLFW-compatible InfluxDB 2. Integrated the O-RAN SC Near-RT RIC over E2 with Python xApps using E2SM-KPM, E2SM-RC, and E2SM-CCC, running the gNB on OCUDU CU/DU with a unified image for ZMQ virtual RF and UHD over-the-air on USRP B210 SDR.}
+\end{itemize}
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Languages:} English (fluent), Deutsch (A2)
+  \item \textbf{Programming Languages:} TypeScript, Go, Python, SQL, JavaScript, Bash, PHP
+  \item \textbf{Cloud-Native \& Infra:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+  \item \textbf{Web \& API:} NodeJS, REST, ReactJS, NestJS, Django, Protocol Buffers, OpenAPI
+  \item \textbf{Databases \& Persistence:} PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Backend Engineer}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Entwickelte und dokumentierte Backend-Services und Features mit NodeJS, TypeScript und ReactJS, optimierte Bereitstellungsprozesse und containerisierte Backend-Services auf AWS EC2 und S3.
+  \item Leitete Systemdesign und Code-Reviews, um Clean-Code-Praktiken und architektonische Integrität im Team durchzusetzen.
+  \item Optimierte Bereitstellungsprozesse und containerisierte Backend-Services, wobei MySQL und MongoDB für die Datenspeicherung genutzt wurden.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Identifizierte Optimierungspotenziale im Systemdesign und schlug Lösungen für Börsendienste mit NodeJS, Go und TypeScript vor.
+  \item Überprüfte Code und Designentscheidungen als Systemexperte, betreute Junior-Entwickler und leitete Teams bei Projektinitiativen.
+  \item Pflegte Release-Prozesse und Dokumentation, wobei PostgreSQL, DynamoDB, Kafka und Terraform für cloud-native Infrastruktur genutzt wurden.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Recherchierte Lösungen und schlug Implementierungsdesigns mit NodeJS und Python vor.
+  \item Lieferte in dreiköpfigen Teams unter Mentoring Lösungen ein, analysierte, bereinigte und visualisierte Daten, um Stakeholdern Erkenntnisse zu präsentieren.
+  \item Analysierte, bereinigte und visualisierte Daten zur Präsentation von Erkenntnissen für Stakeholder, wobei AWS EC2, MongoDB und MySQL genutzt wurden.
+\bulletsend
+\vspace{3pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 – Heute}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projekte}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{IRS Platform (Stealth)}{https://radheem.github.io/my-cv/projects/irs/}{Entwickelte Go-Mikroservices mit gRPC und gRPC-Gateway unter Verwendung von Protobuf-first-APIs, migrierte von Dapr zu nativem NATS JetStream für Messaging und Session-State, während best-effort ETL-Pipelines nach PostgreSQL (sqlc), Dgraph und DocumentDB über Hatchet mit deklarativem Routing und Ginkgo E2E-Datenqualitäts-Gates orchestriert wurden. Sicherte pro-Nutzer-Browsersitzungen mit Playwright, Gateway-Consistent-Hashing und einem AES-256-GCM-Credential-Vault, bereitgestellt auf Kubernetes mit kustomize, Skaffold und Cilium.}
+  \project{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Entwickelte eine Python-basierte Anwendung mit einem unit-getesteten Ranker und LLM-Integration, versionierte jede Bewerbung in Git mit einer Statuslebensdauer, die auf einer MkDocs-Site angezeigt wird. Implementierte ein robustes CI/CD mit GitHub Actions zum Rendern, Signieren und Bereitstellen auf GitHub Pages, schützte pro-Stelle Dokumente mit in-Browser-PBKDF2- und AES-256-GCM-Verschlüsselung und stellte sicher, dass keine API-Keys im CI verwendet wurden. Fügte einen containerisierten LinkedIn-Ingestion-Flow über Playwright mit menschlich getakteter Automatisierung und VNC-CAPTCHA-Handover hinzu, der reproduzierbare Ausgaben mit Model/Seed/Prompt-Hash-Manifests generiert, die durch Quality-Benchmark-Regression-Gates geschützt sind.}
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Konsolidierte ein 5G-SA-Testbed in zusammensetzbaren Docker-Compose-Stacks für Core, gNB, RIC und Monitoring, wodurch remote gNB-Attachments über geteilte Bridge-Netzwerke ermöglicht wurden. Entwickelte eine Kafka-Metriken-Pub/Sub-Pipeline, in der xApps per-UE-KPM-Daten an Kafka veröffentlichen, wobei Consumer Nachrichten an InfluxDB 3 (Grafana), MongoDB und ein AIMLFW-kompatibles InfluxDB 2 weiterleiten. Integrierte den O-RAN SC Near-RT RIC über E2 mit Python-xApps unter Verwendung von E2SM-KPM, E2SM-RC und E2SM-CCC, wobei die gNB auf OCUDU CU/DU mit einem einheitlichen Image für ZMQ-virtual-RF und UHD over-the-air auf USRP B210 SDR lief.}
+\end{itemize}
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Sprachen:} Englisch (fließend), Deutsch (A2)
+  \item \textbf{Programmiersprachen:} TypeScript, Go, Python, SQL, JavaScript, Bash, PHP
+  \item \textbf{Cloud-Native \& Infrastruktur:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+  \item \textbf{Web \& API:} NodeJS, REST, ReactJS, NestJS, Django, Protocol Buffers, OpenAPI
+  \item \textbf{Datenbanken \& Persistenz:} PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
+\end{itemize}
+
+\end{document}

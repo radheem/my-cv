@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Air Apps"
+---
+
+Die Entwicklung eines Planungstools, das sich tatsächlich an die Arbeitsweise der Nutzer anpasst, erfordert ein Backend, das erst dann aktiv wird, wenn es benötigt wird. Air Apps geht genau diese Herausforderung an, indem es verstreute persönliche und unternehmerische Daten in einen einzigen, KI-gesteuerten Ressourcenplaner umwandelt. Ich bewerbe mich für die Position als Backend Engineer, da ich Sie dabei unterstützen möchte, diese Vision skalierbar umzusetzen, ohne dabei an Zuverlässigkeit oder Datenintegrität einzubüßen.
+
+Meine aktuelle Arbeit konzentriert sich auf die Gestaltung serverseitiger Systeme, die KI-Ausgaben auf verifizierten Fakten verankern. Ich habe eine Content-Generierungspipeline entwickelt, die echte Projektdaten verankert, bevor ein Sprachmodell Text generiert. Dieser Ansatz eliminiert Halluzinationen und stellt sicher, dass jede Ausgabe vollständig nachvollziehbar bleibt. Ich habe diese Logik hinter einer strengen Authentifizierungsschicht und verschlüsselten Speichern untergebracht, sodass sensible Anwendungsdaten niemals ungeschützt den Browser verlassen. Derselbe Fokus auf klare Grenzen und ein „secure-by-default“-Design überträgt sich direkt auf die API- und Service-Architektur, die Sie für Ihre Kernplaner-Funktionen benötigen.
+
+Zuverlässige Backends hängen auch davon ab, wie gut sie unerwarteten Traffic und Datenflüsse bewältigen. Ich habe anfällige Sidecar-Proxies durch einen nativen Message Broker ersetzt, der Sitzungsstatus und Event-Streams ohne Latenzzuwachs routet. Ergänzend dazu habe ich automatisierte Data-Quality-Gates implementiert, die Pipeline-Fehler abfangen, bevor diese Produktionsdatenbanken erreichen. Diese Vorgehensweisen stimmen eng mit Ihrem Fokus auf Monitoring, Incident Response und die Aufrechterhaltung der Uptime überein, während Ihre Nutzerbasis in mehreren Regionen wächst.
+
+Ich bringe fünf Jahre Erfahrung im Aufbau cloud-nativer Dienste mit, die sich sauber skalieren lassen und sicherheitstechnisch von Grund auf konzipiert sind. Ich stehe ab sofort zur Verfügung und kann innerhalb von zwei bis drei Wochen an Ihren Standort ziehen. Mein Blue-Card-Status erfordert keinen zusätzlichen Aufwand für eine Sponsorship, sodass Sie lediglich den regulären Arbeitsvertrag ausstellen müssen. Ich würde mich freuen, die Gelegenheit zu erhalten, zu besprechen, wie mein Hintergrund in verteilten Systemen und KI-sicheren Backends die nächste Wachstumsphase von Air Apps unterstützen kann.
