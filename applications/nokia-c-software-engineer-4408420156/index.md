@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1MRZilKdmDLOtHzTzL4ye-UB-NhHxk6Zw"
-drive_updated: "2026-06-22T16:42:06+00:00"
+drive_updated: "2026-06-22T17:30:19+00:00"
 ---
 
 # Nokia — C++ Software Engineer

@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1QI2kd8tQC2yvGI4gVz8VckISwO126itX"
-drive_updated: "2026-06-22T16:41:28+00:00"
+drive_updated: "2026-06-22T17:29:37+00:00"
 ---
 
 # Navera — Freelance DevOps/Cloud Infrastructure Engineer

@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["5g-oran", "distributed-systems", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1VTpMiXNCREog8-3naY-jZiwwYT6vUK07"
-drive_updated: "2026-06-22T16:42:23+00:00"
+drive_updated: "2026-06-22T17:30:36+00:00"
 ---
 
 # T-Systems International — Backend Engineer T Cloud Public – Container

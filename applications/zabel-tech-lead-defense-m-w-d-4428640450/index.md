@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["distributed-systems", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1jYb0gPFvIPrBaWnZ2l6PXbjvlYJ6n8LB"
-drive_updated: "2026-06-22T16:41:36+00:00"
+drive_updated: "2026-06-22T17:29:45+00:00"
 ---
 
 # ZABEL — Tech Lead – Defense

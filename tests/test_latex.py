@@ -72,6 +72,34 @@ def test_render_cv_structure_and_escaping():
     assert "\\item \\textbf{Languages:} English (fluent), Deutsch (A2)" in tex
 
 
+def test_education_pipe_format():
+    """### Org\nDegree | Dates — LLM variant most apps used."""
+    body = "## Education\n\n### TU Ilmenau\nM.Sc. Research | 04/2024 – Present\n\n## Skills\n\n- **Languages** — English\n"
+    tex = latex.render_cv_tex(body, body, PROFILE, PROJECTS, "Eng", "Ing")
+    assert "\\edu{TU Ilmenau}{M.Sc. Research}{04/2024 – Present}" in tex
+
+
+def test_education_middot_no_italic():
+    """### Org\nDegree · Dates (middot but no italic asterisks)."""
+    body = "## Education\n\n### TU Ilmenau\nM.Sc. Research · 04/2024 – Present\n\n## Skills\n\n- **Languages** — English\n"
+    tex = latex.render_cv_tex(body, body, PROFILE, PROJECTS, "Eng", "Ing")
+    assert "\\edu{TU Ilmenau}{M.Sc. Research}{04/2024 – Present}" in tex
+
+
+def test_education_degree_in_heading():
+    """### Org — Degree\n*Dates* — degree embedded in the H3 heading."""
+    body = "## Education\n\n### TU Ilmenau — M.Sc. Research\n*04/2024 – Present*\n\n## Skills\n\n- **Languages** — English\n"
+    tex = latex.render_cv_tex(body, body, PROFILE, PROJECTS, "Eng", "Ing")
+    assert "\\edu{TU Ilmenau}{M.Sc. Research}{04/2024 – Present}" in tex
+
+
+def test_education_h2_heading():
+    """## Org\nDegree | Dates — LLM used H2 instead of H3."""
+    body = "## Education\n\n## TU Ilmenau\nM.Sc. Research | 04/2024 – Present\n\n## Skills\n\n- **Languages** — English\n"
+    tex = latex.render_cv_tex(body, body, PROFILE, PROJECTS, "Eng", "Ing")
+    assert "\\edu{TU Ilmenau}{M.Sc. Research}{04/2024 – Present}" in tex
+
+
 def test_render_cover_bilingual():
     tex = latex.render_cover_tex(
         "Para one.\n\nPara two.", "Absatz eins.\n\nAbsatz zwei.",

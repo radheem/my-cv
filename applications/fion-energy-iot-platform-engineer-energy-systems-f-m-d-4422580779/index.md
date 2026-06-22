@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1Y5AM2xacMn6ti1tWkG8wnsriqdZqYuOb"
-drive_updated: "2026-06-22T16:42:15+00:00"
+drive_updated: "2026-06-22T17:30:28+00:00"
 ---
 
 # FION Energy — IoT Platform Engineer - Energy Systems

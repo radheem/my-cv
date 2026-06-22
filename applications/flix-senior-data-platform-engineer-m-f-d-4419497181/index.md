@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["data-persistence", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1zJtNwTyX_sWJvjRbfeA2sMOIugIwxCuC"
-drive_updated: "2026-06-22T16:41:49+00:00"
+drive_updated: "2026-06-22T17:30:01+00:00"
 ---
 
 # Flix — Senior Data Platform Engineer

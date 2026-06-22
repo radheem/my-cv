@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1lv1RvGNWEEhie3qbDaQR0WHYsKAOKOMV"
-drive_updated: "2026-06-22T16:41:20+00:00"
+drive_updated: "2026-06-22T17:29:28+00:00"
 ---
 
 # Scout24 SE — Senior Platform Engineer - Cloud Infrastructure

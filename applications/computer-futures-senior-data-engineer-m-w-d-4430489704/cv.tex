@@ -46,9 +46,9 @@
 
 \section{Education}
 
-\edu{Technical University of Ilmenau}{}{}
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
 \vspace{2pt}
-\edu{National University of Computer and Engineering Sciences}{}{}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
 
 \section{Projects}
 
@@ -74,7 +74,7 @@
 %% ===== DEUTSCH =====
 \begin{center}
   {\huge\bfseries Radheem Bin Razi}\\[3pt]
-  {\large Senior Data Engineer}\\[6pt]
+  {\large Senior Data \& Pipeline Engineer}\\[6pt]
   \small
   Ilmenau, Deutschland \,\textbar\,
   \href{mailto:\Email}{\Email} \,\textbar\,
@@ -88,35 +88,37 @@
 
 \role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
 \bullets
-  \item Entwickelte und dokumentierte datengetriebene Dienste und Features, durchsetzte SQL-Schema-Standards und Python-Backend-Logik zur Sicherstellung von Datenhoheit und -qualität.
-  \item Optimierte CI/CD-Bereitstellungsprozesse und containerisierte Backend-Dienste, um den Release-Pipeline für cloudbasierte Datenanwendungen zu beschleunigen.
+  \item Entwickelte und dokumentierte Backend-Dienste sowie Datenverarbeitungsfeatures und etablierte klare Standards für Datenflüsse und Governance.
+  \item Leitete Systemdesign und Code-Reviews durch, um Datenqualität, architektonische Konsistenz und sichere Anmeldeinformationen zu gewährleisten.
+  \item Verbesserte CI/CD- und Bereitstellungsprozesse durch Containerisierung von Backend-Diensten sowie Integration der AWS S3/EC2-Infrastruktur für skalierbaren Speicher und Rechenleistung.
 \bulletsend
 \vspace{3pt}
 \role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
 \bullets
-  \item Pflegte Release-Prozesse und Dokumentation für Börsendienste, implementierte CI/CD-Pipelines und Terraform/IaC, um eine reproduzierbare, versionierte Dateninfrastruktur sicherzustellen.
-  \item Entwurf und optimierte Cloud-Datenplattformen (PostgreSQL, DynamoDB, Kafka) sowie integrierte Datenüberwachung, um die Pipeline-Zuverlässigkeit und Systemobservabilität zu steigern.
+  \item Identifizierte Optimierungspotenziale im Systemdesign für hochdurchsatzfähige Börsendienste und setzte dabei Python, Go und PostgreSQL für datenintensive Workloads ein.
+  \item Pflegte robuste Release-Prozesse und Dokumentation zur Daten-Governance und führte dabei Engineering-Teams bei kritischen Projektinitiativen.
+  \item Containerisierte und orchestrierte Dienste mit Docker, Kubernetes und Terraform und integrierte Kafka für ereignisgesteuertes Daten-Streaming sowie Observability.
 \bulletsend
 \vspace{3pt}
 \role{Seed Labs — Software Engineer}{Pakistan}{06/2020 - 06/2021}
 \bullets
-  \item Entwickelte Datenpipelines zur Analyse, Bereinigung und Visualisierung von Datensätzen, setzte Python und scikit-learn ein, um Rohdaten in strukturierte, für Stakeholder aufbereitete Erkenntnisse umzuwandeln.
-  \item Recherchierte und implementierte skalierbare Datenlösungen mit Python, TensorFlow und Docker, um eine robuste Datenqualität und -governance über den gesamten Analytics-Stack sicherzustellen.
+  \item Analysierte, bereinigte und visualisierte strukturierte Daten, um Stakeholdern handlungsrelevante Erkenntnisse und Datenqualitätsberichte zu liefern.
+  \item Erforschte und implementierte datengetriebene Lösungen in kollaborativen Teams und setzte dabei Python, MySQL und MongoDB für die Backend-Entwicklung sowie ML-Integration ein.
 \bulletsend
 \vspace{3pt}
 
 \section{Ausbildung}
 
-\edu{Technical University of Ilmenau}{}{}
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
 \vspace{2pt}
-\edu{National University of Computer and Engineering Sciences}{}{}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
 
 \section{Projekte}
 
 \begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
-  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Entwickelte eine Kafka-Metriken-Pub/Sub-Pipeline, die per-UE-KPM-Daten an InfluxDB 3, MongoDB und eine AIMLFW-kompatible InfluxDB 2 verteilt, um eine zuverlässige Datenerfassung und -übertragung für nachgelagerte Analysen sicherzustellen.}
-  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Entwickelte eine robuste, wiederholbare Dokumenten-Ingestion-Pipeline mit pro-Schritt-Timeouts und Vektorsuche via pgvector, cloudnativ auf k3d mit cert-manager TLS und ExternalDNS bereitgestellt, um eine fehlertolerante Datenverarbeitung zu gewährleisten.}
-  \project{O-RAN AIML Framework}{https://radheem.github.io/my-cv/projects/oran-aiml/}{Orchestrierte End-to-End-Daten- und ML-Pipelines mit Kubeflow und KServe, integrierte InfluxDB-Feature-Quellen, einen Cassandra-Feature-Store und MinIO/LeoFS (S3)-Artefakt-Speicher, um den gesamten Datenlebenszyklus zu automatisieren.}
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Entwickelte eine Kafka-basierte Pub/Sub-Pipeline für Metriken, die per-UE-KPM-Daten von Python-xApps auf InfluxDB 3, MongoDB und eine AIML-kompatible InfluxDB 2 verteilt, und konsolidierte ein Single-Host-5G-Testbed zu composablen Docker-Compose-Stacks für skalierbare Datenerfassung und Überwachung.}
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Implementierte eine robuste, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extract → chunk → embed → summarize → index), die Worker-Crashes übersteht, Echtzeitfortschritt über NATS JetStream + SSE streamt und Vektor-Embeddings über pgvector (HNSW, cosine) für zuverlässige Datenabfragen indiziert.}
+  \project{O-RAN AIML Framework}{https://radheem.github.io/my-cv/projects/oran-aiml/}{Stellte eine Kubernetes-native Daten- und ML-Pipeline-Plattform mit Helm und KServe bereit, automatisierte den vollständigen Lebenszyklus von InfluxDB/Cassandra-Feature-Stores bis hin zur MinIO-Artefakt-Speicherung und orchestrierte Kubeflow-Trainings-/Retraining-Workflows in Python für skalierbares Model Serving.}
 \end{itemize}
 
 \section{Kenntnisse}
@@ -125,7 +127,7 @@
   \item \textbf{Sprachen:} Englisch (fließend), Deutsch (A2)
   \item \textbf{Programmiersprachen:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
   \item \textbf{Datenbanken \& Persistenz:} Snowflake, PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, pgvector
-  \item \textbf{KI- / ML-Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
+  \item \textbf{KI-/ML-Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
   \item \textbf{Cloud-Native \& Infrastruktur:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
 \end{itemize}
 
