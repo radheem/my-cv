@@ -6,6 +6,7 @@ Tailored CVs/cover letters live in Google Drive (Drive column); this table is th
 | Company | Role | Status | Found | Posting | Drive | Updated |
 |---|---|---|---|---|---|---|
 | BMW Group | Senior AI & Data Platform Engineer (f/m/x) | **draft** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4383654573/) | [open](https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc) | 2026-06-21T23:38:05+00:00 |
+| BMW Group | Working Student – Software & Data Engineering | **draft** | 2026-06-22 | [apply](https://www.bmwgroup.jobs/de/en/students/workingstudent.html) | [open](https://drive.google.com/drive/folders/1ZpYwZC0_bVlUaacHMOppm8y1QkkC09uS) | 2026-06-22T00:23:41+00:00 |
 | charles | Platform Engineer (m/w/d) | **draft** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4419881947/) | [open](https://drive.google.com/drive/folders/1t96leERDqV6e1LizOK7VF3XH16w7y08Z) | 2026-06-21T23:38:12+00:00 |
 | Findr | Senior Data Engineer / Data Scientist - AI & Machine Learning - €130,000 | **draft** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4430972736/) | [open](https://drive.google.com/drive/folders/1sSquQFvYC2eeuhlTR593Cj4b77gqQwZh) | 2026-06-21T23:38:18+00:00 |
 | Genki | Mid-Level Backend Developer | **draft** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4416094413/) | [open](https://drive.google.com/drive/folders/1cZ3wD2Bc00Hdakp7CFtGq8pnVf4XIeRk) | 2026-06-21T23:37:38+00:00 |
