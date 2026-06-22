@@ -1,0 +1,41 @@
+\documentclass[11pt,a4paper]{coverletter}
+
+\senderblock
+  {Radheem Bin Razi}
+  {Distributed Systems \& Cloud-Native Engineer}
+  {Ilmenau, Germany \textbar\ \href{mailto:sheikh.radheem@gmail.com}{sheikh.radheem@gmail.com} \textbar\ \href{https://radheem.github.io/my-cv}{portfolio}}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\recipient{Computer Futures}{Hiring Team}{}
+
+\opening{Dear Hiring Team,}
+
+A reliable data pipeline is only as strong as its weakest retry mechanism. Designing systems that survive worker crashes without losing a single record is the part of data engineering I enjoy most. I am applying for the Senior Data Engineer position at Computer Futures because your focus on scalable cloud platforms and modern data models directly supports the data-driven infrastructure work I have spent five years building. I bring a track record of shipping event-driven architectures, automating data quality checks, and deploying cloud-native platforms that scale predictably.
+
+In practice, this means treating data ingestion as a distributed engineering problem rather than a simple script. I recently engineered a durable document-processing pipeline using Hatchet that automatically retries failed steps, enforces per-step timeouts, and streams real-time progress over NATS JetStream. That same reliability mindset guided a Kafka-based metrics pipeline where I structured pub/sub flows to fan out high-volume telemetry into InfluxDB and MongoDB while maintaining strict data governance. I apply the same discipline to cloud data platforms, consistently designing schemas and transformation layers that keep query performance predictable as datasets grow.
+
+Modern data platforms also require tight integration between development workflows and production environments. I have built CI/CD pipelines using Bitbucket and Kubernetes Helm charts to automate the deployment of training managers, model servers, and feature stores across cloud clusters. My work consistently pairs Python and SQL with cloud storage and compute services, ensuring that data models remain version-controlled and reproducible. I also prioritize observability from day one, wiring monitoring dashboards and alerting rules directly into the infrastructure so data quality issues surface before they impact downstream analytics.
+
+I am confident that my background in distributed data systems, automated testing, and cloud-native deployment will allow me to contribute immediately to your Eschborn team. I am available to start full-time immediately and can relocate within Germany within two to three weeks. I hold a valid EU work permit and am Blue Card-ready, so the hiring process requires only a standard employment contract. Thank you for considering my application.
+
+\closing{Sincerely,}{Radheem Bin Razi}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\recipient{Computer Futures}{Personalabteilung}{}
+
+\opening{Sehr geehrtes Hiring-Team,}
+
+Zuverlässige Datenplattformen entfalten ihr volles Potenzial, wenn Erfassung, Transformation und Governance als ein einziger durchgängiger Kreislauf und nicht als eine Reihe voneinander getrennter Skripte konzipiert werden. In den letzten fünf Jahren habe ich genau solche End-to-End-Datenflüsse für verteilte Systeme und Machine-Learning-Workloads aufgebaut. Dieser Fokus auf die Zuverlässigkeit von Pipelines und auf architektonische Klarheit ist der Grund, warum ich mich für die Position als Senior Data Engineer bei Computer Futures bewerbe.
+
+Meine aktuelle Arbeit konzentriert sich darauf, rohe Telemetrie- und Dokumentenströme in konsistent strukturierte, abfragebereite Datenobjekte umzuwandeln. Ich habe eine Kafka-basierte Metriken-Pipeline entworfen, die benutzerspezifische Leistungsdaten auf mehrere Storage-Backends verteilt, während gleichzeitig auf Producer-Ebene eine strenge Schema-Validierung durchgesetzt wird. Für langlaufende Erfassungs-Workflows habe ich eine robuste, schrittweise Verarbeitungsmaschine implementiert, die fehlgeschlagene Stufen automatisch wiederholt und Worker-Ausfälle ohne Beschädigung der Zwischenergebnisse übersteht. Zudem habe ich ein 15-Credit-Forschungsframework entwickelt, das den gesamten Machine-Learning-Lebenszyklus automatisiert, und ich wende auf Produktions-Datenpipelines dieselbe architektonische Strenge an. Diese Systeme laufen auf Kubernetes mit Helm-gesteuerten Deployments, und ich kombiniere sie mit automatisierten Tests und versionierter Konfiguration, um jede Veröffentlichung vorhersehbar zu halten. Derselbe Fokus auf Datenqualität und reproduzierbare Auslieferung entspricht direkt Ihrem Schwerpunkt auf skalierbaren Pipelines, cloud-nativer Verarbeitung und Governance-Standards.
+
+Ich bringe einen pragmatischen Ansatz zur Datenarchitektur mit, der schnelle Iterationen mit strengen Qualitätskontrollen in Einklang bringt, und ich bin bereit, mich sofort in Ihr Team in Eschborn einzubringen. Ich stehe ab sofort für eine Vollzeitbeschäftigung zur Verfügung und kann innerhalb von zwei bis drei Wochen innerhalb Deutschlands umziehen. Meine EU-Arbeitsgenehmigung liegt bereits vor, sodass ein entsprechendes Angebot lediglich einen regulären Arbeitsvertrag ohne zusätzliche Sponsorship-Schritte erfordert. Ich würde mich freuen, die Möglichkeit zu erhalten, zu besprechen, wie mein Hintergrund in cloud-nativen Datenystemen die modernen Datenplattform-Initiativen Ihrer Kunden unterstützen kann.
+
+\closing{Mit freundlichen Grüßen,}{Radheem Bin Razi}
+
+\end{document}

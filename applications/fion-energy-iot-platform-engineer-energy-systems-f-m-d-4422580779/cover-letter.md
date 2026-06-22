@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "FION Energy"
+---
+
+The part of engineering I value most is the seam where software meets physical hardware, because that is where theoretical designs finally face real-world constraints. Building reliable systems that survive unpredictable networks and aging components is exactly what draws me to the IoT Platform Engineer role at FION Energy. Your mission to optimize industrial battery operations through a unified edge-to-cloud platform aligns perfectly with my background in shipping distributed systems that must operate continuously in production environments.
+
+Over the past five years I have designed and deployed production-grade infrastructure that bridges cloud orchestration with constrained edge environments. I built a Kubernetes-based 5G testbed where I managed virtual radio interfaces, routed traffic across network namespaces, and maintained strict latency requirements for active user equipment. That experience taught me how to monitor distributed components, automate failover, and debug connectivity issues without direct physical access. I also architected event-driven microservices using Go and NATS JetStream to route data between multiple third-party vendors, which required strict schema validation and resilient error handling when upstream systems changed unexpectedly. These projects required me to treat deployment artifacts as living systems rather than static code, a mindset that translates directly to managing a growing fleet of energy storage controllers.
+
+I am comfortable switching between high-level platform architecture and hands-on debugging, and I thrive in environments where early engineers directly shape the product roadmap. I am available to start full-time immediately, and I can relocate anywhere within Germany within two to three weeks. I am based in Germany and hold Blue Card eligibility, so your team only needs to issue the employment contract without any visa sponsorship overhead. I would welcome the chance to discuss how my experience with edge orchestration and production reliability can support FION Energy’s next phase of growth.

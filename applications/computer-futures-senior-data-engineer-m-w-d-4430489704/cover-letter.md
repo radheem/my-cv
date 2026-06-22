@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Computer Futures"
+---
+
+A reliable data pipeline is only as strong as its weakest retry mechanism. Designing systems that survive worker crashes without losing a single record is the part of data engineering I enjoy most. I am applying for the Senior Data Engineer position at Computer Futures because your focus on scalable cloud platforms and modern data models directly supports the data-driven infrastructure work I have spent five years building. I bring a track record of shipping event-driven architectures, automating data quality checks, and deploying cloud-native platforms that scale predictably.
+
+In practice, this means treating data ingestion as a distributed engineering problem rather than a simple script. I recently engineered a durable document-processing pipeline using Hatchet that automatically retries failed steps, enforces per-step timeouts, and streams real-time progress over NATS JetStream. That same reliability mindset guided a Kafka-based metrics pipeline where I structured pub/sub flows to fan out high-volume telemetry into InfluxDB and MongoDB while maintaining strict data governance. I apply the same discipline to cloud data platforms, consistently designing schemas and transformation layers that keep query performance predictable as datasets grow.
+
+Modern data platforms also require tight integration between development workflows and production environments. I have built CI/CD pipelines using Bitbucket and Kubernetes Helm charts to automate the deployment of training managers, model servers, and feature stores across cloud clusters. My work consistently pairs Python and SQL with cloud storage and compute services, ensuring that data models remain version-controlled and reproducible. I also prioritize observability from day one, wiring monitoring dashboards and alerting rules directly into the infrastructure so data quality issues surface before they impact downstream analytics.
+
+I am confident that my background in distributed data systems, automated testing, and cloud-native deployment will allow me to contribute immediately to your Eschborn team. I am available to start full-time immediately and can relocate within Germany within two to three weeks. I hold a valid EU work permit and am Blue Card-ready, so the hiring process requires only a standard employment contract. Thank you for considering my application.

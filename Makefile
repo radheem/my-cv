@@ -84,9 +84,26 @@ DOCKER_GID := $(shell id -g)
 export DOCKER_UID DOCKER_GID
 
 .PHONY: ingest
-ingest: ## Run ingest on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= LIMIT=]
+ingest: ## Run ingest on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= LIMIT= DAYS=7 MAX_APPLICANTS=100]
 	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor ingest \
-	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT)
+	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT) \
+	  $(if $(DAYS),--days "$(DAYS)") $(if $(MAX_APPLICANTS),--max-applicants "$(MAX_APPLICANTS)")
+
+DAYS    ?= 7
+MAX_APPLICANTS ?= 100
+TOP     ?= 10
+
+.PHONY: job-hunt
+job-hunt: ## Full pipeline: search 4 cities → score → generate top N → PDF → Drive → push
+	bash scripts/job-hunt.sh --top $(TOP)
+
+.PHONY: job-hunt-dry
+job-hunt-dry: ## Dry run: show what job-hunt would do without running anything
+	bash scripts/job-hunt.sh --top $(TOP) --dry-run
+
+.PHONY: score
+score: ## Score captured JDs and print ranking: make score [TOP=10]
+	$(BIN)/python3 scripts/score-jds.py --top $(TOP)
 
 .PHONY: docker-build
 docker-build: ## Build the ingest container image

@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "Nokia"
+---
+
+Building infrastructure that stays invisible to users while quietly handling massive scale is the part of engineering I enjoy most. Nokia’s mission to unify optical networking with AI-driven development tools aligns exactly with that focus. I am applying for the C++ Software Engineer role to contribute to that backbone. My background in building distributed, event-driven platforms has taught me how to design systems that stay stable under pressure while remaining easy to evolve. I bring a track record of shipping production-grade services, automating quality gates, and collaborating across distributed teams to turn complex architecture into dependable software.
+
+On a stealth tax-processing platform, I replaced a heavy sidecar dependency with a native messaging system called NATS JetStream and direct service-to-service communication. That shift reduced deployment complexity and gave us predictable latency across multiple vendor integrations. I paired that architectural change with automated end-to-end data-quality gates and strict schema validation, which caught mismatches before they reached production. I also integrated a model context protocol server that let external AI agents interact with the platform through a declarative configuration, mirroring the kind of AI-assisted development workflow Nokia is building for its engineering teams. These experiences sharpened my ability to write clean, decoupled code, lead rigorous code reviews, and ship software that meets high reliability standards.
+
+I am ready to bring this same focus on clean architecture, automated quality, and cross-team collaboration to Nokia’s Optical Networks division. I am available to start full-time immediately, though I remain open to working-student or part-time arrangements if that better suits the team’s needs. Based in Germany, I can relocate within the country in two to three weeks, and I hold Blue Card eligibility so the employer only needs to issue the standard employment contract. Thank you for considering my application, and I look forward to discussing how I can contribute to your engineering roadmap.

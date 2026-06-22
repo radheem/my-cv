@@ -418,8 +418,13 @@ def cmd_ingest(args: argparse.Namespace) -> int:
     )
     counts = {"captured": 0, "skipped": 0}
 
+    max_applicants: int | None = args.max_applicants
+
     def run(page) -> None:
-        found = J.search(page, args.keywords, args.location, args.limit)
+        found = J.search(
+            page, args.keywords, args.location, args.limit,
+            days_back=args.days, max_applicants=max_applicants,
+        )
         seen = J.load_seen(seen_path)
         for job in found:
             if J.already_seen(job.job_id, seen):
@@ -430,11 +435,16 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             except Exception as e:  # noqa: BLE001
                 print(f"  skip {job.url}: {e}", file=sys.stderr)
                 continue
+            if max_applicants is not None and job.applicants is not None:
+                if job.applicants > max_applicants:
+                    print(f"  skip {job.url}: {job.applicants} applicants > {max_applicants}")
+                    continue
             captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
             path = J.write_jd(job, text, out_dir, captured_at)
             seen[job.job_id] = J.slugify(job.company, job.title, job.job_id)
             counts["captured"] += 1
-            print(f"  captured {path}")
+            applicants_str = f" ({job.applicants} applicants)" if job.applicants is not None else ""
+            print(f"  captured {path}{applicants_str}")
             human_pause(2.0, 5.0)
         J.save_seen(seen_path, seen)
 
@@ -484,6 +494,10 @@ def main(argv: list[str] | None = None) -> int:
     p_ingest.add_argument("--keywords", required=True, help="job search keywords")
     p_ingest.add_argument("--location", default=None, help="location filter (e.g. 'Remote')")
     p_ingest.add_argument("--limit", type=int, default=10, help="max JDs to capture")
+    p_ingest.add_argument("--days", type=int, default=7,
+                          help="only surface jobs posted within this many days (default: 7)")
+    p_ingest.add_argument("--max-applicants", type=int, default=None, dest="max_applicants",
+                          help="discard jobs with more than this many applicants")
     p_ingest.add_argument("--out", default="vault/jds", help="output dir for JD files")
     p_ingest.set_defaults(func=cmd_ingest)
 

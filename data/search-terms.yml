@@ -1,0 +1,67 @@
+# Job search terms derived from master-cv.md
+# Used by scripts/job-hunt.sh and cv-tailor ingest
+# Update when changing the search strategy.
+
+# Primary keywords — highest signal match to the CV profile
+# (Go/Python distributed-systems backend/platform/data engineering roles)
+primary:
+  - "backend engineer"
+  - "platform engineer"
+  - "software engineer"
+  - "data engineer"
+
+# Secondary / broader terms (use when primary yields too few results)
+secondary:
+  - "golang engineer"
+  - "python backend developer"
+  - "cloud native engineer"
+  - "distributed systems engineer"
+  - "machine learning engineer"
+
+# City / location targets for the batch job hunt
+locations:
+  - "Jena"
+  - "Nuremberg"
+  - "Berlin"
+  - "Frankfurt"
+
+# Filter settings
+filters:
+  days_back: 7         # LinkedIn f_TPR=r<seconds> — posted within this many days
+  max_applicants: 100  # discard jobs with more than this many applicants
+  per_city: 5          # JDs to capture per city
+
+# Scoring weights used by scripts/score-jds.py to rank captured JDs
+# Keys are plain-text patterns matched case-insensitively against the JD body
+scoring:
+  must_have:           # +3 each — core skills from master-cv
+    - "go"
+    - "golang"
+    - "python"
+    - "kubernetes"
+    - "distributed"
+    - "microservice"
+    - "grpc"
+    - "kafka"
+    - "nats"
+  nice_to_have:        # +1 each — relevant but not core
+    - "postgresql"
+    - "docker"
+    - "backend"
+    - "platform"
+    - "cloud"
+    - "llm"
+    - "ml"
+    - "machine learning"
+    - "data pipeline"
+    - "api"
+    - "terraform"
+  language_penalty:    # -5 each — language requirements beyond current level (A2)
+    - "c1 german"
+    - "c2 german"
+    - "b2 german"
+    - "b1 german required"
+    - "german native"
+    - "muttersprachlich"
+    - "verhandlungssicher"
+    - "fließend deutsch"

@@ -5,6 +5,16 @@ Tailored CVs/cover letters live in Google Drive (Drive column); this table is th
 
 | Company | Role | Status | Found | Posting | Drive | Updated |
 |---|---|---|---|---|---|---|
+| ALD Vacuum Technologies GmbH | Backend Developer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429650140/) | [open](https://drive.google.com/drive/folders/1jSAheie1fVR0MtFw2hTfpj5V8fI2Lwio) | 2026-06-22T16:41:42+00:00 |
+| Computer Futures | Senior Data Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4430489704/) | [open](https://drive.google.com/drive/folders/1j6_eUyDHiiC-uNM3_jz2Z9CZRPoJISxE) | 2026-06-22T16:42:31+00:00 |
+| Enginsight GmbH | Backend Developer:in (Go) | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4419894295/) | [open](https://drive.google.com/drive/folders/1w7a1eg17X19ryzdhJT1Yr0ziy1tmBJ--) | 2026-06-22T16:41:57+00:00 |
+| FION Energy | IoT Platform Engineer - Energy Systems | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4422580779/) | [open](https://drive.google.com/drive/folders/1Y5AM2xacMn6ti1tWkG8wnsriqdZqYuOb) | 2026-06-22T16:42:15+00:00 |
+| Flix | Senior Data Platform Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4419497181/) | [open](https://drive.google.com/drive/folders/1zJtNwTyX_sWJvjRbfeA2sMOIugIwxCuC) | 2026-06-22T16:41:49+00:00 |
+| Navera | Freelance DevOps/Cloud Infrastructure Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4426860051/) | [open](https://drive.google.com/drive/folders/1QI2kd8tQC2yvGI4gVz8VckISwO126itX) | 2026-06-22T16:41:28+00:00 |
+| Nokia | C++ Software Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4408420156/) | [open](https://drive.google.com/drive/folders/1MRZilKdmDLOtHzTzL4ye-UB-NhHxk6Zw) | 2026-06-22T16:42:06+00:00 |
+| Scout24 SE | Senior Platform Engineer - Cloud Infrastructure | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4339062900/) | [open](https://drive.google.com/drive/folders/1lv1RvGNWEEhie3qbDaQR0WHYsKAOKOMV) | 2026-06-22T16:41:20+00:00 |
+| T-Systems International | Backend Engineer T Cloud Public – Container | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429738029/) | [open](https://drive.google.com/drive/folders/1VTpMiXNCREog8-3naY-jZiwwYT6vUK07) | 2026-06-22T16:42:23+00:00 |
+| ZABEL | Tech Lead – Defense | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4428640450/) | [open](https://drive.google.com/drive/folders/1jYb0gPFvIPrBaWnZ2l6PXbjvlYJ6n8LB) | 2026-06-22T16:41:36+00:00 |
 | Aroundhome | Senior Software Engineer | **applied** | 2026-06-21 | — | [open](https://drive.google.com/drive/folders/18lZvBbd8yePxUigc7aSgl-lT7dWTmexE) | 2026-06-21T23:37:57+00:00 |
 | BMW Group | Senior AI & Data Platform Engineer (f/m/x) | **applied** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4383654573/) | [open](https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc) | 2026-06-21T23:38:05+00:00 |
 | BMW Group | Werkstudent Softwareentwicklung mit KI-Tools | **applied** | 2026-06-22 | [apply](https://www.bmwgroup.jobs/de/en/students/workingstudent.html) | [open](https://drive.google.com/drive/folders/1ZpYwZC0_bVlUaacHMOppm8y1QkkC09uS) | 2026-06-22T01:36:51+00:00 |

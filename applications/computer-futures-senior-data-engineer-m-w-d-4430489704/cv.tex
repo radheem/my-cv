@@ -1,0 +1,132 @@
+\documentclass[11pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Senior Data \& Pipeline Engineer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Developed and documented backend services and data-handling features, establishing clear data flow and governance standards.
+  \item Led system design and code reviews to enforce data quality, architectural consistency, and secure credential handling.
+  \item Improved CI/CD and deployment processes by containerizing backend services and integrating AWS S3/EC2 infrastructure for scalable storage and compute.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Identified system design improvements for high-throughput exchange services, leveraging Python, Go, and PostgreSQL for data-intensive workloads.
+  \item Maintained robust release processes and data governance documentation while leading engineering teams on critical project initiatives.
+  \item Containerized and orchestrated services using Docker, Kubernetes, and Terraform, integrating Kafka for event-driven data streaming and observability.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Analyzed, cleaned, and visualized structured data to deliver actionable insights and data quality reports to stakeholders.
+  \item Researched and implemented data-driven solutions in collaborative teams, utilizing Python, MySQL, and MongoDB for backend development and ML integration.
+\bulletsend
+\vspace{3pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{}{}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{}{}
+
+\section{Projects}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Engineered a Kafka-based metrics pub/sub pipeline that fans out per-UE KPM data from Python xApps to InfluxDB 3, MongoDB, and an AIML-compatible InfluxDB 2, consolidating a single-host 5G testbed into composable Docker Compose stacks for scalable data ingestion and monitoring.}
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) that survives worker crashes, streaming real-time progress over NATS JetStream + SSE while indexing vector embeddings via pgvector (HNSW, cosine) for reliable data retrieval.}
+  \project{O-RAN AIML Framework}{https://radheem.github.io/my-cv/projects/oran-aiml/}{Deployed a Kubernetes-native data and ML pipeline platform using Helm and KServe, automating the full lifecycle from InfluxDB/Cassandra feature stores to MinIO artifact storage, and orchestrating Kubeflow training/retraining workflows in Python for scalable model serving.}
+\end{itemize}
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Languages:} English (fluent), Deutsch (A2)
+  \item \textbf{Programming Languages:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Databases \& Persistence:} Snowflake, PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, pgvector
+  \item \textbf{AI / ML Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
+  \item \textbf{Cloud-Native \& Infra:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Senior Data Engineer}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Entwickelte und dokumentierte datengetriebene Dienste und Features, durchsetzte SQL-Schema-Standards und Python-Backend-Logik zur Sicherstellung von Datenhoheit und -qualität.
+  \item Optimierte CI/CD-Bereitstellungsprozesse und containerisierte Backend-Dienste, um den Release-Pipeline für cloudbasierte Datenanwendungen zu beschleunigen.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Pflegte Release-Prozesse und Dokumentation für Börsendienste, implementierte CI/CD-Pipelines und Terraform/IaC, um eine reproduzierbare, versionierte Dateninfrastruktur sicherzustellen.
+  \item Entwurf und optimierte Cloud-Datenplattformen (PostgreSQL, DynamoDB, Kafka) sowie integrierte Datenüberwachung, um die Pipeline-Zuverlässigkeit und Systemobservabilität zu steigern.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Entwickelte Datenpipelines zur Analyse, Bereinigung und Visualisierung von Datensätzen, setzte Python und scikit-learn ein, um Rohdaten in strukturierte, für Stakeholder aufbereitete Erkenntnisse umzuwandeln.
+  \item Recherchierte und implementierte skalierbare Datenlösungen mit Python, TensorFlow und Docker, um eine robuste Datenqualität und -governance über den gesamten Analytics-Stack sicherzustellen.
+\bulletsend
+\vspace{3pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{}{}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{}{}
+
+\section{Projekte}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Entwickelte eine Kafka-Metriken-Pub/Sub-Pipeline, die per-UE-KPM-Daten an InfluxDB 3, MongoDB und eine AIMLFW-kompatible InfluxDB 2 verteilt, um eine zuverlässige Datenerfassung und -übertragung für nachgelagerte Analysen sicherzustellen.}
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Entwickelte eine robuste, wiederholbare Dokumenten-Ingestion-Pipeline mit pro-Schritt-Timeouts und Vektorsuche via pgvector, cloudnativ auf k3d mit cert-manager TLS und ExternalDNS bereitgestellt, um eine fehlertolerante Datenverarbeitung zu gewährleisten.}
+  \project{O-RAN AIML Framework}{https://radheem.github.io/my-cv/projects/oran-aiml/}{Orchestrierte End-to-End-Daten- und ML-Pipelines mit Kubeflow und KServe, integrierte InfluxDB-Feature-Quellen, einen Cassandra-Feature-Store und MinIO/LeoFS (S3)-Artefakt-Speicher, um den gesamten Datenlebenszyklus zu automatisieren.}
+\end{itemize}
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Sprachen:} Englisch (fließend), Deutsch (A2)
+  \item \textbf{Programmiersprachen:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Datenbanken \& Persistenz:} Snowflake, PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, pgvector
+  \item \textbf{KI- / ML-Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
+  \item \textbf{Cloud-Native \& Infrastruktur:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+\end{itemize}
+
+\end{document}

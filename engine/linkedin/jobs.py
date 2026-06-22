@@ -30,11 +30,39 @@ class Job:
     company: str
     location: str
     url: str
+    applicants: "int | None" = None
 
 
 # ── pure helpers (unit-tested) ──────────────────────────────────────────────────────────
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
+_APPLICANTS_RE = re.compile(
+    r"(?:be among the first|first)\s+(\d+)\s+applicants?|"
+    r"over\s+(\d[\d,]*)\s+applicants?|"
+    r"(\d[\d,]*)\s+applicants?",
+    re.IGNORECASE,
+)
+
+
+def parse_applicant_count(text: str) -> "int | None":
+    """Parse an applicant count from card or JD text.
+
+    Returns None if not found.
+    - "Be among the first 25 applicants" → 24 (treat as fewer than 25)
+    - "Over 200 applicants"              → 201
+    - "1,234 applicants"                 → 1234
+    """
+    m = _APPLICANTS_RE.search(text or "")
+    if not m:
+        return None
+    raw1, raw2, raw3 = m.group(1), m.group(2), m.group(3)
+    if raw1:
+        return int(raw1) - 1
+    if raw2:
+        return int(raw2.replace(",", "")) + 1
+    if raw3:
+        return int(raw3.replace(",", ""))
+    return None
 _JOBID_VIEW = re.compile(r"/jobs/view/(\d+)")
 _JOBID_PARAM = re.compile(r"currentJobId=(\d+)")
 
@@ -73,6 +101,7 @@ def _yaml_escape(v: str) -> str:
 
 def jd_frontmatter(job: Job, captured_at: str) -> str:
     e = _yaml_escape
+    applicants_line = f"applicants: {job.applicants}\n" if job.applicants is not None else ""
     return (
         "---\n"
         "source: linkedin\n"
@@ -82,6 +111,7 @@ def jd_frontmatter(job: Job, captured_at: str) -> str:
         f'location: "{e(job.location)}"\n'
         f'job_id: "{e(job.job_id)}"\n'
         f'captured_at: "{e(captured_at)}"\n'
+        f"{applicants_line}"
         "---\n"
     )
 
@@ -138,12 +168,26 @@ def _abs_url(href: str) -> str:
     return "https://www.linkedin.com" + href.split("?")[0]
 
 
-def search(page, keywords: str, location: str | None = None, limit: int = 10) -> list[Job]:
-    """Run a jobs search and collect up to `limit` cards (human-paced scrolling)."""
+def search(
+    page,
+    keywords: str,
+    location: "str | None" = None,
+    limit: int = 10,
+    days_back: int = 7,
+    max_applicants: "int | None" = None,
+) -> "list[Job]":
+    """Run a jobs search and collect up to `limit` cards (human-paced scrolling).
+
+    days_back: only surface jobs posted within this many days (LinkedIn f_TPR filter).
+    max_applicants: discard cards whose displayed applicant count exceeds this value.
+                    Cards with no count shown are kept and checked again after capture_jd.
+    """
     url = f"{SEARCH_URL}?keywords={quote_plus(keywords)}"
     if location:
         url += f"&location={quote_plus(location)}"
-    log.info("searching: %s", keywords)
+    if days_back:
+        url += f"&f_TPR=r{days_back * 86400}"
+    log.info("searching: %s (last %d days)", keywords, days_back)
     page.goto(url, wait_until="domcontentloaded")
     settle(page)
 
@@ -163,6 +207,20 @@ def search(page, keywords: str, location: str | None = None, limit: int = 10) ->
             jid = extract_job_id(href)
             if not jid or jid in ids:
                 continue
+
+            # Try to read applicant count from card text for early rejection
+            card_text = ""
+            try:
+                card_text = card.inner_text(timeout=1000) or ""
+            except Exception:
+                pass
+            card_applicants = parse_applicant_count(card_text)
+            if max_applicants is not None and card_applicants is not None:
+                if card_applicants > max_applicants:
+                    log.debug("skip %s: %d applicants (card)", jid, card_applicants)
+                    ids.add(jid)
+                    continue
+
             ids.add(jid)
             jobs.append(
                 Job(
@@ -182,6 +240,7 @@ def search(page, keywords: str, location: str | None = None, limit: int = 10) ->
                         [".job-card-container__metadata-item", ".job-search-card__location"],
                     ),
                     url=_abs_url(href),
+                    applicants=card_applicants,
                 )
             )
         if len(jobs) >= limit:
@@ -192,10 +251,38 @@ def search(page, keywords: str, location: str | None = None, limit: int = 10) ->
     return jobs[:limit]
 
 
+def _extract_applicant_count_from_page(page) -> "int | None":
+    """Try to read the applicant count from an open job detail page."""
+    for sel in (
+        ".jobs-unified-top-card__applicant-count",
+        ".jobs-unified-top-card__subtitle-secondary-grouping",
+        ".num-applicants__caption",
+        ".jobs-unified-top-card__bullet",
+    ):
+        loc = page.locator(sel)
+        if loc.count():
+            try:
+                for i in range(loc.count()):
+                    text = loc.nth(i).inner_text(timeout=1000) or ""
+                    count = parse_applicant_count(text)
+                    if count is not None:
+                        return count
+            except Exception:
+                continue
+    return None
+
+
 def capture_jd(page, job: Job) -> str:
-    """Open a job and return clean text from its description pane (never the whole body)."""
+    """Open a job and return clean text from its description pane (never the whole body).
+
+    Side-effect: sets job.applicants from the page header if not already known.
+    """
     page.goto(job.url, wait_until="domcontentloaded")
     settle(page)
+
+    if job.applicants is None:
+        job.applicants = _extract_applicant_count_from_page(page)
+
     for sel in (
         '[data-testid="expandable-text-button"]',
         "button.show-more-less-html__button",

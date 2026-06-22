@@ -10,6 +10,7 @@ from engine.linkedin.jobs import (
     extract_job_id,
     jd_frontmatter,
     load_seen,
+    parse_applicant_count,
     save_seen,
     slugify,
     write_jd,
@@ -35,6 +36,15 @@ def test_clean_jd_text_collapses_blanks():
     assert clean_jd_text(raw) == "Title\n\nbody line\n\nend"
 
 
+def test_parse_applicant_count():
+    assert parse_applicant_count("Be among the first 25 applicants") == 24
+    assert parse_applicant_count("Over 200 applicants") == 201
+    assert parse_applicant_count("1,234 applicants") == 1234
+    assert parse_applicant_count("42 applicants") == 42
+    assert parse_applicant_count("No count here") is None
+    assert parse_applicant_count("") is None
+
+
 def test_jd_frontmatter_has_fields_and_escapes_quotes():
     job = Job("1", 'Eng "X"', "Acme", "Remote", "https://x/jobs/view/1")
     fm = jd_frontmatter(job, "2026-06-21T10:00:00+00:00")
@@ -42,6 +52,13 @@ def test_jd_frontmatter_has_fields_and_escapes_quotes():
     for key in ("source: linkedin", "company:", "title:", "job_id:", "captured_at:"):
         assert key in fm
     assert '\\"X\\"' in fm  # embedded quotes escaped
+    assert "applicants:" not in fm  # not set, should be omitted
+
+
+def test_jd_frontmatter_includes_applicants_when_set():
+    job = Job("2", "Data Engineer", "Corp", "Berlin", "https://x/jobs/view/2", applicants=47)
+    fm = jd_frontmatter(job, "2026-06-22T08:00:00+00:00")
+    assert "applicants: 47" in fm
 
 
 def test_dedup_roundtrip(tmp_path):

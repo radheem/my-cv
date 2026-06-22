@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "ALD Vacuum Technologies GmbH"
+---
+
+Der Aufbau einer automatisierten Qualitätskontrolle, die Fehler erkennt, bevor sie die Fabrikhalle verlassen, verwandelt rohe Maschinensignale in Vertrauen für den Endnutzer. Genau diese Art von praktischer Zuverlässigkeit möchte ich als Backend Developer bei ALD Vacuum Technologies aufbauen. Ihre Vakuumsysteme generieren vielfältige Datenströme, die Backend-Services zur Aufnahme, Auswertung und zur Unterstützung von weltweit eingesetzten Ingenieuren erfordern. Ich bringe fünf Jahre Erfahrung in der Entwicklung datengetriebener Backends und Microservices mit, die genau diesen Arten von realen Datenflüssen bewältigen.
+
+In meinen aktuellen Projekten habe ich Microservice-Architekturen entworfen, die heterogene Eingabedaten sammeln und für nachgelagerte Auswertungen in strukturierte Speicher leiten. Ich habe ereignisgesteuerte Pipelines entwickelt, die Daten aus mehreren Quellen abrufen, transformieren und in PostgreSQL persistieren, wobei stets klare Prüfprotokolle für Qualitätskontrollen gewahrt bleiben. Diese Systeme laufen in containerisierten Umgebungen und werden zuverlässig unter verschiedenen Netzwerkbedingungen bereitgestellt, was den Remote- und Vor-Ort-Einsätzen Ihres Teams entspricht. Zudem strukturiere ich Backend-Services so, dass sie saubere Schnittstellen für andere Teams bereitstellen, sodass Projektleiter und Vertriebsmitarbeiter auf die benötigten Metriken zugreifen können, ohne in rohen Logs stöbern zu müssen.
+
+Ich stehe ab sofort zur vollständigen Übernahme zur Verfügung und kann bei Bedarf innerhalb von zwei bis drei Wochen nach Hanau ziehen. Mein Hintergrund in Python, Datenbankdesign und containerisierten Bereitstellungen deckt sich eng mit den Microservice- und Datenbewertungsarbeiten, die Sie ausbauen. Vielen Dank für die Prüfung meiner Bewerbung. Ich freue mich auf die Gelegenheit, in einem Gespräch zu besprechen, wie ich die Qualitätskontroll- und globalen Einsatzziele von ALD unterstützen kann.
