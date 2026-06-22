@@ -4,13 +4,16 @@
 Usage:
     python3 scripts/score-jds.py [--top N] [--out ranked.json]
 
-Reads data/search-terms.yml for weights.  Prints a ranked table and optionally
-writes a JSON file listing slugs in score order for scripts/job-hunt.sh to consume.
+Reads the `scoring:` weights from the runtime search config (config/search.yml, or
+$CV_TAILOR_SEARCH_CONFIG), falling back to the legacy data/search-terms.yml.  Prints a
+ranked table and optionally writes a JSON file listing slugs in score order for
+scripts/job-hunt.sh to consume.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import re
 import sys
@@ -23,10 +26,19 @@ VAULT_JDS = ROOT / "vault" / "jds"
 
 
 def _load_config() -> dict:
-    cfg_path = DATA / "search-terms.yml"
-    if not cfg_path.exists():
-        sys.exit(f"Missing {cfg_path}")
-    return yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    """Find the first config file that defines `scoring:`. Prefers the runtime search
+    config (env path, then config/search.yml); falls back to the legacy file."""
+    candidates: list[pathlib.Path] = []
+    env = os.environ.get("CV_TAILOR_SEARCH_CONFIG")
+    if env:
+        candidates.append(pathlib.Path(env))
+    candidates += [ROOT / "config" / "search.yml", DATA / "search-terms.yml"]
+    for cfg_path in candidates:
+        if cfg_path.exists():
+            cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+            if cfg.get("scoring"):
+                return cfg
+    sys.exit(f"No scoring config found (looked in: {', '.join(str(c) for c in candidates)})")
 
 
 def _score(text: str, cfg: dict) -> tuple[int, list[str]]:

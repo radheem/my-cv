@@ -6,6 +6,7 @@ import json
 from engine.linkedin.jobs import (
     Job,
     already_seen,
+    build_search_url,
     clean_jd_text,
     extract_job_id,
     jd_frontmatter,
@@ -59,6 +60,48 @@ def test_jd_frontmatter_includes_applicants_when_set():
     job = Job("2", "Data Engineer", "Corp", "Berlin", "https://x/jobs/view/2", applicants=47)
     fm = jd_frontmatter(job, "2026-06-22T08:00:00+00:00")
     assert "applicants: 47" in fm
+
+
+def test_build_search_url_minimal():
+    url = build_search_url("platform engineer", days_back=7)
+    assert url.startswith("https://www.linkedin.com/jobs/search/?keywords=")
+    assert "platform+engineer" in url
+    assert "f_TPR=r604800" in url  # 7 * 86400
+    assert "geoId" not in url and "location" not in url and "f_EA" not in url
+
+
+def test_build_search_url_boolean_keywords_passthrough():
+    url = build_search_url('"Go" OR "Golang" OR "Python"')
+    # quotes and the OR operator survive URL-encoding (LinkedIn parses the boolean)
+    assert "%22Go%22" in url and "OR" in url and "%22Python%22" in url
+
+
+def test_build_search_url_geo_id_preferred_over_location():
+    url = build_search_url(
+        "x", location="Berlin", geo_id="101768819", distance=0, easy_apply=True
+    )
+    assert "geoId=101768819" in url
+    assert "location=" not in url  # geo_id wins
+    assert "distance=0" in url
+    assert "f_EA=true" in url
+
+
+def test_build_search_url_location_when_no_geo_id():
+    url = build_search_url("x", location="Berlin")
+    assert "location=Berlin" in url
+
+
+def test_build_search_url_reproduces_example():
+    # The multi-keyword filter URL the user built, modulo tracking params.
+    url = build_search_url(
+        '"Go" OR "Golang" OR "Python"',
+        geo_id="101768819",
+        distance=0.0,
+        days_back=7,
+        easy_apply=True,
+    )
+    for frag in ("geoId=101768819", "distance=0.0", "f_TPR=r604800", "f_EA=true"):
+        assert frag in url
 
 
 def test_dedup_roundtrip(tmp_path):

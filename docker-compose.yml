@@ -12,6 +12,7 @@ services:
       DISPLAY: ":99"
       LINKEDIN_USER_DATA_DIR: /app/vault/profile
       CV_TAILOR_VAULT: /app/vault
+      CV_TAILOR_SEARCH_CONFIG: /app/config/search.yml
       SCREEN_GEOMETRY: 1440x900x24
       HOME: /tmp   # the host uid has no home in the image; Chromium needs a writable HOME
       VNC_PASSWORD: ${VNC_PASSWORD:-}   # set to require a password (recommended over Tailscale)
@@ -19,6 +20,7 @@ services:
     volumes:
       - ./vault:/app/vault       # browser profile, captured JDs, challenge screenshots
       - ./data:/app/data:ro      # persona (John Doe sample; mount real data ro if ever used)
+      - ./config:/app/config:ro  # search config, loaded at runtime (never baked into the image)
     ports:
       # VNC bind address. Default localhost (use an SSH tunnel). To reach it directly over
       # Tailscale, bind to the tailnet IP: `VNC_BIND=<tailnet-ip> make docker-ingest`.

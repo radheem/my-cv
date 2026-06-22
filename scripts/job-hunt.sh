@@ -5,8 +5,7 @@
 #   ./scripts/job-hunt.sh [--top N] [--dry-run]
 #
 # Steps:
-#   1. Search LinkedIn in each configured city (data/search-terms.yml) and
-#      capture JDs (posted this week, < 100 applicants)
+#   1. Run every search in config/search.yml (cv-tailor hunt) and capture JDs
 #   2. Score all captured JDs and select the top N (default 10)
 #   3. Generate tailored CV + cover letter for each top JD
 #   4. Render bilingual PDFs (LaTeX)
@@ -56,72 +55,29 @@ if ! command -v cv-tailor &>/dev/null; then
 fi
 
 PYTHON=${PYTHON:-python3}
-KEYWORDS_FILE=data/search-terms.yml
+SEARCH_CONFIG=${CV_TAILOR_SEARCH_CONFIG:-config/search.yml}
 RANKED_JSON=vault/jds/.ranked.json
 XVFB="xvfb-run -a -s '-screen 0 1440x900x24'"
 
-# Read config from search-terms.yml via Python
-read_cfg() {
-  $PYTHON - "$KEYWORDS_FILE" "$1" <<'PYEOF'
-import sys, yaml
-cfg = yaml.safe_load(open(sys.argv[1]))
-key = sys.argv[2]
-# dot-path support: "filters.per_city"
-parts = key.split(".")
-val = cfg
-for p in parts:
-    val = val[p]
-if isinstance(val, list):
-    print("\n".join(str(v) for v in val))
-else:
-    print(val)
-PYEOF
-}
-
-DAYS=$(read_cfg "filters.days_back")
-MAX_APPLICANTS=$(read_cfg "filters.max_applicants")
-PER_CITY=$(read_cfg "filters.per_city")
-mapfile -t CITIES < <(read_cfg "locations")
-mapfile -t KEYWORDS < <(read_cfg "primary")
-
 echo "════════════════════════════════════════════════════════"
 echo " Job Hunt Pipeline — $(date '+%Y-%m-%d')"
-echo " Cities    : ${CITIES[*]}"
-echo " Keywords  : ${KEYWORDS[*]}"
-echo " Per city  : $PER_CITY  |  Days back: $DAYS  |  Max applicants: $MAX_APPLICANTS"
+echo " Searches  : $SEARCH_CONFIG"
 echo " Top N     : $TOP"
 echo " Dry run   : $DRY_RUN"
 echo "════════════════════════════════════════════════════════"
 
 # ── step 1: ingest ────────────────────────────────────────────────────────────
 echo ""
-echo "── Step 1: LinkedIn ingest ──────────────────────────────"
+echo "── Step 1: LinkedIn ingest (cv-tailor hunt) ─────────────"
+# All search params (keywords, geo_id/location, filters) live in $SEARCH_CONFIG and
+# are loaded at runtime — edit that file to change what is searched (no rebuild).
 
-# Cycle through keywords across cities (first keyword per city to stay focused)
-# Edit KEYWORDS array in data/search-terms.yml to change what is searched.
-for i in "${!CITIES[@]}"; do
-  city="${CITIES[$i]}"
-  # Rotate through primary keywords: city 0 → kw[0], city 1 → kw[1], etc.
-  kw_idx=$(( i % ${#KEYWORDS[@]} ))
-  kw="${KEYWORDS[$kw_idx]}"
-
-  echo ""
-  echo "  [$((i+1))/${#CITIES[@]}] '$kw' in '$city'"
-
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [dry-run] would run: cv-tailor ingest --keywords '$kw' --location '$city' ..."
-    continue
-  fi
-
-  $XVFB cv-tailor ingest \
-    --keywords "$kw" \
-    --location "$city" \
-    --limit "$PER_CITY" \
-    --days "$DAYS" \
-    --max-applicants "$MAX_APPLICANTS" \
-    --out vault/jds \
-    || echo "  WARNING: ingest for '$city' returned non-zero — continuing"
-done
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "  [dry-run] would run: cv-tailor hunt --out vault/jds"
+else
+  $XVFB cv-tailor hunt --out vault/jds \
+    || echo "  WARNING: hunt returned non-zero — continuing"
+fi
 
 # ── step 2: score and rank ────────────────────────────────────────────────────
 echo ""
@@ -229,15 +185,14 @@ if [[ "$DRY_RUN" == "true" ]]; then
 fi
 
 # Stage everything except gitignored files (PDFs etc.)
-git add applications/ data/search-terms.yml
+git add applications/ "$SEARCH_CONFIG"
 
 # Only commit if there are staged changes
 if git diff --cached --quiet; then
   echo "  Nothing new to commit."
 else
   DATE=$(date '+%Y-%m-%d')
-  CITIES_STR=$(IFS=', '; echo "${CITIES[*]}")
-  git commit -m "job hunt ${DATE}: ${TOP} applications — ${CITIES_STR}"
+  git commit -m "job hunt ${DATE}: ${TOP} applications"
 fi
 
 git push

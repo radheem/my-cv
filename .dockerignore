@@ -11,3 +11,4 @@ tests/experiments/outputs
 tests/experiments/results
 node_modules
 .env
+config           # search config is mounted at runtime, never baked into the image

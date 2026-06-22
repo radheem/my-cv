@@ -24,7 +24,8 @@ PDF is the generic CV (`latex/resume.tex` → `docs/assets/cv.pdf`, compiled in 
 ## The pipeline
 
 ```
-cv-tailor ingest      → vault/jds/<slug>.txt        (LinkedIn capture; containerized)
+cv-tailor hunt        → vault/jds/<slug>.txt        (run every search in config/search.yml)
+cv-tailor ingest      → vault/jds/<slug>.txt        (one ad-hoc search via CLI flags)
 cv-tailor new <jd>    → applications/<slug>/         cv.md (+cv.de.md), cover-letter.md (+.de),
                                                      job-description.md, index.md, manifest.json
 cv-tailor translate   → cv.de.md / cover-letter.de.md  (German, LLM; run inside `new` by default)
@@ -32,6 +33,21 @@ cv-tailor pdf <slug>  → cv.tex/cover-letter.tex → cv.pdf/cover-letter.pdf  (
 cv-tailor upload <slug> → Google Drive (Apps Script); writes drive_url into index.md
 cv-tailor status <slug> <state> → edits index.md + refreshes applications/README.md
 ```
+
+## Search config (`config/search.yml`)
+
+What to search lives in **`config/search.yml`**, loaded at **runtime** (`engine/config.resolve_search`,
+path overridable via `CV_TAILOR_SEARCH_CONFIG`). It is **never baked into the image** — `.dockerignore`
+excludes `config/`, and docker-compose mounts `./config:/app/config:ro`. Edit the file and re-run; no
+rebuild. Shape: a `defaults:` block + a `searches:` list (each entry = one LinkedIn search/URL) + the
+`scoring:` weights `scripts/score-jds.py` reads.
+
+- `cv-tailor hunt` runs **every** search in one logged-in session (`.seen.json` dedups across all).
+- `keywords` is passed verbatim, so LinkedIn **boolean** syntax works: `'"Go" OR "Golang" OR "Python"'`.
+- `geo_id` (`&geoId=`, copied from a LinkedIn URL) is preferred over free-text `location`; also
+  `distance`, `days_back` (`f_TPR`), `max_applicants`, `limit`, `easy_apply` (`f_EA=true`).
+- `cv-tailor ingest --keywords ... [--geo-id --distance --easy-apply --location ...]` is the one-off
+  escape hatch; URL assembly is the pure, unit-tested `engine/linkedin/jobs.build_search_url`.
 
 Generation (`new`/`translate`) needs an LLM (Anthropic key or local Ollama) and runs **locally**.
 PDF compile uses LaTeX — local `latexmk` or the `texlive/texlive` Docker image (auto-detected by
@@ -65,7 +81,8 @@ table (regenerate with `cv-tailor track`). One application = one logical commit.
 | Path | What |
 |------|------|
 | `data/` | source of truth: `master-cv.md`, `profile.yml`, `projects.yml`, `guides/`, ranking config, prompts |
-| `engine/` | `rank` (pure top-3/skills), `jobspec`/`render` (LLM), `latex` (MD→LaTeX), `cli` |
+| `config/search.yml` | runtime search config (named searches + scoring); mounted, never baked into the image |
+| `engine/` | `rank` (pure top-3/skills), `jobspec`/`render` (LLM), `latex` (MD→LaTeX), `config`, `cli` |
 | `latex/` | `resume.cls`, `coverletter.cls`, `resume.tex` (public CV) — shared LaTeX style |
 | `applications/<slug>/` | one dir per application (md sources, .tex, index.md metadata); PDFs are gitignored (in Drive) |
 | `applications/README.md` | the status tracker table |
@@ -79,7 +96,9 @@ table (regenerate with `cv-tailor track`). One application = one logical commit.
 make build            # mkdocs build (public portfolio) → ./site
 make serve            # live preview
 make public-pdf       # compile latex/resume.tex → docs/assets/cv.pdf
-pytest -q             # rank + render + latex tests (no browser, no API key)
+make hunt             # run every search in config/search.yml (host, Xvfb)
+make docker-hunt      # same, in the container (config mounted at runtime)
+pytest -q             # rank + render + latex + search-config tests (no browser, no API key)
 
 # per application:
 make translate SLUG=<slug>     # German .de.md (LLM)

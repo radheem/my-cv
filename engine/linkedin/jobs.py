@@ -168,6 +168,37 @@ def _abs_url(href: str) -> str:
     return "https://www.linkedin.com" + href.split("?")[0]
 
 
+def build_search_url(
+    keywords: str,
+    *,
+    location: "str | None" = None,
+    geo_id: "str | None" = None,
+    distance: "int | float | None" = None,
+    days_back: int = 7,
+    easy_apply: bool = False,
+) -> str:
+    """Build a LinkedIn jobs-search URL. Pure (unit-tested).
+
+    `keywords` is passed through verbatim (URL-encoded), so LinkedIn boolean syntax
+    works as typed: '"Go" OR "Golang" OR "Python"'. `geo_id` (the LinkedIn region id,
+    `&geoId=`) is preferred over the free-text `location`; only one is emitted.
+    `distance` → `&distance=`, `days_back` → `&f_TPR=r<seconds>`, `easy_apply` →
+    `&f_EA=true`.
+    """
+    url = f"{SEARCH_URL}?keywords={quote_plus(keywords)}"
+    if geo_id:
+        url += f"&geoId={quote_plus(str(geo_id))}"
+    elif location:
+        url += f"&location={quote_plus(location)}"
+    if distance is not None:
+        url += f"&distance={distance}"
+    if days_back:
+        url += f"&f_TPR=r{days_back * 86400}"
+    if easy_apply:
+        url += "&f_EA=true"
+    return url
+
+
 def search(
     page,
     keywords: str,
@@ -175,18 +206,26 @@ def search(
     limit: int = 10,
     days_back: int = 7,
     max_applicants: "int | None" = None,
+    *,
+    geo_id: "str | None" = None,
+    distance: "int | float | None" = None,
+    easy_apply: bool = False,
 ) -> "list[Job]":
     """Run a jobs search and collect up to `limit` cards (human-paced scrolling).
 
     days_back: only surface jobs posted within this many days (LinkedIn f_TPR filter).
     max_applicants: discard cards whose displayed applicant count exceeds this value.
                     Cards with no count shown are kept and checked again after capture_jd.
+    geo_id / location / distance / easy_apply: see build_search_url.
     """
-    url = f"{SEARCH_URL}?keywords={quote_plus(keywords)}"
-    if location:
-        url += f"&location={quote_plus(location)}"
-    if days_back:
-        url += f"&f_TPR=r{days_back * 86400}"
+    url = build_search_url(
+        keywords,
+        location=location,
+        geo_id=geo_id,
+        distance=distance,
+        days_back=days_back,
+        easy_apply=easy_apply,
+    )
     log.info("searching: %s (last %d days)", keywords, days_back)
     page.goto(url, wait_until="domcontentloaded")
     settle(page)

@@ -1,0 +1,78 @@
+# Job search configuration for `cv-tailor hunt`.
+#
+# Loaded at RUNTIME from the path in $CV_TAILOR_SEARCH_CONFIG
+# (default: config/search.yml; in the container mounted at /app/config/search.yml).
+# This file is NEVER baked into the image — edit it and re-run; no rebuild needed.
+version: 1
+
+# Applied to every search unless the entry overrides the key.
+defaults:
+  days_back: 7          # f_TPR=r<days*86400> — only jobs posted within this many days
+  max_applicants: 100   # discard jobs with more applicants (checked off the search page too)
+  limit: 5              # max JDs to capture per search
+  easy_apply: false     # f_EA=true — restrict to LinkedIn "Easy Apply" listings
+  distance: null        # &distance=<km>; null = LinkedIn's default radius
+  geo_id: null          # &geoId=<id> (preferred); copy it from a LinkedIn search URL
+  location: null        # &location=<text>; used only when geo_id is null
+
+# Each entry is ONE LinkedIn search = one results URL.
+# `keywords` is passed verbatim, so LinkedIn boolean syntax works as typed:
+#   '"Go" OR "Golang" OR "Python"'
+# Prefer geo_id (exact region, like the LinkedIn UI) over the free-text location.
+searches:
+  - name: go-python-germany
+    keywords: '"Go" OR "Golang" OR "Python"'
+    geo_id: "101768819"        # geoId copied from a LinkedIn jobs-search URL
+    distance: 0
+    easy_apply: true
+
+  - name: backend-jena
+    keywords: "backend engineer"
+    location: "Jena"
+
+  - name: platform-nuremberg
+    keywords: "platform engineer"
+    location: "Nuremberg"
+
+  - name: software-berlin
+    keywords: "software engineer"
+    location: "Berlin"
+
+  - name: data-frankfurt
+    keywords: "data engineer"
+    location: "Frankfurt"
+
+# Scoring weights used by scripts/score-jds.py to rank captured JDs.
+# Keys are plain-text patterns matched case-insensitively against the JD body.
+scoring:
+  must_have:           # +3 each — core skills from master-cv
+    - "go"
+    - "golang"
+    - "python"
+    - "kubernetes"
+    - "distributed"
+    - "microservice"
+    - "grpc"
+    - "kafka"
+    - "nats"
+  nice_to_have:        # +1 each — relevant but not core
+    - "postgresql"
+    - "docker"
+    - "backend"
+    - "platform"
+    - "cloud"
+    - "llm"
+    - "ml"
+    - "machine learning"
+    - "data pipeline"
+    - "api"
+    - "terraform"
+  language_penalty:    # -5 each — language requirements beyond current level (A2)
+    - "c1 german"
+    - "c2 german"
+    - "b2 german"
+    - "b1 german required"
+    - "german native"
+    - "muttersprachlich"
+    - "verhandlungssicher"
+    - "fließend deutsch"

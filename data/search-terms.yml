@@ -1,6 +1,6 @@
-# Job search terms derived from master-cv.md
-# Used by scripts/job-hunt.sh and cv-tailor ingest
-# Update when changing the search strategy.
+# DEPRECATED — search params now live in config/search.yml (loaded at runtime by
+# `cv-tailor hunt` / engine.config.resolve_search). This file is kept only as a
+# legacy scoring fallback for scripts/score-jds.py. Edit config/search.yml instead.
 
 # Primary keywords — highest signal match to the CV profile
 # (Go/Python distributed-systems backend/platform/data engineering roles)

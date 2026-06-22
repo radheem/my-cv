@@ -84,10 +84,16 @@ DOCKER_GID := $(shell id -g)
 export DOCKER_UID DOCKER_GID
 
 .PHONY: ingest
-ingest: ## Run ingest on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= LIMIT= DAYS=7 MAX_APPLICANTS=100]
+ingest: ## Run a single ad-hoc search on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= GEO_ID= DISTANCE= LIMIT= DAYS=7 MAX_APPLICANTS=100 EASY_APPLY=1]
 	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor ingest \
 	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT) \
-	  $(if $(DAYS),--days "$(DAYS)") $(if $(MAX_APPLICANTS),--max-applicants "$(MAX_APPLICANTS)")
+	  $(if $(GEO_ID),--geo-id "$(GEO_ID)") $(if $(DISTANCE),--distance "$(DISTANCE)") \
+	  $(if $(DAYS),--days "$(DAYS)") $(if $(MAX_APPLICANTS),--max-applicants "$(MAX_APPLICANTS)") \
+	  $(if $(EASY_APPLY),--easy-apply)
+
+.PHONY: hunt
+hunt: ## Run every search in config/search.yml on the HOST under Xvfb
+	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor hunt
 
 DAYS    ?= 7
 MAX_APPLICANTS ?= 100
@@ -110,9 +116,14 @@ docker-build: ## Build the ingest container image
 	docker compose build
 
 .PHONY: docker-ingest
-docker-ingest: ## Run ingest in the container: make docker-ingest KEYWORDS="..." [LOCATION= LIMIT=]
+docker-ingest: ## Run a single ad-hoc search in the container: make docker-ingest KEYWORDS="..." [LOCATION= GEO_ID= LIMIT=]
 	docker compose run --rm --service-ports ingest cv-tailor ingest \
-	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT)
+	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") \
+	  $(if $(GEO_ID),--geo-id "$(GEO_ID)") --limit $(LIMIT)
+
+.PHONY: docker-hunt
+docker-hunt: ## Run every search in config/search.yml in the container (config mounted at runtime)
+	docker compose run --rm --service-ports ingest cv-tailor hunt
 
 .PHONY: docker-login
 docker-login: ## First-time VNC login (long timeout to solve CAPTCHA): VNC_BIND=<ip> VNC_PASSWORD=<pw> make docker-login

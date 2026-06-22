@@ -55,6 +55,18 @@ _DEFAULTS: dict[str, Any] = {
 
 _OLLAMA_ALIASES = {"ollama", "openai", "openai-compatible"}
 
+# Per-search defaults for the LinkedIn hunt. A search entry inherits any key it
+# omits from the file's `defaults:` block, which in turn falls back to these.
+_SEARCH_DEFAULTS: dict[str, Any] = {
+    "days_back": 7,
+    "max_applicants": 100,
+    "limit": 5,
+    "easy_apply": False,
+    "distance": None,
+    "geo_id": None,
+    "location": None,
+}
+
 
 def _deep_merge(base: dict, over: dict) -> dict:
     out = dict(base)
@@ -126,3 +138,43 @@ def resolve_llm(root: pathlib.Path | None = None) -> dict[str, Any]:
 def data_path(rel: str, root: pathlib.Path | None = None) -> pathlib.Path:
     """Resolve a config-relative data path (e.g. tailoring.ranking_file)."""
     return (root or ROOT) / rel
+
+
+def search_config_path(root: pathlib.Path | None = None) -> pathlib.Path:
+    """Where the runtime search config lives. `$CV_TAILOR_SEARCH_CONFIG` wins so the
+    container can mount it (never baked into the image); otherwise `config/search.yml`."""
+    env = os.environ.get("CV_TAILOR_SEARCH_CONFIG")
+    if env:
+        return pathlib.Path(env)
+    return (root or ROOT) / "config" / "search.yml"
+
+
+def resolve_search(
+    root: pathlib.Path | None = None, path: pathlib.Path | None = None
+) -> dict[str, Any]:
+    """Load the LinkedIn search config (named searches + scoring).
+
+    Each entry in `searches:` is returned fully resolved: keys it omits are filled
+    from the file's `defaults:` block, then from `_SEARCH_DEFAULTS`. Returns
+    ``{"path", "searches": [...], "scoring": {...}}``. Raises if the file is missing
+    or a search omits the required `keywords`."""
+    path = path or search_config_path(root)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"search config not found: {path} "
+            "(set CV_TAILOR_SEARCH_CONFIG or create config/search.yml)"
+        )
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+    file_defaults = cfg.get("defaults") or {}
+    base = _deep_merge(_SEARCH_DEFAULTS, file_defaults)
+
+    searches: list[dict[str, Any]] = []
+    for i, entry in enumerate(cfg.get("searches") or []):
+        merged = {**base, **(entry or {})}
+        if not merged.get("keywords"):
+            raise ValueError(f"search #{i} in {path} is missing required 'keywords'")
+        merged.setdefault("name", merged["keywords"])
+        searches.append(merged)
+
+    return {"path": path, "searches": searches, "scoring": cfg.get("scoring") or {}}

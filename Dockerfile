@@ -25,11 +25,15 @@ COPY docs/assets ./docs/assets
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Search config is NOT baked in (note: no `COPY config`). It is mounted at runtime at
+# the path below so it can be edited without rebuilding the image.
 ENV DISPLAY=:99 \
     LINKEDIN_USER_DATA_DIR=/app/vault/profile \
     CV_TAILOR_VAULT=/app/vault \
+    CV_TAILOR_SEARCH_CONFIG=/app/config/search.yml \
     SCREEN_GEOMETRY=1440x900x24
 
 # tini reaps Xvfb/x11vnc children cleanly.
 ENTRYPOINT ["tini", "--", "/usr/local/bin/entrypoint.sh"]
-CMD ["cv-tailor", "ingest", "--keywords", "platform engineer", "--limit", "5"]
+# Default: run every search in the mounted config/search.yml.
+CMD ["cv-tailor", "hunt"]

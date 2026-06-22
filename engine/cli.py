@@ -25,7 +25,15 @@ import urllib.request
 
 import yaml
 
-from . import documents, fetch, jobspec as jobspec_mod, manifest as manifest_mod, rank, render
+from . import (
+    config as config_mod,
+    documents,
+    fetch,
+    jobspec as jobspec_mod,
+    manifest as manifest_mod,
+    rank,
+    render,
+)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -389,8 +397,12 @@ def cmd_upload(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_ingest(args: argparse.Namespace) -> int:
-    """Drive a logged-in LinkedIn session and capture JDs. Stop-before-submit (D4)."""
+def _do_ingest(searches: list[dict], out_dir: pathlib.Path) -> dict:
+    """Drive ONE logged-in LinkedIn session through a list of search specs and capture
+    JDs. Stop-before-submit (D4). Each spec is a dict with keywords + the optional
+    filter keys (location, geo_id, distance, days_back, max_applicants, easy_apply,
+    limit, name). The session is reused across all searches, so one login covers them
+    all and `.seen.json` dedups across the whole run."""
     import logging
 
     from playwright.sync_api import sync_playwright
@@ -403,7 +415,6 @@ def cmd_ingest(args: argparse.Namespace) -> int:
 
     vault = os.environ.get("CV_TAILOR_VAULT", "vault")
     user_data_dir = os.environ.get("LINKEDIN_USER_DATA_DIR", f"{vault}/profile")
-    out_dir = pathlib.Path(args.out)
     seen_path = out_dir / ".seen.json"
 
     challenge_timeout = float(os.environ.get("LINKEDIN_CHALLENGE_TIMEOUT", "300"))
@@ -418,34 +429,40 @@ def cmd_ingest(args: argparse.Namespace) -> int:
     )
     counts = {"captured": 0, "skipped": 0}
 
-    max_applicants: int | None = args.max_applicants
-
     def run(page) -> None:
-        found = J.search(
-            page, args.keywords, args.location, args.limit,
-            days_back=args.days, max_applicants=max_applicants,
-        )
         seen = J.load_seen(seen_path)
-        for job in found:
-            if J.already_seen(job.job_id, seen):
-                counts["skipped"] += 1
-                continue
-            try:
-                text = J.capture_jd(page, job)
-            except Exception as e:  # noqa: BLE001
-                print(f"  skip {job.url}: {e}", file=sys.stderr)
-                continue
-            if max_applicants is not None and job.applicants is not None:
-                if job.applicants > max_applicants:
-                    print(f"  skip {job.url}: {job.applicants} applicants > {max_applicants}")
+        for spec in searches:
+            max_applicants = spec.get("max_applicants")
+            name = spec.get("name") or spec["keywords"]
+            print(f"\n── search: {name} ──")
+            found = J.search(
+                page, spec["keywords"], spec.get("location"), spec.get("limit", 10),
+                days_back=spec.get("days_back", 7), max_applicants=max_applicants,
+                geo_id=spec.get("geo_id"), distance=spec.get("distance"),
+                easy_apply=spec.get("easy_apply", False),
+            )
+            for job in found:
+                if J.already_seen(job.job_id, seen):
+                    counts["skipped"] += 1
                     continue
-            captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-            path = J.write_jd(job, text, out_dir, captured_at)
-            seen[job.job_id] = J.slugify(job.company, job.title, job.job_id)
-            counts["captured"] += 1
-            applicants_str = f" ({job.applicants} applicants)" if job.applicants is not None else ""
-            print(f"  captured {path}{applicants_str}")
-            human_pause(2.0, 5.0)
+                try:
+                    text = J.capture_jd(page, job)
+                except Exception as e:  # noqa: BLE001
+                    print(f"  skip {job.url}: {e}", file=sys.stderr)
+                    continue
+                if max_applicants is not None and job.applicants is not None:
+                    if job.applicants > max_applicants:
+                        print(f"  skip {job.url}: {job.applicants} applicants > {max_applicants}")
+                        continue
+                captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+                path = J.write_jd(job, text, out_dir, captured_at)
+                seen[job.job_id] = J.slugify(job.company, job.title, job.job_id)
+                counts["captured"] += 1
+                applicants_str = (
+                    f" ({job.applicants} applicants)" if job.applicants is not None else ""
+                )
+                print(f"  captured {path}{applicants_str}")
+                human_pause(2.0, 5.0)
         J.save_seen(seen_path, seen)
 
     with sync_playwright() as p:
@@ -456,6 +473,36 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             session.close()
 
     print(f"\ningest done: captured {counts['captured']}, skipped {counts['skipped']} (seen)")
+    return counts
+
+
+def cmd_ingest(args: argparse.Namespace) -> int:
+    """Capture JDs for a single ad-hoc search (CLI flags). For the configured batch
+    of searches, use `cv-tailor hunt`."""
+    spec = {
+        "keywords": args.keywords,
+        "location": args.location,
+        "limit": args.limit,
+        "days_back": args.days,
+        "max_applicants": args.max_applicants,
+        "geo_id": args.geo_id,
+        "distance": args.distance,
+        "easy_apply": args.easy_apply,
+    }
+    _do_ingest([spec], pathlib.Path(args.out))
+    return 0
+
+
+def cmd_hunt(args: argparse.Namespace) -> int:
+    """Run every search in the runtime config (config/search.yml) in one session."""
+    cfg = config_mod.resolve_search()
+    searches = cfg["searches"]
+    if not searches:
+        print(f"no searches defined in {cfg['path']}", file=sys.stderr)
+        return 1
+    names = ", ".join(s["name"] for s in searches)
+    print(f"hunt: {len(searches)} search(es) from {cfg['path']} — {names}")
+    _do_ingest(searches, pathlib.Path(args.out))
     return 0
 
 
@@ -498,8 +545,20 @@ def main(argv: list[str] | None = None) -> int:
                           help="only surface jobs posted within this many days (default: 7)")
     p_ingest.add_argument("--max-applicants", type=int, default=None, dest="max_applicants",
                           help="discard jobs with more than this many applicants")
+    p_ingest.add_argument("--geo-id", default=None, dest="geo_id",
+                          help="LinkedIn region id (&geoId=); preferred over --location")
+    p_ingest.add_argument("--distance", type=float, default=None,
+                          help="search radius in km (&distance=)")
+    p_ingest.add_argument("--easy-apply", action="store_true", dest="easy_apply",
+                          help="restrict to LinkedIn 'Easy Apply' listings (&f_EA=true)")
     p_ingest.add_argument("--out", default="vault/jds", help="output dir for JD files")
     p_ingest.set_defaults(func=cmd_ingest)
+
+    p_hunt = sub.add_parser(
+        "hunt", help="run every search in config/search.yml and capture JDs"
+    )
+    p_hunt.add_argument("--out", default="vault/jds", help="output dir for JD files")
+    p_hunt.set_defaults(func=cmd_hunt)
 
     p_pdf = sub.add_parser("pdf", help="render the LaTeX CV + cover letter and compile to PDFs")
     p_pdf.add_argument("slug", help="application slug")
