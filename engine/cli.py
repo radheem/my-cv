@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import argparse
 import base64
+import csv
 import datetime
+import io
 import json
 import os
 import pathlib
@@ -354,13 +356,59 @@ def _write_tracker() -> pathlib.Path:
             u=r.get("drive_updated", "") or "—"))
     path = jobs / "README.md"
     path.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+    _csv_fields = ["slug", "company", "job_title", "status", "date_found",
+                   "job_url", "drive_url", "drive_updated", "clusters"]
+    csv_rows = [{
+        "slug": r.get("slug", ""),
+        "company": r.get("company", ""),
+        "job_title": r.get("job_title", ""),
+        "status": r.get("status", ""),
+        "date_found": r.get("date_found", "") or "",
+        "job_url": r.get("job_url", "") or "",
+        "drive_url": r.get("drive_url", "") or "",
+        "drive_updated": r.get("drive_updated", "") or "",
+        "clusters": ";".join(r.get("clusters") or []),
+    } for r in rows]
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=_csv_fields, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(csv_rows)
+    (jobs / "tracker.csv").write_text(buf.getvalue(), encoding="utf-8")
+
     return path
 
 
 def cmd_track(args: argparse.Namespace) -> int:
-    """Regenerate the applications/README.md status table from per-app front matter."""
+    """Regenerate the applications/README.md + tracker.csv from per-app front matter."""
     path = _write_tracker()
-    print(f"wrote {path}")
+    print(f"wrote {path} and {path.parent / 'tracker.csv'}")
+    return 0
+
+
+def cmd_sync_sheets(args: argparse.Namespace) -> int:
+    """Push applications/tracker.csv to the Google Sheet via the Apps Script endpoint."""
+    url = os.environ.get("APPS_SCRIPT_URL")
+    token = os.environ.get("APPS_SCRIPT_TOKEN")
+    if not url or not token:
+        raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
+    csv_path = _jobs_dir() / "tracker.csv"
+    if not csv_path.exists():
+        _write_tracker()
+    payload = {
+        "token": token,
+        "action": "sync_tracker",
+        "csv": csv_path.read_text(encoding="utf-8"),
+    }
+    req = urllib.request.Request(
+        url, data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "text/plain;charset=utf-8"},
+    )
+    with urllib.request.urlopen(req, timeout=60) as r:
+        resp = json.loads(r.read().decode("utf-8"))
+    if not resp.get("ok"):
+        raise SystemExit(f"sync-sheets failed: {resp}")
+    print(f"synced {resp.get('rows', '?')} rows to Google Sheets")
     return 0
 
 
@@ -770,8 +818,11 @@ def main(argv: list[str] | None = None) -> int:
     p_status.add_argument("state", help="draft|applied|interview|offer|rejected|withdrawn")
     p_status.set_defaults(func=cmd_status)
 
-    p_track = sub.add_parser("track", help="regenerate applications/README.md status table")
+    p_track = sub.add_parser("track", help="regenerate applications/README.md + tracker.csv")
     p_track.set_defaults(func=cmd_track)
+
+    p_sheets = sub.add_parser("sync-sheets", help="push tracker.csv to Google Sheets")
+    p_sheets.set_defaults(func=cmd_sync_sheets)
 
     args = parser.parse_args(argv)
     return args.func(args)

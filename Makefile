@@ -194,8 +194,12 @@ upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload SLUG=
 	$(BIN)/cv-tailor upload "$(SLUG)"
 
 .PHONY: track
-track: ## Regenerate the applications/README.md status table
+track: ## Regenerate applications/README.md + tracker.csv
 	$(BIN)/cv-tailor track
+
+.PHONY: sync-sheets
+sync-sheets: ## Push applications/tracker.csv to Google Sheets
+	$(BIN)/cv-tailor sync-sheets
 
 .PHONY: status
 status: ## Advance an application's lifecycle: make status SLUG=<slug> STATUS=applied
@@ -215,8 +219,8 @@ serve: ## Live-preview the portfolio (mkdocs serve) on localhost (PORT=8000)
 	$(BIN)/mkdocs serve -a localhost:$(PORT)
 
 .PHONY: public-pdf
-public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → docs/assets/cv.pdf)
-	cd latex && $(MAKE) docker && cp resume.pdf ../docs/assets/cv.pdf && echo "wrote docs/assets/cv.pdf"
+public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → doc-pages/assets/cv.pdf)
+	cd latex && $(MAKE) docker && cp resume.pdf ../doc-pages/assets/cv.pdf && echo "wrote doc-pages/assets/cv.pdf"
 
 # ---- Test & quality --------------------------------------------------------
 

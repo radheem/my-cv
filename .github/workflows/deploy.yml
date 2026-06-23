@@ -24,14 +24,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Public CV PDF: compile latex/resume.tex (pdfLaTeX) → docs/assets/cv.pdf.
+      # Public CV PDF: compile latex/resume.tex (pdfLaTeX) → doc-pages/assets/cv.pdf.
       - name: Compile public CV PDF
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: latex
           root_file: resume.tex
-      - name: Stage CV PDF into docs
-        run: cp latex/resume.pdf docs/assets/cv.pdf
+      - name: Stage CV PDF into doc-pages
+        run: cp latex/resume.pdf doc-pages/assets/cv.pdf
 
       - uses: actions/setup-python@v5
         with:

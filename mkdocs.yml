@@ -2,6 +2,7 @@ site_name: Radheem Bin Razi
 site_description: Distributed Systems & Cloud-Native Engineer — portfolio, projects, and CV
 site_author: Radheem Bin Razi
 site_url: https://radheem.github.io/my-cv/
+docs_dir: doc-pages
 
 theme:
   name: material
@@ -86,8 +87,3 @@ nav:
       - Sheet Dashboard (Google Sheets): projects/csv-dashboard.md
       - Gitpress (Zero-Server Blog): projects/gitpress.md
   - CV: cv.md
-  - Project:
-      - Architecture: architecture.md
-      - Setup: setup.md
-      - Runbooks: runbooks.md
-      - CLI: cli.md

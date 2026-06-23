@@ -22,7 +22,7 @@ from typing import Any
 import markdown as _markdown
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-_CSS_PATH = ROOT / "docs" / "assets" / "doc.css"
+_CSS_PATH = ROOT / "doc-pages" / "assets" / "doc.css"
 
 _MD_EXTENSIONS = ["tables", "attr_list", "sane_lists"]
 

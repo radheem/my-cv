@@ -13,6 +13,8 @@
 
 var ROOT_FOLDER_ID = 'REPLACE_WITH_DRIVE_FOLDER_ID';   // the "Applications" Drive folder
 var TOKEN = 'REPLACE_WITH_A_LONG_RANDOM_STRING';        // must match APPS_SCRIPT_TOKEN
+var SHEET_ID = 'REPLACE_WITH_SPREADSHEET_ID';           // Google Sheets spreadsheet ID for tracker
+var TRACKER_SHEET = 'Applications';
 
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
@@ -24,10 +26,28 @@ function findOrCreate(parent, name) {
   return it.hasNext() ? it.next() : parent.createFolder(name);
 }
 
+function syncTracker(csvText) {
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var sh = ss.getSheetByName(TRACKER_SHEET) || ss.insertSheet(TRACKER_SHEET);
+  var rows = Utilities.parseCsv(csvText);
+  sh.clearContents();
+  if (rows.length > 0) {
+    sh.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+    sh.getRange(1, 1, 1, rows[0].length).setFontWeight('bold');
+  }
+  return { ok: true, rows: rows.length };
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
     if (body.token !== TOKEN) return json({ ok: false, error: 'unauthorized' });
+
+    if (body.action === 'sync_tracker') {
+      if (!body.csv) return json({ ok: false, error: 'missing csv' });
+      return json(syncTracker(body.csv));
+    }
+
     if (!body.slug) return json({ ok: false, error: 'missing slug' });
 
     var folder = findOrCreate(DriveApp.getFolderById(ROOT_FOLDER_ID), body.slug);

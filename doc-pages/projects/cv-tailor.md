@@ -50,7 +50,7 @@ An optional containerized flow drives a logged-in LinkedIn session and feeds the
 
 - **Playwright** persistent context with **human-paced** typing/clicks; a first login hands off to a **VNC** viewer to solve the one-time security check, then the warm profile is a recognized device.
 - Searches roles, captures full job descriptions (dedup ledger), then generates a tailored application per role — all in Docker, output to a gitignored vault.
-- **Code never submits.** Every run stops at a ready-to-apply package a human reviews and sends by hand. (See the [Runbooks](../runbooks.md).)
+- **Code never submits.** Every run stops at a ready-to-apply package a human reviews and sends by hand.
 
 ## Reproducible & configurable
 - Provider, model, temperatures, budgets, and the system **prompts** are user-editable files under `data/` — no code change needed; an absent file = default behavior, and env overrides the file.

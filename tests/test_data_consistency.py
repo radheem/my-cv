@@ -56,10 +56,10 @@ def test_programming_languages_present_in_master_cv():
 
 def test_project_doc_paths_resolve():
     _, _, projects = _load()
-    docs = ROOT / "docs"
+    docs = ROOT / "doc-pages"
     missing = [p["id"] for p in projects
                if p.get("doc") and not (docs / p["doc"]).exists()]
-    assert not missing, f"projects.yml doc: path does not resolve under docs/: {missing}"
+    assert not missing, f"projects.yml doc: path does not resolve under doc-pages/: {missing}"
 
 
 def test_project_highlights_are_subsets_of_master_or_summary():
