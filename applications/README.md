@@ -5,18 +5,26 @@ Tailored CVs/cover letters live in Google Drive (Drive column); this table is th
 
 | Company | Role | Status | Found | Posting | Drive | Updated |
 |---|---|---|---|---|---|---|
-| Air Apps | Backend Engineer | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4428254276/) | [open](https://drive.google.com/drive/folders/1dySQrORMCLAmMxRWIlDChONnUpU-aOvv) | 2026-06-22T20:26:58+00:00 |
-| ALD Vacuum Technologies GmbH | Backend Developer | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429650140/) | [open](https://drive.google.com/drive/folders/1jSAheie1fVR0MtFw2hTfpj5V8fI2Lwio) | 2026-06-22T17:29:52+00:00 |
+| ageneo Life Science Experts (Interim Solutions) GmbH | Plattform Developer (m/w/d) | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4428933791/) | — | — |
+| Air Apps | Backend Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4428254276/) | [open](https://drive.google.com/drive/folders/1dySQrORMCLAmMxRWIlDChONnUpU-aOvv) | 2026-06-22T20:26:58+00:00 |
+| ALD Vacuum Technologies GmbH | Backend Developer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429650140/) | [open](https://drive.google.com/drive/folders/1jSAheie1fVR0MtFw2hTfpj5V8fI2Lwio) | 2026-06-22T17:29:52+00:00 |
+| Atain | DevOps Engineer | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4420707494/) | — | — |
+| CHECK24 Vergleichsportal GmbH | Full-Stack Entwickler (m/w/d) – AI & Digital Innovation Explorer | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4422336823/) | — | — |
 | Computer Futures | Senior Data Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4430489704/) | [open](https://drive.google.com/drive/folders/1j6_eUyDHiiC-uNM3_jz2Z9CZRPoJISxE) | 2026-06-22T17:30:43+00:00 |
+| Darktrace | Data Engineer | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4432269032/) | [open](https://drive.google.com/drive/folders/164EYS58F_GGMWY28_vLZKUhCh2fpxyYj) | 2026-06-23T15:20:05+00:00 |
 | Enginsight GmbH | Backend Developer:in (Go) | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4419894295/) | [open](https://drive.google.com/drive/folders/1w7a1eg17X19ryzdhJT1Yr0ziy1tmBJ--) | 2026-06-22T17:30:09+00:00 |
-| FION Energy | IoT Platform Engineer - Energy Systems | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4422580779/) | [open](https://drive.google.com/drive/folders/1Y5AM2xacMn6ti1tWkG8wnsriqdZqYuOb) | 2026-06-22T17:30:28+00:00 |
-| Flix | Senior Data Platform Engineer | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4419497181/) | [open](https://drive.google.com/drive/folders/1zJtNwTyX_sWJvjRbfeA2sMOIugIwxCuC) | 2026-06-22T17:30:01+00:00 |
-| Navera | Freelance DevOps/Cloud Infrastructure Engineer | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4426860051/) | [open](https://drive.google.com/drive/folders/1QI2kd8tQC2yvGI4gVz8VckISwO126itX) | 2026-06-22T17:29:37+00:00 |
-| Nokia | C++ Software Engineer | **applied** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4408420156/) | [open](https://drive.google.com/drive/folders/1MRZilKdmDLOtHzTzL4ye-UB-NhHxk6Zw) | 2026-06-22T17:30:19+00:00 |
+| FION Energy | IoT Platform Engineer - Energy Systems | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4422580779/) | [open](https://drive.google.com/drive/folders/1Y5AM2xacMn6ti1tWkG8wnsriqdZqYuOb) | 2026-06-22T17:30:28+00:00 |
+| Flix | Senior Data Platform Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4419497181/) | [open](https://drive.google.com/drive/folders/1zJtNwTyX_sWJvjRbfeA2sMOIugIwxCuC) | 2026-06-22T17:30:01+00:00 |
+| Navera | Freelance DevOps/Cloud Infrastructure Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4426860051/) | [open](https://drive.google.com/drive/folders/1QI2kd8tQC2yvGI4gVz8VckISwO126itX) | 2026-06-22T17:29:37+00:00 |
+| Nokia | C++ Software Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4408420156/) | [open](https://drive.google.com/drive/folders/1MRZilKdmDLOtHzTzL4ye-UB-NhHxk6Zw) | 2026-06-22T17:30:19+00:00 |
 | Pertemps Network Group | Senior Go Backend Developer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4430446260/) | [open](https://drive.google.com/drive/folders/1sl-e6HEJjtRDRDdDAThziBMk6qZrDso-) | 2026-06-22T20:26:51+00:00 |
+| PwC Deutschland | Backend-Developer - Public Sector & Energy | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4407028069/) | — | — |
 | Scout24 SE | Senior Platform Engineer - Cloud Infrastructure | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4339062900/) | [open](https://drive.google.com/drive/folders/1lv1RvGNWEEhie3qbDaQR0WHYsKAOKOMV) | 2026-06-22T17:29:28+00:00 |
 | T-Systems International | Backend Engineer T Cloud Public – Container | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429738029/) | [open](https://drive.google.com/drive/folders/1VTpMiXNCREog8-3naY-jZiwwYT6vUK07) | 2026-06-22T17:30:36+00:00 |
+| tonies® | Senior Software Engineer, Production Systems | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4423211464/) | — | — |
 | Vattenfall | Data Engineer | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4429677796/) | [open](https://drive.google.com/drive/folders/1TOw77H_KeSM43Dq4FYqw62dwY5XvqRtY) | 2026-06-22T20:27:14+00:00 |
+| Wire | Senior Security Engineer | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4428859728/) | — | — |
+| Wiz | Principal Solutions Engineer - Application Security | **draft** | 2026-06-23 | [apply](https://www.linkedin.com/jobs/view/4406757497/) | — | — |
 | ZABEL | Tech Lead – Defense | **draft** | 2026-06-22 | [apply](https://www.linkedin.com/jobs/view/4428640450/) | [open](https://drive.google.com/drive/folders/1jYb0gPFvIPrBaWnZ2l6PXbjvlYJ6n8LB) | 2026-06-22T17:29:45+00:00 |
 | Aroundhome | Senior Software Engineer | **applied** | 2026-06-21 | — | [open](https://drive.google.com/drive/folders/18lZvBbd8yePxUigc7aSgl-lT7dWTmexE) | 2026-06-21T23:37:57+00:00 |
 | BMW Group | Senior AI & Data Platform Engineer (f/m/x) | **applied** | 2026-06-21 | [apply](https://www.linkedin.com/jobs/view/4383654573/) | [open](https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc) | 2026-06-21T23:38:05+00:00 |

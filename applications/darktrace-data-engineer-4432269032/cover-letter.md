@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Darktrace"
+---
+
+A reliable data backbone quietly enables AI to spot threats before they cause damage, and designing that foundation is exactly why I want to join Darktrace as a Data Engineer. Your platform turns complex telemetry into proactive defense, and I want to help build the infrastructure that keeps those models accurate. Over five years, I have focused on distributed systems and cloud-native pipelines that scale without breaking under pressure.
+
+I have spent recent years building event-driven ingestion systems that survive worker failures and keep data moving to AI models. I designed a durable pipeline that automatically retries each extraction and embedding step, streaming real-time progress through NATS JetStream while keeping all inference local. I later extended that reliability mindset to machine learning workflows by deploying a full training and serving lifecycle on Kubernetes. A configuration-driven Python client automated everything from feature group creation to model deployment, while a Kafka metrics pipeline fanned out telemetry to multiple databases for monitoring. These experiences gave me direct practice in keeping data flows predictable, which aligns closely with your need for scalable pipelines.
+
+Cloud-native deployment and cross-team collaboration are equally important when data infrastructure powers production AI. I have packaged complex research frameworks into reproducible Kubernetes clusters using Helm, and I routinely document architectural decisions so data scientists and MLOps engineers can integrate smoothly. Working on a top-graded academic project, I wired together Cassandra, InfluxDB, and object storage to feed a prediction model, and I built a lightweight SDK that let non-infrastructure teammates trigger training jobs without touching the command line. This blend of infrastructure rigor and developer-friendly tooling helps me bridge the gap between raw data collection and model production.
+
+I am ready to bring this operational discipline to your R&D team in The Hague and would welcome the opportunity to discuss how my background aligns with your data platform goals. I am available to start full-time immediately, though I remain open to working-student or part-time arrangements. I am currently based in Germany and can relocate to the Netherlands within two to three weeks, and I am fully Blue Card-ready so your team only needs to issue the contract. Thank you for your time.
