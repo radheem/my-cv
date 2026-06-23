@@ -602,6 +602,40 @@ def cmd_capture(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_screenshot(args: argparse.Namespace) -> int:
+    """Capture a job posting from a URL or local screenshot file via PixelRAG + Ollama vision.
+
+    Renders the page to JPEG tiles using PixelRAG's Chrome CDP renderer (no LinkedIn
+    session required), then calls an Ollama vision model to extract the title, company,
+    location, and full JD body text. Works for any URL Chrome can render, plus local
+    .png/.jpg files. Output is the same vault/jds/<slug>.txt + .json that `cv-tailor new`
+    consumes unchanged."""
+    try:
+        from .pixel_capture import VISION_MODEL_DEFAULT, capture_screenshot
+    except ImportError as exc:
+        raise SystemExit(
+            "Screenshot capture needs PixelRAG render. "
+            "Run: make install-screenshot\n"
+            "Then pull a vision model: ollama pull qwen3-vl:8b"
+        ) from exc
+
+    vision_model = args.vision_model or os.environ.get(
+        "CV_TAILOR_VISION_MODEL", VISION_MODEL_DEFAULT
+    )
+    out_dir = pathlib.Path(args.out)
+    path = capture_screenshot(
+        args.source,
+        out_dir,
+        vision_model=vision_model,
+        keep_tiles=args.keep_tiles,
+    )
+    sidecar = path.with_suffix(".json")
+    slug = json.loads(sidecar.read_text())["slug"] if sidecar.exists() else path.stem
+    print(f"\ncaptured {path}")
+    print(f"\nNext: cv-tailor new {path} --slug {slug}")
+    return 0
+
+
 def _add_provider_flags(p: argparse.ArgumentParser) -> None:
     p.add_argument("--provider", choices=["anthropic", "ollama"], default=None,
                    help="generation backend (default: anthropic; ollama = OpenAI-compatible)")
@@ -662,6 +696,28 @@ def main(argv: list[str] | None = None) -> int:
     p_cap.add_argument("url", help="LinkedIn job URL (/jobs/view/<id> or ...?currentJobId=<id>)")
     p_cap.add_argument("--out", default="vault/jds", help="output dir for the JD file")
     p_cap.set_defaults(func=cmd_capture)
+
+    p_shot = sub.add_parser(
+        "screenshot",
+        help="capture a job posting via screenshot + Ollama vision (no LinkedIn session; any URL or local .png/.jpg)",
+    )
+    p_shot.add_argument(
+        "source", help="job posting URL or path to a local screenshot file (.png/.jpg)"
+    )
+    p_shot.add_argument("--out", default="vault/jds", help="output dir for JD files")
+    p_shot.add_argument(
+        "--vision-model",
+        default=None,
+        dest="vision_model",
+        help="Ollama vision model (default: qwen3-vl:8b; env: CV_TAILOR_VISION_MODEL)",
+    )
+    p_shot.add_argument(
+        "--keep-tiles",
+        action="store_true",
+        dest="keep_tiles",
+        help="keep rendered tile directory after extraction (for debugging)",
+    )
+    p_shot.set_defaults(func=cmd_screenshot)
 
     p_pdf = sub.add_parser("pdf", help="render the LaTeX CV + cover letter and compile to PDFs")
     p_pdf.add_argument("slug", help="application slug")

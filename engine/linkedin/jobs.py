@@ -99,12 +99,12 @@ def _yaml_escape(v: str) -> str:
     return (v or "").replace("\\", "\\\\").replace('"', '\\"')
 
 
-def jd_frontmatter(job: Job, captured_at: str) -> str:
+def jd_frontmatter(job: Job, captured_at: str, *, source: str = "linkedin") -> str:
     e = _yaml_escape
     applicants_line = f"applicants: {job.applicants}\n" if job.applicants is not None else ""
     return (
         "---\n"
-        "source: linkedin\n"
+        f"source: {source}\n"
         f'url: "{e(job.url)}"\n'
         f'company: "{e(job.company)}"\n'
         f'title: "{e(job.title)}"\n'
@@ -136,12 +136,12 @@ def already_seen(job_id: str, seen: dict) -> bool:
     return job_id in seen
 
 
-def write_jd(job: Job, text: str, out_dir, captured_at: str) -> pathlib.Path:
+def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "linkedin") -> pathlib.Path:
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     slug = slugify(job.company, job.title, job.job_id)
     txt = out / f"{slug}.txt"
-    txt.write_text(jd_frontmatter(job, captured_at) + "\n" + clean_jd_text(text) + "\n", "utf-8")
+    txt.write_text(jd_frontmatter(job, captured_at, source=source) + "\n" + clean_jd_text(text) + "\n", "utf-8")
     (out / f"{slug}.json").write_text(
         json.dumps({**asdict(job), "captured_at": captured_at, "slug": slug}, indent=2)
     )

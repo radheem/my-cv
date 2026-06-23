@@ -68,6 +68,11 @@ install-dev: venv ## Install dev deps (pytest)
 install-all: venv ## Install everything (base + generate + fetch + ollama + dev)
 	$(UVPIP) -e '.[generate,fetch,ollama,dev]'
 
+.PHONY: install-screenshot
+install-screenshot: venv ## Install screenshot capture deps (PixelRAG render + openai)
+	$(UVPIP) -e '.[screenshot]'
+	@echo "Next: ollama pull qwen3-vl:8b   (on genai.ltc.hsnet)"
+
 .PHONY: playwright
 playwright: ## Install the Playwright Chromium browser (needed to fetch job URLs)
 	$(BIN)/playwright install chromium
@@ -99,6 +104,13 @@ hunt: ## Run every search in config/search.yml on the HOST under Xvfb
 capture: ## Capture ONE job link to vault/jds/ on the HOST under Xvfb: make capture URL="https://www.linkedin.com/jobs/view/<id>"
 	@test -n "$(URL)" || { echo 'URL required, e.g. make capture URL="https://www.linkedin.com/jobs/view/123"'; exit 2; }
 	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor capture "$(URL)"
+
+VISION_MODEL ?= qwen3-vl:8b
+
+.PHONY: screenshot
+screenshot: ## Capture a job posting via screenshot + Ollama vision (no session): make screenshot SOURCE=<url-or-file>
+	@test -n "$(SOURCE)" || { echo 'SOURCE required, e.g. make screenshot SOURCE="https://example.com/jobs/123"'; exit 2; }
+	$(BIN)/cv-tailor screenshot "$(SOURCE)" --vision-model "$(VISION_MODEL)"
 
 DAYS    ?= 7
 MAX_APPLICANTS ?= 100
