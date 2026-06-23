@@ -57,7 +57,7 @@ fi
 PYTHON=${PYTHON:-python3}
 SEARCH_CONFIG=${CV_TAILOR_SEARCH_CONFIG:-config/search.yml}
 RANKED_JSON=vault/jds/.ranked.json
-XVFB="xvfb-run -a -s '-screen 0 1440x900x24'"
+xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }
 
 echo "════════════════════════════════════════════════════════"
 echo " Job Hunt Pipeline — $(date '+%Y-%m-%d')"
@@ -75,7 +75,7 @@ echo "── Step 1: LinkedIn ingest (cv-tailor hunt) ────────�
 if [[ "$DRY_RUN" == "true" ]]; then
   echo "  [dry-run] would run: cv-tailor hunt --out vault/jds"
 else
-  $XVFB cv-tailor hunt --out vault/jds \
+  xvfb_run cv-tailor hunt --out vault/jds \
     || echo "  WARNING: hunt returned non-zero — continuing"
 fi
 

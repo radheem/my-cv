@@ -41,7 +41,7 @@ fi
 
 PYTHON=${PYTHON:-python3}
 RANKED_JSON=vault/jds/.erfurt-ranked.json
-XVFB="xvfb-run -a -s '-screen 0 1440x900x24'"
+xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }
 
 echo "════════════════════════════════════════════════════════"
 echo " Erfurt Hunt Pipeline — $(date '+%Y-%m-%d')"
@@ -62,7 +62,7 @@ echo "── Step 2: LinkedIn ingest (Erfurt, backend + data) ────"
 if [[ "$DRY_RUN" == "true" ]]; then
   echo "  [dry-run] would run: cv-tailor ingest backend engineer + data engineer"
 else
-  $XVFB cv-tailor ingest \
+  xvfb_run cv-tailor ingest \
     --keywords "backend engineer" \
     --geo-id "$GEO_ID" \
     --distance "$DISTANCE" \
@@ -70,7 +70,7 @@ else
     --limit "$LIMIT" \
     || echo "  WARNING: backend ingest returned non-zero — continuing"
 
-  $XVFB cv-tailor ingest \
+  xvfb_run cv-tailor ingest \
     --keywords '"data engineer" OR "software engineer"' \
     --geo-id "$GEO_ID" \
     --distance "$DISTANCE" \
