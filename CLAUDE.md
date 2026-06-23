@@ -14,8 +14,8 @@ portfolio** (MkDocs → GitHub Pages at `radheem.github.io/my-cv`) and a private
 - renders them as **bilingual (English + German) PDFs** using a **LaTeX** template
   (`latex/resume.cls` / `latex/coverletter.cls`), the same system as the `resume` repo;
 - stores those PDFs in **Google Drive** (one folder per application);
-- tracks each application's **status in git** (`applications/<slug>/index.md` front matter +
-  `applications/README.md` + `applications/tracker.csv`). Commits are the audit trail.
+- tracks each application's **status** in `applications/tracker.csv` (git) + Google Sheet
+  (live view); `applications/<slug>/index.md` is the per-app metadata store. Commits are the audit trail.
 
 The **public site** publishes only the portfolio (Home, Projects, CV). `applications/` lives
 **outside `doc-pages/`** and is never built into the site — so no company name leaks. The only
@@ -36,8 +36,8 @@ cv-tailor new <jd>    → applications/<slug>/         cv.md (+cv.de.md), cover-
 cv-tailor translate   → cv.de.md / cover-letter.de.md  (German, LLM; run inside `new` by default)
 cv-tailor pdf <slug>  → cv.tex/cover-letter.tex → cv.pdf/cover-letter.pdf  (engine/latex.py + latexmk)
 cv-tailor upload <slug> → Google Drive (Apps Script); writes drive_url into index.md
-cv-tailor status <slug> <state> → edits index.md + refreshes README.md + tracker.csv
-cv-tailor sync-sheets → push tracker.csv to Google Sheets (needs SHEET_ID in Code.gs; see apps-script/README.md)
+cv-tailor status <slug> <state> → pull sheet → sync remote changes → apply → push CSV + sheet
+cv-tailor sync-sheets → pull sheet → sync remote changes → push (explicit bidirectional sync)
 ```
 
 ## Search config (`config/search.yml`)
@@ -78,10 +78,10 @@ tailored tech**; German headings Berufserfahrung / Ausbildung / Projekte / Kennt
 ```
 draft → applied → interview → offer | rejected | withdrawn
 ```
-Edit via `cv-tailor status <slug> <state>` (regex-edits `index.md`, auto-refreshes the tracker),
-then **commit** — the message + date are the record. `applications/README.md` and
-`applications/tracker.csv` are the at-a-glance view (regenerate with `cv-tailor track`; push to
-Google Sheets with `cv-tailor sync-sheets`). One application = one logical commit.
+Edit via `cv-tailor status <slug> <state>` — pulls the sheet first (to catch remote edits), applies
+the local change, then pushes the updated CSV back. Commit after. `applications/tracker.csv` and
+the Google Sheet are the two sources of truth; `index.md` is the per-app metadata store.
+`cv-tailor sync-sheets` does a pull→merge→push without a status change. One application = one commit.
 
 ## Layout
 
@@ -92,8 +92,7 @@ Google Sheets with `cv-tailor sync-sheets`). One application = one logical commi
 | `engine/` | `rank` (pure top-3/skills), `jobspec`/`render` (LLM), `latex` (MD→LaTeX), `config`, `cli` |
 | `latex/` | `resume.cls`, `coverletter.cls`, `resume.tex` (public CV) — shared LaTeX style |
 | `applications/<slug>/` | one dir per application (md sources, .tex, index.md metadata); PDFs are gitignored (in Drive) |
-| `applications/README.md` | generated at-a-glance tracker table |
-| `applications/tracker.csv` | generated tracker (same data as README.md; used by `sync-sheets`) |
+| `applications/tracker.csv` | source of truth for status in git (CSV; synced with Google Sheet) |
 | `apps-script/` | the Google Drive uploader + Sheets syncer (`Code.gs`) + setup runbook |
 | `scripts/build-application.sh` | compile an app's `.tex` → PDFs (latexmk / texlive Docker) |
 | `doc-pages/` | MkDocs source: published portfolio (Home, Projects, CV). Never put applications here. |
@@ -114,8 +113,8 @@ make translate SLUG=<slug>     # German .de.md (LLM)
 make pdf SLUG=<slug>           # bilingual PDFs (LaTeX)
 make upload SLUG=<slug>        # → Google Drive (needs .env; see apps-script/README.md)
 make status SLUG=<slug> STATUS=applied
-make track                     # refresh applications/README.md + tracker.csv
-make sync-sheets               # push tracker.csv to Google Sheets (needs SHEET_ID in Code.gs)
+make track                     # regenerate tracker.csv from index.md files
+make sync-sheets               # bidirectional sync: pull sheet → merge → push
 ```
 
 ## Conventions

@@ -96,7 +96,7 @@ def _student_relocation(title: str, relocation: str) -> str:
 
 
 # Application lifecycle. Edit `status:` (cv-tailor status) and commit as a role
-# progresses; the tracker (applications/README.md) surfaces it. See CLAUDE.md.
+# progresses; tracker.csv + Google Sheet are the at-a-glance view. See CLAUDE.md.
 _STATUSES = ("draft", "applied", "interview", "offer", "rejected", "withdrawn")
 
 
@@ -324,24 +324,38 @@ def cmd_pdf(args: argparse.Namespace) -> int:
 
 
 def cmd_status(args: argparse.Namespace) -> int:
-    """Advance an application's lifecycle status and refresh the tracker."""
+    """Pull sheet → sync remote changes → apply local status → push CSV back to sheet."""
     hub = _jobs_dir() / args.slug / "index.md"
     if not hub.exists():
         raise SystemExit(f"no such application: {hub}")
     if args.state not in _STATUSES:
         print(f"warning: '{args.state}' is not a standard status ({', '.join(_STATUSES)})",
               file=sys.stderr)
+
+    url, token = os.environ.get("APPS_SCRIPT_URL"), os.environ.get("APPS_SCRIPT_TOKEN")
+    if url and token:
+        sheet_statuses = _pull_sheet_statuses(url, token)
+        changed = _sync_remote_statuses(sheet_statuses)
+        if changed:
+            print(f"synced {len(changed)} remote change(s): {', '.join(changed)}")
+
     text = hub.read_text(encoding="utf-8")
     new, n = re.subn(r"(?m)^status:.*$", f"status: {_yaml(args.state)}", text)
     if n == 0:
         raise SystemExit(f"no 'status:' field in {hub}")
     hub.write_text(new, encoding="utf-8")
-    _write_tracker()
-    print(f"set {args.slug} status -> {args.state}  (review the diff, then commit)")
+
+    csv_path = _write_tracker()
+    if url and token:
+        _push_to_sheets(url, token, csv_path)
+        print(f"set {args.slug} → {args.state}  (sheet synced; review diff + commit)")
+    else:
+        print(f"set {args.slug} → {args.state}  (review diff + commit)")
     return 0
 
 
 def _write_tracker() -> pathlib.Path:
+    """Regenerate applications/tracker.csv from per-application index.md front matter."""
     jobs = _jobs_dir()
     rows = []
     for d in sorted(jobs.glob("*")):
@@ -353,25 +367,6 @@ def _write_tracker() -> pathlib.Path:
         rows.append(meta)
     order = {s: i for i, s in enumerate(_STATUSES)}
     rows.sort(key=lambda r: (order.get(str(r.get("status")), 99), str(r.get("company", "")).lower()))
-    out = [
-        "# Applications",
-        "",
-        "Status lifecycle: " + " → ".join(_STATUSES) + ".",
-        "Tailored CVs/cover letters live in Google Drive (Drive column); this table is the tracker.",
-        "",
-        "| Company | Role | Status | Found | Posting | Drive | Updated |",
-        "|---|---|---|---|---|---|---|",
-    ]
-    for r in rows:
-        drive = f"[open]({r['drive_url']})" if r.get("drive_url") else "—"
-        posting = f"[apply]({r['job_url']})" if r.get("job_url") else "—"
-        out.append("| {c} | {t} | **{s}** | {f} | {p} | {d} | {u} |".format(
-            c=r.get("company", ""), t=r.get("job_title", ""), s=r.get("status", ""),
-            f=r.get("date_found", "") or "—", p=posting, d=drive,
-            u=r.get("drive_updated", "") or "—"))
-    path = jobs / "README.md"
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
-
     _csv_fields = ["slug", "company", "job_title", "status", "date_found",
                    "job_url", "drive_url", "drive_updated", "clusters"]
     csv_rows = [{
@@ -389,32 +384,52 @@ def _write_tracker() -> pathlib.Path:
     writer = csv.DictWriter(buf, fieldnames=_csv_fields, lineterminator="\n")
     writer.writeheader()
     writer.writerows(csv_rows)
-    (jobs / "tracker.csv").write_text(buf.getvalue(), encoding="utf-8")
-
-    return path
-
-
-def cmd_track(args: argparse.Namespace) -> int:
-    """Regenerate the applications/README.md + tracker.csv from per-app front matter."""
-    path = _write_tracker()
-    print(f"wrote {path} and {path.parent / 'tracker.csv'}")
-    return 0
+    csv_path = jobs / "tracker.csv"
+    csv_path.write_text(buf.getvalue(), encoding="utf-8")
+    return csv_path
 
 
-def cmd_sync_sheets(args: argparse.Namespace) -> int:
-    """Push applications/tracker.csv to the Google Sheet via the Apps Script endpoint."""
-    url = os.environ.get("APPS_SCRIPT_URL")
-    token = os.environ.get("APPS_SCRIPT_TOKEN")
-    if not url or not token:
-        raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
-    csv_path = _jobs_dir() / "tracker.csv"
-    if not csv_path.exists():
-        _write_tracker()
-    payload = {
-        "token": token,
-        "action": "sync_tracker",
-        "csv": csv_path.read_text(encoding="utf-8"),
-    }
+def _pull_sheet_statuses(url: str, token: str) -> dict[str, str]:
+    """Fetch the status column from the Google Sheet. Returns {slug: status}."""
+    payload = {"token": token, "action": "get_tracker"}
+    req = urllib.request.Request(
+        url, data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "text/plain;charset=utf-8"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            resp = json.loads(r.read().decode("utf-8"))
+        if not resp.get("ok") or not resp.get("csv"):
+            return {}
+        reader = csv.DictReader(io.StringIO(resp["csv"]))
+        return {row["slug"]: row["status"]
+                for row in reader if row.get("slug") and row.get("status")}
+    except Exception as exc:
+        print(f"warning: could not pull from sheet: {exc}", file=sys.stderr)
+        return {}
+
+
+def _sync_remote_statuses(sheet_statuses: dict[str, str]) -> list[str]:
+    """Update index.md status for any slug where the sheet has a different value."""
+    changed = []
+    for slug, remote_status in sheet_statuses.items():
+        hub = _jobs_dir() / slug / "index.md"
+        if not hub.exists():
+            continue
+        meta, _ = documents.split_front_matter(hub.read_text(encoding="utf-8"))
+        if meta.get("status") != remote_status:
+            text = hub.read_text(encoding="utf-8")
+            new, n = re.subn(r"(?m)^status:.*$", f"status: {_yaml(remote_status)}", text)
+            if n:
+                hub.write_text(new, encoding="utf-8")
+                changed.append(f"{slug} → {remote_status}")
+    return changed
+
+
+def _push_to_sheets(url: str, token: str, csv_path: pathlib.Path) -> int:
+    """Push tracker.csv to the Google Sheet. Returns row count."""
+    payload = {"token": token, "action": "sync_tracker",
+               "csv": csv_path.read_text(encoding="utf-8")}
     req = urllib.request.Request(
         url, data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "text/plain;charset=utf-8"},
@@ -422,8 +437,37 @@ def cmd_sync_sheets(args: argparse.Namespace) -> int:
     with urllib.request.urlopen(req, timeout=60) as r:
         resp = json.loads(r.read().decode("utf-8"))
     if not resp.get("ok"):
-        raise SystemExit(f"sync-sheets failed: {resp}")
-    print(f"synced {resp.get('rows', '?')} rows to Google Sheets")
+        raise SystemExit(f"sheet push failed: {resp}")
+    return resp.get("rows", 0)
+
+
+def cmd_track(args: argparse.Namespace) -> int:
+    """Regenerate applications/tracker.csv from per-app front matter."""
+    csv_path = _write_tracker()
+    print(f"wrote {csv_path}")
+    return 0
+
+
+def cmd_sync_sheets(args: argparse.Namespace) -> int:
+    """Pull sheet status changes → merge locally → push updated CSV back to sheet."""
+    url = os.environ.get("APPS_SCRIPT_URL")
+    token = os.environ.get("APPS_SCRIPT_TOKEN")
+    if not url or not token:
+        raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
+    print("pulling from sheet ...")
+    sheet_statuses = _pull_sheet_statuses(url, token)
+    changed = _sync_remote_statuses(sheet_statuses)
+    if changed:
+        print(f"  synced {len(changed)} remote change(s):")
+        for c in changed:
+            print(f"    {c}")
+    else:
+        print("  no remote status changes")
+    csv_path = _write_tracker()
+    n = _push_to_sheets(url, token, csv_path)
+    print(f"pushed {n} rows to sheet")
+    if changed:
+        print("review the diff and commit to record the remote status changes")
     return 0
 
 
@@ -833,7 +877,7 @@ def main(argv: list[str] | None = None) -> int:
     p_status.add_argument("state", help="draft|applied|interview|offer|rejected|withdrawn")
     p_status.set_defaults(func=cmd_status)
 
-    p_track = sub.add_parser("track", help="regenerate applications/README.md + tracker.csv")
+    p_track = sub.add_parser("track", help="regenerate applications/tracker.csv from index.md files")
     p_track.set_defaults(func=cmd_track)
 
     p_sheets = sub.add_parser("sync-sheets", help="push tracker.csv to Google Sheets")

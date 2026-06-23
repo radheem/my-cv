@@ -48,6 +48,21 @@ function doPost(e) {
       return json(syncTracker(body.csv));
     }
 
+    if (body.action === 'get_tracker') {
+      var ss = SpreadsheetApp.openById(SHEET_ID);
+      var sh = ss.getSheetByName(TRACKER_SHEET);
+      if (!sh || sh.getLastRow() === 0) return json({ ok: true, csv: '' });
+      var data = sh.getDataRange().getValues();
+      var csvLines = data.map(function(row) {
+        return row.map(function(cell) {
+          var s = String(cell);
+          return (s.indexOf(',') !== -1 || s.indexOf('"') !== -1 || s.indexOf('\n') !== -1)
+            ? '"' + s.replace(/"/g, '""') + '"' : s;
+        }).join(',');
+      });
+      return json({ ok: true, csv: csvLines.join('\n') });
+    }
+
     if (!body.slug) return json({ ok: false, error: 'missing slug' });
 
     var folder = findOrCreate(DriveApp.getFolderById(ROOT_FOLDER_ID), body.slug);
