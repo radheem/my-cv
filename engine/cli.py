@@ -81,6 +81,20 @@ def _slugify(*parts: str) -> str:
     return slug or "tailored-application"
 
 
+_STUDENT_ROLE_RE = re.compile(
+    r"\b(thesis|masterarbeit|bachelorarbeit|werkstudent|working[\s\-]student"
+    r"|hilfskraft|hiwi|praktik\w*)\b",
+    re.IGNORECASE,
+)
+
+
+def _student_relocation(title: str, relocation: str) -> str:
+    """Strip the Blue Card sentence from relocation for student/thesis roles."""
+    if relocation and _STUDENT_ROLE_RE.search(title):
+        return re.sub(r"\s*Blue Card[^.]*\.", "", relocation, flags=re.IGNORECASE).strip()
+    return relocation
+
+
 # Application lifecycle. Edit `status:` (cv-tailor status) and commit as a role
 # progresses; the tracker (applications/README.md) surfaces it. See CLAUDE.md.
 _STATUSES = ("draft", "applied", "interview", "offer", "rejected", "withdrawn")
@@ -223,7 +237,8 @@ def cmd_new(args: argparse.Namespace) -> int:
     print("Rendering cover letter ...", file=sys.stderr)
     cl_body = render.render_cover_letter(
         spec, tailoring, profile.get("summary", ""), job_text, cl_guide,
-        availability=profile.get("availability", ""), relocation=profile.get("relocation", ""),
+        availability=profile.get("availability", ""),
+        relocation=_student_relocation(spec.get("title", ""), profile.get("relocation", "")),
     )
 
     cv_fm = f"---\ntagline: {_yaml(tagline)}\n---\n\n"
