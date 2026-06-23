@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "CHECK24 Vergleichsportal GmbH"
+---
+
+Eine Empfehlungsmaschine, die im Hintergrund lernt, was ein Nutzer tatsächlich sucht, anstatt nur das, was er angeklickt hat, entspricht genau der intelligenten Vergleichserfahrung, die ich aufbauen möchte. Daher bewerbe ich mich um die Position als Full-Stack Entwickler im Team von CHECK24 Explorer. In den letzten fünf Jahren habe ich verteilte Backends und KI-integrierte Workflows entwickelt, die Rohdaten in zuverlässige, nutzerorientierte Features umwandeln. Mein Hintergrund passt direkt zu Ihrem Fokus auf End-to-End-Verantwortung, moderne KI-Tools und skalierbare Full-Stack-Entwicklung.
+
+In aktuellen Projekten habe ich Large Language Models direkt in Produktions-Pipelines integriert, ohne die Datenintegrität oder Systemleistung zu beeinträchtigen. Ich habe einen Model Context Protocol Server entwickelt, der deklarative Tools für KI-Agenten bereitstellt und es ihnen ermöglicht, Backend-Services über eine hot-reloadable Konfigurationsschicht abzufragen. Dieselbe Architektur unterstützte einen Dokumenten-Ingestion-Workflow, bei dem eine 5-stufige Extraktionspipeline zuverlässig auf Kubernetes lief, wobei NATS JetStream für das Echtzeit-State-Tracking und pgvector für die lokale Vektorsuche eingesetzt wurden.
+
+Ich habe diese Backend-Systeme mit Next.js-Oberflächen und automatisierten CI/CD-Pipelines kombiniert, die Linting, Testing und konsistente Deployment-Patterns durchsetzen. Zudem entwickelte ich einen reproduzierbaren Anwendungsworkflow, der einen deterministischen Ranker zur Auswahl relevanter Daten nutzt, bevor ein LLM Text generiert. Dies eliminierte halluzinierte Aussagen vollständig. Dieser Full-Stack-Ansatz stellt sicher, dass KI-Features schnell ausgeliefert werden, dabei aber in der Produktion gut beobachtbar und wartbar bleiben.
+
+Ich bin überzeugt, dass meine Erfahrung in der Verbindung skalierbarer Infrastruktur mit praxisnahen KI-Tools mich in die Lage versetzt, mich sofort produktiv in das Explorer-Produkt einzubringen. Ich stehe ab sofort zur Verfügung, gerne auch in Teilzeit oder als Werkstudent, falls dies besser in Ihre aktuellen Planungen passt. Ich befinde mich derzeit in Deutschland und kann innerhalb von 2 bis 3 Wochen innerhalb des Landes umziehen. Die Blue Card ist vollständig übertragbar, sodass der Einstellungsprozess nur einen regulären Arbeitsvertrag ohne zusätzlichen Sponsorship-Aufwand erfordert.

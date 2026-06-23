@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "PwC Deutschland"
+---
+
+Building infrastructure that quietly handles the weight of public services before a single citizen notices a delay is the kind of backend work I find most rewarding. That focus on resilient, transparent systems aligns directly with PwC’s mission to modernize public sector and energy operations. I am applying for the Backend-Developer - Public Sector & Energy role to bring that same discipline to your cross-functional delivery teams.
+
+Over the past five years I have designed and operated distributed backends where security and scalability are non-negotiable. For a high-throughput tax processing platform I replaced a heavy sidecar architecture with native NATS JetStream messaging and direct gRPC calls. That architectural shift reduced deployment complexity and gave operations teams predictable latency. I paired that event-driven pipeline with a Kubernetes deployment strategy. The setup used consistent hashing and encrypted credential vaults to keep user sessions and third-party integrations isolated. When I later built a Python-based document generation service I applied the same principles. I unit-tested the ranking logic, encrypted every application artifact at rest, and routed data through a Kafka metrics pipeline that fed directly into monitoring dashboards. These experiences taught me how to write clean, testable APIs that integrate smoothly with frontend teams and DevOps workflows while meeting strict data-handling requirements.
+
+I am ready to contribute immediately to your Public & Energy Transformation team and can start full-time right away. I am also open to a working-student or part-time arrangement if that better fits your current project needs. Based in Germany, I can relocate to any office within two to three weeks. I hold Blue Card eligibility so your team can issue a standard contract without sponsorship delays. Thank you for considering my application, and I look forward to discussing how I can help your clients build secure, scalable systems that stand the test of time.

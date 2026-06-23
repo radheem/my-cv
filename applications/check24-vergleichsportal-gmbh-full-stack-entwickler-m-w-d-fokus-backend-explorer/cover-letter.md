@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "CHECK24 Vergleichsportal GmbH"
+---
+
+Building a recommendation engine that quietly surfaces the right experience before a user even knows they want it is the kind of problem that keeps me engaged. I am applying for the Full-Stack Entwickler (m/w/d) – Fokus Backend Explorer role at CHECK24 because your mission to merge adventure with technology aligns perfectly with my background in data-driven backends. I bring five years of experience designing distributed systems and machine-learning infrastructure that scale reliably under real-world traffic.
+
+My recent work focuses on making complex data pipelines resilient and fast enough to power personalized features at scale. I designed a durable document-ingestion system using Hatchet that automatically retries failed steps and streams real-time progress to users over NATS JetStream. The pipeline feeds a local vector search built with pgvector, which indexes content using cosine similarity and HNSW algorithms to deliver precise matches. I wrapped these components in Go and Python microservices that run on Kubernetes, ensuring the backend stays responsive even when inference workloads spike. This experience directly supports your goal of integrating AI-driven recommendation systems while maintaining clean code and rigorous testing standards. I also built a containerized application tracker that encrypts sensitive data in-browser and automates secure deployments, which demonstrates my commitment to shipping reliable software without compromising security.
+
+I am confident that my background in scalable backend architecture and data-driven systems will help the Explorer team deliver reliable, personalized experiences for your users. I am available to start full-time immediately and can also accommodate working-student or part-time arrangements if needed. I am currently based in Germany and can relocate to Erfurt within two to three weeks. A Blue Card is ready upon offer, which means your team only needs to issue the employment contract with no additional sponsorship overhead.

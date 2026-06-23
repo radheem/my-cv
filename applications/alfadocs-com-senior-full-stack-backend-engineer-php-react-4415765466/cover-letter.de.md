@@ -1,0 +1,10 @@
+---
+recipient: ""
+company: "AlfaDocs.com"
+---
+
+Die Reduzierung von Reibungsverlusten im Verwaltungsbereich, damit Kliniker sich voll auf die Patienten konzentrieren können, ist genau die Art von sinnstiftender technischer Herausforderung, die ich suche. Als ich die Stelle als Senior Full Stack Backend Engineer bei AlfaDocs sah, erkannte ich eine Plattform, die eine sichere und skalierbare Architektur als direkte Erweiterung der Patientenversorgung betrachtet. Meine Erfahrung mit verteilten Systemen und datengetriebenen Backends entspricht genau Ihrem Bedarf an robuster Feature-Entwicklung und langfristiger Systemstabilität.
+
+In den letzten fünf Jahren habe ich ereignisgesteuerte Pipelines und cloud-native Dienste entwickelt, die sensible Daten unter strikt definierten Sicherheitsgrenzen verarbeiten. Bei einer Stealth-Finanzplattform habe ich eine aufwändige Sidecar-Architektur durch natives Message-Streaming und direkte Service-Kommunikation ersetzt, was die Deployments vereinfachte und den Betriebsaufwand reduzierte. Zudem entwickelte ich eine deklarative Tooling-Schicht, die Plattformfunktionen für Large Language Models zugänglich machte und es nicht-technischen Teams ermöglichte, komplexe Workflows sicher zu automatisieren, ohne den Datenschutz zu gefährden. Ich arbeite regelmäßig im Pairing mit Produktdesignern und Junior-Engineers, um Geschäftsanforderungen in sichere, testbare Komponenten zu übersetzen. Diese Erfahrung hat mir gezeigt, wie man Systeme um klare Domänengrenzen und automatisierte Quality Gates strukturiert – einen Ansatz, den ich gerne auf Ihren Symfony- und React-Stack anwenden möchte.
+
+Ich stehe ab sofort zur Verfügung und kann innerhalb weniger Wochen innerhalb Deutschlands umziehen. Meine Arbeitserlaubnis ist unkompliziert, da ich Blue Card-ready bin und keine zusätzlichen Sponsoring-Aufwände für den Arbeitgeber bedeutet. Ich würde mich sehr über die Gelegenheit freuen, in einem Gespräch zu erläutern, wie mein Hintergrund im sicheren Systemdesign und in KI-unterstützten Workflows zur Mission von AlfaDocs beitragen kann, die Gesundheitsverwaltung zu transformieren.

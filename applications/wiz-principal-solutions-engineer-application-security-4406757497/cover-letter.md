@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Wiz"
+---
+
+Securing a system means understanding how code, cloud infrastructure, and runtime behavior actually talk to each other before a vulnerability becomes an incident. That precise alignment of development velocity and security posture is why I want to join Wiz as a Principal Solutions Engineer. I bring five years of building distributed cloud-native platforms. I understand how to translate complex security and architecture concepts into clear value for both engineering teams and executive stakeholders.
+
+My background centers on designing and operating the exact kind of modern, containerized environments that Wiz helps customers secure. I recently architected a Go-based microservices platform deployed across Kubernetes with Cilium networking and kustomize. I replaced fragile sidecar patterns with native NATS JetStream and direct gRPC calls to improve system reliability. That work required strict schema validation using CUE to map third-party vendor contracts. I learned how to enforce security boundaries without slowing down developer iteration. I have also built event-driven pipelines and managed SBOM-style dependency tracking while integrating LLM tooling through declarative configuration. This gives me practical experience with the AppSec and cloud-native workflows Wiz supports.
+
+Translating that technical depth into clear guidance for customers is a daily practice in my work. I routinely document complex deployment architectures and troubleshoot multi-service interactions. This experience prepares me to lead proof-of-concept engagements and share field insights with product teams. My approach to building tools always prioritizes reproducible, auditable processes. I can confidently explain how security controls integrate into CI/CD pipelines and container orchestration without oversimplifying the underlying mechanics. This balance of hands-on engineering and clear communication aligns directly with the advisory and feedback loops required for this position.
+
+I am ready to bring this blend of cloud-native engineering and customer-facing technical advisory to Wiz immediately. I am based in Germany and can relocate within the country within two to three weeks. I hold full legal authorization to work in Germany without requiring visa sponsorship. I am available for full-time or working-student arrangements depending on your needs.

@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Katarina Biermann Spot On You Consulting"
+---
+
+Besonders gerne arbeite ich an der Schnittstelle zwischen veralteten und modernen Systemarchitekturen. Das Eintauchen in eine etablierte Codebasis, um deren Architektur gezielt zu modernisieren, entspricht genau der Herausforderung, die ich suche. Ich möchte Ihr Team dabei unterstützen, die strukturellen Grundlagen zu legen, die die Windows-Desktopanwendung auch in den kommenden Jahren zuverlässig betreiben.
+
+In meiner jüngsten Arbeit lag der Fokus auf dem Entwirren komplexer Datenflüsse sowie dem Ersetzen anfälliger Integrationen durch robuste und vollständig beobachtbare Datenpipelines. Im Rahmen der IRS Platform habe ich eine ressourcenintensive Sidecar-Abhängigkeit zu nativem NATS JetStream und direktem gRPC migriert, wodurch sich die Deployment-Topologie erheblich vereinfachte und operative Reibungsverluste sanken. Zudem entwickelte ich einen deklarativen ETL-Workflow, der Daten nach PostgreSQL und DocumentDB leitet und sicherstellt, dass jede Transformation ein striktes Qualitäts-Gate durchläuft, bevor sie die Datenbank erreicht. Diese gleiche Sorgfalt und Disziplin übertrage ich nahtlos auf Desktop-Umgebungen, in denen Datenpersistenz und benutzerseitige Stabilität ebenso entscheidend sind.
+
+Die Modernisierung eines gewachsenen Systems erfordert mehr als reine Code-Anpassungen; es bedarf klarer Tooling-Lösungen und vorhersagbarer Workflows. In den letzten Jahren habe ich mich darauf spezialisiert, Build-Pipelines, Schema-Validierungsschichten sowie automatisierte Test-Gates zu konzipieren, die es Entwicklern ermöglichen, Releases sicher auszuliefern, ohne bestehende Funktionalitäten zu gefährden. Ich arbeite gerne direkt mit Endanwendern zusammen, um technische Randbedingungen in praxistaugliche Lösungen zu übersetzen. Zudem unterstütze ich Teams dabei, schlanke agile Praktiken zu etablieren, die mit dem Wachstum des Produkts skalieren.
+
+Ich bringe eine nachweisliche Erfolgsbilanz bei der Stabilisierung komplexer Systeme, der Integration relationaler Datenbanken sowie dem Aufbau struktureller Rahmenbedingungen mit, die Modernisierungsprojekte zum Erfolg führen. Ich stehe ab sofort zur Verfügung und kann mich innerhalb von zwei bis drei Wochen innerhalb Deutschlands umsetzen. Für den Arbeitgeber entfällt jeder zusätzliche Aufwand, da ich bereits Blue-Card-ready bin und kein Sponsoringsverfahren erforderlich ist.
