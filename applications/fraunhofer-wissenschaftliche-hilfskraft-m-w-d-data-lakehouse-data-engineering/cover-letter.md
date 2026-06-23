@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Fraunhofer"
+---
+
+Modern maritime logistics depends on turning scattered sensor feeds into a single source of truth before a vessel even docks. Building that quiet kind of reliability across heterogeneous data streams is the part of data engineering I enjoy most. I am applying for the Wissenschaftliche Hilfskraft position in Data Lakehouse & Data Engineering at the Fraunhofer CML.
+
+My recent work has focused on stitching together real-time telemetry and batch archives into consistent, queryable stores. I designed a Kafka-driven metrics pipeline that ingested per-device measurements and fanned them out to time-series and document databases. The system handled continuous streams without dropping records. I configured the consumer logic to align with strict data-quality gates. This experience maps directly to your goal of connecting live AIS, radar, and camera feeds to a local Lakehouse. I am comfortable configuring open-source streaming and storage layers. I prefer building pipelines that survive network hiccups and worker restarts.
+
+I have also orchestrated complex ingestion workflows that require reliable scheduling and transparent state tracking. I built a five-step document-processing pipeline that extracts, chunks, embeds, summarizes, and indexes content while streaming progress updates. Each step included configurable timeouts and automatic retries. The overall job kept running even when individual workers failed. I paired these pipelines with declarative routing and automated validation checks. These checks caught schema drift before it reached production. This approach aligns with your need for robust ETL processes and self-directed literature research to evaluate emerging Lakehouse architectures. I thrive in research environments where technical choices must balance experimental flexibility with production-grade stability.
+
+My background in distributed data pipelines and open-source infrastructure will support the CML’s research projects on maritime sensor integration. I am available to start immediately. I can work full-time or in a working-student arrangement. I am currently based in Germany. I can relocate to Hamburg within two to three weeks. A Blue Card is straightforward to process. The employer only needs to issue the employment contract. I look forward to discussing how my pipeline experience can accelerate your maritime data initiatives. Thank you for considering my application.

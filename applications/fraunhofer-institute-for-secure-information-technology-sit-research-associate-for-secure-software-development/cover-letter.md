@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Fraunhofer Institute for Secure Information Technology (SIT)"
+---
+
+The most dangerous vulnerabilities are the ones that hide in plain sight until a system scales beyond its original design. Building tools that catch those flaws early in the development lifecycle is exactly why I want to join the Secure Software Engineering department as a Research Associate for Secure Software Development at Fraunhofer SIT. Your work on automated code analysis and AI-driven security aligns directly with my focus on making complex systems safer without slowing down delivery.
+
+I have spent the last five years designing and securing distributed platforms where reliability and data protection must coexist. On a recent internal platform, I replaced a heavy sidecar architecture with native NATS JetStream messaging and direct gRPC calls. I then extended that system with a Model Context Protocol server, allowing external AI agents to interact with the platform through a strictly typed toolbox. I also built a secure browser-session service that routes user traffic through consistent hashing and stores credentials in an encrypted vault. These experiences taught me how to weave security controls directly into the software lifecycle rather than treating them as an afterthought.
+
+My background also includes building reproducible research prototypes that bridge the gap between academic concepts and production systems. I consolidated a complex 5G testbed into modular Docker Compose stacks and integrated a Near-Real-Time RAN Intelligent Controller with Python-based control applications. I designed a Kafka metrics pipeline that fans out performance data to multiple databases and visualization tools. I apply the same rigor to AI-assisted development by generating reproducible manifests for every run and gating outputs with regression benchmarks. This approach to systematic testing and automated verification translates directly to your work on static and dynamic program analysis.
+
+I am eager to bring this blend of secure system design, automated verification, and prototype development to your Heilbronn research center. I am available to start full-time immediately and remain open to part-time or working-student arrangements. Based in Germany, I can relocate to the campus within two to three weeks. I hold Blue Card eligibility so the employer only needs to issue a standard contract. Thank you for considering my application.

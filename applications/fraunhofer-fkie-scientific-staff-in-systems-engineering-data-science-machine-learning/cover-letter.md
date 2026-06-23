@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Fraunhofer FKIE"
+---
+
+Reliable decision support only works when the architecture anticipates failure before it reaches the operator. Building that operational resilience draws me to the Scientific Staff role in Systems Engineering, Data Science, and Machine Learning at Fraunhofer FKIE. I have spent five years designing distributed platforms where data flows and model outputs must align under real-world constraints. My background bridges full-cycle software development with practical machine learning integration. I want to apply it to your interoperable command and control research.
+
+At a stealth startup, I prototyped a configuration server that exposed platform capabilities to language agents through a declarative interface. I built a verification pipeline that cross-checked every generated action against a strict schema before it reached downstream services. This kept the system stable while domain experts tested the interface against real operational workflows. I later applied the same pattern to a 5G testbed. I wrote Python modules that published performance metrics to a message queue and fed them into an optimization loop for network decisions. Both projects required translating algorithmic concepts into deployable prototypes evaluated iteratively alongside subject-matter experts.
+
+I also built a reproducible document-generation tool that combines a deterministic ranking algorithm with a language model to draft tailored content without inventing facts. Every output is anchored to a versioned manifest recording model parameters and quality benchmarks. This makes the results auditable across repeated runs. This focus on traceability and controlled experimentation matches your requirement for reliable, responsible AI in operational contexts. I regularly coordinate technical interfaces across distributed teams. I also bridge engineering constraints with stakeholder expectations during prototype reviews.
+
+My experience in full-cycle development, iterative evaluation, and responsible AI integration aligns directly with your research and acquisition objectives. I am available to start full-time immediately. I welcome part-time or working-student arrangements if they fit your timeline. Based in Germany, I can relocate to Wachtberg within two to three weeks. My Blue Card requires no employer sponsorship beyond the standard contract. Thank you for your time. I look forward to discussing how I can support your team.

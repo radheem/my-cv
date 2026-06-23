@@ -58,6 +58,27 @@ searches:
     keywords: "data engineer"
     location: "Frankfurt"
 
+  # ── Fraunhofer (jobs.fraunhofer.de — no session needed) ─────────────────
+  - name: fraunhofer-software
+    source: fraunhofer
+    keywords: "software engineer"
+    limit: 20
+
+  - name: fraunhofer-ml
+    source: fraunhofer
+    keywords: "machine learning engineer"
+    limit: 15
+
+  - name: fraunhofer-data
+    source: fraunhofer
+    keywords: "data engineer"
+    limit: 15
+
+  - name: fraunhofer-platform
+    source: fraunhofer
+    keywords: "platform engineer"
+    limit: 10
+
 # Scoring weights used by scripts/score-jds.py to rank captured JDs.
 # Keys are plain-text patterns matched case-insensitively against the JD body.
 scoring:

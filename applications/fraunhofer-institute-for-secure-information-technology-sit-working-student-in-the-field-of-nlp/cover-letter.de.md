@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Fraunhofer Institute for Secure Information Technology SIT"
+---
+
+Das Erkennen von synthetischem Text, bevor dieser Entscheidungen beeinflusst, ist genau die Art von NLP-Problem, das ich angehen möchte. Die Arbeit des Fraunhofer SIT zur Attribution KI-generierter Inhalte und zur Cybersicherheit entspricht genau diesem Ziel. Ich bewerbe mich um die Position als Working Student in the Field of NLP.
+
+Mein Hintergrund befähigt mich, die Art von reproduzierbaren Data Pipelines aufzubauen, die NLP-Forschung verlässlich machen. Ich entwickelte die `cv-tailor`-Toolchain in Python, bei der ein unit-tested ranker relevante Inhalte auswählt, bevor ein LLM Prosa generiert. Jeder Lauf schreibt ein Manifest, das model versions, seeds und input hashes trackt, und ich schütze es mit einem regression gate, um drift frühzeitig zu erkennen. Zudem entwickelte ich einen Playwright ingestion flow, der unstrukturierten Text erfasst, normalisiert und durch eine sichere processing chain leitet, ohne API keys in CI preiszugeben. Dieser Workflow spiegelt die Strenge bei der feature extraction und evaluation wider, die Ihr Team bei der authorship analysis und style detection anwendet.
+
+Ich verbinde zudem model development mit zugänglichen interfaces zur Validierung der Forschung. Ich entwarf die MCP integration für die IRS Platform und stellte damit declarative tool definitions für LLM agents bereit, sodass Forscher prompts gegen echte Daten testen können, ohne die zugrunde liegende Infrastruktur zu berühren. Der Service leitet Anfragen über ein consistent-hashing gateway, cached den session state in einem key-value store und überprüft die output quality durch automated data gates. Ich verknüpfte dieses Backend mit leichten Web Dashboards, die es Nutzern ermöglichen, Parameter anzupassen und Klassifikationsergebnisse in Echtzeit einzusehen. Diese Erfahrung überträgt sich direkt auf Ihre Arbeit zu ensemble methods, model evaluation und rapid prototyping mit Streamlit oder Gradio.
+
+Der Fokus des Fraunhofer SIT auf angewandte Cybersicherheit und NLP attribution entspricht meinem Interesse am Aufbau vertrauenswürdiger, research-grade systems. Ich stehe ab sofort zur Verfügung und kann meinen Zeitplan an ein working-student oder full-time arrangement anpassen. Ich befinde mich derzeit in Deutschland und kann innerhalb von zwei bis drei Wochen innerhalb des Landes umziehen. Ein entsprechendes Angebot würde lediglich die Ausstellung des Vertrags erfordern, da ich Blue Card-ready bin und keinen sponsorship overhead benötige.

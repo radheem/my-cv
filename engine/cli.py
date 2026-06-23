@@ -555,7 +555,16 @@ def cmd_ingest(args: argparse.Namespace) -> int:
 
 
 def cmd_hunt(args: argparse.Namespace) -> int:
-    """Run every search in the runtime config (config/search.yml) in one session."""
+    """Run every search in the runtime config (config/search.yml) in one session.
+
+    Dispatches by the optional `source:` key in each search entry (default: linkedin).
+    LinkedIn searches share one logged-in Playwright session (needs Xvfb).
+    Fraunhofer searches run in their own headless browser (no session needed).
+    """
+    import logging
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+
     cfg = config_mod.resolve_search()
     searches = cfg["searches"]
     if not searches:
@@ -563,7 +572,36 @@ def cmd_hunt(args: argparse.Namespace) -> int:
         return 1
     names = ", ".join(s["name"] for s in searches)
     print(f"hunt: {len(searches)} search(es) from {cfg['path']} — {names}")
-    _do_ingest(searches, pathlib.Path(args.out))
+
+    out_dir = pathlib.Path(args.out)
+    linkedin_searches = [s for s in searches if s.get("source", "linkedin") == "linkedin"]
+    fraunhofer_searches = [s for s in searches if s.get("source") == "fraunhofer"]
+    other_sources = [
+        s["name"] for s in searches
+        if s.get("source", "linkedin") not in ("linkedin", "fraunhofer")
+    ]
+    if other_sources:
+        print(f"warning: unknown source in searches (skipped): {', '.join(other_sources)}",
+              file=sys.stderr)
+
+    if linkedin_searches:
+        _do_ingest(linkedin_searches, out_dir)
+
+    if fraunhofer_searches:
+        from .fraunhofer import jobs as FJ
+
+        for spec in fraunhofer_searches:
+            name = spec.get("name") or spec.get("keywords", "fraunhofer")
+            print(f"\n── fraunhofer search: {name} ──")
+            counts = FJ.hunt_and_capture(
+                spec["keywords"],
+                out_dir,
+                location=spec.get("location"),
+                limit=spec.get("limit", 10),
+            )
+            print(f"  captured {counts['captured']}, skipped {counts['skipped']} (seen), "
+                  f"errors {counts['errors']}")
+
     return 0
 
 
