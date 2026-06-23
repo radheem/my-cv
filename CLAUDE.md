@@ -30,7 +30,7 @@ cv-tailor capture <url> → vault/jds/<slug>.txt      (single job link; logged-i
                                                      `new <url>` would hit the LinkedIn auth wall)
 cv-tailor screenshot <url-or-file> → vault/jds/<slug>.txt  (screenshot + Ollama vision extraction;
                                                      no LinkedIn session; any URL or local .png/.jpg;
-                                                     needs: make install-screenshot + ollama pull qwen3-vl:8b)
+                                                     needs: make install-screenshot + ollama pull qwen3-vl:32b)
 cv-tailor new <jd>    → applications/<slug>/         cv.md (+cv.de.md), cover-letter.md (+.de),
                                                      job-description.md, index.md, manifest.json
 cv-tailor translate   → cv.de.md / cover-letter.de.md  (German, LLM; run inside `new` by default)

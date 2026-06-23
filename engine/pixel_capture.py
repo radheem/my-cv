@@ -24,7 +24,7 @@ import re
 import shutil
 import tempfile
 
-VISION_MODEL_DEFAULT = "qwen3-vl:8b"
+VISION_MODEL_DEFAULT = "qwen3-vl:32b"
 
 METADATA_PROMPT = (
     "You are extracting job posting metadata from a screenshot of a job listing page.\n"
@@ -107,6 +107,9 @@ def _derive_source_and_job_id(source: str) -> tuple[str, str]:
     return "file", hashlib.md5(source.encode()).hexdigest()[:12]
 
 
+_NO_THINK = [{"role": "system", "content": "/no_think"}]
+
+
 def extract_metadata(tile0: pathlib.Path, vision_model: str, client) -> dict:
     """Call Ollama vision on the first tile to extract structured job metadata as JSON."""
     content = [
@@ -115,8 +118,8 @@ def extract_metadata(tile0: pathlib.Path, vision_model: str, client) -> dict:
     ]
     resp = client.chat.completions.create(
         model=vision_model,
-        messages=[{"role": "user", "content": content}],
-        max_tokens=512,
+        messages=_NO_THINK + [{"role": "user", "content": content}],
+        max_tokens=2048,
         temperature=0.0,
     )
     raw = (resp.choices[0].message.content or "{}").strip()
@@ -136,8 +139,8 @@ def extract_body_text(tiles: list[pathlib.Path], vision_model: str, client) -> s
     content.append({"type": "text", "text": BODY_PROMPT})
     resp = client.chat.completions.create(
         model=vision_model,
-        messages=[{"role": "user", "content": content}],
-        max_tokens=4096,
+        messages=_NO_THINK + [{"role": "user", "content": content}],
+        max_tokens=8192,
         temperature=0.0,
     )
     return (resp.choices[0].message.content or "").strip()

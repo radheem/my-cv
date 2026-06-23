@@ -105,7 +105,7 @@ capture: ## Capture ONE job link to vault/jds/ on the HOST under Xvfb: make capt
 	@test -n "$(URL)" || { echo 'URL required, e.g. make capture URL="https://www.linkedin.com/jobs/view/123"'; exit 2; }
 	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor capture "$(URL)"
 
-VISION_MODEL ?= qwen3-vl:8b
+VISION_MODEL ?= qwen3-vl:32b
 
 .PHONY: screenshot
 screenshot: ## Capture a job posting via screenshot + Ollama vision (no session): make screenshot SOURCE=<url-or-file>
