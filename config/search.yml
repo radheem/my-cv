@@ -30,6 +30,22 @@ searches:
     keywords: "backend engineer"
     location: "Jena"
 
+  # Thuringia hub: Erfurt + Jena + Ilmenau + Arnstadt (geoId 102387116 = Erfurt region)
+  - name: backend-erfurt
+    keywords: "backend engineer"
+    geo_id: "102387116"
+    distance: 50
+
+  - name: platform-erfurt
+    keywords: "platform engineer"
+    geo_id: "102387116"
+    distance: 50
+
+  - name: data-erfurt
+    keywords: '"data engineer" OR "software engineer"'
+    geo_id: "102387116"
+    distance: 50
+
   - name: platform-nuremberg
     keywords: "platform engineer"
     location: "Nuremberg"

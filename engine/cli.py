@@ -397,6 +397,88 @@ def cmd_upload(args: argparse.Namespace) -> int:
     return 0
 
 
+def _make_session():
+    """Build a LinkedInSession from env. Shared by `ingest`/`hunt` and `capture`.
+
+    A TTY resolves login challenges via stdin; otherwise (Xvfb/CI) it polls a file
+    inbox under vault/challenges. The persistent profile (vault/profile) keeps us
+    logged in across runs."""
+    from .linkedin.session import FileInboxResolver, LinkedInSession, StdinResolver
+
+    vault = os.environ.get("CV_TAILOR_VAULT", "vault")
+    user_data_dir = os.environ.get("LINKEDIN_USER_DATA_DIR", f"{vault}/profile")
+    challenge_timeout = float(os.environ.get("LINKEDIN_CHALLENGE_TIMEOUT", "300"))
+    resolver = (
+        StdinResolver()
+        if sys.stdin.isatty()
+        else FileInboxResolver(pathlib.Path(vault) / "challenges", timeout=challenge_timeout)
+    )
+    return LinkedInSession(
+        user_data_dir=user_data_dir, vault_dir=vault,
+        resolver=resolver, challenge_timeout=challenge_timeout,
+    )
+
+
+def _drive_session(action) -> None:
+    """Open the logged-in LinkedIn session, run action(page), and always close."""
+    from playwright.sync_api import sync_playwright
+
+    session = _make_session()
+    with sync_playwright() as p:
+        session.context(p)
+        try:
+            session.with_session(action)
+        finally:
+            session.close()
+
+
+def _job_id_from_url(url: str) -> str:
+    """Pull the numeric job id from a view URL (/jobs/view/<id>) or a search URL
+    (...?currentJobId=<id>)."""
+    m = re.search(r"(?:/jobs/view/|currentJobId=)(\d+)", url)
+    if not m:
+        raise SystemExit(
+            f"no job id in URL (expected /jobs/view/<id> or currentJobId=<id>): {url}"
+        )
+    return m.group(1)
+
+
+def _extract_title_company(page) -> tuple[str, str]:
+    """Best-effort (title, company) for a logged-in job page: JSON-LD JobPosting
+    first, then the 'Company hiring Title in Location' og:title / <title>."""
+    try:
+        data = page.evaluate(
+            """() => {
+                for (const s of document.querySelectorAll(
+                        'script[type="application/ld+json"]')) {
+                    try {
+                        const j = JSON.parse(s.textContent);
+                        for (const o of (Array.isArray(j) ? j : [j])) {
+                            if (o && o['@type'] === 'JobPosting') {
+                                const org = o.hiringOrganization;
+                                return {title: o.title || '',
+                                        company: org ? (org.name || '') : ''};
+                            }
+                        }
+                    } catch (e) {}
+                }
+                const og = document.querySelector('meta[property="og:title"]');
+                return {raw: (og && og.content) || document.title || ''};
+            }"""
+        ) or {}
+    except Exception:
+        data = {}
+    title = (data.get("title") or "").strip()
+    company = (data.get("company") or "").strip()
+    if not (title and company):
+        raw = (data.get("raw") or "").split(" | LinkedIn")[0]
+        m = re.match(r"^(?P<company>.+?) hiring (?P<title>.+?) in .+$", raw)
+        if m:
+            title = title or m.group("title").strip()
+            company = company or m.group("company").strip()
+    return title, company
+
+
 def _do_ingest(searches: list[dict], out_dir: pathlib.Path) -> dict:
     """Drive ONE logged-in LinkedIn session through a list of search specs and capture
     JDs. Stop-before-submit (D4). Each spec is a dict with keywords + the optional
@@ -405,28 +487,12 @@ def _do_ingest(searches: list[dict], out_dir: pathlib.Path) -> dict:
     all and `.seen.json` dedups across the whole run."""
     import logging
 
-    from playwright.sync_api import sync_playwright
-
     from .linkedin import jobs as J
     from .linkedin.humanize import human_pause
-    from .linkedin.session import FileInboxResolver, LinkedInSession, StdinResolver
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 
-    vault = os.environ.get("CV_TAILOR_VAULT", "vault")
-    user_data_dir = os.environ.get("LINKEDIN_USER_DATA_DIR", f"{vault}/profile")
     seen_path = out_dir / ".seen.json"
-
-    challenge_timeout = float(os.environ.get("LINKEDIN_CHALLENGE_TIMEOUT", "300"))
-    resolver = (
-        StdinResolver()
-        if sys.stdin.isatty()
-        else FileInboxResolver(pathlib.Path(vault) / "challenges", timeout=challenge_timeout)
-    )
-    session = LinkedInSession(
-        user_data_dir=user_data_dir, vault_dir=vault,
-        resolver=resolver, challenge_timeout=challenge_timeout,
-    )
     counts = {"captured": 0, "skipped": 0}
 
     def run(page) -> None:
@@ -465,12 +531,7 @@ def _do_ingest(searches: list[dict], out_dir: pathlib.Path) -> dict:
                 human_pause(2.0, 5.0)
         J.save_seen(seen_path, seen)
 
-    with sync_playwright() as p:
-        session.context(p)
-        try:
-            session.with_session(run)
-        finally:
-            session.close()
+    _drive_session(run)
 
     print(f"\ningest done: captured {counts['captured']}, skipped {counts['skipped']} (seen)")
     return counts
@@ -503,6 +564,41 @@ def cmd_hunt(args: argparse.Namespace) -> int:
     names = ", ".join(s["name"] for s in searches)
     print(f"hunt: {len(searches)} search(es) from {cfg['path']} — {names}")
     _do_ingest(searches, pathlib.Path(args.out))
+    return 0
+
+
+def cmd_capture(args: argparse.Namespace) -> int:
+    """Capture ONE job link (a /jobs/view/<id> URL or a search URL carrying
+    currentJobId=<id>) to vault/jds/<slug>.txt (+ .json sidecar), using the logged-in
+    session — so we get the real description behind the auth wall. Feed the resulting
+    file to `cv-tailor new` (which reads the sidecar for the posting URL)."""
+    from .linkedin import jobs as J
+
+    job_id = _job_id_from_url(args.url)
+    view_url = f"https://www.linkedin.com/jobs/view/{job_id}/"
+    out_dir = pathlib.Path(args.out)
+    result: dict = {}
+
+    def run(page) -> None:
+        # capture_jd navigates + expands the description; read title/company after, off
+        # the settled page (JSON-LD / og:title), then write_jd derives the slug from them.
+        job = J.Job(job_id=job_id, title="role", company="company", location="", url=view_url)
+        text = J.capture_jd(page, job)
+        title, company = _extract_title_company(page)
+        job.title = title or job.title
+        job.company = company or job.company
+        captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+        result["path"] = J.write_jd(job, text, out_dir, captured_at)
+        result["slug"] = J.slugify(job.company, job.title, job.job_id)
+        result["title"], result["company"] = job.title, job.company
+
+    _drive_session(run)
+
+    if not result.get("path"):
+        raise SystemExit("capture produced no JD")
+    print(f"\ncaptured {result['path']}")
+    print(f"  company: {result['company']}   title: {result['title']}")
+    print(f"\nNext: cv-tailor new {result['path']} --slug {result['slug']}")
     return 0
 
 
@@ -559,6 +655,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_hunt.add_argument("--out", default="vault/jds", help="output dir for JD files")
     p_hunt.set_defaults(func=cmd_hunt)
+
+    p_cap = sub.add_parser(
+        "capture", help="capture ONE job link (view URL or ?currentJobId=) to vault/jds/"
+    )
+    p_cap.add_argument("url", help="LinkedIn job URL (/jobs/view/<id> or ...?currentJobId=<id>)")
+    p_cap.add_argument("--out", default="vault/jds", help="output dir for the JD file")
+    p_cap.set_defaults(func=cmd_capture)
 
     p_pdf = sub.add_parser("pdf", help="render the LaTeX CV + cover letter and compile to PDFs")
     p_pdf.add_argument("slug", help="application slug")

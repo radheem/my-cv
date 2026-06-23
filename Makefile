@@ -95,6 +95,11 @@ ingest: ## Run a single ad-hoc search on the HOST under Xvfb: make ingest KEYWOR
 hunt: ## Run every search in config/search.yml on the HOST under Xvfb
 	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor hunt
 
+.PHONY: capture
+capture: ## Capture ONE job link to vault/jds/ on the HOST under Xvfb: make capture URL="https://www.linkedin.com/jobs/view/<id>"
+	@test -n "$(URL)" || { echo 'URL required, e.g. make capture URL="https://www.linkedin.com/jobs/view/123"'; exit 2; }
+	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor capture "$(URL)"
+
 DAYS    ?= 7
 MAX_APPLICANTS ?= 100
 TOP     ?= 10

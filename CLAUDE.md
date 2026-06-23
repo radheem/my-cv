@@ -26,6 +26,8 @@ PDF is the generic CV (`latex/resume.tex` → `docs/assets/cv.pdf`, compiled in 
 ```
 cv-tailor hunt        → vault/jds/<slug>.txt        (run every search in config/search.yml)
 cv-tailor ingest      → vault/jds/<slug>.txt        (one ad-hoc search via CLI flags)
+cv-tailor capture <url> → vault/jds/<slug>.txt      (single job link; logged-in session; use when
+                                                     `new <url>` would hit the LinkedIn auth wall)
 cv-tailor new <jd>    → applications/<slug>/         cv.md (+cv.de.md), cover-letter.md (+.de),
                                                      job-description.md, index.md, manifest.json
 cv-tailor translate   → cv.de.md / cover-letter.de.md  (German, LLM; run inside `new` by default)
