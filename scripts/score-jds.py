@@ -80,15 +80,30 @@ def main() -> None:
     ap.add_argument("--out", default=None, help="write ranked slug list to JSON file")
     ap.add_argument("--jds-dir", default=str(VAULT_JDS),
                     help="directory of captured .txt JDs")
+    ap.add_argument("--only-slugs", nargs="*", default=None, metavar="SLUG",
+                    help="score only these slug stems (default: all files in --jds-dir)")
+    ap.add_argument("--skip-existing-apps", action="store_true",
+                    help="exclude JDs that already have an applications/<slug>/ dir")
     args = ap.parse_args()
 
     cfg = _load_config()
     scoring_cfg = cfg.get("scoring", {})
 
     jds_dir = pathlib.Path(args.jds_dir)
-    txt_files = sorted(jds_dir.glob("*.txt"))
+
+    if args.only_slugs is not None:
+        txt_files = sorted(
+            p for slug in args.only_slugs
+            if (p := jds_dir / f"{slug}.txt").exists()
+        )
+    else:
+        txt_files = sorted(jds_dir.glob("*.txt"))
     if not txt_files:
         sys.exit(f"No .txt files in {jds_dir}")
+
+    apps_dir = ROOT / "applications"
+    if args.skip_existing_apps:
+        txt_files = [p for p in txt_files if not (apps_dir / p.stem).is_dir()]
 
     rows: list[dict] = []
     for p in txt_files:
