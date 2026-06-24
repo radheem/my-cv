@@ -5,8 +5,8 @@ job_url: ""
 status: "draft"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-24"
-drive_url: ""
-drive_updated: ""
+drive_url: "https://drive.google.com/drive/folders/1dYjAkBe4tVPskGfmsltirljMJ0cLo8JI"
+drive_updated: "2026-06-24T12:09:20+00:00"
 ---
 
 # PwC Deutschland — Backend-Developer – Public Sector & Energy
