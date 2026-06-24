@@ -9,12 +9,12 @@
 #
 # Common overridable variables (make VAR=value target):
 #   SOURCE   job posting URL or .txt/.md path     (required by `new`)
-#   SLUG     application slug under applications/  (new/translate/pdf/upload/status)
+#   ID       numeric job id or full slug            (translate/pdf/upload/status/archive)
 #   RECIPIENT cover-letter salutation name         (new)
 #   PROVIDER  anthropic | ollama                   (new/translate)
 #   MODEL     model id override                    (new/translate)
 #   OLLAMA_URL OpenAI-compatible base URL          (new/translate)
-#   STATUS / SLUG  lifecycle update                (status)
+#   STATUS / ID  lifecycle update                  (status)
 #   PORT     dev server port (default 8000)
 
 VENV    := .venv
@@ -40,7 +40,7 @@ help: ## Show this help
 	@echo "  make new SOURCE=path/to/job.txt --provider anthropic"
 	@echo "  make new SOURCE=jd.txt PROVIDER=ollama OLLAMA_URL=http://host:11434/v1 MODEL=qwen3.6-35b"
 	@echo "  make preview            # build the gated site and serve it"
-	@echo "  make status SLUG=acme-senior-engineer STATUS=applied"
+	@echo "  make status ID=4427480993 STATUS=applied"
 
 # ---- Setup -----------------------------------------------------------------
 

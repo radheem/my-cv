@@ -1,7 +1,7 @@
 ---
 job_title: "Data Engineer (m/w/d)"
 company: "Randstad Deutschland"
-status: "applied"
+status: "withdrawn"
 clusters: ["data-persistence", "platform-cloud-native", "ml-ai"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1ykrHuIqJmYkVMo_GeGUEWpVEXq5V9Fkv"

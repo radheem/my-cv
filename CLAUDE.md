@@ -109,12 +109,13 @@ make docker-hunt      # same, in the container (config mounted at runtime)
 pytest -q             # rank + render + latex + search-config tests (no browser, no API key)
 
 # per application:
-make translate SLUG=<slug>     # German .de.md (LLM)
-make pdf SLUG=<slug>           # bilingual PDFs (LaTeX)
-make upload SLUG=<slug>        # → Google Drive (needs .env; see apps-script/README.md)
-make status SLUG=<slug> STATUS=applied
-make track                     # regenerate tracker.csv from index.md files
-make sync-sheets               # bidirectional sync: pull sheet → merge → push
+make translate ID=<id-or-slug>     # German .de.md (LLM)
+make pdf ID=<id-or-slug>           # bilingual PDFs (LaTeX)
+make upload ID=<id-or-slug>        # → Google Drive (needs .env; see apps-script/README.md)
+make status ID=<id-or-slug> STATUS=applied
+make archive ID=<id-or-slug>       # move Drive folder to Archive/, set status withdrawn
+make track                         # regenerate tracker.csv from index.md files
+make sync-sheets                   # bidirectional sync: pull sheet → merge → push
 ```
 
 ## Conventions
