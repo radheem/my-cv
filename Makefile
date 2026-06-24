@@ -179,19 +179,19 @@ new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIEN
 	  $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
 
 .PHONY: translate
-translate: ## Generate German cv.de.md / cover-letter.de.md: make translate SLUG=<slug>
-	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
-	$(BIN)/cv-tailor translate "$(SLUG)" $(if $(PROVIDER),--provider "$(PROVIDER)") $(if $(MODEL),--model "$(MODEL)") $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
+translate: ## Generate German cv.de.md / cover-letter.de.md: make translate ID=<id-or-slug>
+	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
+	$(BIN)/cv-tailor translate "$(ID)" $(if $(PROVIDER),--provider "$(PROVIDER)") $(if $(MODEL),--model "$(MODEL)") $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
 
 .PHONY: pdf
-pdf: ## Render the LaTeX CV + cover letter and compile to PDFs: make pdf SLUG=<slug>
-	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
-	$(BIN)/cv-tailor pdf "$(SLUG)"
+pdf: ## Render the LaTeX CV + cover letter and compile to PDFs: make pdf ID=<id-or-slug>
+	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
+	$(BIN)/cv-tailor pdf "$(ID)"
 
 .PHONY: upload
-upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload SLUG=<slug>
-	@test -n "$(SLUG)" || { echo "SLUG required"; exit 2; }
-	$(BIN)/cv-tailor upload "$(SLUG)"
+upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<id-or-slug>
+	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
+	$(BIN)/cv-tailor upload "$(ID)"
 
 .PHONY: track
 track: ## Regenerate applications/README.md + tracker.csv
@@ -202,9 +202,14 @@ sync-sheets: ## Push applications/tracker.csv to Google Sheets
 	$(BIN)/cv-tailor sync-sheets
 
 .PHONY: status
-status: ## Advance an application's lifecycle: make status SLUG=<slug> STATUS=applied
-	@test -n "$(SLUG)" -a -n "$(STATUS)" || { echo "Usage: make status SLUG=<slug> STATUS=draft|applied|interview|offer|rejected|withdrawn"; exit 2; }
-	$(BIN)/cv-tailor status "$(SLUG)" "$(STATUS)"
+status: ## Advance an application's lifecycle: make status ID=<id-or-slug> STATUS=applied
+	@test -n "$(ID)" -a -n "$(STATUS)" || { echo "Usage: make status ID=<job-id> STATUS=draft|applied|interview|offer|rejected|withdrawn"; exit 2; }
+	$(BIN)/cv-tailor status "$(ID)" "$(STATUS)"
+
+.PHONY: archive
+archive: ## Move Drive folder to Archive/, set status withdrawn: make archive ID=<id-or-slug>
+	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
+	$(BIN)/cv-tailor archive "$(ID)"
 
 # ---- Build & serve ---------------------------------------------------------
 

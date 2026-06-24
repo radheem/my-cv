@@ -81,6 +81,44 @@ def _slugify(*parts: str) -> str:
     return slug or "tailored-application"
 
 
+_JOB_ID_RE = re.compile(r"(\d{7,})/?$")
+
+
+def _job_id_from_source(source: str) -> str:
+    """Extract numeric job id from a vault JD file's frontmatter or URL."""
+    src = pathlib.Path(source)
+    if src.suffix == ".txt" and src.exists():
+        try:
+            fm, _ = documents.split_front_matter(src.read_text(encoding="utf-8"))
+            jid = str(fm.get("job_id", "")).strip()
+            if jid:
+                return jid
+            url = str(fm.get("url", "")).strip()
+            m = _JOB_ID_RE.search(url.rstrip("/"))
+            if m:
+                return m.group(1)
+        except Exception:
+            pass
+    if source.startswith(("http://", "https://")):
+        m = _JOB_ID_RE.search(source.rstrip("/"))
+        if m:
+            return m.group(1)
+    return ""
+
+
+def _resolve_slug(arg: str) -> str:
+    """Accept a numeric job id or full slug; return the full slug."""
+    if not re.fullmatch(r"\d+", arg):
+        return arg
+    matches = [d.name for d in _jobs_dir().iterdir()
+               if d.is_dir() and d.name.endswith(f"-{arg}")]
+    if not matches:
+        raise SystemExit(f"no application found with job id {arg}")
+    if len(matches) > 1:
+        raise SystemExit(f"ambiguous id {arg} — matches: {', '.join(sorted(matches))}")
+    return matches[0]
+
+
 _STUDENT_ROLE_RE = re.compile(
     r"\b(thesis|masterarbeit|bachelorarbeit|werkstudent|working[\s\-]student"
     r"|hilfskraft|hiwi|praktik\w*)\b",
@@ -228,7 +266,8 @@ def cmd_new(args: argparse.Namespace) -> int:
     tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
     clusters = rank.job_clusters(spec, taxonomy, rank.invert_aliases(taxonomy.get("aliases", {})))
 
-    slug = args.slug or _slugify(spec.get("company", ""), spec.get("title", ""))
+    job_id = _job_id_from_source(str(args.source))
+    slug = args.slug or _slugify(spec.get("company", ""), spec.get("title", ""), job_id)
     out = _jobs_dir() / slug
     out.mkdir(parents=True, exist_ok=True)
 
@@ -305,6 +344,7 @@ def _translate_app(slug: str, en_tagline: str = "") -> None:
 def cmd_translate(args: argparse.Namespace) -> int:
     """Generate German cv.de.md / cover-letter.de.md from the English sources (LLM)."""
     _apply_provider_flags(args)
+    args.slug = _resolve_slug(args.slug)
     app = _jobs_dir() / args.slug
     if not app.is_dir():
         raise SystemExit(f"no such application: {app}")
@@ -315,6 +355,7 @@ def cmd_translate(args: argparse.Namespace) -> int:
 
 def cmd_pdf(args: argparse.Namespace) -> int:
     """Render the LaTeX CV + cover letter (bilingual) and compile to PDFs."""
+    args.slug = _resolve_slug(args.slug)
     pdfs = _build_app(args.slug)
     if not pdfs:
         raise SystemExit("no PDFs produced (missing cv.md/cover-letter.md?)")
@@ -325,6 +366,7 @@ def cmd_pdf(args: argparse.Namespace) -> int:
 
 def cmd_status(args: argparse.Namespace) -> int:
     """Pull sheet → sync remote changes → apply local status → push CSV back to sheet."""
+    args.slug = _resolve_slug(args.slug)
     hub = _jobs_dir() / args.slug / "index.md"
     if not hub.exists():
         raise SystemExit(f"no such application: {hub}")
@@ -471,8 +513,46 @@ def cmd_sync_sheets(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_archive(args: argparse.Namespace) -> int:
+    """Move the Drive folder to Archive/, set status → withdrawn, sync CSV + sheet."""
+    args.slug = _resolve_slug(args.slug)
+    hub = _jobs_dir() / args.slug / "index.md"
+    if not hub.exists():
+        raise SystemExit(f"no such application: {hub}")
+
+    url, token = os.environ.get("APPS_SCRIPT_URL"), os.environ.get("APPS_SCRIPT_TOKEN")
+    if not url or not token:
+        raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env")
+
+    if url and token:
+        sheet_statuses = _pull_sheet_statuses(url, token)
+        changed = _sync_remote_statuses(sheet_statuses)
+        if changed:
+            print(f"synced {len(changed)} remote change(s): {', '.join(changed)}")
+
+    payload = {"token": token, "action": "archive_application", "slug": args.slug}
+    req = urllib.request.Request(
+        url, data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "text/plain;charset=utf-8"},
+    )
+    with urllib.request.urlopen(req, timeout=60) as r:
+        resp = json.loads(r.read().decode("utf-8"))
+    if not resp.get("ok"):
+        raise SystemExit(f"archive failed: {resp}")
+
+    new_drive_url = resp.get("folderUrl", "")
+    _set_front_matter_fields(hub, {"status": "withdrawn", "drive_url": new_drive_url})
+    csv_path = _write_tracker()
+    _push_to_sheets(url, token, csv_path)
+    print(f"archived {args.slug}")
+    print(f"drive → {new_drive_url}")
+    print("review diff + commit")
+    return 0
+
+
 def cmd_upload(args: argparse.Namespace) -> int:
     """Compile the PDFs and upload them to Google Drive via the Apps Script endpoint."""
+    args.slug = _resolve_slug(args.slug)
     url = os.environ.get("APPS_SCRIPT_URL")
     token = os.environ.get("APPS_SCRIPT_TOKEN")
     if not url or not token:
@@ -880,8 +960,12 @@ def main(argv: list[str] | None = None) -> int:
     p_track = sub.add_parser("track", help="regenerate applications/tracker.csv from index.md files")
     p_track.set_defaults(func=cmd_track)
 
-    p_sheets = sub.add_parser("sync-sheets", help="push tracker.csv to Google Sheets")
+    p_sheets = sub.add_parser("sync-sheets", help="bidirectional pull→merge→push with Google Sheets")
     p_sheets.set_defaults(func=cmd_sync_sheets)
+
+    p_archive = sub.add_parser("archive", help="move Drive folder to Archive/, set status withdrawn")
+    p_archive.add_argument("slug", help="application slug or numeric job id")
+    p_archive.set_defaults(func=cmd_archive)
 
     args = parser.parse_args(argv)
     return args.func(args)

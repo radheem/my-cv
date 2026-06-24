@@ -38,6 +38,16 @@ function syncTracker(csvText) {
   return { ok: true, rows: rows.length };
 }
 
+function archiveApplication(slug) {
+  var root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  var archive = findOrCreate(root, 'Archive');
+  var it = root.getFoldersByName(slug);
+  if (!it.hasNext()) return { ok: false, error: 'folder not found: ' + slug };
+  var folder = it.next();
+  folder.moveTo(archive);
+  return { ok: true, folderUrl: folder.getUrl() };
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
@@ -61,6 +71,11 @@ function doPost(e) {
         }).join(',');
       });
       return json({ ok: true, csv: csvLines.join('\n') });
+    }
+
+    if (body.action === 'archive_application') {
+      if (!body.slug) return json({ ok: false, error: 'missing slug' });
+      return json(archiveApplication(body.slug));
     }
 
     if (!body.slug) return json({ ok: false, error: 'missing slug' });
