@@ -2,7 +2,7 @@
 job_title: "Software Engineer"
 company: "Contabo"
 job_url: "https://www.linkedin.com/jobs/view/4427480993/"
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "distributed-systems", "platform-cloud-native", "web-api"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1LE6EBy-iZ83gt2_7u6kcr3Y7iWFfCaeX"
