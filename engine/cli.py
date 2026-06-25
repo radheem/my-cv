@@ -497,6 +497,14 @@ def cmd_sync_sheets(args: argparse.Namespace) -> int:
     token = os.environ.get("APPS_SCRIPT_TOKEN")
     if not url or not token:
         raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
+    
+    if getattr(args, "push_only", False):
+        print("skip pull: force-pushing local tracker to Google Sheets...")
+        csv_path = _write_tracker()
+        n = _push_to_sheets(url, token, csv_path)
+        print(f"pushed {n} rows to sheet")
+        return 0
+
     print("pulling from sheet ...")
     sheet_statuses = _pull_sheet_statuses(url, token)
     changed = _sync_remote_statuses(sheet_statuses)
@@ -1035,6 +1043,8 @@ def main(argv: list[str] | None = None) -> int:
     p_track.set_defaults(func=cmd_track)
 
     p_sheets = sub.add_parser("sync-sheets", help="bidirectional pull→merge→push with Google Sheets")
+    p_sheets.add_argument("--push-only", action="store_true",
+                          help="force push local tracker.csv to Sheets without pulling/merging remote changes")
     p_sheets.set_defaults(func=cmd_sync_sheets)
 
     p_archive = sub.add_parser("archive", help="move Drive folder to Archive/, set status withdrawn")
