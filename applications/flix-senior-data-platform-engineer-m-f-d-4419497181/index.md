@@ -2,7 +2,7 @@
 job_title: "Senior Data Platform Engineer"
 company: "Flix"
 job_url: "https://www.linkedin.com/jobs/view/4419497181/"
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1zJtNwTyX_sWJvjRbfeA2sMOIugIwxCuC"

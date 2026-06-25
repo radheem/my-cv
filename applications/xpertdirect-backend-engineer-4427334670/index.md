@@ -1,7 +1,7 @@
 ---
 job_title: "Backend Engineer"
 company: "XpertDirect"
-status: "withdrawn"
+status: "applied"
 clusters: ["distributed-systems", "platform-cloud-native", "web-api", "observability"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1czFEUfFnTj8qhaYYf88V3M1VB2Ymiz19"

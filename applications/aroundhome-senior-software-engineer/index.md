@@ -1,7 +1,7 @@
 ---
 job_title: "Senior Software Engineer"
 company: "Aroundhome"
-status: "withdrawn"
+status: "applied"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/18lZvBbd8yePxUigc7aSgl-lT7dWTmexE"
