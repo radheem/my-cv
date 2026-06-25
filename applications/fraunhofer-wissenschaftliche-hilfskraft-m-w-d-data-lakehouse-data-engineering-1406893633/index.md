@@ -2,7 +2,7 @@
 job_title: "WISSENSCHAFTLICHE HILFSKRAFT (m/w/d) DATA LAKEHOUSE & DATA ENGINEERING"
 company: "Fraunhofer"
 job_url: "https://jobs.fraunhofer.de/job/Hamburg-WISSENSCHAFTLICHE-HILFSKRAFT-%28mwd%29-DATA-LAKEHOUSE-&-DATA-ENGINEERING-21073/1406893633/"
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1TYXQSuyUTjjz8JcwZ2qEilhVCbXbcf3D"
