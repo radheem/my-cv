@@ -197,9 +197,17 @@ upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<i
 track: ## Regenerate applications/README.md + tracker.csv
 	$(BIN)/cv-tailor track
 
+TYPE ?= pull-push
+
 .PHONY: sync-sheets
-sync-sheets: ## Push applications/tracker.csv to Google Sheets
-	$(BIN)/cv-tailor sync-sheets
+sync-sheets: ## Sync applications/tracker.csv with Google Sheets (TYPE=push-only|pull-push)
+	@if [ "$(TYPE)" = "push-only" ]; then \
+		$(BIN)/cv-tailor sync-sheets --push-only; \
+	elif [ "$(TYPE)" = "pull-push" ]; then \
+		$(BIN)/cv-tailor sync-sheets; \
+	else \
+		echo "Invalid TYPE '$(TYPE)'. Must be 'push-only' or 'pull-push'"; exit 2; \
+	fi
 
 .PHONY: status
 status: ## Advance an application's lifecycle: make status ID=<id-or-slug> STATUS=applied

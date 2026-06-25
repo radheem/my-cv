@@ -2,7 +2,7 @@
 job_title: "Scientific Staff in Systems Engineering / Data Science / Machine Learning"
 company: "Fraunhofer FKIE"
 job_url: "https://jobs.fraunhofer.de/job/Wachtberg-WISSENSCHAFTLICHER-MITARBEITERIN-im-Bereich-Systems-Engineering-Data-Science-Machine-Learning-53343/1395616833/"
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "distributed-systems", "ml-ai"]
 date_found: "2026-06-23"
 drive_url: ""

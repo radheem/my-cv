@@ -2,7 +2,7 @@
 job_title: "Senior Software Engineer API"
 company: "smartclip"
 job_url: ""
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-24"
 drive_url: "https://drive.google.com/drive/folders/1UgB9QwQ6h3K-c2q-ePqP-Tx-PReoIzr2"

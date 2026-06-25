@@ -32,6 +32,17 @@ sent.
 
 ---
 
+## Detailed Runbook Guides
+
+Refer to these dedicated operational runbooks for specific workflows:
+
+*   📂 [Search & Summarize Emails](runbooks/search-emails.md) — Gmail Apps Script Proxy search, read, and local Ollama summarization.
+*   📂 [Search Jobs on Fraunhofer](runbooks/search-fraunhofer.md) — Headless, public-portal job harvesting.
+*   📂 [Search Jobs on LinkedIn](runbooks/search-linkedin.md) — Login session warmup, ad-hoc search, and batch ingest workflows.
+*   📂 [Create Tailored Application](runbooks/create-application.md) — Generating from text files, LinkedIn URLs, or Fraunhofer postings.
+
+---
+
 ## Runbook 0 — Build & configure (one-time)
 
 ```bash
