@@ -422,7 +422,33 @@ def _paras(body: str) -> list[str]:
 
 def _letter_block(body: str, company: str, attn: str, salutation: str,
                   signoff: str, name: str) -> str:
-    paras = "\n\n".join(inline(" ".join(p.splitlines())) for p in _paras(body))
+    # Line-by-line parser to cleanly support H2/H3 headings while keeping multi-line paragraphs folded.
+    lines = body.splitlines()
+    formatted_blocks = []
+    current_para = []
+    
+    for line in lines:
+        line_str = line.strip()
+        if not line_str:
+            if current_para:
+                formatted_blocks.append(inline(" ".join(current_para)))
+                current_para = []
+            continue
+            
+        heading_match = re.match(r"^#{2,3}\s+(.+)$", line_str)
+        if heading_match:
+            if current_para:
+                formatted_blocks.append(inline(" ".join(current_para)))
+                current_para = []
+            title = inline(heading_match.group(1))
+            formatted_blocks.append(f"\\vspace{{8pt}}\\noindent\\textbf{{{title}}}\\par\\vspace{{3pt}}")
+        else:
+            current_para.append(line_str)
+            
+    if current_para:
+        formatted_blocks.append(inline(" ".join(current_para)))
+        
+    paras = "\n\n".join(formatted_blocks)
     return "\n".join([
         "\\recipient{%s}{%s}{}" % (inline(company), attn),
         "",

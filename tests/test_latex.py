@@ -110,3 +110,22 @@ def test_render_cover_bilingual():
     assert "\\opening{Sehr geehrtes Hiring-Team,}" in tex
     assert "\\recipient{Acme \\& Co}" in tex
     assert "\\closing{Sincerely,}{Radheem Bin Razi}" in tex
+
+
+def test_latex_heading_rendering():
+    body = (
+        "## 1. Why Google?\n"
+        "I love Google.\n\n"
+        "## 2. Why me?\n"
+        "I am a strong developer.\n\n"
+        "## 3. Why now?\n"
+        "It is the right time."
+    )
+    meta = {"company": "Google", "recipient": "Hiring Team"}
+    profile = {"name": "John Doe", "email": "john@doe.com"}
+    tex = latex.render_cover_tex(body, body, meta, profile)
+    
+    assert r"\textbf{1. Why Google?}" in tex
+    assert r"\vspace{8pt}\noindent" in tex
+    assert "##" not in tex
+    assert r"\#" not in tex
