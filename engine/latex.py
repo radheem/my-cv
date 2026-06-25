@@ -415,11 +415,6 @@ def render_cv_tex(en_body: str, de_body: str, profile: dict, projects: list[dict
 
 # ---- Cover letter -----------------------------------------------------------
 
-def _paras(body: str) -> list[str]:
-    """Split a cover-letter body into paragraphs (blank-line separated)."""
-    return [p.strip() for p in re.split(r"\n\s*\n", body.strip()) if p.strip()]
-
-
 def _letter_block(body: str, company: str, attn: str, salutation: str,
                   signoff: str, name: str) -> str:
     # Line-by-line parser to cleanly support H2/H3 headings while keeping multi-line paragraphs folded.
