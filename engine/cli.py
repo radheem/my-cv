@@ -31,6 +31,7 @@ from . import (
     config as config_mod,
     documents,
     fetch,
+    gmail,
     jobspec as jobspec_mod,
     manifest as manifest_mod,
     rank,
@@ -861,6 +862,79 @@ def cmd_screenshot(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_gmail_search(args: argparse.Namespace) -> int:
+    threads = gmail.search_emails(args.query, args.limit, False)
+    if args.json:
+        print(json.dumps(threads, indent=2))
+        return 0
+
+    print(f"Found {len(threads)} threads:\n")
+    for t in threads:
+        status = []
+        if t.get("isUnread"):
+            status.append("UNREAD")
+        if t.get("isStarred"):
+            status.append("STARRED")
+        if t.get("isImportant"):
+            status.append("IMPORTANT")
+        status_str = f"[{' '.join(status)}]" if status else ""
+        print(f"ID: {t.get('id')} {status_str}")
+        print(f"Sub: {t.get('subject')} | {t.get('snippet')}\n")
+    return 0
+
+
+def cmd_gmail_read(args: argparse.Namespace) -> int:
+    t = gmail.get_thread(args.thread_id)
+    if not t:
+        print(f"Thread {args.thread_id} not found.")
+        return 1
+    print(f"Subject: {t.get('subject')}\n")
+    for m in t.get("messages", []):
+        print(f"--- From: {m.get('sender')} ---")
+        print(m.get("body"))
+        print("-" * 40 + "\n")
+    return 0
+
+
+def cmd_gmail_modify(args: argparse.Namespace) -> int:
+    ids = sys.stdin.read().split() if args.thread_ids == ["-"] else args.thread_ids
+
+    read_flag = None
+    if args.read:
+        read_flag = True
+    elif args.unread:
+        read_flag = False
+
+    star_flag = None
+    if args.star:
+        star_flag = True
+    elif args.unstar:
+        star_flag = False
+
+    imp_flag = None
+    if args.important:
+        imp_flag = True
+    elif args.unimportant:
+        imp_flag = False
+
+    count = gmail.batch_modify_threads(ids, read_flag, star_flag, imp_flag)
+    print(f"Modified {count} threads.")
+    return 0
+
+
+def cmd_gmail_send(args: argparse.Namespace) -> int:
+    if args.bulk_file:
+        emails = json.loads(pathlib.Path(args.bulk_file).read_text(encoding="utf-8"))
+    else:
+        if not args.to or not args.subject or not args.body:
+            raise SystemExit("Missing --to, --subject, or --body")
+        emails = [{"to": args.to, "subject": args.subject, "body": args.body}]
+
+    res = gmail.batch_send_emails(emails)
+    print(f"Sent {res.get('sentCount')} emails. Remaining quota: {res.get('remainingQuota')}")
+    return 0
+
+
 def _add_provider_flags(p: argparse.ArgumentParser) -> None:
     p.add_argument("--provider", choices=["anthropic", "ollama"], default=None,
                    help="generation backend (default: anthropic; ollama = OpenAI-compatible)")
@@ -966,6 +1040,36 @@ def main(argv: list[str] | None = None) -> int:
     p_archive = sub.add_parser("archive", help="move Drive folder to Archive/, set status withdrawn")
     p_archive.add_argument("slug", help="application slug or numeric job id")
     p_archive.set_defaults(func=cmd_archive)
+
+    p_gmail = sub.add_parser("gmail", help="Gmail operations via Apps Script proxy")
+    gmail_sub = p_gmail.add_subparsers(dest="gmail_cmd", required=True)
+
+    pg_search = gmail_sub.add_parser("search", help="Search emails")
+    pg_search.add_argument("--query", required=True, help="Gmail search query")
+    pg_search.add_argument("--limit", type=int, default=20)
+    pg_search.add_argument("--json", action="store_true")
+    pg_search.set_defaults(func=cmd_gmail_search)
+
+    pg_read = gmail_sub.add_parser("read", help="Read a full thread by ID")
+    pg_read.add_argument("thread_id")
+    pg_read.set_defaults(func=cmd_gmail_read)
+
+    pg_mod = gmail_sub.add_parser("modify", help="Batch modify thread status")
+    pg_mod.add_argument("--thread-ids", nargs="+", required=True, help="List of IDs or '-' for stdin")
+    pg_mod.add_argument("--read", action="store_true")
+    pg_mod.add_argument("--unread", action="store_true")
+    pg_mod.add_argument("--star", action="store_true")
+    pg_mod.add_argument("--unstar", action="store_true")
+    pg_mod.add_argument("--important", action="store_true")
+    pg_mod.add_argument("--unimportant", action="store_true")
+    pg_mod.set_defaults(func=cmd_gmail_modify)
+
+    pg_send = gmail_sub.add_parser("send", help="Send emails")
+    pg_send.add_argument("--to")
+    pg_send.add_argument("--subject")
+    pg_send.add_argument("--body")
+    pg_send.add_argument("--bulk-file", help="Path to JSON file with array of email objects")
+    pg_send.set_defaults(func=cmd_gmail_send)
 
     args = parser.parse_args(argv)
     return args.func(args)
