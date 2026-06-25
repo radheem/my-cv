@@ -1,0 +1,12 @@
+---
+recipient: ""
+company: "Peter Park"
+---
+
+Replacing clunky physical infrastructure with quiet, reliable digital systems is exactly the kind of engineering challenge I want to tackle next. Peter Park’s mission to turn outdated parking operations into seamless, data-driven ecosystems resonates with how I approach backend work. I am applying for the Senior Backend Engineer role to help scale your platform across thousands of European locations. My background in distributed systems and cloud-native development aligns directly with your need for robust, event-driven architecture.
+
+In my recent work on a high-throughput platform, I designed an event-driven microservices layer that replaced a heavy sidecar pattern with NATS JetStream for reliable messaging. This architectural shift reduced latency and gave the team clearer visibility into data flow across services. I built similar backend foundations using Kubernetes and container orchestration, which translates directly to managing your growing fleet of parking endpoints. I understand that scaling to thousands of lots requires systems that can handle unpredictable traffic without manual intervention. My experience shipping production-ready services in cloud environments prepares me to refine your core architecture and support both B2B and B2C workloads.
+
+Reliable deployments depend on automated pipelines and proactive observability, which is why I prioritize both in every project. I implemented quality gates and reproducible build processes that catch regressions before code reaches production. I orchestrated background data jobs with Hatchet to ensure reliable processing, and I built automated browser workflows that handle complex third-party integrations without breaking the core system. These practices align with your focus on streamlining CI/CD and elevating monitoring with Datadog. I enjoy establishing clean engineering standards that make testing, debugging, and scaling straightforward for the whole team.
+
+I am confident that my experience building scalable, event-driven backends will help Peter Park continue delivering smooth, automated parking experiences. I am available to start full-time immediately and can relocate within Germany within two to three weeks. I hold a Blue Card and can join without any sponsorship delays. Thank you for considering my application, and I look forward to discussing how I can contribute to your engineering team.
