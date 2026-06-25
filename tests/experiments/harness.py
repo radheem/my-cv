@@ -279,19 +279,47 @@ _FORBIDDEN_OPENERS = re.compile(
 def cover_metrics(gen_cover: str, company: str) -> dict[str, Any]:
     body = strip_front_matter(gen_cover).strip()
     wc = len(body.split())
-    paras = paragraphs(gen_cover)
+    blocks = [b.strip() for b in re.split(r"\n\s*\n", body) if b.strip()]
+    
+    # Identify headings
+    headings = [b for b in blocks if b.startswith("##") or b.startswith("###")]
+    paras = [b for b in blocks if not (b.startswith("##") or b.startswith("###"))]
+    
+    has_headings = 1.0 if len(headings) > 0 else 0.0
+    
+    headings_correct = 0.0
+    if has_headings:
+        # Verify we have exactly 3 headings, matched by sequence numbers 1, 2, 3
+        patterns = [
+            r"1\.\s+(why|warum)\b",
+            r"2\.\s+(why\s+me|warum\s+ich)\b",
+            r"3\.\s+(why\s+now|warum\s+jetzt)\b"
+        ]
+        matched = 0
+        for i, h in enumerate(headings[:3]):
+            if i < len(patterns) and re.search(patterns[i], h, re.IGNORECASE):
+                matched += 1
+        if matched == 3 and len(headings) == 3:
+            headings_correct = 1.0
+            
     no_salutation = 0.0 if _FORBIDDEN_OPENERS.search(body) else 1.0
     company_hit = 1.0
     if company:
         first = re.sub(r"[^a-z0-9]+", "", company.split()[0].lower())
         company_hit = 1.0 if first and first in _tokens(body) else 0.0
+        
+    # Determine effective paragraphs to count
+    effective_paras_count = len(paras) if has_headings else len(blocks)
+    
     return {
         "word_count": wc,
         "length_ok": round(_band(wc, 250, 400, 150), 3),
-        "paragraphs": len(paras),
-        "paragraphs_ok": 1.0 if 3 <= len(paras) <= 5 else 0.5,
+        "paragraphs": effective_paras_count,
+        "paragraphs_ok": 1.0 if 3 <= effective_paras_count <= 5 else 0.5,
         "no_salutation": no_salutation,
         "company_mention": company_hit,
+        "has_headings": has_headings,
+        "headings_correct": headings_correct,
     }
 
 
@@ -305,7 +333,9 @@ _W = {
     "cl_length": 0.05,
     "cl_no_salutation": 0.05,
     "cl_company": 0.05,
-    "cl_paragraphs": 0.05,
+    "cl_paragraphs": 0.02, # Demoted legacy paras check slightly to accommodate headings
+    "cl_has_headings": 0.01,
+    "cl_headings_correct": 0.02,
 }
 
 
@@ -329,6 +359,8 @@ def score_case(
         "cl_no_salutation": cm["no_salutation"],
         "cl_company": cm["company_mention"],
         "cl_paragraphs": cm["paragraphs_ok"],
+        "cl_has_headings": cm["has_headings"],
+        "cl_headings_correct": cm["headings_correct"],
     }
     heuristic = round(sum(_W[k] * parts[k] for k in _W), 4)
     return {

@@ -111,3 +111,28 @@ def test_score_case_runs_and_is_bounded(cases):
     row = harness.score_case(c.gold_cv, c.gold_cover, c, ["Go", "Kubernetes"], master, catalog)
     assert 0.0 <= row["heuristic"] <= 1.0
     assert set(row["parts"]) == set(harness._W)
+
+
+def test_cover_metrics_handling_headings():
+    # Structured with headings
+    structured = (
+        "## 1. Why Google?\n\n"
+        "I am excited to work at Google because of their search infrastructure.\n\n"
+        "## 2. Why me?\n\n"
+        "I designed a distributed database that handled millions of QPS.\n\n"
+        "## 3. Why now?\n\n"
+        "I am ready to bring my database scaling expertise to a larger scale."
+    )
+    m1 = harness.cover_metrics(structured, "Google")
+    assert m1["paragraphs"] == 3
+    assert m1["has_headings"] == 1.0
+    assert m1["headings_correct"] == 1.0
+    assert m1["company_mention"] == 1.0
+
+    # Legacy unstructured body
+    legacy = "Paragraph one.\n\nParagraph two.\n\nParagraph three."
+    m2 = harness.cover_metrics(legacy, "Google")
+    assert m2["paragraphs"] == 3
+    assert m2["has_headings"] == 0.0
+    assert m2["headings_correct"] == 0.0
+
