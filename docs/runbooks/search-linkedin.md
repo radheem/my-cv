@@ -19,7 +19,7 @@ The first time you log in from a fresh browser environment, LinkedIn will likely
 Run the warmup target over VNC once to solve the CAPTCHA and warm up the browser profile saved in `vault/profile`:
 
 ```bash
-VNC_PASSWORD=my_secure_password cv-tailor ingest --keywords warmup --limit 0
+make docker-login
 ```
 Then connect to `127.0.0.1:5900` using a VNC viewer (such as TigerVNC or RealVNC), solve any challenges presented in the browser window, and let the login complete. The profile is now authenticated as a "recognized device."
 
@@ -27,35 +27,36 @@ Then connect to `127.0.0.1:5900` using a VNC viewer (such as TigerVNC or RealVNC
 
 ## 3. Search and Ingest Job Descriptions
 
-Once you have a warm browser session, you can run automated searches.
+Once you have a warm browser session, you can run automated searches inside the container (zero host setup needed).
 
 ### Option A: Ad-Hoc CLI Search
 To quickly search for a specific role and location directly from the CLI:
 
 ```bash
-cv-tailor ingest --keywords "Platform Engineer" --location "Remote" --limit 5
+make ingest KEYWORDS="Platform Engineer" LOCATION="Remote" LIMIT=5
 ```
 
-#### Available CLI Search Flags:
-*   `--keywords` (Required): Search keywords (boolean syntax works: `"Go" OR "Golang"`).
-*   `--location`: Geographic region text (e.g. `"Remote"`, `"Berlin"`).
-*   `--limit`: Maximum number of jobs to fetch (default: `10`).
-*   `--days`: Filter postings by age (default: `7` days back).
-*   `--easy-apply`: Restrict searches to LinkedIn "Easy Apply" roles.
-*   `--max-applicants`: Automatically discard roles that have more than a specified number of applicants.
+#### Available CLI Search Flags (overridable via `make` variables):
+*   `KEYWORDS` (Required): Search keywords (boolean syntax works: `"Go" OR "Golang"`).
+*   `LOCATION`: Geographic region text (e.g. `"Remote"`, `"Berlin"`).
+*   `LIMIT`: Maximum number of jobs to fetch (default: `5`).
+*   `DAYS`: Filter postings by age (default: `7` days back).
+*   `EASY_APPLY`: Restrict searches to LinkedIn "Easy Apply" roles.
+*   `MAX_APPLICANTS`: Automatically discard roles that have more than a specified number of applicants.
 
 ### Option B: Batch Config-Based Hunt
 To run a sequence of multiple pre-configured searches defined in `config/search.yml`:
 
 ```bash
-cv-tailor hunt
+make hunt
 ```
 
 ---
 
 ## 4. Verification & Output Location
 
-Job details are captured under `vault/jds/`:
+Job details are captured directly under the PostgreSQL database and temporarily cached locally in `vault/jds/`:
+*   PostgreSQL `jobs` Table — The absolute database source of truth.
 *   `vault/jds/<slug>.txt` — Cleaned text of the job description.
 *   `vault/jds/<slug>.json` — Job title, company, URL, and metadata.
-*   `vault/jds/.seen.json` — Seen ledger used to automatically deduplicate subsequent searches.
+*   PostgreSQL database queries are executed automatically to deduplicate subsequent searches (avoiding any duplicate JDs).

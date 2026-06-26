@@ -26,23 +26,24 @@ searches:
 ```
 
 ### Step 2: Run the hunt
-Execute the batch search to fetch matching jobs and save them:
+Execute the batch search to fetch matching jobs and save them inside the container:
 ```bash
-cv-tailor hunt
+make hunt
 ```
 
-The system will start a headless browser, navigate the Fraunhofer career portal, extract job posting details, and write them to:
-📁 `vault/jds/<slug>.txt` (Job description)
-📁 `vault/jds/<slug>.json` (Title, company, URL, and job metadata)
+The system will start a headless browser, navigate the Fraunhofer career portal, extract job posting details, and write them directly into the database:
+📁 PostgreSQL `jobs` Table (absolute database source of truth)
+📁 `vault/jds/<slug>.txt` (Job description backup)
+📁 `vault/jds/<slug>.json` (Title, company, URL, and job metadata backup)
 
 ---
 
 ## 2. Ingest Verification & Troubleshooting
 
-Every job successfully ingested is recorded in the seen ledger `vault/jds/.seen.json` to prevent duplicates. Re-running `cv-tailor hunt` will automatically skip postings that have already been imported.
+Every job successfully ingested is recorded in the PostgreSQL database. Re-running `make hunt` will automatically skip postings that have already been imported by querying the database.
 
 *   To inspect captured descriptions, list files under:
     ```bash
     ls vault/jds/ | grep fraunhofer
     ```
-*   To force re-ingestion of an already seen job posting, delete its corresponding entry in `vault/jds/.seen.json` or clear the file entirely.
+*   To force re-ingestion of an already seen job posting, delete its corresponding row in the PostgreSQL `jobs` table (e.g., `DELETE FROM jobs WHERE slug = '...'`).

@@ -14,12 +14,16 @@ pip install -e '.[generate,fetch]'   # Anthropic backend + URL fetch
 
 | Command | What it does |
 |---|---|
-| `cv-tailor new <source>` | job → tailored `cv.md`/`cover-letter.md` (+ German) + `index.md` |
+| `cv-tailor new <source>` | job → tailored `cv.md`/`cover-letter.md` (+ German) + `index.md` + DB upsert |
 | `cv-tailor translate <slug>` | (re)generate the German `cv.de.md` / `cover-letter.de.md` |
 | `cv-tailor pdf <slug>` | render `.tex` and compile the bilingual PDFs (LaTeX) |
 | `cv-tailor upload <slug>` | compile + upload the PDFs to Google Drive; write `drive_url` |
-| `cv-tailor status <slug> <state>` | advance the lifecycle + refresh the tracker |
-| `cv-tailor track` | regenerate `applications/README.md` (the status table) |
+| `cv-tailor status <slug> <state>` | advance the lifecycle status directly in PostgreSQL |
+| `cv-tailor status push` | push all database application statuses and metadata to Google Sheets |
+| `cv-tailor status pull` | pull Google Sheets status modifications back to PostgreSQL |
+| `cv-tailor db push [slug]` | push filesystem application markdown files to the database |
+| `cv-tailor db pull [slug]` | pull database application markdown files to the filesystem |
+| `cv-tailor db export` | export the entire database state to disk under `application-data/` |
 | `cv-tailor ingest --keywords …` | capture LinkedIn JDs (containerized) — see [Runbooks](runbooks.md) |
 
 ## `cv-tailor new`

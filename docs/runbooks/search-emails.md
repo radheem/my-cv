@@ -1,22 +1,38 @@
 # Runbook — Search & Summarize Emails
 
-This runbook covers how to search emails using custom filters and summarize thread contents secure and locally using the Gmail Apps Script Proxy.
+This runbook covers how to search emails using custom filters, summarize thread contents securely, and drive the automated **Gmail Job Hunt Pipeline** (`make gmail-hunt`).
 
 ---
 
 ## Prerequisites
-Ensure that your `.env` contains the correct Apps Script configurations:
+Ensure that your `.env` contains the correct Apps Script and database configurations:
 *   `APPS_SCRIPT_URL` — The deployment URL of your Apps Script Web App.
 *   `APPS_SCRIPT_TOKEN` — The secure API token shared with your Apps Script instance.
+*   `DATABASE_URL` — PostgreSQL connection string.
 
 ---
 
-## 1. Search Emails with Filter
+## 1. Gmail Job Hunt Pipeline (`make gmail-hunt`)
 
-You can perform powerful structured searches on your Gmail inbox using standard Gmail search operators via the CLI.
+The absolute best way to manage job alerts sent to your Gmail inbox is to run our end-to-end automated pipeline. This pipeline automatically queries Gmail, extracts unseen LinkedIn job URLs from alert emails, crawls and ingests them into PostgreSQL, ranks them, tailors cover letters and CVs on disk, compiles PDFs, and uploads them to Drive!
 
 ```bash
-cv-tailor gmail search --query "<query>" [--limit <num>]
+make gmail-hunt FILTER="subject:'linkedin job alert' is:unread" LIMIT=5 ORDER=top
+```
+
+### Overridable Parameters:
+*   `FILTER`: The Gmail query used to search for alert emails (default: `"linkedin job alert"`).
+*   `LIMIT`: Maximum number of applications to generate (default: `10`).
+*   `ORDER`: Match ordering. `top` scores and selects the best matching roles; `fifo` selects the first N jobs chronologically.
+
+---
+
+## 2. Manual Search Emails with Filter
+
+You can perform powerful structured searches on your Gmail inbox using standard Gmail search operators via the CLI:
+
+```bash
+make tailor CMD="gmail search --query '<query>' [--limit <num>]"
 ```
 
 ### Common Filter Examples:

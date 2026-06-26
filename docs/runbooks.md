@@ -98,15 +98,14 @@ session.
 
 ## Runbook 2 — Ingest job descriptions
 
-With a warm profile, search LinkedIn and capture full job descriptions to `vault/jds/`:
+With a warm profile, search LinkedIn and capture full job descriptions directly inside PostgreSQL:
 
 ```bash
-make docker-ingest KEYWORDS="platform engineer" LOCATION="Remote" LIMIT=5
+make ingest KEYWORDS="platform engineer" LOCATION="Remote" LIMIT=5
 ```
 
-- Each role lands as `vault/jds/<slug>.txt` (the full description) plus a `<slug>.json` sidecar
-  (title, company, URL, job id).
-- A `.seen.json` ledger dedupes across runs — re-running skips roles already captured.
+- Each role lands directly in the PostgreSQL database `jobs` table (with standard backups written to `vault/jds/<slug>.txt` + `.json`).
+- Duplication checks are done automatically against the database to prevent duplicate ingestion.
 - `KEYWORDS` is required; `LOCATION` and `LIMIT` (default 5) are optional.
 
 If the session was logged out, it silently re-logs-in from the warm profile. If that login is
@@ -116,14 +115,13 @@ itself challenged, repeat **Runbook 1** to re-solve over VNC.
 
 ## Runbook 3 — Generate a tailored CV + cover letter
 
-Turn one captured JD into a tailored application, in the same container, against the model
-configured in `.env`:
+Turn one captured JD (referenced by database slug) into a tailored application, on the host, against the model configured in `.env`:
 
 ```bash
-make docker-generate SLUG=acme-platform-engineer-123
+make new SOURCE=acme-platform-engineer-123 RECIPIENT="Hiring Team"
 ```
 
-Output lands in `vault/applications/<slug>/`:
+Output lands in `applications/<slug>/` and is automatically saved to the PostgreSQL database `applications` table:
 
 | File | What |
 |------|------|
@@ -133,38 +131,35 @@ Output lands in `vault/applications/<slug>/`:
 | `manifest.json` | model, seed, prompt + input hashes (re-derivable) |
 
 The ranker is pure and deterministic; the LLM only writes prose around facts pinned in `data/` —
-it never fabricates experience. See [Architecture](architecture.md) for the hard
-generation/deploy boundary.
+it never fabricates experience. See [Architecture](architecture.md) for the hard Boundary.
 
 ---
 
 ## Runbook 4 — Review & advance the lifecycle (stop-before-submit)
 
-1. **Review** `vault/applications/<slug>/cv.pdf` and `cover-letter.pdf`. Edit the Markdown if
-   needed — it is the source of truth.
+1. **Review** `applications/<slug>/cv.md` and `cover-letter.md`. Edit the Markdown if needed.
 2. **Apply by hand.** Submit the application yourself in the browser. Code does not.
-3. **Record the transition** in git's application tracker:
-
+3. **Database push**: To save any local Markdown edits you made back into PostgreSQL:
    ```bash
-   make status SLUG=acme-platform-engineer-123 STATUS=applied
+   make db-push ID=acme-platform-engineer-123
+   ```
+4. **Record the transition**: Advance status directly in the database:
+   ```bash
+   make status ID=acme-platform-engineer-123 STATUS=applied
    # draft → applied → interview → offer | rejected | withdrawn
    ```
-
-Status lives in the hub front matter; `git log` is the audit trail. See
-[CLAUDE.md](../CLAUDE.md) for the full lifecycle.
 
 ---
 
 ## Runbook 5 — Render PDFs, push to Drive, track status
 
-The tailored CV + cover letter are rendered as **bilingual (EN+DE) PDFs** with the LaTeX template
-and stored in **Google Drive** — they are never published to the site (the public site is
-portfolio-only). Status lives in git.
+The tailored CV + cover letter are rendered as **bilingual (EN+DE) PDFs** with the LaTeX template and stored in **Google Drive** — they are never published to the site. Status lives in PostgreSQL.
 
 ```bash
-make pdf SLUG=<slug>             # render cv.tex/cover-letter.tex → bilingual PDFs (latexmk/Docker)
-make upload SLUG=<slug>          # compile + upload PDFs to Google Drive (see apps-script/README.md)
-make status SLUG=<slug> STATUS=applied   # advance lifecycle + refresh applications/README.md
+make pdf ID=<slug>             # render cv.tex/cover-letter.tex → bilingual PDFs
+make upload ID=<slug>          # compile + upload PDFs to Google Drive (see apps-script/README.md)
+make sheet-push                # sync all database application statuses with Google Sheets
+make sheet-pull                # pull Google Sheets status modifications back to PostgreSQL
 ```
 
 The public portfolio still ships via `make build` (`mkdocs build`) + CI; no company name ever

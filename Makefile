@@ -195,21 +195,25 @@ upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<i
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
 	$(UV_RUN) cv-tailor upload "$(ID)"
 
-.PHONY: track
-track: ## Regenerate applications/README.md + tracker.csv
-	$(UV_RUN) cv-tailor track
+.PHONY: db-push
+db-push: ## Push filesystem application markdown files to the database: make db-push [ID=<slug>]
+	$(UV_RUN) cv-tailor db push $(ID)
 
-TYPE ?= pull-push
+.PHONY: db-pull
+db-pull: ## Pull database application markdown files to the filesystem: make db-pull [ID=<slug>]
+	$(UV_RUN) cv-tailor db pull $(ID)
 
-.PHONY: sync-sheets
-sync-sheets: ## Sync applications/tracker.csv with Google Sheets (TYPE=push-only|pull-push)
-	@if [ "$(TYPE)" = "push-only" ]; then \
-		$(UV_RUN) cv-tailor sync-sheets --push-only; \
-	elif [ "$(TYPE)" = "pull-push" ]; then \
-		$(UV_RUN) cv-tailor sync-sheets; \
-	else \
-		echo "Invalid TYPE '$(TYPE)'. Must be 'push-only' or 'pull-push'"; exit 2; \
-	fi
+.PHONY: db-export
+db-export: ## Export the entire database state to application-data/ on disk
+	$(UV_RUN) cv-tailor db export
+
+.PHONY: sheet-push
+sheet-push: ## Push PostgreSQL application statuses and metadata to Google Sheets
+	$(UV_RUN) cv-tailor status push
+
+.PHONY: sheet-pull
+sheet-pull: ## Pull Google Sheets status changes and metadata back to PostgreSQL
+	$(UV_RUN) cv-tailor status pull
 
 .PHONY: status
 status: ## Advance an application's lifecycle: make status ID=<id-or-slug> STATUS=applied

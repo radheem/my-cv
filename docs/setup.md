@@ -58,7 +58,7 @@ Markdown — it is the source of truth — and **have the German checked** befor
 ## 2. Render the bilingual PDFs
 
 ```bash
-make pdf SLUG=<slug>      # cv.tex/cover-letter.tex → 2-page EN+DE cv.pdf / cover-letter.pdf
+make pdf ID=<slug>      # cv.tex/cover-letter.tex → 2-page EN+DE cv.pdf / cover-letter.pdf
 ```
 
 `engine/latex.py` renders the `.tex` (the LLM never emits LaTeX); `scripts/build-application.sh`
@@ -67,13 +67,14 @@ compiles with local `latexmk` or the `texlive/texlive` Docker image. PDFs are gi
 ## 3. Upload to Google Drive + track status
 
 ```bash
-make upload SLUG=<slug>                      # compile + push PDFs to Drive; writes drive_url
-make status SLUG=<slug> STATUS=applied       # advance lifecycle + refresh the tracker
-make track                                   # rebuild applications/README.md
+make upload ID=<slug>                       # compile + push PDFs to Drive; writes drive_url
+make status ID=<slug> STATUS=applied        # advance lifecycle status in PostgreSQL
+make sheet-push                             # push all database application statuses to Google Sheets
+make sheet-pull                             # pull Google Sheets status modifications back to PostgreSQL
+make db-export                              # backup and export database tables to disk (application-data/)
 ```
 
-Upload needs `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` in `.env` (one-time Apps Script deploy — see
-its README). Status transitions are git commits; `applications/README.md` is the at-a-glance table.
+Upload and sheet sync need `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` and `DATABASE_URL` in `.env` (PostgreSQL runs locally in Docker: `docker compose up -d db`). Status transitions are stored directly in the database. Backup exports reside on-disk under `/application-data/`.
 
 ## 4. Run the tests
 

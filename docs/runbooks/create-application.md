@@ -21,9 +21,9 @@ EOF
 ```
 
 ### Step 2: Run the Tailoring Engine
-Run the `new` command, specifying the path to your file. You can optionally supply a `--slug` and `--recipient` name:
+Run the `new` command, specifying the path to your file. You can optionally supply a `SLUG` and `RECIPIENT` name:
 ```bash
-cv-tailor new my-job-description.txt --slug acme-corp-backend-engineer --recipient "Jane Smith"
+make new SOURCE=my-job-description.txt SLUG=acme-corp-backend-engineer RECIPIENT="Jane Smith"
 ```
 
 The engine will:
@@ -31,27 +31,28 @@ The engine will:
 2. Select the top-3 matching projects and order skills deterministically.
 3. Call the LLM to write beautifully tailored CV and cover letter prose.
 4. Output Markdown files and indexes under: `applications/acme-corp-backend-engineer/`.
+5. Automatically **push** the newly generated application straight into your PostgreSQL database!
 
 ---
 
 ## 2. Option B: Create Application from LinkedIn
 
 ### Pathway 1: Direct Generation from URL (Dynamic Ingestion)
-If you have a direct job URL, `cv-tailor` can dynamically fetch the job description using Playwright, parse it, and generate the tailored files in a single step:
+If you have a direct job URL, `cv-tailor` can dynamically fetch the job description inside the container using Playwright, parse it, and generate the tailored files in a single step:
 
 ```bash
-cv-tailor new "https://www.linkedin.com/jobs/view/123456789/" --recipient "Hiring Manager"
+make new SOURCE="https://www.linkedin.com/jobs/view/123456789/" RECIPIENT="Hiring Manager"
 ```
 
-### Pathway 2: Generating from an Ingested File
-If you have already run `cv-tailor ingest` or `cv-tailor hunt` and have a captured job in `vault/jds/`:
-1. Find the path of the job text file under `vault/jds/`:
+### Pathway 2: Generating from an Ingested File / Database Slug
+If you have already run `make ingest` or `make hunt` and have a captured job inside PostgreSQL:
+1. Find the slug of the job using:
    ```bash
-   ls vault/jds/ | grep acme
+   make score
    ```
-2. Run the generator using that file path:
+2. Run the generator using that database slug directly! Because `fetch_job_text` supports database lookup fallbacks, you do **not** need a local text file:
    ```bash
-   cv-tailor new vault/jds/acme-software-engineer-4412345.txt --recipient "John Doe"
+   make new SOURCE=acme-software-engineer-4412345 RECIPIENT="John Doe"
    ```
 
 ---
@@ -62,13 +63,13 @@ If you have already run `cv-tailor ingest` or `cv-tailor hunt` and have a captur
 You can generate a tailored application directly from a public Fraunhofer job posting URL. No login is needed:
 
 ```bash
-cv-tailor new "https://jobs.fraunhofer.de/job/Ilmenau-Research-Associate-Secure-Development-98693/1234567/"
+make new SOURCE="https://jobs.fraunhofer.de/job/Ilmenau-Research-Associate-Secure-Development-98693/1234567/"
 ```
 
-### Pathway 2: Generating from an Ingested File
-If the job has been captured via `cv-tailor hunt` and lives under `vault/jds/`:
+### Pathway 2: Generating from an Ingested Database Slug
+If the job has been captured via `make hunt` and lives inside PostgreSQL:
 ```bash
-cv-tailor new vault/jds/fraunhofer-institute-research-associate-12345.txt
+make new SOURCE=fraunhofer-institute-research-associate-12345
 ```
 
 ---
@@ -78,15 +79,26 @@ cv-tailor new vault/jds/fraunhofer-institute-research-associate-12345.txt
 Once the application is created under `applications/<slug>/`:
 
 ### Step 1: Review & Manual Edits
-Review the generated `cv.md` and `cover-letter.md` inside `applications/<slug>/`. You can make manual tweaks directly to these files—they are your source of truth.
+Review the generated `cv.md` and `cover-letter.md` inside `applications/<slug>/`.
 
-### Step 2: Compile to PDF (Bilingual EN/DE)
-Render and compile the bilingual PDFs using the local LaTeX toolchain or Docker container:
+### Step 2: Database Sync (Database as absolute Source of Truth)
+If you make manual edits to the local markdown files on disk and want to save them back to PostgreSQL:
 ```bash
-cv-tailor pdf <slug>
+make db-push ID=<slug>
+```
+If you want to discard local edits and pull the clean, original text back from the PostgreSQL database:
+```bash
+make db-pull ID=<slug>
+```
+
+### Step 3: Compile to PDF (Bilingual EN/DE)
+Render and compile the bilingual PDFs using the LaTeX template in the scraper container:
+```bash
+make pdf ID=<slug>
 ```
 
 This compiles a clean, professional PDF:
 *   `applications/<slug>/cv.pdf`
 *   `applications/<slug>/cover-letter.pdf`
-*   (Optional) Run `cv-tailor upload <slug>` to compile and automatically sync them to your Google Drive!
+*   (Optional) Run `make upload ID=<slug>` to compile and automatically sync them to your Google Drive!
+*   (Optional) Run `make sheet-push` to sync all application statuses with Google Sheets!
