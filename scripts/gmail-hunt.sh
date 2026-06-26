@@ -141,15 +141,13 @@ echo ""
 echo "── Step 4: Generate Applications and Upload ─────────────"
 
 for slug in "${SELECTED_SLUGS[@]}"; do
-  jd_file="vault/jds/${slug}.txt"
-  
   if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [dry-run] cv-tailor new \"$jd_file\" --slug \"$slug\""
+    echo "  [dry-run] cv-tailor new \"$slug\" --slug \"$slug\""
     echo "  [dry-run] cv-tailor pdf \"$slug\""
     echo "  [dry-run] cv-tailor upload \"$slug\""
   else
     echo "  >> Processing: $slug"
-    cv-tailor new "$jd_file" --slug "$slug"
+    cv-tailor new "$slug" --slug "$slug"
     
     echo "  >> Rendering PDF: $slug"
     cv-tailor pdf "$slug"
@@ -162,11 +160,9 @@ done
 echo ""
 echo "── Step 5: Sync Status ──────────────────────────────────"
 if [[ "$DRY_RUN" == "true" ]]; then
-  echo "  [dry-run] cv-tailor track"
-  echo "  [dry-run] cv-tailor sync-sheets"
+  echo "  [dry-run] cv-tailor status push"
 else
-  cv-tailor track
-  cv-tailor sync-sheets
+  cv-tailor status push
 fi
 
 echo "════════════════════════════════════════════════════════"

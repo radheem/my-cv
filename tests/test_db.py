@@ -186,4 +186,59 @@ def test_db_push_pull_sync(tmp_path, monkeypatch):
     assert "status: \"offer\"" in idx_txt
 
 
+def test_db_export(tmp_path, monkeypatch):
+    import json
+    try:
+        with get_conn():
+            pass
+    except psycopg.OperationalError:
+        pytest.skip("PostgreSQL container is offline. Skipping database integration tests.")
+
+    init_db()
+
+    # Isolate paths
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr("engine.cli._jobs_dir", lambda: tmp_path / "applications")
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM applications WHERE slug='test-export-slug'")
+            cur.execute("DELETE FROM jobs WHERE slug='test-export-slug'")
+            cur.execute("""
+                INSERT INTO jobs (slug, job_id, company, title, source, platform, description)
+                VALUES ('test-export-slug', '88877711', 'Export Corp', 'Export Lead', 'file', 'other', 'JD Description Text')
+            """)
+            cur.execute("""
+                INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
+                VALUES ('test-export-slug', 'applied', 'Hiring Manager', 'CV EN', 'CV DE', 'CL EN', 'CL DE', 'http://drive/folder', ARRAY['web-api', 'distributed-systems'])
+            """)
+        conn.commit()
+
+    from engine.cli import cmd_db_export
+    import argparse
+
+    cmd_db_export(argparse.Namespace())
+
+    # Check files created in application-data/
+    export_dir = tmp_path / "application-data"
+    assert (export_dir / "jobs.csv").exists()
+    assert (export_dir / "applications.csv").exists()
+    assert (export_dir / "jds" / "test-export-slug.txt").exists()
+    
+    slug_dir = export_dir / "applications" / "test-export-slug"
+    assert slug_dir.exists()
+    assert (slug_dir / "cv.md").read_text(encoding="utf-8") == "CV EN"
+    assert (slug_dir / "cv.de.md").read_text(encoding="utf-8") == "CV DE"
+    assert (slug_dir / "cover-letter.md").read_text(encoding="utf-8") == "CL EN"
+    assert (slug_dir / "cover-letter.de.md").read_text(encoding="utf-8") == "CL DE"
+    
+    meta = json.loads((slug_dir / "meta.json").read_text(encoding="utf-8"))
+    assert meta["company"] == "Export Corp"
+    assert meta["title"] == "Export Lead"
+    assert meta["status"] == "applied"
+    assert meta["recipient"] == "Hiring Manager"
+    assert "web-api" in meta["clusters"]
+
+
+
 

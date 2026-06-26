@@ -155,11 +155,11 @@ for slug in "${TOP_SLUGS[@]}"; do
   echo ""
   echo "  Generating: $slug"
   if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [dry-run] would run: cv-tailor new '$jd_file' --slug '$slug'"
+    echo "  [dry-run] would run: cv-tailor new '$slug' --slug '$slug'"
     continue
   fi
 
-  cv-tailor new "$jd_file" --slug "$slug" \
+  cv-tailor new "$slug" --slug "$slug" \
     || { echo "  ERROR generating $slug — skipping"; continue; }
 done
 
@@ -197,7 +197,7 @@ done
 # ── step 8: commit + push ────────────────────────────────────────────────────
 echo ""
 echo "── Step 8: commit + push ────────────────────────────────"
-make track
+cv-tailor status push
 
 if [[ "$DRY_RUN" == "true" ]]; then
   echo "  [dry-run] would commit and push"; echo ""; echo "Pipeline complete (dry run)."; exit 0

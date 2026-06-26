@@ -90,37 +90,76 @@ def main() -> None:
     scoring_cfg = cfg.get("scoring", {})
 
     jds_dir = pathlib.Path(args.jds_dir)
-
-    if args.only_slugs is not None:
-        txt_files = sorted(
-            p for slug in args.only_slugs
-            if (p := jds_dir / f"{slug}.txt").exists()
-        )
-    else:
-        txt_files = sorted(jds_dir.glob("*.txt"))
-    if not txt_files:
-        sys.exit(f"No .txt files in {jds_dir}")
-
-    apps_dir = ROOT / "applications"
-    if args.skip_existing_apps:
-        txt_files = [p for p in txt_files if not (apps_dir / p.stem).is_dir()]
-
     rows: list[dict] = []
-    for p in txt_files:
-        text = p.read_text(encoding="utf-8", errors="ignore")
-        fm, body = _parse_frontmatter(text)
-        score, hits = _score(body or text, scoring_cfg)
-        slug = p.stem
-        rows.append({
-            "slug": slug,
-            "score": score,
-            "title": fm.get("title", slug),
-            "company": fm.get("company", ""),
-            "location": fm.get("location", ""),
-            "applicants": fm.get("applicants", "?"),
-            "url": fm.get("url", ""),
-            "hits": hits,
-        })
+    db_mode = False
+
+    # Check if we can connect to database first
+    sys.path.insert(0, str(ROOT))
+    try:
+        from engine.db import get_conn
+        with get_conn() as conn:
+            db_mode = True
+            with conn.cursor() as cur:
+                if args.only_slugs is not None:
+                    cur.execute("SELECT slug, company, title, description, url, score, location, applicants FROM jobs WHERE slug = ANY(%s)", (list(args.only_slugs),))
+                else:
+                    cur.execute("SELECT slug, company, title, description, url, score, location, applicants FROM jobs")
+                db_rows = cur.fetchall()
+                
+                # Filter out existing applications if requested
+                if args.skip_existing_apps:
+                    cur.execute("SELECT slug FROM applications")
+                    existing_apps = {row["slug"] for row in cur.fetchall()}
+                    db_rows = [r for r in db_rows if r["slug"] not in existing_apps]
+                    
+                for r in db_rows:
+                    desc = r["description"] or ""
+                    score, hits = _score(desc, scoring_cfg)
+                    cur.execute("UPDATE jobs SET score = %s WHERE slug = %s", (score, r["slug"]))
+                    rows.append({
+                        "slug": r["slug"],
+                        "score": score,
+                        "title": r["title"] or r["slug"],
+                        "company": r["company"] or "Unknown",
+                        "location": r["location"] or "",
+                        "applicants": r["applicants"] if r["applicants"] is not None else "?",
+                        "url": r["url"] or "",
+                        "hits": hits,
+                    })
+            conn.commit()
+    except Exception as exc:
+        db_mode = False
+
+    if not db_mode:
+        if args.only_slugs is not None:
+            txt_files = sorted(
+                p for slug in args.only_slugs
+                if (p := jds_dir / f"{slug}.txt").exists()
+            )
+        else:
+            txt_files = sorted(jds_dir.glob("*.txt"))
+        if not txt_files:
+            sys.exit(f"No .txt files in {jds_dir}")
+
+        apps_dir = ROOT / "applications"
+        if args.skip_existing_apps:
+            txt_files = [p for p in txt_files if not (apps_dir / p.stem).is_dir()]
+
+        for p in txt_files:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+            fm, body = _parse_frontmatter(text)
+            score, hits = _score(body or text, scoring_cfg)
+            slug = p.stem
+            rows.append({
+                "slug": slug,
+                "score": score,
+                "title": fm.get("title", slug),
+                "company": fm.get("company", ""),
+                "location": fm.get("location", ""),
+                "applicants": fm.get("applicants", "?"),
+                "url": fm.get("url", ""),
+                "hits": hits,
+            })
 
     rows.sort(key=lambda r: r["score"], reverse=True)
 

@@ -28,3 +28,6 @@ tests/experiments/_*.log
 *.synctex.gz
 applications/*/*.log
 *.out
+
+# database exports
+/application-data/

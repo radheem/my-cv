@@ -316,6 +316,13 @@ def cmd_new(args: argparse.Namespace) -> int:
         print("Translating to German ...", file=sys.stderr)
         _translate_app(slug, tagline)
 
+    # Automatically push newly generated application to database
+    push_args = argparse.Namespace(slug=slug)
+    try:
+        cmd_db_push(push_args)
+    except Exception as e:
+        print(f"Warning: Failed to push new application to database: {e}", file=sys.stderr)
+
     print(f"\nWrote {out}/ (cv, cover-letter [+ .de], job-description, index, manifest).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
     print(
@@ -454,6 +461,10 @@ def cmd_status(args: argparse.Namespace) -> int:
 
     # Else standard: cv-tailor status <slug> <state>
     slug = _resolve_slug(args.slug)
+    hub = _jobs_dir() / slug / "index.md"
+    if not hub.exists():
+        raise SystemExit(f"no such application: {hub}")
+
     state = args.state
     if not state:
         raise SystemExit("Missing state argument (e.g. cv-tailor status acme applied)")
@@ -463,13 +474,16 @@ def cmd_status(args: argparse.Namespace) -> int:
               file=sys.stderr)
 
     # Update status in PostgreSQL DB
-    from .db import get_conn
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (state, slug))
-            if cur.rowcount == 0:
-                raise SystemExit(f"No application found with slug: {slug}")
-        conn.commit()
+    try:
+        from .db import get_conn
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (state, slug))
+                if cur.rowcount == 0:
+                    print(f"warning: Slug '{slug}' not found in database applications table.", file=sys.stderr)
+            conn.commit()
+    except Exception as e:
+        print(f"warning: Database update skipped ({e}).", file=sys.stderr)
 
     # Also update local index.md status for consistency (if present)
     hub = _jobs_dir() / slug / "index.md"
@@ -480,11 +494,19 @@ def cmd_status(args: argparse.Namespace) -> int:
             hub.write_text(new, encoding="utf-8")
 
     # Push updated CSV to sheet
-    csv_data = _get_db_tracker_csv()
-    csv_path = _jobs_dir() / "tracker.csv"
-    csv_path.write_text(csv_data, encoding="utf-8")
-    _push_to_sheets(url, token, csv_path)
-    print(f"set {slug} → {state} (synced with DB & Sheets)")
+    try:
+        csv_data = _get_db_tracker_csv()
+        csv_path = _jobs_dir() / "tracker.csv"
+        csv_path.write_text(csv_data, encoding="utf-8")
+    except Exception:
+        # Fallback to local files index.md metadata parsing
+        csv_path = _write_tracker()
+
+    if url and token:
+        _push_to_sheets(url, token, csv_path)
+        print(f"set {slug} → {state} (synced with DB & Sheets)")
+    else:
+        print(f"set {slug} → {state} (review diff + commit)")
     return 0
 
 
@@ -627,6 +649,89 @@ def cmd_db_pull(args: argparse.Namespace) -> int:
         count += 1
         
     print(f"Pulled {count} applications from PostgreSQL to disk.")
+    return 0
+
+
+def cmd_db_export(args: argparse.Namespace) -> int:
+    from .db import get_conn
+    import csv, json, pathlib
+
+    export_dir = pathlib.Path("application-data")
+    export_dir.mkdir(parents=True, exist_ok=True)
+
+    # Helper to dump table to CSV
+    def dump_table_to_csv(table_name, filename):
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT * FROM {table_name}")
+                rows = cur.fetchall()
+                if not rows:
+                    return
+                fields = list(rows[0].keys())
+                csv_path = export_dir / filename
+                with open(csv_path, "w", encoding="utf-8", newline="") as f:
+                    writer = csv.DictWriter(f, fieldnames=fields)
+                    writer.writeheader()
+                    for r in rows:
+                        row_copy = dict(r)
+                        if "clusters" in row_copy and isinstance(row_copy["clusters"], list):
+                            row_copy["clusters"] = ";".join(row_copy["clusters"])
+                        writer.writerow(row_copy)
+                print(f"  exported {table_name} table to {csv_path}")
+
+    print("Exporting database state to flat files...")
+    dump_table_to_csv("jobs", "jobs.csv")
+    dump_table_to_csv("applications", "applications.csv")
+
+    # Export JDs and applications folders
+    jds_dir = export_dir / "jds"
+    jds_dir.mkdir(parents=True, exist_ok=True)
+    
+    apps_dir = export_dir / "applications"
+    apps_dir.mkdir(parents=True, exist_ok=True)
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            # Export JDs
+            cur.execute("SELECT slug, description FROM jobs WHERE description IS NOT NULL")
+            for r in cur.fetchall():
+                (jds_dir / f"{r['slug']}.txt").write_text(r["description"], encoding="utf-8")
+                
+            # Export applications folders
+            cur.execute("""
+                SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
+                       a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
+                       a.drive_url, a.clusters
+                FROM jobs j JOIN applications a ON j.slug = a.slug
+            """)
+            for r in cur.fetchall():
+                slug = r["slug"]
+                slug_dir = apps_dir / slug
+                slug_dir.mkdir(parents=True, exist_ok=True)
+
+                def write_file_safe(filename, content):
+                    if content is not None:
+                        (slug_dir / filename).write_text(content, encoding="utf-8")
+
+                write_file_safe("cv.md", r["cv_en"])
+                write_file_safe("cv.de.md", r["cv_de"])
+                write_file_safe("cover-letter.md", r["cover_letter_en"])
+                write_file_safe("cover-letter.de.md", r["cover_letter_de"])
+                
+                # Metadata JSON
+                meta = {
+                    "slug": slug,
+                    "company": r["company"],
+                    "title": r["title"],
+                    "url": r["url"] or "",
+                    "status": r["status"],
+                    "recipient": r["recipient"] or "",
+                    "drive_url": r["drive_url"] or "",
+                    "clusters": r["clusters"] or [],
+                }
+                (slug_dir / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+
+    print(f"Database exported successfully. Backup output is located at {export_dir}/")
     return 0
 
 
@@ -1338,6 +1443,9 @@ def main(argv: list[str] | None = None) -> int:
     pdb_pull = db_sub.add_parser("pull", help="pull database application markdown files to the filesystem")
     pdb_pull.add_argument("slug", nargs="?", help="application slug (optional; pulls all if omitted)")
     pdb_pull.set_defaults(func=cmd_db_pull)
+
+    pdb_export = db_sub.add_parser("export", help="export the entire database state to application-data/ on disk")
+    pdb_export.set_defaults(func=cmd_db_export)
 
     args = parser.parse_args(argv)
     return args.func(args)

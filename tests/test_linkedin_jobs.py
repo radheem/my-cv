@@ -105,12 +105,15 @@ def test_build_search_url_reproduces_example():
 
 
 def test_dedup_roundtrip(tmp_path):
+    from unittest.mock import patch
+    import psycopg
     p = tmp_path / ".seen.json"
-    assert load_seen(p) == {}
-    seen = {"1": "acme-eng-1"}
-    save_seen(p, seen)
-    assert already_seen("1", load_seen(p))
-    assert not already_seen("2", load_seen(p))
+    with patch("engine.db.get_conn", side_effect=psycopg.OperationalError("Offline")):
+        assert load_seen(p) == {}
+        seen = {"1": "acme-eng-1"}
+        save_seen(p, seen)
+        assert already_seen("1", load_seen(p))
+        assert not already_seen("2", load_seen(p))
 
 
 def test_write_jd_emits_txt_and_sidecar(tmp_path):

@@ -117,19 +117,31 @@ def jd_frontmatter(job: Job, captured_at: str, *, source: str = "linkedin") -> s
 
 
 def load_seen(path: pathlib.Path) -> dict:
-    path = pathlib.Path(path)
-    if path.exists():
-        try:
-            return json.loads(path.read_text())
-        except json.JSONDecodeError:
-            return {}
-    return {}
+    from ..db import get_conn
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT job_id, slug FROM jobs WHERE job_id IS NOT NULL")
+                return {row["job_id"]: row["slug"] for row in cur.fetchall()}
+    except Exception:
+        # Fallback to local file if DB connection is unavailable (for offline tests)
+        path = pathlib.Path(path)
+        if path.exists():
+            try:
+                return json.loads(path.read_text())
+            except json.JSONDecodeError:
+                return {}
+        return {}
 
 
 def save_seen(path: pathlib.Path, seen: dict) -> None:
-    path = pathlib.Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(seen, indent=2, sort_keys=True))
+    # Save local backup, but database is main truth
+    try:
+        path = pathlib.Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(seen, indent=2, sort_keys=True))
+    except Exception:
+        pass
 
 
 def already_seen(job_id: str, seen: dict) -> bool:
@@ -137,9 +149,47 @@ def already_seen(job_id: str, seen: dict) -> bool:
 
 
 def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "linkedin") -> pathlib.Path:
+    slug = slugify(job.company, job.title, job.job_id)
+    
+    # Upsert into PostgreSQL jobs table
+    from ..db import get_conn
+    try:
+        # Determine platform
+        platform = "other"
+        if "linkedin.com" in job.url:
+            platform = "linkedin"
+        elif "glassdoor" in job.url:
+            platform = "glassdoor"
+        elif "fraunhofer" in job.url:
+            platform = "fraunhofer"
+            
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO jobs (slug, job_id, company, title, location, url, description, score, applicants, source, platform)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (slug) DO UPDATE SET
+                        job_id = EXCLUDED.job_id,
+                        company = EXCLUDED.company,
+                        title = EXCLUDED.title,
+                        location = EXCLUDED.location,
+                        url = EXCLUDED.url,
+                        description = EXCLUDED.description,
+                        applicants = EXCLUDED.applicants,
+                        source = EXCLUDED.source,
+                        platform = EXCLUDED.platform
+                """, (
+                    slug, job.job_id, job.company, job.title, job.location, job.url, 
+                    clean_jd_text(text), None, job.applicants, "url", platform
+                ))
+            conn.commit()
+    except Exception as e:
+        import logging
+        logging.getLogger("cv-tailor").error(f"Failed to save captured job to DB: {e}")
+
+    # Also write local backup text file
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    slug = slugify(job.company, job.title, job.job_id)
     txt = out / f"{slug}.txt"
     txt.write_text(jd_frontmatter(job, captured_at, source=source) + "\n" + clean_jd_text(text) + "\n", "utf-8")
     (out / f"{slug}.json").write_text(
