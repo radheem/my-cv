@@ -36,6 +36,7 @@ sent.
 
 Refer to these dedicated operational runbooks for specific workflows:
 
+*   📂 [PostgreSQL MCP Server](runbooks/mcp-server.md) — Connect external AI agents safely to your database and pipelines.
 *   📂 [Search & Summarize Emails](runbooks/search-emails.md) — Gmail Apps Script Proxy search, read, and local Ollama summarization.
 *   📂 [Search Jobs on Fraunhofer](runbooks/search-fraunhofer.md) — Headless, public-portal job harvesting.
 *   📂 [Search Jobs on LinkedIn](runbooks/search-linkedin.md) — Login session warmup, ad-hoc search, and batch ingest workflows.
