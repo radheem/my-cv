@@ -4,6 +4,13 @@ import decimal
 from mcp.server.fastmcp import FastMCP
 from ..db import get_conn
 from .sqlguard import guard_and_wrap
+from ..workflows import (
+    create_application_workflow,
+    update_application_status_workflow,
+    score_jobs_workflow,
+    sync_status_to_sheets_workflow,
+    run_gmail_hunt_workflow,
+)
 
 log = logging.getLogger("cv-tailor-mcp")
 mcp = FastMCP("cv-tailor", host="0.0.0.0", port=5000)
@@ -91,6 +98,39 @@ def query(sql: str) -> str:
     except Exception as e:
         log.exception("Query execution failed in FastMCP server")
         return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def search_gmail_alerts(filter: str = "subject:\"linkedin job alert\" is:unread", limit: int = 10, order: str = "top") -> str:
+    """Search Gmail for job alerts, capture the job postings, rank them, and store them in the database.
+    This triggers the full ingest pipeline natively (fetch -> score -> db)."""
+    return run_gmail_hunt_workflow(filter, limit, order)
+
+
+@mcp.tool()
+def create_application(source: str) -> str:
+    """Generate a tailored application (CV + Cover Letter in EN/DE) for a specific job source.
+    `source` can be a URL, a local file path, or an existing job slug."""
+    return create_application_workflow(source)
+
+
+@mcp.tool()
+def update_application_status(slug: str, status: str) -> str:
+    """Update the lifecycle status of an application.
+    Valid statuses: draft, applied, interview, offer, rejected, withdrawn."""
+    return update_application_status_workflow(slug, status)
+
+
+@mcp.tool()
+def sync_status_to_sheets() -> str:
+    """Push all database application statuses and metadata to Google Sheets."""
+    return sync_status_to_sheets_workflow()
+
+
+@mcp.tool()
+def score_jobs(top: int = 10) -> str:
+    """Score all unapplied job descriptions in the database against the user's profile and return the top matches."""
+    return score_jobs_workflow(top)
 
 
 def main():
