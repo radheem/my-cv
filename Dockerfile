@@ -14,7 +14,7 @@ WORKDIR /app
 # Install deps first for layer caching. Browser is already in the base image.
 COPY pyproject.toml README.md ./
 COPY engine ./engine
-RUN pip install --no-cache-dir -e '.[fetch,generate,ollama]' \
+RUN pip install --no-cache-dir -e '.[fetch,generate,ollama,mcp]' \
     && playwright install chromium
 
 # Persona data (John Doe sample); mounted read-only at runtime, copied for standalone runs.

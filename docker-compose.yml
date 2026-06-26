@@ -45,10 +45,10 @@ services:
       - "5432:5432"
 
   mcp:
-    build:
-      context: .
-      dockerfile: Dockerfile.mcp
-    image: my-cv-mcp:latest
+    build: .
+    image: my-cv-ingest:latest
+    user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
+    env_file: .env
     restart: always
     environment:
       MCP_TRANSPORT: streamable-http
@@ -57,10 +57,21 @@ services:
       PGDATABASE: cv_tailor
       PGUSER: postgres
       PGPASSWORD: postgres
+      DISPLAY: ":99"
+      LINKEDIN_USER_DATA_DIR: /app/vault/profile
+      CV_TAILOR_VAULT: /app/vault
+      CV_TAILOR_SEARCH_CONFIG: /app/config/search.yml
+      HOME: /tmp
+    volumes:
+      - .:/app
+      - ./vault:/app/vault
+      - ./data:/app/data:ro
+      - ./config:/app/config:ro
     ports:
       - "5000:5000"
     depends_on:
       - db
+    command: ["python", "-m", "engine.mcp.server"]
 
 volumes:
   pgdata:

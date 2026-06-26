@@ -17,7 +17,7 @@ spec:
       containers:
         - name: server
           # Python FastMCP server for cv-tailor, running on transport=streamable-http (SSE) on port 5000
-          image: my-cv-mcp:latest
+          image: my-cv-ingest:latest
           imagePullPolicy: IfNotPresent
           ports:
             - { containerPort: 5000, name: mcp }
