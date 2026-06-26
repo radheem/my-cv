@@ -35,6 +35,9 @@ screenshot = [
     "pixelrag @ file:///home/radr/pers/PixelRAG",
     "openai>=1.40",
 ]
+mcp = [
+    "mcp[cli]>=1.2.0",
+]
 dev = [
     "pytest>=8",
 ]
