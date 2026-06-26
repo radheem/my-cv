@@ -871,7 +871,8 @@ def cmd_screenshot(args: argparse.Namespace) -> int:
 
 
 def cmd_gmail_search(args: argparse.Namespace) -> int:
-    threads = gmail.search_emails(args.query, args.limit, False)
+    include_bodies = getattr(args, "include_bodies", False) or getattr(args, "json", False)
+    threads = gmail.search_emails(args.query, args.limit, include_bodies)
     if args.json:
         print(json.dumps(threads, indent=2))
         return 0
@@ -1058,6 +1059,8 @@ def main(argv: list[str] | None = None) -> int:
     pg_search.add_argument("--query", required=True, help="Gmail search query")
     pg_search.add_argument("--limit", type=int, default=20)
     pg_search.add_argument("--json", action="store_true")
+    pg_search.add_argument("--include-bodies", action="store_true", dest="include_bodies",
+                           help="include message bodies in the results")
     pg_search.set_defaults(func=cmd_gmail_search)
 
     pg_read = gmail_sub.add_parser("read", help="Read a full thread by ID")
