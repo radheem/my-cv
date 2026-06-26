@@ -7,11 +7,12 @@ from psycopg.rows import dict_row
 
 log = logging.getLogger("cv-tailor")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor")
 
 def get_conn():
     """Retrieve a raw connection to the database."""
-    return psycopg.connect(DATABASE_URL, row_factory=dict_row)
+    db_url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor")
+    return psycopg.connect(db_url, row_factory=dict_row)
+
 
 def init_db():
     """Initialize the jobs and applications tables."""
@@ -44,8 +45,13 @@ def init_db():
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
     """
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute(schema_sql)
-            conn.commit()
-    log.info("Database schema applied successfully.")
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(schema_sql)
+                conn.commit()
+        log.info("Database schema applied successfully.")
+    except psycopg.OperationalError as e:
+        log.error(f"Database connection failed: {e}\n-> Please ensure your PostgreSQL Docker container is running (docker compose up -d db) and DATABASE_URL is set correctly.")
+        raise
+
