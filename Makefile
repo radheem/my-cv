@@ -218,6 +218,10 @@ test: ## Run the unit tests (ranking + render logic; no browser, no API key)
 .PHONY: check
 check: test build ## Pre-push sanity: run tests, then build the portfolio
 
+.PHONY: mcp
+mcp: ## Start the cv-tailor PostgreSQL MCP server
+	$(UV_RUN) cv-tailor-mcp
+
 # ---- Housekeeping ----------------------------------------------------------
 
 .PHONY: clean
