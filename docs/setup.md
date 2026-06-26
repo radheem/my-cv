@@ -19,15 +19,23 @@ to Google Drive, track status in git, and deploy the public portfolio.
 - **Google Drive** upload (optional): a deployed Apps Script web app — see
   [apps-script/README.md](https://github.com/radheem/my-cv/blob/main/apps-script/README.md).
 
-## Install
+## Install & Configure
 
+Because the entire application pipeline is containerized, there is **no need to install Python, Playwright, or dependencies on your host**.
+
+### Step 1: Copy Environment Configuration
 ```bash
-make install-all                    # uv venv + all extras
-# or, with pip:
-pip install -e '.[generate,fetch]'  # Anthropic backend + URL fetch
-pip install -e '.[ollama]'          # local Ollama / OpenAI-compatible backend
-playwright install chromium         # only to fetch job URLs / LinkedIn ingest
-cp .env.example .env                # then fill in keys (provider, Drive)
+cp .env.example .env                # then edit and fill in keys (VNC, APPS_SCRIPT, Drive)
+```
+
+### Step 2: Build the Scraper Container
+```bash
+make docker-build
+```
+
+### Step 3: Start the PostgreSQL Database
+```bash
+docker compose up -d db
 ```
 
 ## 1. Generate a tailored application

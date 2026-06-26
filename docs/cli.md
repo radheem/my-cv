@@ -6,8 +6,7 @@ Drive, and tracks status in git. Applications live under `applications/<slug>/` 
 published `docs/` tree. See [Architecture](architecture.md).
 
 ```bash
-pip install -e '.[generate,fetch]'   # Anthropic backend + URL fetch
-# or: pip install -e '.[ollama]'     # local Ollama / OpenAI-compatible backend
+make tailor CMD="new <source>"   # run any raw CLI command in the managed container environment
 ```
 
 ## Commands at a glance
@@ -70,10 +69,10 @@ the message + date are the audit trail.
 
 ## Model support
 
-| Provider | Install | Default model | Auth | Selected by |
+| Provider | Environment | Default model | Auth | Selected by |
 |---|---|---|---|---|
-| **Anthropic** (default) | `.[generate]` | `claude-sonnet-4-6` | `ANTHROPIC_API_KEY` | (default) |
-| **Ollama** / OpenAI-compatible | `.[ollama]` | `qwen3.5:35b` | `CV_TAILOR_OLLAMA_API_KEY` | `--provider ollama` |
+| **Anthropic** (default) | Built-in (Docker) | `claude-sonnet-4-6` | `ANTHROPIC_API_KEY` | (default) |
+| **Ollama** / OpenAI-compatible | Built-in (Docker) | `qwen3.5:35b` | `CV_TAILOR_OLLAMA_API_KEY` | `--provider ollama` |
 
 Flags map onto env (`--provider`→`CV_TAILOR_PROVIDER`, `--model`→`CV_TAILOR_MODEL`,
 `--ollama-url`→`CV_TAILOR_OLLAMA_BASE_URL`); CLI flags win.

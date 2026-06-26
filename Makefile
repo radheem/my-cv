@@ -29,42 +29,10 @@ help: ## Show this help
 	@grep -hE '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) \
 	  | awk 'BEGIN{FS=":.*## "}{printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
 	@echo "\nExamples:"
-	@echo "  make install-all"
 	@echo "  make new SOURCE=path/to/job.txt --provider anthropic"
 	@echo "  make new SOURCE=jd.txt PROVIDER=ollama OLLAMA_URL=http://host:11434/v1 MODEL=qwen3.6-35b"
 	@echo "  make preview            # build the gated site and serve it"
 	@echo "  make status ID=4427480993 STATUS=applied"
-
-# ---- Setup -----------------------------------------------------------------
-
-.PHONY: install
-install: ## Install base deps (site build + gate; no API key)
-	uv sync
-
-.PHONY: install-generate
-install-generate: ## Install generation deps (Anthropic API + URL fetch)
-	uv sync --extra generate --extra fetch
-
-.PHONY: install-ollama
-install-ollama: ## Install local Ollama / OpenAI-compatible backend
-	uv sync --extra ollama
-
-.PHONY: install-dev
-install-dev: ## Install dev deps (pytest)
-	uv sync --extra dev
-
-.PHONY: install-all
-install-all: ## Install everything (base + generate + fetch + ollama + dev)
-	uv sync --all-extras
-
-.PHONY: install-screenshot
-install-screenshot: ## Install screenshot capture deps (PixelRAG render + openai)
-	uv sync --extra screenshot
-	@echo "Next: ollama pull qwen3-vl:8b   (on genai.ltc.hsnet)"
-
-.PHONY: playwright
-playwright: ## Install the Playwright Chromium browser (needed to fetch job URLs)
-	$(UV_RUN) playwright install chromium
 
 # ---- LinkedIn ingest (Sprint 1) --------------------------------------------
 
