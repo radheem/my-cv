@@ -44,5 +44,23 @@ services:
     ports:
       - "5432:5432"
 
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    image: my-cv-mcp:latest
+    restart: always
+    environment:
+      MCP_TRANSPORT: streamable-http
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: cv_tailor
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
 volumes:
   pgdata:

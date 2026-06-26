@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cv-tailor-mcp
+  labels:
+    app: cv-tailor-mcp
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: cv-tailor-mcp.genai.ottogenix.com
+spec:
+  type: ClusterIP
+  selector:
+    app: cv-tailor-mcp
+  ports:
+    - { name: mcp, port: 5000, targetPort: 5000, protocol: TCP }

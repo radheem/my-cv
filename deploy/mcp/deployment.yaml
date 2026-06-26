@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-tailor-mcp
+  labels:
+    app: cv-tailor-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cv-tailor-mcp
+  template:
+    metadata:
+      labels:
+        app: cv-tailor-mcp
+    spec:
+      containers:
+        - name: server
+          # Python FastMCP server for cv-tailor, running on transport=streamable-http (SSE) on port 5000
+          image: my-cv-mcp:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - { containerPort: 5000, name: mcp }
+          env:
+            - { name: MCP_TRANSPORT, value: streamable-http }
+            - { name: PGHOST, value: cv-tailor-db.db-system.svc.cluster.local }
+            - { name: PGPORT, value: "5432" }
+            - { name: PGDATABASE, value: cv_tailor }
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef: { name: cv-tailor-db-secret, key: username }
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef: { name: cv-tailor-db-secret, key: password }
+          readinessProbe:
+            tcpSocket: { port: 5000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: 50m, memory: 96Mi }
+            limits: { cpu: "1", memory: 384Mi }
