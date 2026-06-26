@@ -124,6 +124,14 @@ job-hunt: ## Full pipeline: search 4 cities → score → generate top N → PDF
 job-hunt-dry: ## Dry run: show what job-hunt would do without running anything
 	bash scripts/job-hunt.sh --top $(TOP) --dry-run
 
+FILTER  ?= "linkedin job alert"
+LIMIT   ?= 10
+ORDER   ?= top
+
+.PHONY: gmail-hunt
+gmail-hunt: ## Search Gmail for alerts, capture, and generate applications: make gmail-hunt [FILTER="..."] [LIMIT=10] [ORDER=top|fifo]
+	bash scripts/gmail-hunt.sh --filter "$(FILTER)" --limit $(LIMIT) --order $(ORDER)
+
 .PHONY: score
 score: ## Score captured JDs and print ranking: make score [TOP=10]
 	$(BIN)/python3 scripts/score-jds.py --top $(TOP)
