@@ -168,6 +168,11 @@ docker-generate: ## Generate a tailored application in-container from a captured
 
 # ---- Generate (cv-tailor CLI) ----------------------------------------------
 
+.PHONY: tailor
+tailor: ## Run any raw cv-tailor CLI command: make tailor CMD="<args>"
+	@test -n "$(CMD)" || { echo 'CMD is required, e.g. make tailor CMD="gmail search --query unread"'; exit 2; }
+	$(BIN)/cv-tailor $(CMD)
+
 .PHONY: new
 new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIENT= PROVIDER= MODEL= OLLAMA_URL=]
 	@test -n "$(SOURCE)" || { echo "SOURCE is required, e.g. make new SOURCE=path/to/job.txt"; exit 2; }
