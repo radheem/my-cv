@@ -5,7 +5,7 @@ from engine import cli
 log = logging.getLogger("cv-tailor-workflows")
 
 
-def create_application_workflow(source: str, provider: str = "anthropic") -> str:
+def create_application_workflow(source: str, provider: str | None = None) -> str:
     """Generate a tailored application draft programmatically."""
     args = argparse.Namespace(
         source=source,

@@ -115,7 +115,7 @@ def run_gmail_hunt_workflow(filter_query: str = "subject:\"linkedin job alert\" 
     for slug in selected_slugs:
         logs.append(f"Processing application: {slug}")
         args_new = argparse.Namespace(
-            source=slug, slug=slug, provider="anthropic", model=None,
+            source=slug, slug=slug, provider=None, model=None,
             ollama_url=None, no_translate=False, no_save_db=False, recipient=None
         )
         try:

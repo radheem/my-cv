@@ -11,6 +11,11 @@ log = logging.getLogger("cv-tailor")
 def get_conn():
     """Retrieve a raw connection to the database."""
     db_url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor")
+    
+    # If running inside Docker, replace localhost with Compose db hostname
+    if os.path.exists("/.dockerenv") and "localhost" in db_url:
+        db_url = db_url.replace("localhost", "db")
+        
     return psycopg.connect(db_url, row_factory=dict_row)
 
 
