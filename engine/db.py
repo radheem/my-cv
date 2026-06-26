@@ -12,9 +12,11 @@ def get_conn():
     """Retrieve a raw connection to the database."""
     db_url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor")
     
-    # If running inside Docker, replace localhost with Compose db hostname
-    if os.path.exists("/.dockerenv") and "localhost" in db_url:
-        db_url = db_url.replace("localhost", "db")
+    # If running inside Docker, replace localhost/127.0.0.1 with Compose db hostname
+    if os.path.exists("/.dockerenv"):
+        for local_host in ("localhost", "127.0.0.1"):
+            if local_host in db_url:
+                db_url = db_url.replace(local_host, "db")
         
     return psycopg.connect(db_url, row_factory=dict_row)
 
