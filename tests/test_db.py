@@ -92,3 +92,98 @@ def test_legacy_migration(tmp_path):
             assert "observability" in app["clusters"]
 
 
+def test_fetch_job_text_db_fallback():
+    try:
+        with get_conn():
+            pass
+    except psycopg.OperationalError:
+        pytest.skip("PostgreSQL container is offline. Skipping database integration tests.")
+
+    init_db()
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            # Delete any existing row to ensure isolation
+            cur.execute("DELETE FROM jobs WHERE slug='test-db-fallback-slug'")
+            cur.execute("""
+                INSERT INTO jobs (slug, job_id, company, title, source, platform, description)
+                VALUES ('test-db-fallback-slug', '9999911111', 'Test Fallback Inc', 'Fallback Engineer', 'file', 'other', 'DB Fallback Description')
+            """)
+        conn.commit()
+
+    from engine.fetch import fetch_job_text
+    desc = fetch_job_text("test-db-fallback-slug")
+    assert desc == "DB Fallback Description"
+
+
+def test_db_push_pull_sync(tmp_path, monkeypatch):
+    try:
+        with get_conn():
+            pass
+    except psycopg.OperationalError:
+        pytest.skip("PostgreSQL container is offline. Skipping database integration tests.")
+
+    init_db()
+
+    # Override jobs directory for local files isolation
+    monkeypatch.setattr("engine.cli._jobs_dir", lambda: tmp_path)
+
+    # 1. Test DB Push (Disk -> DB)
+    app_slug = "test-sync-app-888"
+    app_dir = tmp_path / app_slug
+    app_dir.mkdir()
+
+    (app_dir / "index.md").write_text(
+        "---\n"
+        "job_title: \"Cloud Engineer\"\n"
+        "company: \"Sync Corp\"\n"
+        "status: \"interview\"\n"
+        "clusters: [\"ml-ai\"]\n"
+        "---\n\n"
+        "# Sync Corp\n",
+        encoding="utf-8"
+    )
+    (app_dir / "cv.md").write_text("Local CV EN", encoding="utf-8")
+    (app_dir / "cv.de.md").write_text("Local CV DE", encoding="utf-8")
+    (app_dir / "cover-letter.md").write_text("---\nrecipient: \"Jane Doe\"\n---\nLocal CL EN", encoding="utf-8")
+    (app_dir / "cover-letter.de.md").write_text("Local CL DE", encoding="utf-8")
+
+    from engine.cli import cmd_db_push, cmd_db_pull
+    import argparse
+
+    # Push to DB
+    args = argparse.Namespace(slug=app_slug)
+    cmd_db_push(args)
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM applications WHERE slug=%s", (app_slug,))
+            row = cur.fetchone()
+            assert row is not None
+            assert row["status"] == "interview"
+            assert row["recipient"] == "Jane Doe"
+            assert row["cv_en"] == "Local CV EN"
+            assert "ml-ai" in row["clusters"]
+
+            # Update DB content to simulate external changes
+            cur.execute("""
+                UPDATE applications SET 
+                    status = 'offer',
+                    cv_en = 'Updated DB CV EN',
+                    recipient = 'John Smith'
+                WHERE slug = %s
+            """, (app_slug,))
+        conn.commit()
+
+    # 2. Test DB Pull (DB -> Disk)
+    cmd_db_pull(args)
+
+    # Check local files were overwritten
+    cv_txt = (app_dir / "cv.md").read_text(encoding="utf-8")
+    assert cv_txt == "Updated DB CV EN"
+
+    idx_txt = (app_dir / "index.md").read_text(encoding="utf-8")
+    assert "status: \"offer\"" in idx_txt
+
+
+

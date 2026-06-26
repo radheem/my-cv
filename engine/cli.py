@@ -365,35 +365,268 @@ def cmd_pdf(args: argparse.Namespace) -> int:
     return 0
 
 
+def _get_db_tracker_csv() -> str:
+    from .db import get_conn
+    import csv, io
+    _csv_fields = ["slug", "company", "job_title", "status", "date_found",
+                   "job_url", "drive_url", "drive_updated", "clusters"]
+    rows = []
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT j.slug, j.company, j.title as job_title, a.status, 
+                       j.created_at::date as date_found, j.url as job_url, 
+                       a.drive_url, a.updated_at::text as drive_updated, a.clusters
+                FROM jobs j
+                JOIN applications a ON j.slug = a.slug
+                ORDER BY 
+                    CASE a.status
+                        WHEN 'draft' THEN 1
+                        WHEN 'applied' THEN 2
+                        WHEN 'interview' THEN 3
+                        WHEN 'offer' THEN 4
+                        WHEN 'rejected' THEN 5
+                        WHEN 'withdrawn' THEN 6
+                        ELSE 99
+                    END, j.company ASC
+            """)
+            db_rows = cur.fetchall()
+            for r in db_rows:
+                rows.append({
+                    "slug": r.get("slug", ""),
+                    "company": r.get("company", ""),
+                    "job_title": r.get("job_title", ""),
+                    "status": r.get("status", ""),
+                    "date_found": str(r.get("date_found", "")),
+                    "job_url": r.get("job_url", "") or "",
+                    "drive_url": r.get("drive_url", "") or "",
+                    "drive_updated": r.get("drive_updated", "") or "",
+                    "clusters": ";".join(r.get("clusters") or []),
+                })
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=_csv_fields, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return buf.getvalue()
+
+
+def _sync_db_remote_statuses(sheet_statuses: dict[str, str]) -> list[str]:
+    from .db import get_conn
+    changed = []
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            for slug, remote_status in sheet_statuses.items():
+                cur.execute("SELECT status FROM applications WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if row and row["status"] != remote_status:
+                    cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (remote_status, slug))
+                    changed.append(f"{slug} → {remote_status}")
+        conn.commit()
+    return changed
+
+
 def cmd_status(args: argparse.Namespace) -> int:
     """Pull sheet → sync remote changes → apply local status → push CSV back to sheet."""
-    args.slug = _resolve_slug(args.slug)
-    hub = _jobs_dir() / args.slug / "index.md"
-    if not hub.exists():
-        raise SystemExit(f"no such application: {hub}")
-    if args.state not in _STATUSES:
-        print(f"warning: '{args.state}' is not a standard status ({', '.join(_STATUSES)})",
+    url, token = os.environ.get("APPS_SCRIPT_URL"), os.environ.get("APPS_SCRIPT_TOKEN")
+    if not url or not token:
+        raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
+
+    if args.slug == "push":
+        print("Pushing local database state to Google Sheets...")
+        csv_data = _get_db_tracker_csv()
+        csv_path = _jobs_dir() / "tracker.csv"
+        csv_path.write_text(csv_data, encoding="utf-8")
+        n = _push_to_sheets(url, token, csv_path)
+        print(f"pushed {n} rows to sheet")
+        return 0
+
+    elif args.slug == "pull":
+        print("pulling from sheet ...")
+        sheet_statuses = _pull_sheet_statuses(url, token)
+        changed = _sync_db_remote_statuses(sheet_statuses)
+        if changed:
+            print(f"  synced {len(changed)} remote change(s) directly to DB:")
+            for c in changed:
+                print(f"    {c}")
+        else:
+            print("  no remote status changes")
+        return 0
+
+    # Else standard: cv-tailor status <slug> <state>
+    slug = _resolve_slug(args.slug)
+    state = args.state
+    if not state:
+        raise SystemExit("Missing state argument (e.g. cv-tailor status acme applied)")
+        
+    if state not in _STATUSES:
+        print(f"warning: '{state}' is not a standard status ({', '.join(_STATUSES)})",
               file=sys.stderr)
 
-    url, token = os.environ.get("APPS_SCRIPT_URL"), os.environ.get("APPS_SCRIPT_TOKEN")
-    if url and token:
-        sheet_statuses = _pull_sheet_statuses(url, token)
-        changed = _sync_remote_statuses(sheet_statuses)
-        if changed:
-            print(f"synced {len(changed)} remote change(s): {', '.join(changed)}")
+    # Update status in PostgreSQL DB
+    from .db import get_conn
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (state, slug))
+            if cur.rowcount == 0:
+                raise SystemExit(f"No application found with slug: {slug}")
+        conn.commit()
 
-    text = hub.read_text(encoding="utf-8")
-    new, n = re.subn(r"(?m)^status:.*$", f"status: {_yaml(args.state)}", text)
-    if n == 0:
-        raise SystemExit(f"no 'status:' field in {hub}")
-    hub.write_text(new, encoding="utf-8")
+    # Also update local index.md status for consistency (if present)
+    hub = _jobs_dir() / slug / "index.md"
+    if hub.exists():
+        text = hub.read_text(encoding="utf-8")
+        new, n = re.subn(r"(?m)^status:.*$", f"status: {_yaml(state)}", text)
+        if n > 0:
+            hub.write_text(new, encoding="utf-8")
 
-    csv_path = _write_tracker()
-    if url and token:
-        _push_to_sheets(url, token, csv_path)
-        print(f"set {args.slug} → {args.state}  (sheet synced; review diff + commit)")
-    else:
-        print(f"set {args.slug} → {args.state}  (review diff + commit)")
+    # Push updated CSV to sheet
+    csv_data = _get_db_tracker_csv()
+    csv_path = _jobs_dir() / "tracker.csv"
+    csv_path.write_text(csv_data, encoding="utf-8")
+    _push_to_sheets(url, token, csv_path)
+    print(f"set {slug} → {state} (synced with DB & Sheets)")
+    return 0
+
+
+def cmd_db_push(args: argparse.Namespace) -> int:
+    from .db import get_conn
+    from . import documents
+    import yaml
+    
+    slugs = [args.slug] if getattr(args, "slug", None) else [
+        d.name for d in _jobs_dir().iterdir() if d.is_dir() and (d / "index.md").exists()
+    ]
+    
+    count = 0
+    with get_conn() as conn:
+        for slug in slugs:
+            app_dir = _jobs_dir() / slug
+            if not app_dir.exists():
+                print(f"Warning: directory not found for {slug}")
+                continue
+            
+            def read_file_safe(filename):
+                p = app_dir / filename
+                return p.read_text(encoding="utf-8") if p.exists() else ""
+
+            cv_en = read_file_safe("cv.md")
+            cv_de = read_file_safe("cv.de.md")
+            cover_letter_en = read_file_safe("cover-letter.md")
+            cover_letter_de = read_file_safe("cover-letter.de.md")
+            index_md = read_file_safe("index.md")
+
+            status = "draft"
+            recipient = ""
+            clusters = []
+            
+            if index_md:
+                try:
+                    meta, _ = documents.split_front_matter(index_md)
+                    status = meta.get("status") or "draft"
+                    clusters = meta.get("clusters") or []
+                except Exception:
+                    pass
+            if cover_letter_en:
+                try:
+                    meta, _ = documents.split_front_matter(cover_letter_en)
+                    recipient = meta.get("recipient") or ""
+                except Exception:
+                    pass
+
+            with conn.cursor() as cur:
+                # Update application body
+                cur.execute("""
+                    UPDATE applications SET
+                        status = %s,
+                        recipient = %s,
+                        cv_en = %s,
+                        cv_de = %s,
+                        cover_letter_en = %s,
+                        cover_letter_de = %s,
+                        clusters = %s,
+                        updated_at = NOW()
+                    WHERE slug = %s
+                """, (status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters, slug))
+                
+                # If no row was updated (meaning job wasn't in db first), insert it!
+                if cur.rowcount == 0:
+                    # Let's insert a dummy job and then the application
+                    cur.execute("""
+                        INSERT INTO jobs (slug, company, title, source, platform)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON CONFLICT (slug) DO NOTHING
+                    """, (slug, slug, slug, "file", "other"))
+                    
+                    cur.execute("""
+                        INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters))
+            count += 1
+        conn.commit()
+    print(f"Pushed {count} applications from disk to PostgreSQL.")
+    return 0
+
+
+def cmd_db_pull(args: argparse.Namespace) -> int:
+    from .db import get_conn
+    from . import documents
+    import json
+    
+    slugs = [args.slug] if getattr(args, "slug", None) else []
+    
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            if slugs:
+                cur.execute("""
+                    SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
+                           a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
+                           a.drive_url, a.clusters, j.description
+                    FROM jobs j JOIN applications a ON j.slug = a.slug
+                    WHERE j.slug = %s
+                """, (slugs[0],))
+            else:
+                cur.execute("""
+                    SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
+                           a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
+                           a.drive_url, a.clusters, j.description
+                    FROM jobs j JOIN applications a ON j.slug = a.slug
+                """)
+            rows = cur.fetchall()
+
+    count = 0
+    for r in rows:
+        slug = r["slug"]
+        app_dir = _jobs_dir() / slug
+        app_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Write files
+        def write_file_safe(filename, content):
+            if content is not None:
+                (app_dir / filename).write_text(content, encoding="utf-8")
+
+        write_file_safe("cv.md", r["cv_en"])
+        write_file_safe("cv.de.md", r["cv_de"])
+        write_file_safe("cover-letter.md", r["cover_letter_en"])
+        write_file_safe("cover-letter.de.md", r["cover_letter_de"])
+        write_file_safe("job-description.md", r["description"])
+        
+        # Format index.md
+        index_content = (
+            "---\n"
+            f"job_title: {json.dumps(r['title'])}\n"
+            f"company: {json.dumps(r['company'])}\n"
+            f"job_url: {json.dumps(r['url'] or '')}\n"
+            f"status: {json.dumps(r['status'])}\n"
+            f"clusters: {json.dumps(r['clusters'] or [])}\n"
+            f"drive_url: {json.dumps(r['drive_url'] or '')}\n"
+            "---\n\n"
+            f"# {r['company']} — {r['title']}\n\n"
+            "Tailored application. Source of truth: database.\n"
+        )
+        (app_dir / "index.md").write_text(index_content, encoding="utf-8")
+        count += 1
+        
+    print(f"Pulled {count} applications from PostgreSQL to disk.")
     return 0
 
 
@@ -1044,8 +1277,8 @@ def main(argv: list[str] | None = None) -> int:
     p_up.set_defaults(func=cmd_upload)
 
     p_status = sub.add_parser("status", help="advance an application's lifecycle status")
-    p_status.add_argument("slug", help="application slug")
-    p_status.add_argument("state", help="draft|applied|interview|offer|rejected|withdrawn")
+    p_status.add_argument("slug", help="application slug, 'push', or 'pull'")
+    p_status.add_argument("state", nargs="?", default=None, help="draft|applied|interview|offer|rejected|withdrawn")
     p_status.set_defaults(func=cmd_status)
 
     p_track = sub.add_parser("track", help="regenerate applications/tracker.csv from index.md files")
@@ -1097,6 +1330,14 @@ def main(argv: list[str] | None = None) -> int:
     
     pdb_migrate = db_sub.add_parser("migrate-legacy", help="migrate legacy filesystem applications to PostgreSQL")
     pdb_migrate.set_defaults(func=cmd_db_migrate_legacy)
+
+    pdb_push = db_sub.add_parser("push", help="push filesystem application markdown files to the database")
+    pdb_push.add_argument("slug", nargs="?", help="application slug (optional; pushes all if omitted)")
+    pdb_push.set_defaults(func=cmd_db_push)
+    
+    pdb_pull = db_sub.add_parser("pull", help="pull database application markdown files to the filesystem")
+    pdb_pull.add_argument("slug", nargs="?", help="application slug (optional; pulls all if omitted)")
+    pdb_pull.set_defaults(func=cmd_db_pull)
 
     args = parser.parse_args(argv)
     return args.func(args)

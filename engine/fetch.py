@@ -11,11 +11,22 @@ import pathlib
 
 
 def fetch_job_text(source: str) -> str:
-    """Return clean job-posting text from a URL or a local file path."""
+    """Return clean job-posting text from a URL, a local file path, or database slug."""
     if source.startswith(("http://", "https://")):
         return _fetch_url(source)
     path = pathlib.Path(source)
     if not path.exists():
+        # Fallback to database lookup if it matches a slug
+        try:
+            from .db import get_conn
+            with get_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT description FROM jobs WHERE slug = %s", (source,))
+                    row = cur.fetchone()
+                    if row and row["description"]:
+                        return row["description"]
+        except Exception:
+            pass
         raise SystemExit(f"Job source not found: {source}")
     return path.read_text(encoding="utf-8")
 
