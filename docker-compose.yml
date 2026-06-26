@@ -31,3 +31,18 @@ services:
     tty: true
     # extra_hosts:               # uncomment if the generation endpoint host needs a static map
     #   - "internal-llm-host:10.0.0.0"
+
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cv_tailor
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
