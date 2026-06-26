@@ -34,12 +34,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -f .env ]]; then set -o allexport; source .env; set +o allexport; fi
-if ! command -v cv-tailor &>/dev/null; then
-  [[ -f .venv/bin/activate ]] && source .venv/bin/activate \
-    || { echo "ERROR: cv-tailor not found. Run: pip install -e '.[generate,fetch]'" >&2; exit 1; }
+# Force execution through uv run to guarantee correct environment
+if [[ "${1:-}" != "--inside-uv" ]]; then
+  exec uv run "$0" --inside-uv "$@"
 fi
+shift # remove --inside-uv
 
-PYTHON=${PYTHON:-python3}
+PYTHON="python3"
 RANKED_JSON=vault/jds/.erfurt-ranked.json
 xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }
 

@@ -3,7 +3,7 @@ name = "cv-tailor"
 version = "0.1.0"
 description = "Generate job-tailored CVs + cover letters (LaTeX), publish a public MkDocs portfolio to GitHub Pages, store tailored PDFs in Google Drive, and track applications in git."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 license = { text = "MIT" }
 
 # Runtime split in two:

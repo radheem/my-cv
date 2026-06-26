@@ -2,8 +2,7 @@
 # Run `make` (or `make help`) for the target list.
 #
 # Conventions:
-#   * The venv is uv-managed (.venv) and has no pip — installs go through
-#     `uv pip install` (see $(UVPIP)).
+#   * The project is uv-managed and all commands run through `uv run`.
 #   * PDFs are rendered with LaTeX (latex/*.cls) via scripts/build-application.sh
 #     (local latexmk, else the texlive/texlive Docker image).
 #
@@ -17,14 +16,8 @@
 #   STATUS / ID  lifecycle update                  (status)
 #   PORT     dev server port (default 8000)
 
-VENV    := .venv
-BIN     := $(VENV)/bin
-PYTHON  := $(BIN)/python
-UVPIP   := VIRTUAL_ENV=$(VENV) uv pip install
+UV_RUN  := uv run
 PORT    ?= 8000
-
-# mkdocs/cv-tailor run from the venv; make the venv tools resolvable.
-export PATH := $(abspath $(BIN)):$(PATH)
 
 .DEFAULT_GOAL := help
 
@@ -44,38 +37,34 @@ help: ## Show this help
 
 # ---- Setup -----------------------------------------------------------------
 
-.PHONY: venv
-venv: ## Create the uv virtualenv (.venv) if missing
-	@test -d $(VENV) || uv venv $(VENV)
-
 .PHONY: install
-install: venv ## Install base deps (site build + gate; no API key)
-	$(UVPIP) -e .
+install: ## Install base deps (site build + gate; no API key)
+	uv sync
 
 .PHONY: install-generate
-install-generate: venv ## Install generation deps (Anthropic API + URL fetch)
-	$(UVPIP) -e '.[generate,fetch]'
+install-generate: ## Install generation deps (Anthropic API + URL fetch)
+	uv sync --extra generate --extra fetch
 
 .PHONY: install-ollama
-install-ollama: venv ## Install local Ollama / OpenAI-compatible backend
-	$(UVPIP) -e '.[ollama]'
+install-ollama: ## Install local Ollama / OpenAI-compatible backend
+	uv sync --extra ollama
 
 .PHONY: install-dev
-install-dev: venv ## Install dev deps (pytest)
-	$(UVPIP) -e '.[dev]'
+install-dev: ## Install dev deps (pytest)
+	uv sync --extra dev
 
 .PHONY: install-all
-install-all: venv ## Install everything (base + generate + fetch + ollama + dev)
-	$(UVPIP) -e '.[generate,fetch,ollama,dev]'
+install-all: ## Install everything (base + generate + fetch + ollama + dev)
+	uv sync --all-extras
 
 .PHONY: install-screenshot
-install-screenshot: venv ## Install screenshot capture deps (PixelRAG render + openai)
-	$(UVPIP) -e '.[screenshot]'
+install-screenshot: ## Install screenshot capture deps (PixelRAG render + openai)
+	uv sync --extra screenshot
 	@echo "Next: ollama pull qwen3-vl:8b   (on genai.ltc.hsnet)"
 
 .PHONY: playwright
 playwright: ## Install the Playwright Chromium browser (needed to fetch job URLs)
-	$(BIN)/playwright install chromium
+	$(UV_RUN) playwright install chromium
 
 # ---- LinkedIn ingest (Sprint 1) --------------------------------------------
 
@@ -90,7 +79,7 @@ export DOCKER_UID DOCKER_GID
 
 .PHONY: ingest
 ingest: ## Run a single ad-hoc search on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= GEO_ID= DISTANCE= LIMIT= DAYS=7 MAX_APPLICANTS=100 EASY_APPLY=1]
-	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor ingest \
+	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor ingest \
 	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT) \
 	  $(if $(GEO_ID),--geo-id "$(GEO_ID)") $(if $(DISTANCE),--distance "$(DISTANCE)") \
 	  $(if $(DAYS),--days "$(DAYS)") $(if $(MAX_APPLICANTS),--max-applicants "$(MAX_APPLICANTS)") \
@@ -98,19 +87,19 @@ ingest: ## Run a single ad-hoc search on the HOST under Xvfb: make ingest KEYWOR
 
 .PHONY: hunt
 hunt: ## Run every search in config/search.yml on the HOST under Xvfb
-	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor hunt
+	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor hunt
 
 .PHONY: capture
 capture: ## Capture ONE job link to vault/jds/ on the HOST under Xvfb: make capture URL="https://www.linkedin.com/jobs/view/<id>"
 	@test -n "$(URL)" || { echo 'URL required, e.g. make capture URL="https://www.linkedin.com/jobs/view/123"'; exit 2; }
-	xvfb-run -a -s "-screen 0 1440x900x24" $(BIN)/cv-tailor capture "$(URL)"
+	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor capture "$(URL)"
 
 VISION_MODEL ?= qwen3-vl:32b
 
 .PHONY: screenshot
 screenshot: ## Capture a job posting via screenshot + Ollama vision (no session): make screenshot SOURCE=<url-or-file>
 	@test -n "$(SOURCE)" || { echo 'SOURCE required, e.g. make screenshot SOURCE="https://example.com/jobs/123"'; exit 2; }
-	$(BIN)/cv-tailor screenshot "$(SOURCE)" --vision-model "$(VISION_MODEL)"
+	$(UV_RUN) cv-tailor screenshot "$(SOURCE)" --vision-model "$(VISION_MODEL)"
 
 DAYS    ?= 7
 MAX_APPLICANTS ?= 100
@@ -134,7 +123,7 @@ gmail-hunt: ## Search Gmail for alerts, capture, and generate applications: make
 
 .PHONY: score
 score: ## Score captured JDs and print ranking: make score [TOP=10]
-	$(BIN)/python3 scripts/score-jds.py --top $(TOP)
+	$(UV_RUN) python3 scripts/score-jds.py --top $(TOP)
 
 .PHONY: docker-build
 docker-build: ## Build the ingest container image
@@ -179,12 +168,12 @@ docker-generate: ## Generate a tailored application in-container from a captured
 .PHONY: tailor
 tailor: ## Run any raw cv-tailor CLI command: make tailor CMD="<args>"
 	@test -n "$(CMD)" || { echo 'CMD is required, e.g. make tailor CMD="gmail search --query unread"'; exit 2; }
-	$(BIN)/cv-tailor $(CMD)
+	$(UV_RUN) cv-tailor $(CMD)
 
 .PHONY: new
 new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIENT= PROVIDER= MODEL= OLLAMA_URL=]
 	@test -n "$(SOURCE)" || { echo "SOURCE is required, e.g. make new SOURCE=path/to/job.txt"; exit 2; }
-	$(BIN)/cv-tailor new "$(SOURCE)" \
+	$(UV_RUN) cv-tailor new "$(SOURCE)" \
 	  $(if $(SLUG),--slug "$(SLUG)") \
 	  $(if $(RECIPIENT),--recipient "$(RECIPIENT)") \
 	  $(if $(PROVIDER),--provider "$(PROVIDER)") \
@@ -194,30 +183,30 @@ new: ## Generate a tailored application: make new SOURCE=job.txt [SLUG= RECIPIEN
 .PHONY: translate
 translate: ## Generate German cv.de.md / cover-letter.de.md: make translate ID=<id-or-slug>
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
-	$(BIN)/cv-tailor translate "$(ID)" $(if $(PROVIDER),--provider "$(PROVIDER)") $(if $(MODEL),--model "$(MODEL)") $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
+	$(UV_RUN) cv-tailor translate "$(ID)" $(if $(PROVIDER),--provider "$(PROVIDER)") $(if $(MODEL),--model "$(MODEL)") $(if $(OLLAMA_URL),--ollama-url "$(OLLAMA_URL)")
 
 .PHONY: pdf
 pdf: ## Render the LaTeX CV + cover letter and compile to PDFs: make pdf ID=<id-or-slug>
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
-	$(BIN)/cv-tailor pdf "$(ID)"
+	$(UV_RUN) cv-tailor pdf "$(ID)"
 
 .PHONY: upload
 upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<id-or-slug>
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
-	$(BIN)/cv-tailor upload "$(ID)"
+	$(UV_RUN) cv-tailor upload "$(ID)"
 
 .PHONY: track
 track: ## Regenerate applications/README.md + tracker.csv
-	$(BIN)/cv-tailor track
+	$(UV_RUN) cv-tailor track
 
 TYPE ?= pull-push
 
 .PHONY: sync-sheets
 sync-sheets: ## Sync applications/tracker.csv with Google Sheets (TYPE=push-only|pull-push)
 	@if [ "$(TYPE)" = "push-only" ]; then \
-		$(BIN)/cv-tailor sync-sheets --push-only; \
+		$(UV_RUN) cv-tailor sync-sheets --push-only; \
 	elif [ "$(TYPE)" = "pull-push" ]; then \
-		$(BIN)/cv-tailor sync-sheets; \
+		$(UV_RUN) cv-tailor sync-sheets; \
 	else \
 		echo "Invalid TYPE '$(TYPE)'. Must be 'push-only' or 'pull-push'"; exit 2; \
 	fi
@@ -225,24 +214,24 @@ sync-sheets: ## Sync applications/tracker.csv with Google Sheets (TYPE=push-only
 .PHONY: status
 status: ## Advance an application's lifecycle: make status ID=<id-or-slug> STATUS=applied
 	@test -n "$(ID)" -a -n "$(STATUS)" || { echo "Usage: make status ID=<job-id> STATUS=draft|applied|interview|offer|rejected|withdrawn"; exit 2; }
-	$(BIN)/cv-tailor status "$(ID)" "$(STATUS)"
+	$(UV_RUN) cv-tailor status "$(ID)" "$(STATUS)"
 
 .PHONY: archive
 archive: ## Move Drive folder to Archive/, set status withdrawn: make archive ID=<id-or-slug>
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
-	$(BIN)/cv-tailor archive "$(ID)"
+	$(UV_RUN) cv-tailor archive "$(ID)"
 
 # ---- Build & serve ---------------------------------------------------------
 
 .PHONY: build
 build: ## Build the public MkDocs portfolio into ./site (no gate)
-	$(BIN)/mkdocs build --clean
+	$(UV_RUN) mkdocs build --clean
 
 docs: build ## Alias for build
 
 .PHONY: serve
 serve: ## Live-preview the portfolio (mkdocs serve) on localhost (PORT=8000)
-	$(BIN)/mkdocs serve -a localhost:$(PORT)
+	$(UV_RUN) mkdocs serve -a localhost:$(PORT)
 
 .PHONY: public-pdf
 public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → doc-pages/assets/cv.pdf)
@@ -252,7 +241,7 @@ public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → doc-pages/
 
 .PHONY: test
 test: ## Run the unit tests (ranking + render logic; no browser, no API key)
-	$(PYTHON) -m pytest -q
+	$(UV_RUN) pytest -q
 
 .PHONY: check
 check: test build ## Pre-push sanity: run tests, then build the portfolio

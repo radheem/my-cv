@@ -43,18 +43,13 @@ if [[ -f .env ]]; then
   set +o allexport
 fi
 
-# Activate venv if cv-tailor not already on PATH
-if ! command -v cv-tailor &>/dev/null; then
-  if [[ -f .venv/bin/activate ]]; then
-    # shellcheck disable=SC1091
-    source .venv/bin/activate
-  else
-    echo "ERROR: cv-tailor not found and no .venv. Run: pip install -e '.[generate,fetch]'" >&2
-    exit 1
-  fi
+# Force execution through uv run to guarantee correct environment
+if [[ "${1:-}" != "--inside-uv" ]]; then
+  exec uv run "$0" --inside-uv "$@"
 fi
+shift # remove --inside-uv
 
-PYTHON=${PYTHON:-python3}
+PYTHON="python3"
 SEARCH_CONFIG=${CV_TAILOR_SEARCH_CONFIG:-config/search.yml}
 RANKED_JSON=vault/jds/.ranked.json
 xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }

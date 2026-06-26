@@ -53,21 +53,18 @@ into or gated on the public site.)
 ## Run it
 
 ```bash
-# 0. one-time: Ollama backend dep (uv venv, no pip)
-VIRTUAL_ENV=$PWD/.venv uv pip install -e '.[ollama]'
-
 # 1. generate (defaults to the lab box + qwen3.6:35b)
-.venv/bin/python tests/experiments/run.py --split train      # iterate on these
-.venv/bin/python tests/experiments/run.py --split test       # held-out, final check
-.venv/bin/python tests/experiments/run.py --only redcare-pharmacy-data-engineer
-.venv/bin/python tests/experiments/run.py --split test --provider anthropic   # baseline
+uv run tests/experiments/run.py --split train      # iterate on these
+uv run tests/experiments/run.py --split test       # held-out, final check
+uv run tests/experiments/run.py --only redcare-pharmacy-data-engineer
+uv run tests/experiments/run.py --split test --provider anthropic   # baseline
 
 # 2. score (heuristics + LLM judge; --no-judge for offline heuristics only)
-.venv/bin/python tests/experiments/evaluate.py --split all
+uv run tests/experiments/evaluate.py --split all
 cat tests/experiments/results/report.md
 
 # 3. regression gate — non-zero exit if a split drops below gates.yml floors
-.venv/bin/python tests/experiments/evaluate.py --split all --gate
+uv run tests/experiments/evaluate.py --split all --gate
 ```
 
 Every generated case also writes `outputs/<slug>/manifest.json` (provider, model,

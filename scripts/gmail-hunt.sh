@@ -34,16 +34,13 @@ if [[ -f .env ]]; then
   set +o allexport
 fi
 
-if ! command -v cv-tailor &>/dev/null; then
-  if [[ -f .venv/bin/activate ]]; then
-    source .venv/bin/activate
-  else
-    echo "ERROR: cv-tailor not found and no .venv. Run: pip install -e '.[generate,fetch]'" >&2
-    exit 1
-  fi
+# Force execution through uv run to guarantee correct environment
+if [[ "${1:-}" != "--inside-uv" ]]; then
+  exec uv run "$0" --inside-uv "$@"
 fi
+shift # remove --inside-uv
 
-PYTHON=${PYTHON:-python3}
+PYTHON="python3"
 xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }
 
 echo "════════════════════════════════════════════════════════"
