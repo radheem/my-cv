@@ -78,48 +78,48 @@ DOCKER_GID := $(shell id -g)
 export DOCKER_UID DOCKER_GID
 
 .PHONY: ingest
-ingest: ## Run a single ad-hoc search on the HOST under Xvfb: make ingest KEYWORDS="..." [LOCATION= GEO_ID= DISTANCE= LIMIT= DAYS=7 MAX_APPLICANTS=100 EASY_APPLY=1]
-	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor ingest \
+ingest: ## Run a single ad-hoc search inside the ingest container: make ingest KEYWORDS="..." [LOCATION= GEO_ID= DISTANCE= LIMIT= DAYS=7 MAX_APPLICANTS=100 EASY_APPLY=1]
+	docker compose run --rm --service-ports ingest cv-tailor ingest \
 	  --keywords "$(KEYWORDS)" $(if $(LOCATION),--location "$(LOCATION)") --limit $(LIMIT) \
 	  $(if $(GEO_ID),--geo-id "$(GEO_ID)") $(if $(DISTANCE),--distance "$(DISTANCE)") \
 	  $(if $(DAYS),--days "$(DAYS)") $(if $(MAX_APPLICANTS),--max-applicants "$(MAX_APPLICANTS)") \
 	  $(if $(EASY_APPLY),--easy-apply)
 
 .PHONY: hunt
-hunt: ## Run every search in config/search.yml on the HOST under Xvfb
-	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor hunt
+hunt: ## Run every search in config/search.yml inside the ingest container
+	docker compose run --rm --service-ports ingest cv-tailor hunt
 
 .PHONY: capture
-capture: ## Capture ONE job link to vault/jds/ on the HOST under Xvfb: make capture URL="https://www.linkedin.com/jobs/view/<id>"
+capture: ## Capture ONE job link inside the ingest container: make capture URL="https://www.linkedin.com/jobs/view/<id>"
 	@test -n "$(URL)" || { echo 'URL required, e.g. make capture URL="https://www.linkedin.com/jobs/view/123"'; exit 2; }
-	xvfb-run -a -s "-screen 0 1440x900x24" $(UV_RUN) cv-tailor capture "$(URL)"
+	docker compose run --rm --service-ports ingest cv-tailor capture "$(URL)"
 
 VISION_MODEL ?= qwen3-vl:32b
 
 .PHONY: screenshot
-screenshot: ## Capture a job posting via screenshot + Ollama vision (no session): make screenshot SOURCE=<url-or-file>
+screenshot: ## Capture a job posting via screenshot + Ollama vision (no session) in-container: make screenshot SOURCE=<url-or-file>
 	@test -n "$(SOURCE)" || { echo 'SOURCE required, e.g. make screenshot SOURCE="https://example.com/jobs/123"'; exit 2; }
-	$(UV_RUN) cv-tailor screenshot "$(SOURCE)" --vision-model "$(VISION_MODEL)"
+	docker compose run --rm ingest cv-tailor screenshot "$(SOURCE)" --vision-model "$(VISION_MODEL)"
 
 DAYS    ?= 7
 MAX_APPLICANTS ?= 100
 TOP     ?= 10
 
 .PHONY: job-hunt
-job-hunt: ## Full pipeline: search 4 cities → score → generate top N → PDF → Drive → push
-	bash scripts/job-hunt.sh --top $(TOP)
+job-hunt: ## Full pipeline inside the ingest container: search 4 cities → score → generate top N → PDF → Drive → push
+	docker compose run --rm ingest bash scripts/job-hunt.sh --top $(TOP)
 
 .PHONY: job-hunt-dry
-job-hunt-dry: ## Dry run: show what job-hunt would do without running anything
-	bash scripts/job-hunt.sh --top $(TOP) --dry-run
+job-hunt-dry: ## Dry run inside the ingest container: show what job-hunt would do without running anything
+	docker compose run --rm ingest bash scripts/job-hunt.sh --top $(TOP) --dry-run
 
 FILTER  ?= "linkedin job alert"
 LIMIT   ?= 10
 ORDER   ?= top
 
 .PHONY: gmail-hunt
-gmail-hunt: ## Search Gmail for alerts, capture, and generate applications: make gmail-hunt [FILTER="..."] [LIMIT=10] [ORDER=top|fifo]
-	bash scripts/gmail-hunt.sh --filter "$(FILTER)" --limit $(LIMIT) --order $(ORDER)
+gmail-hunt: ## Search Gmail for alerts inside the ingest container, capture, and generate applications: make gmail-hunt [FILTER="..."] [LIMIT=10] [ORDER=top|fifo]
+	docker compose run --rm ingest bash scripts/gmail-hunt.sh --filter "$(FILTER)" --limit $(LIMIT) --order $(ORDER)
 
 .PHONY: score
 score: ## Score captured JDs and print ranking: make score [TOP=10]

@@ -18,6 +18,7 @@ services:
       VNC_PASSWORD: ${VNC_PASSWORD:-}   # set to require a password (recommended over Tailscale)
       # LINKEDIN_PACE: "1.2"   # raise to slow login pacing further on a touchy account
     volumes:
+      - .:/app                   # mount full codebase for live-development
       - ./vault:/app/vault       # browser profile, captured JDs, challenge screenshots
       - ./data:/app/data:ro      # persona (John Doe sample; mount real data ro if ever used)
       - ./config:/app/config:ro  # search config, loaded at runtime (never baked into the image)

@@ -226,6 +226,11 @@ def hunt_and_capture(
             locale="en-US",
         )
         page = ctx.new_page()
+        try:
+            from playwright_stealth import stealth_sync
+            stealth_sync(page)
+        except ImportError:
+            pass
 
         try:
             jobs = search(page, keywords, location=location, limit=limit)

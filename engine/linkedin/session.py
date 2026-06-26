@@ -201,7 +201,13 @@ class LinkedInSession:
 
     def page(self):
         pages = self._ctx.pages
-        return pages[0] if pages else self._ctx.new_page()
+        page = pages[0] if pages else self._ctx.new_page()
+        try:
+            from playwright_stealth import stealth_sync
+            stealth_sync(page)
+        except ImportError:
+            pass
+        return page
 
     def close(self) -> None:
         if self._ctx is not None:

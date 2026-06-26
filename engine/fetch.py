@@ -34,6 +34,11 @@ def _fetch_url(url: str) -> str:
         browser = p.chromium.launch()
         try:
             page = browser.new_page()
+            try:
+                from playwright_stealth import stealth_sync
+                stealth_sync(page)
+            except ImportError:
+                pass
             page.goto(url, wait_until="networkidle", timeout=30000)
             # innerText collapses to roughly what a human reads, dropping markup.
             text = page.inner_text("body")

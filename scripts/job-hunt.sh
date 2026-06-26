@@ -43,16 +43,25 @@ if [[ -f .env ]]; then
   set +o allexport
 fi
 
-# Force execution through uv run to guarantee correct environment
+# Force execution through uv run if uv is available and we're not already running inside it
 if [[ "${1:-}" != "--inside-uv" ]]; then
-  exec uv run "$0" --inside-uv "$@"
+  if command -v uv &>/dev/null; then
+    exec uv run "$0" --inside-uv "$@"
+  fi
+else
+  shift # remove --inside-uv
 fi
-shift # remove --inside-uv
 
 PYTHON="python3"
 SEARCH_CONFIG=${CV_TAILOR_SEARCH_CONFIG:-config/search.yml}
 RANKED_JSON=vault/jds/.ranked.json
-xvfb_run() { xvfb-run -a -s "-screen 0 1440x900x24" "$@"; }
+xvfb_run() {
+  if [[ -n "${DISPLAY:-}" ]]; then
+    "$@"
+  else
+    xvfb-run -a -s "-screen 0 1440x900x24" "$@"
+  fi
+}
 
 echo "════════════════════════════════════════════════════════"
 echo " Job Hunt Pipeline — $(date '+%Y-%m-%d')"
@@ -130,11 +139,11 @@ for slug in "${TOP_SLUGS[@]}"; do
   fi
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [dry-run] would run: make pdf SLUG=$slug"
+    echo "  [dry-run] would run: cv-tailor pdf $slug"
     continue
   fi
 
-  make pdf SLUG="$slug" \
+  cv-tailor pdf "$slug" \
     || echo "  WARNING: PDF compile failed for $slug"
 done
 
@@ -157,11 +166,11 @@ for slug in "${TOP_SLUGS[@]}"; do
   fi
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [dry-run] would run: make upload SLUG=$slug"
+    echo "  [dry-run] would run: cv-tailor upload $slug"
     continue
   fi
 
-  make upload SLUG="$slug" \
+  cv-tailor upload "$slug" \
     || echo "  WARNING: upload failed for $slug"
 done
 
@@ -170,7 +179,7 @@ echo ""
 echo "── Step 6: commit and push ──────────────────────────────"
 
 # Refresh the applications tracker table
-make track
+cv-tailor track
 
 if [[ "$DRY_RUN" == "true" ]]; then
   echo "  [dry-run] would commit and push"
