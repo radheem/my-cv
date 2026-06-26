@@ -944,6 +944,14 @@ def cmd_gmail_send(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_db_migrate_legacy(args: argparse.Namespace) -> int:
+    from .db import init_db, migrate_legacy_data
+    init_db()
+    count = migrate_legacy_data()
+    print(f"Migration completed. Migrated {count} entries into PostgreSQL.")
+    return 0
+
+
 def _add_provider_flags(p: argparse.ArgumentParser) -> None:
     p.add_argument("--provider", choices=["anthropic", "ollama"], default=None,
                    help="generation backend (default: anthropic; ollama = OpenAI-compatible)")
@@ -1083,6 +1091,12 @@ def main(argv: list[str] | None = None) -> int:
     pg_send.add_argument("--body")
     pg_send.add_argument("--bulk-file", help="Path to JSON file with array of email objects")
     pg_send.set_defaults(func=cmd_gmail_send)
+
+    p_db = sub.add_parser("db", help="Database administrative and synchronization utilities")
+    db_sub = p_db.add_subparsers(dest="db_cmd", required=True)
+    
+    pdb_migrate = db_sub.add_parser("migrate-legacy", help="migrate legacy filesystem applications to PostgreSQL")
+    pdb_migrate.set_defaults(func=cmd_db_migrate_legacy)
 
     args = parser.parse_args(argv)
     return args.func(args)

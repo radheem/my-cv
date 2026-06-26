@@ -55,3 +55,146 @@ def init_db():
         log.error(f"Database connection failed: {e}\n-> Please ensure your PostgreSQL Docker container is running (docker compose up -d db) and DATABASE_URL is set correctly.")
         raise
 
+
+def migrate_legacy_data(applications_dir: str = "applications") -> int:
+    """Read existing folders in applications/ and legacy tracker.csv, and upsert them into the database."""
+    import csv
+    import pathlib
+    import re
+    from . import documents
+
+    app_root = pathlib.Path(applications_dir)
+    tracker_path = app_root / "tracker.csv"
+    
+    tracker_rows = {}
+    if tracker_path.exists():
+        with open(tracker_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                tracker_rows[row["slug"]] = row
+
+    if not app_root.exists():
+        return 0
+
+    count = 0
+    with get_conn() as conn:
+        for app_dir in app_root.iterdir():
+            if not app_dir.is_dir() or app_dir.name == "__pycache__":
+                continue
+            
+            slug = app_dir.name
+            index_md = app_dir / "index.md"
+            if not index_md.exists():
+                continue
+
+            # Read index.md frontmatter
+            try:
+                content = index_md.read_text(encoding="utf-8")
+                meta, _ = documents.split_front_matter(content)
+            except Exception as e:
+                log.warning(f"Failed to parse index.md for {slug}: {e}")
+                meta = {}
+
+            # Fallback to tracker.csv data
+            tracker_meta = tracker_rows.get(slug, {})
+            
+            company = meta.get("company") or tracker_meta.get("company") or "Unknown"
+            title = meta.get("job_title") or tracker_meta.get("job_title") or "Unknown"
+            url = meta.get("job_url") or tracker_meta.get("job_url") or ""
+            status = meta.get("status") or tracker_meta.get("status") or "draft"
+            drive_url = meta.get("drive_url") or tracker_meta.get("drive_url") or ""
+            
+            # Parse clusters (tags)
+            clusters = meta.get("clusters")
+            if not clusters and tracker_meta.get("clusters"):
+                clusters = [c.strip() for c in tracker_meta["clusters"].split(";") if c.strip()]
+            if not clusters:
+                clusters = []
+
+            # Platform & Source inference
+            platform = "other"
+            if "linkedin.com" in url:
+                platform = "linkedin"
+            elif "glassdoor" in url:
+                platform = "glassdoor"
+            elif "fraunhofer" in url:
+                platform = "fraunhofer"
+
+            # Parse job ID from manifest or slug or URL
+            job_id = None
+            manifest_json = app_dir / "manifest.json"
+            if manifest_json.exists():
+                try:
+                    import json
+                    m_data = json.loads(manifest_json.read_text(encoding="utf-8"))
+                    job_id = str(m_data.get("job_id", "")) if m_data.get("job_id") else None
+                except Exception:
+                    pass
+            
+            if not job_id and url:
+                # Extract job ID from URL
+                m = re.search(r"(\d{7,})/?$", url.rstrip("/"))
+                if m:
+                    job_id = m.group(1)
+                    
+            if not job_id:
+                # Extract trailing digits from slug
+                m = re.search(r"(\d+)$", slug)
+                if m:
+                    job_id = m.group(1)
+                else:
+                    job_id = f"legacy-{slug}"
+
+            # Read content files
+            def read_file_safe(filename):
+                p = app_dir / filename
+                return p.read_text(encoding="utf-8") if p.exists() else ""
+
+            cv_en = read_file_safe("cv.md")
+            cv_de = read_file_safe("cv.de.md")
+            cover_letter_en = read_file_safe("cover-letter.md")
+            cover_letter_de = read_file_safe("cover-letter.de.md")
+            description = read_file_safe("job-description.md")
+
+            # Parse recipient from cover letter frontmatter
+            recipient = ""
+            if cover_letter_en:
+                try:
+                    cl_meta, _ = documents.split_front_matter(cover_letter_en)
+                    recipient = cl_meta.get("recipient") or ""
+                except Exception:
+                    pass
+
+            with conn.cursor() as cur:
+                # Insert job first
+                cur.execute("""
+                    INSERT INTO jobs (slug, job_id, company, title, url, description, source, platform)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (slug) DO UPDATE SET
+                        job_id = EXCLUDED.job_id,
+                        company = EXCLUDED.company,
+                        title = EXCLUDED.title,
+                        url = EXCLUDED.url,
+                        description = EXCLUDED.description
+                """, (slug, job_id, company, title, url, description, "file", platform))
+
+                # Insert application
+                cur.execute("""
+                    INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (slug) DO UPDATE SET
+                        status = EXCLUDED.status,
+                        recipient = EXCLUDED.recipient,
+                        cv_en = EXCLUDED.cv_en,
+                        cv_de = EXCLUDED.cv_de,
+                        cover_letter_en = EXCLUDED.cover_letter_en,
+                        cover_letter_de = EXCLUDED.cover_letter_de,
+                        drive_url = EXCLUDED.drive_url,
+                        clusters = EXCLUDED.clusters
+                """, (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters))
+            
+            count += 1
+        conn.commit()
+    log.info(f"Successfully migrated {count} legacy applications from filesystem to database.")
+    return count
+
