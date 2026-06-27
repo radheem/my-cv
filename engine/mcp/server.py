@@ -104,10 +104,21 @@ def query(sql: str) -> str:
 
 
 @mcp.tool()
-def search_gmail_alerts(filter_query: str = "subject:\"linkedin job alert\" is:unread", limit: int = 10, order: str = "top") -> str:
-    """Search Gmail for job alerts, capture the job postings, rank them, and store them in the database.
-    This triggers the full ingest pipeline natively (fetch -> score -> db)."""
-    return run_gmail_hunt_workflow(filter_query, limit, order)
+def list_gmail_jobs(provider: str, query: str = "is:unread", limit: int = 10) -> str:
+    """Search Gmail alerts from a specified provider (e.g. 'linkedin', 'glassdoor', 'indeed') and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description."""
+    return list_gmail_jobs_workflow(provider, query, limit)
+
+
+@mcp.tool()
+def extract_job_details(url: str) -> str:
+    """Execute Playwright scraper in an isolated process to extract the full job description from a given URL and save the completed record into the PostgreSQL database jobs table."""
+    return extract_job_details_workflow(url)
+
+
+@mcp.tool()
+def create_application_from_job(slug: str) -> str:
+    """Generate tailored job application documents (CV/CL in English and German) for a specific job slug, render them to PDFs, upload them to Google Drive, and synchronize application status."""
+    return create_application_from_job_workflow(slug)
 
 
 @mcp.tool()
