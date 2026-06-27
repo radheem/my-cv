@@ -471,3 +471,53 @@ def extract_job_details_workflow(url: str) -> str:
         
     slug = result_slugs[0]
     return f"SUCCESS: Captured job with slug '{slug}' and saved to database."
+
+
+def create_application_from_job_workflow(slug: str) -> str:
+    """Modular workflow to generate tailored application documents (CV/CL) for a specific job slug,
+    compile them into PDFs, upload them to Google Drive, and sync tracking statuses."""
+    import argparse
+    from engine import cli
+    
+    logs = [f"=== Processing application tailoring for: {slug} ==="]
+    
+    # 1. Generate tailored markdown docs (cv.md, cover-letter.md, etc.)
+    args_new = argparse.Namespace(
+        source=slug, slug=slug, provider=None, model=None,
+        ollama_url=None, no_translate=False, no_save_db=False, recipient=None
+    )
+    try:
+        cli.cmd_new(args_new)
+        logs.append("  -> Successfully generated tailored cv.md and cover-letter.md")
+    except Exception as e:
+        log.exception(f"Tailoring generation failed for slug {slug}")
+        return f"ERROR: Tailoring generation failed: {str(e)}"
+        
+    # 2. Render Markdown docs to PDF via LaTeX
+    try:
+        args_pdf = argparse.Namespace(slug=slug)
+        cli.cmd_pdf(args_pdf)
+        logs.append("  -> Successfully rendered PDFs via LaTeX")
+    except Exception as e:
+        log.exception(f"LaTeX PDF rendering failed for slug {slug}")
+        return f"ERROR: PDF rendering failed: {str(e)}"
+        
+    # 3. Upload compiled PDFs to Google Drive
+    try:
+        args_upload = argparse.Namespace(slug=slug)
+        cli.cmd_upload(args_upload)
+        logs.append("  -> Successfully uploaded compiled PDFs to Google Drive")
+    except Exception as e:
+        log.exception(f"Google Drive upload failed for slug {slug}")
+        return f"ERROR: Google Drive upload failed: {str(e)}"
+        
+    # 4. Synchronize statuses to Google Sheets
+    try:
+        args_push = argparse.Namespace(slug="push", state=None)
+        cli.cmd_status(args_push)
+        logs.append("  -> Successfully synchronized application sheets!")
+    except Exception as e:
+        logs.append(f"WARNING: Sheets sync skipped or failed: {str(e)}")
+        
+    logs.append("=== Application Tailoring Pipeline Complete ===")
+    return "\n".join(logs)

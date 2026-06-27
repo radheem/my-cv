@@ -114,3 +114,21 @@ def test_extract_job_details_workflow_invalid_url():
     res = extract_job_details_workflow("https://www.linkedin.com/settings/")
     assert "ERROR" in res
     assert "Invalid" in res
+
+
+def test_create_application_from_job_workflow_success(monkeypatch):
+    from engine import cli
+    calls = []
+    
+    # Mock core CLI execution actions
+    monkeypatch.setattr(cli, "cmd_new", lambda args: calls.append("new"))
+    monkeypatch.setattr(cli, "cmd_pdf", lambda args: calls.append("pdf"))
+    monkeypatch.setattr(cli, "cmd_upload", lambda args: calls.append("upload"))
+    monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
+    
+    from engine.workflows.gmail_ingest import create_application_from_job_workflow
+    res = create_application_from_job_workflow("test-slug-123")
+    
+    assert "Complete" in res
+    assert "Successfully" in res
+    assert calls == ["new", "pdf", "upload", "status"]
