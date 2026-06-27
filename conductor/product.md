@@ -9,7 +9,7 @@ The `cv-tailor` project is a localized Python CLI tool and static site generator
 - **High-Volume Personalization:** Allows the user to rapidly adapt a master CV and cover letter contextually using LLMs (Anthropic/Ollama) to fit specific job descriptions.
 - **Data Privacy & Security:** Keeps application data (companies applied to, tailored responses) completely private within local Git tracking and a local database, while safely publishing *only* generic portfolio data to the public internet.
 - **Professional Presentation:** Outputting cleanly typeset, bilingual (English/German) LaTeX documents that stand out to employers without the manual typesetting overhead.
-- **Unified Pipeline:** Condenses searching (via Gmail alerts), scraping, scoring, tailoring, rendering, uploading, and tracking into a single CLI tool.
+- **Modular & Unified Pipeline:** Supports both a unified pipeline and a modular, on-demand trilogy (listing, detailed extraction, and application creation) to support interactive and incremental agent use.
 
 # Key Features
 1. **JD Ingestion & Scoring:** Scrapes job descriptions from URLs or Gmail alerts, evaluates them against the user profile, and stores them in a local PostgreSQL database.
