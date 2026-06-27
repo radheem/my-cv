@@ -7,7 +7,7 @@
     - [x] Write failing test `test_mcp_get_cv_guide` in `tests/test_mcp_server.py`.
     - [x] Write failing test `test_mcp_get_cover_letter_guide` in `tests/test_mcp_server.py`.
     - [x] Run tests and verify they fail (Red Phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
 - [ ] Task: Create `data/guides/mcp-insights.md`
