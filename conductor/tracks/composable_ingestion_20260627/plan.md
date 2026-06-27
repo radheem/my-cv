@@ -21,9 +21,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implement Composable MCP Tools' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and E2E Integration
-- [ ] Task: Update Tool Descriptions and Architecture Docs
-    - [ ] Update `engine/mcp/server.py` docstrings to clearly contrast the "Authenticated Browser Flow" (`extract_job_details`) vs "Direct/Public Flow" (`fetch` + `save`).
-    - [ ] Write the proposed Mermaid-based workflows documentation to `docs/mcp-workflows.md` detailing the composable architecture.
-- [ ] Task: Final Test Verification
+- [x] Task: Update Tool Descriptions and Architecture Docs (9c8ef9b)
+    - [x] Update `engine/mcp/server.py` docstrings to clearly contrast the "Authenticated Browser Flow" (`extract_job_details`) vs "Direct/Public Flow" (`fetch` + `save`).
+    - [x] Write the proposed Mermaid-based workflows documentation to `docs/mcp-workflows.md` detailing the composable architecture.
+- [~] Task: Final Test Verification
     - [ ] Run the full test suite (`pytest`) to guarantee no regressions.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Documentation and E2E Integration' (Protocol in workflow.md)
