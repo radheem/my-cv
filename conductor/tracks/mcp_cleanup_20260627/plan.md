@@ -7,7 +7,7 @@
     - [x] Write failing test for `list_gmail_indeed_jobs` in `tests/test_mcp_server.py`.
     - [x] Update any test asserting against the presence or functionality of `list_gmail_jobs` to instead assert on the new specialized tools.
     - [x] Run the tests and confirm they fail.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Refactor Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Refactor Tests' (Protocol in workflow.md)
 
 ## Phase 2: Refactor MCP Server Tools
 - [ ] Task: Remove deprecated and generic tools
