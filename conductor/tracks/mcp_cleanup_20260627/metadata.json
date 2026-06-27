@@ -1,0 +1,8 @@
+{
+  "track_id": "mcp_cleanup_20260627",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-27T00:00:00Z",
+  "updated_at": "2026-06-27T00:00:00Z",
+  "description": "Refactor Gmail Job Search Tools / MCP Cleanup"
+}
