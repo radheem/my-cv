@@ -6,7 +6,7 @@
     - [x] Write failing test `test_mcp_save_job_description` in `tests/test_mcp_server.py` verifying DB upsert and slug return.
     - [x] Update E2E test `test_mcp_3step_pipeline_e2e` to also simulate the new direct pipeline (Fetch -> Save -> Create).
     - [x] Run tests and verify they fail (Red Phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Test Restructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Test Restructure' (Protocol in workflow.md)
 
 ## Phase 2: Implement Composable MCP Tools
 - [ ] Task: Implement `fetch_public_job_url`
