@@ -4,7 +4,7 @@ from .application_actions import (
     score_jobs_workflow,
     sync_status_to_sheets_workflow,
 )
-from .gmail_ingest import run_gmail_hunt_workflow
+from .gmail_ingest import run_gmail_hunt_workflow, list_gmail_jobs_workflow
 
 __all__ = [
     "create_application_workflow",
@@ -12,4 +12,5 @@ __all__ = [
     "score_jobs_workflow",
     "sync_status_to_sheets_workflow",
     "run_gmail_hunt_workflow",
+    "list_gmail_jobs_workflow",
 ]
