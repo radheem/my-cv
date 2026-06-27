@@ -11,6 +11,7 @@ gmail_alerts:
   linkedin: "jobalerts-noreply@linkedin.com"
   glassdoor: "noreply@glassdoor.com"
   indeed: "donotreply@jobalert.indeed.com"
+  fraunhofer: "fraunhofer-jobnotification@noreply12.jobs2web.com"
 
 # Applied to every search unless the entry overrides the key.
 defaults:
