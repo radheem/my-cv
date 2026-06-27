@@ -15,11 +15,11 @@
     - [x] Remove `search_gmail_glassdoor_jobs` from `engine/mcp/server.py`.
     - [x] Remove `search_gmail_indeed_jobs` from `engine/mcp/server.py`.
     - [x] Remove `list_gmail_jobs` from `engine/mcp/server.py`.
-- [ ] Task: Implement specialized tools
-    - [ ] Add `list_gmail_linkedin_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
-    - [ ] Add `list_gmail_glassdoor_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
-    - [ ] Add `list_gmail_indeed_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
-    - [ ] Run test suite and ensure all tests pass (Green Phase).
+- [x] Task: Implement specialized tools (9252bad)
+    - [x] Add `list_gmail_linkedin_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
+    - [x] Add `list_gmail_glassdoor_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
+    - [x] Add `list_gmail_indeed_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
+    - [x] Run test suite and ensure all tests pass (Green Phase).
 - [ ] Task: Update Tool Descriptions and Imports
     - [ ] Update docstring for `extract_job_details` to indicate it is Step 2.
     - [ ] Update docstring for `create_application_from_job` to indicate it is Step 3.
