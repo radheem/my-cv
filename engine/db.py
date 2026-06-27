@@ -36,6 +36,7 @@ def init_db():
         applicants INTEGER,
         source VARCHAR(50) NOT NULL,
         platform VARCHAR(50) NOT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT 'active',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -57,6 +58,8 @@ def init_db():
         with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute(schema_sql)
+                # Migrations: add status column to jobs if it doesn't exist
+                cur.execute("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS status VARCHAR(50) NOT NULL DEFAULT 'active';")
                 conn.commit()
         log.info("Database schema applied successfully.")
     except psycopg.OperationalError as e:
