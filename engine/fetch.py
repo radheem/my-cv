@@ -21,7 +21,7 @@ def fetch_job_text(source: str) -> str:
             from .db import get_conn
             with get_conn() as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT description FROM jobs WHERE slug = %s", (source,))
+                    cur.execute("SELECT description FROM jobs WHERE slug = %s AND description IS NOT NULL", (source,))
                     row = cur.fetchone()
                     if row and row["description"]:
                         return row["description"]
@@ -32,27 +32,42 @@ def fetch_job_text(source: str) -> str:
 
 
 def _fetch_url(url: str) -> str:
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError as e:  # pragma: no cover - optional dep
-        raise SystemExit(
-            "Fetching a URL needs Playwright. Install with: "
-            "pip install -e '.[fetch]' && playwright install chromium\n"
-            "Or paste the job description into a .txt/.md file and pass that path."
-        ) from e
+    import multiprocessing
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
+    def worker(q, target_url):
+        import sys
+        import os
+        # Redirect standard input/output to protect parent MCP Stdio channel, keeping stderr for tracebacks
+        sys.stdin = open(os.devnull, "r")
+        sys.stdout = open(os.devnull, "w")
+
         try:
-            page = browser.new_page()
+            from playwright.sync_api import sync_playwright
             try:
                 from playwright_stealth import stealth_sync
-                stealth_sync(page)
             except ImportError:
-                pass
-            page.goto(url, wait_until="load", timeout=30000)
-            # innerText collapses to roughly what a human reads, dropping markup.
-            text = page.inner_text("body")
-        finally:
-            browser.close()
-    return text
+                stealth_sync = None
+
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                try:
+                    page = browser.new_page()
+                    if stealth_sync:
+                        stealth_sync(page)
+                    page.goto(target_url, wait_until="load", timeout=30000)
+                    text = page.inner_text("body")
+                    q.put((True, text))
+                finally:
+                    browser.close()
+        except Exception as e:
+            q.put((False, e))
+
+    ctx = multiprocessing.get_context("spawn")
+    q = ctx.Queue()
+    p = ctx.Process(target=worker, args=(q, url))
+    p.start()
+    success, result = q.get()
+    p.join()
+    if success:
+        return result
+    raise result

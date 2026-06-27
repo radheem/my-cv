@@ -67,6 +67,12 @@ _SEARCH_DEFAULTS: dict[str, Any] = {
     "location": None,
 }
 
+_GMAIL_ALERT_DEFAULTS: dict[str, str] = {
+    "linkedin": "jobalerts-noreply@linkedin.com",
+    "glassdoor": "noreply@glassdoor.com",
+    "indeed": "donotreply@jobalert.indeed.com",
+}
+
 
 def _deep_merge(base: dict, over: dict) -> dict:
     out = dict(base)
@@ -123,9 +129,14 @@ def resolve_llm(root: pathlib.Path | None = None) -> dict[str, Any]:
     }
     if is_ollama:
         oll = cfg["ollama"]
+        base_url = os.environ.get("CV_TAILOR_OLLAMA_BASE_URL", oll["base_url"])
+        if os.path.exists("/.dockerenv"):
+            for local_host in ("localhost", "127.0.0.1"):
+                if local_host in base_url:
+                    base_url = base_url.replace(local_host, "host.docker.internal")
         out.update(
             model=os.environ.get("CV_TAILOR_MODEL", cfg["ollama_model"]),
-            base_url=os.environ.get("CV_TAILOR_OLLAMA_BASE_URL", oll["base_url"]),
+            base_url=base_url,
             api_key=os.environ.get("CV_TAILOR_OLLAMA_API_KEY", oll["api_key"]),
             min_json_tokens=_env_int("CV_TAILOR_MIN_JSON_TOKENS") or oll["min_json_tokens"],
             min_text_tokens=_env_int("CV_TAILOR_MIN_TEXT_TOKENS") or oll["min_text_tokens"],
@@ -169,6 +180,9 @@ def resolve_search(
     file_defaults = cfg.get("defaults") or {}
     base = _deep_merge(_SEARCH_DEFAULTS, file_defaults)
 
+    file_alerts = cfg.get("gmail_alerts") or {}
+    gmail_alerts = {**_GMAIL_ALERT_DEFAULTS, **file_alerts}
+
     searches: list[dict[str, Any]] = []
     for i, entry in enumerate(cfg.get("searches") or []):
         merged = {**base, **(entry or {})}
@@ -177,4 +191,9 @@ def resolve_search(
         merged.setdefault("name", merged["keywords"])
         searches.append(merged)
 
-    return {"path": path, "searches": searches, "scoring": cfg.get("scoring") or {}}
+    return {
+        "path": path,
+        "searches": searches,
+        "scoring": cfg.get("scoring") or {},
+        "gmail_alerts": gmail_alerts,
+    }

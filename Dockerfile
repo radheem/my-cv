@@ -6,7 +6,9 @@ FROM mcr.microsoft.com/playwright/python:v1.60.0-noble
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends xvfb x11vnc x11-utils tini \
+    && apt-get install -y --no-install-recommends \
+       xvfb x11vnc x11-utils tini \
+       latexmk texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-lang-german lmodern \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

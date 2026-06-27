@@ -4,10 +4,10 @@ services:
   ingest:
     build: .
     image: my-cv-ingest:latest
-    # Run as the host user so vault/ files aren't owned by a foreign uid. The Makefile exports
-    # DOCKER_UID/DOCKER_GID = your id -u/-g. Outside make: `DOCKER_UID=$(id -u) DOCKER_GID=$(id -g) docker compose ...`.
     user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
     env_file: .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DISPLAY: ":99"
       LINKEDIN_USER_DATA_DIR: /app/vault/profile
@@ -50,6 +50,8 @@ services:
     user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
     env_file: .env
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       MCP_TRANSPORT: streamable-http
       PGHOST: db
