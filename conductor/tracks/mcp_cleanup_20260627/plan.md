@@ -10,11 +10,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Refactor Tests' (Protocol in workflow.md)
 
 ## Phase 2: Refactor MCP Server Tools
-- [ ] Task: Remove deprecated and generic tools
-    - [ ] Remove `search_gmail_linkedin_jobs` from `engine/mcp/server.py`.
-    - [ ] Remove `search_gmail_glassdoor_jobs` from `engine/mcp/server.py`.
-    - [ ] Remove `search_gmail_indeed_jobs` from `engine/mcp/server.py`.
-    - [ ] Remove `list_gmail_jobs` from `engine/mcp/server.py`.
+- [x] Task: Remove deprecated and generic tools (84ca7db)
+    - [x] Remove `search_gmail_linkedin_jobs` from `engine/mcp/server.py`.
+    - [x] Remove `search_gmail_glassdoor_jobs` from `engine/mcp/server.py`.
+    - [x] Remove `search_gmail_indeed_jobs` from `engine/mcp/server.py`.
+    - [x] Remove `list_gmail_jobs` from `engine/mcp/server.py`.
 - [ ] Task: Implement specialized tools
     - [ ] Add `list_gmail_linkedin_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
     - [ ] Add `list_gmail_glassdoor_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
