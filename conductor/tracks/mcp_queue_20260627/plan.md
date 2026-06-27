@@ -16,6 +16,6 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Finalization
-- [ ] Task: Final Test Verification
-    - [ ] Run the full test suite (`pytest`) to guarantee no regressions.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Finalization' (Protocol in workflow.md)
+- [x] Task: Final Test Verification
+    - [x] Run the full test suite (`pytest`) to guarantee no regressions.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Finalization' (Protocol in workflow.md)
