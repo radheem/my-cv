@@ -6,7 +6,7 @@
     - [x] Add unit tests verifying that the background thread successfully updates the DB to `'failed'` upon a simulated workflow failure.
     - [x] Add unit tests for the new `delete_job` tool, verifying that deleting a job changes its status, suffixes its `job_id` and `slug`, and allows a subsequent identical URL save to insert a brand-new active record.
     - [x] Run tests and verify they fail (Red Phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
 - [ ] Task: Implement database schema update
