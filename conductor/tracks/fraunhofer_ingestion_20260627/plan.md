@@ -11,6 +11,6 @@
 - [x] Task: Implement `list_gmail_fraunhofer_jobs` tool (6016c2d)
     - [ ] Add the `@mcp.tool()` function `list_gmail_fraunhofer_jobs` to `engine/mcp/server.py`.
     - [ ] Ensure the function correctly delegates to `list_gmail_jobs_workflow("fraunhofer", query, limit)`.
-- [~] Task: Refactor and verify tests
+- [x] Task: Refactor and verify tests (1bd51c5)
     - [ ] Run the test suite to ensure all tests pass.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: MCP Tool Implementation (TDD)' (Protocol in workflow.md)
