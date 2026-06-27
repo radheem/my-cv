@@ -99,6 +99,10 @@ def test_mcp_specialized_gmail_tools(monkeypatch):
     res_ind = json.loads(server.list_gmail_indeed_jobs(limit=2))
     assert isinstance(res_ind, list)
 
+    # Test specialized Fraunhofer tool
+    res_fh = json.loads(server.list_gmail_fraunhofer_jobs(limit=2))
+    assert isinstance(res_fh, list)
+
 
 def test_mcp_new_gmail_modular_tools(monkeypatch):
     from engine.mcp import server
