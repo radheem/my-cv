@@ -1,7 +1,7 @@
 # Implementation Plan: Fraunhofer Job Alerts MCP Tool
 
 ## Phase 1: Configuration Update
-- [ ] Task: Add Fraunhofer email to configuration
+- [x] Task: Add Fraunhofer email to configuration (253f649)
     - [ ] Update `config/search.yml` to include `fraunhofer: "fraunhofer-jobnotification@noreply12.jobs2web.com"` under `gmail_alerts`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Configuration Update' (Protocol in workflow.md)
 
