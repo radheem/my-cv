@@ -1,11 +1,11 @@
 # Implementation Plan: Composable Ingestion and Application Flow
 
 ## Phase 1: Setup and Test Restructure
-- [ ] Task: Create isolated unit tests for new composable tools
-    - [ ] Write failing test `test_mcp_fetch_public_job_url` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_save_job_description` in `tests/test_mcp_server.py` verifying DB upsert and slug return.
-    - [ ] Update E2E test `test_mcp_3step_pipeline_e2e` to also simulate the new direct pipeline (Fetch -> Save -> Create).
-    - [ ] Run tests and verify they fail (Red Phase).
+- [x] Task: Create isolated unit tests for new composable tools (fc0ff63)
+    - [x] Write failing test `test_mcp_fetch_public_job_url` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_save_job_description` in `tests/test_mcp_server.py` verifying DB upsert and slug return.
+    - [x] Update E2E test `test_mcp_3step_pipeline_e2e` to also simulate the new direct pipeline (Fetch -> Save -> Create).
+    - [x] Run tests and verify they fail (Red Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Test Restructure' (Protocol in workflow.md)
 
 ## Phase 2: Implement Composable MCP Tools
