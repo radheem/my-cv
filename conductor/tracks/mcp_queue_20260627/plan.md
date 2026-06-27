@@ -1,0 +1,21 @@
+# Implementation Plan: Global Sequential Ingestion FIFO Queue
+
+## Phase 1: Setup and Testing
+- [ ] Task: Update unit tests for queue lifecycle
+    - [ ] Update `tests/test_mcp_server.py` to assert that `create_application_from_job` returns immediately with `'queued'` status.
+    - [ ] Update unit tests verifying that the background worker correctly transitions status from `'queued'` to `'generating'`, and then either `'draft'` (success) or `'failed'` (failure).
+    - [ ] Run test suite and verify failing tests (Red Phase).
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
+
+## Phase 2: Implementation
+- [ ] Task: Implement Global FIFO Queue and Worker
+    - [ ] Add `queue.Queue`, `TailorConsumerWorker`, and path locking/checks to `engine/mcp/server.py`.
+    - [ ] Refactor `create_application_from_job` to upsert application status as `'queued'` and push to the queue.
+- [ ] Task: Test Verification
+    - [ ] Run test suite and ensure all tests pass (Green Phase).
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
+
+## Phase 3: Finalization
+- [ ] Task: Final Test Verification
+    - [ ] Run the full test suite (`pytest`) to guarantee no regressions.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Finalization' (Protocol in workflow.md)

@@ -1,0 +1,8 @@
+{
+  "track_id": "mcp_queue_20260627",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2026-06-27T17:15:00Z",
+  "updated_at": "2026-06-27T17:15:00Z",
+  "description": "Refactor application creation to use a global FIFO queue for sequential processing"
+}
