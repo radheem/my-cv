@@ -216,6 +216,12 @@ def list_gmail_indeed_jobs(query: str = "is:unread", limit: int = 10) -> str:
 
 
 @mcp.tool()
+def list_gmail_fraunhofer_jobs(query: str = "is:unread", limit: int = 10) -> str:
+    """Step 1 of the job application workflow. Search Gmail alerts from Fraunhofer and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    return list_gmail_jobs_workflow("fraunhofer", query, limit)
+
+
+@mcp.tool()
 def extract_job_details(url: str) -> str:
     """Step 2 (Scraper Path). Execute Playwright scraper in an isolated process to extract the full job description from a given URL and save the completed record into the PostgreSQL database.
     WARNING: This tool launches a full headless browser and is only useful when there is an active, warm logged-in LinkedIn session to bypass login walls. It is prone to timeouts and CAPTCHAs on public/unauthenticated pages. For public links, prefer fetching content via 'fetch_public_job_url' and saving via 'save_job_description'.
