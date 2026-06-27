@@ -66,3 +66,51 @@ def test_list_gmail_jobs_workflow_no_jobs(monkeypatch):
     res = json.loads(res_str)
     assert isinstance(res, list)
     assert len(res) == 0
+
+
+def test_extract_job_details_workflow_success(monkeypatch):
+    import engine.workflows.gmail_ingest as gi
+    import multiprocessing
+    
+    # Mock the worker function to return a mock slug without launching Playwright
+    monkeypatch.setattr(gi, "_capture_jobs_worker_func", lambda urls: (["mock-acme-engineer-123"], ["Successfully captured mock job"]))
+    
+    # Mock Process and Queue to run inline instead of spawning a new process (preserving monkeypatch!)
+    class MockProcess:
+        def __init__(self, target, args):
+            self.target = target
+            self.args = args
+        def start(self):
+            self.target(*self.args)
+        def join(self):
+            pass
+            
+    class MockQueue:
+        def __init__(self):
+            self.val = None
+        def put(self, val):
+            self.val = val
+        def get(self):
+            return self.val
+            
+    class MockContext:
+        def Queue(self):
+            return MockQueue()
+        def Process(self, target, args):
+            return MockProcess(target, args)
+            
+    monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
+    
+    # Run extract_job_details_workflow
+    from engine.workflows.gmail_ingest import extract_job_details_workflow
+    res = extract_job_details_workflow("https://www.linkedin.com/jobs/view/1234567/")
+    
+    assert "SUCCESS" in res
+    assert "mock-acme-engineer-123" in res
+
+
+def test_extract_job_details_workflow_invalid_url():
+    from engine.workflows.gmail_ingest import extract_job_details_workflow
+    res = extract_job_details_workflow("https://www.linkedin.com/settings/")
+    assert "ERROR" in res
+    assert "Invalid" in res

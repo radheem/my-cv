@@ -442,3 +442,32 @@ def list_gmail_jobs_workflow(provider: str, query: str = "is:unread", limit: int
             break
             
     return json.dumps(results)
+
+
+def extract_job_details_workflow(url: str) -> str:
+    """Modular workflow to crawl a single job posting URL, extract details, and save to database."""
+    import multiprocessing
+    
+    parsed_info = parse_and_normalize_job_url(url)
+    if parsed_info is None:
+        return f"ERROR: Invalid or non-job URL: {url}"
+        
+    norm_url = parsed_info["normalized_url"]
+    
+    ctx = multiprocessing.get_context("spawn")
+    q = ctx.Queue()
+    p = ctx.Process(target=_capture_jobs_process_worker, args=(q, [norm_url]))
+    p.start()
+    success, result_slugs, worker_logs = q.get()
+    p.join()
+    
+    if not success:
+        if isinstance(result_slugs, Exception):
+            return f"ERROR: Capture failed: {str(result_slugs)}"
+        return f"ERROR: Capture failed: {result_slugs}"
+        
+    if not result_slugs:
+        return "ERROR: Scraper failed to capture job details."
+        
+    slug = result_slugs[0]
+    return f"SUCCESS: Captured job with slug '{slug}' and saved to database."
