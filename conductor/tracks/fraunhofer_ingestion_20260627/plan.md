@@ -8,9 +8,9 @@
 ## Phase 2: MCP Tool Implementation (TDD)
 - [x] Task: Write failing test for `list_gmail_fraunhofer_jobs` (64cef37)
     - [ ] Add a unit test in `tests/test_mcp_server.py` that verifies the `list_gmail_fraunhofer_jobs` tool exists and calls the underlying workflow correctly.
-- [~] Task: Implement `list_gmail_fraunhofer_jobs` tool
+- [x] Task: Implement `list_gmail_fraunhofer_jobs` tool (6016c2d)
     - [ ] Add the `@mcp.tool()` function `list_gmail_fraunhofer_jobs` to `engine/mcp/server.py`.
     - [ ] Ensure the function correctly delegates to `list_gmail_jobs_workflow("fraunhofer", query, limit)`.
-- [ ] Task: Refactor and verify tests
+- [~] Task: Refactor and verify tests
     - [ ] Run the test suite to ensure all tests pass.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: MCP Tool Implementation (TDD)' (Protocol in workflow.md)
