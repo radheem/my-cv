@@ -9,14 +9,14 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
-- [ ] Task: Implement `get_user_profile`
-    - [ ] Add `get_user_profile` tool to `engine/mcp/server.py` that reads and returns `data/profile.yml` as JSON.
-- [ ] Task: Implement `get_user_projects`
-    - [ ] Add `get_user_projects` tool to `engine/mcp/server.py` that reads and returns `data/projects.yml` as JSON.
-- [ ] Task: Implement `get_master_cv`
-    - [ ] Add `get_master_cv` tool to `engine/mcp/server.py` that reads and returns `data/master-cv.md` as text.
-- [ ] Task: Test Verification
-    - [ ] Run test suite and ensure all tests pass (Green Phase).
+- [x] Task: Implement `get_user_profile` (8cff009)
+    - [x] Add `get_user_profile` tool to `engine/mcp/server.py` that reads and returns `data/profile.yml` as JSON.
+- [x] Task: Implement `get_user_projects`
+    - [x] Add `get_user_projects` tool to `engine/mcp/server.py` that reads and returns `data/projects.yml` as JSON.
+- [x] Task: Implement `get_master_cv`
+    - [x] Add `get_master_cv` tool to `engine/mcp/server.py` that reads and returns `data/master-cv.md` as text.
+- [x] Task: Test Verification
+    - [x] Run test suite and ensure all tests pass (Green Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and Finalization
