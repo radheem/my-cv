@@ -77,7 +77,7 @@ def test_legacy_migration(tmp_path):
             assert job["url"] == "https://linkedin.com/jobs/view/123"
             assert job["description"] == "Raw Description Text"
             assert job["platform"] == "linkedin"
-            assert job["job_id"] == "123"
+            assert job["job_id"] == "cc7c5209ffb4"
 
             cur.execute("SELECT * FROM applications WHERE slug='acme-engineering-123'")
             app = cur.fetchone()
@@ -104,10 +104,10 @@ def test_fetch_job_text_db_fallback():
     with get_conn() as conn:
         with conn.cursor() as cur:
             # Delete any existing row to ensure isolation
-            cur.execute("DELETE FROM jobs WHERE slug='test-db-fallback-slug'")
+            cur.execute("DELETE FROM jobs WHERE job_id='9999911111'")
             cur.execute("""
-                INSERT INTO jobs (slug, job_id, company, title, source, platform, description)
-                VALUES ('test-db-fallback-slug', '9999911111', 'Test Fallback Inc', 'Fallback Engineer', 'file', 'other', 'DB Fallback Description')
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('9999911111', 'test-db-fallback-slug', 'Test Fallback Inc', 'Fallback Engineer', 'file', 'other', 'DB Fallback Description')
             """)
         conn.commit()
 
@@ -130,6 +130,12 @@ def test_db_push_pull_sync(tmp_path, monkeypatch):
 
     # 1. Test DB Push (Disk -> DB)
     app_slug = "test-sync-app-888"
+    
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs WHERE slug=%s", (app_slug,))
+        conn.commit()
+
     app_dir = tmp_path / app_slug
     app_dir.mkdir()
 
@@ -202,15 +208,15 @@ def test_db_export(tmp_path, monkeypatch):
 
     with get_conn() as conn:
         with conn.cursor() as cur:
-            cur.execute("DELETE FROM applications WHERE slug='test-export-slug'")
-            cur.execute("DELETE FROM jobs WHERE slug='test-export-slug'")
+            cur.execute("DELETE FROM applications WHERE job_id='88877711'")
+            cur.execute("DELETE FROM jobs WHERE job_id='88877711'")
             cur.execute("""
-                INSERT INTO jobs (slug, job_id, company, title, source, platform, description)
-                VALUES ('test-export-slug', '88877711', 'Export Corp', 'Export Lead', 'file', 'other', 'JD Description Text')
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('88877711', 'test-export-slug', 'Export Corp', 'Export Lead', 'file', 'other', 'JD Description Text')
             """)
             cur.execute("""
-                INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
-                VALUES ('test-export-slug', 'applied', 'Hiring Manager', 'CV EN', 'CV DE', 'CL EN', 'CL DE', 'http://drive/folder', ARRAY['web-api', 'distributed-systems'])
+                INSERT INTO applications (job_id, slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
+                VALUES ('88877711', 'test-export-slug', 'applied', 'Hiring Manager', 'CV EN', 'CV DE', 'CL EN', 'CL DE', 'http://drive/folder', ARRAY['web-api', 'distributed-systems'])
             """)
         conn.commit()
 

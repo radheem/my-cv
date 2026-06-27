@@ -5,6 +5,13 @@
 # This file is NEVER baked into the image — edit it and re-run; no rebuild needed.
 version: 1
 
+# Gmail search configurations for periodic job alerts.
+# Allows setting specific sender email addresses for each platform.
+gmail_alerts:
+  linkedin: "jobalerts-noreply@linkedin.com"
+  glassdoor: "noreply@glassdoor.com"
+  indeed: "donotreply@jobalert.indeed.com"
+
 # Applied to every search unless the entry overrides the key.
 defaults:
   days_back: 7          # f_TPR=r<days*86400> — only jobs posted within this many days

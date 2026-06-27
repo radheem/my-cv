@@ -153,6 +153,7 @@ def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "l
     
     # Upsert into PostgreSQL jobs table
     from ..db import get_conn
+    import hashlib
     try:
         # Determine platform
         platform = "other"
@@ -163,13 +164,21 @@ def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "l
         elif "fraunhofer" in job.url:
             platform = "fraunhofer"
             
+        # Compute new hash-based job_id for database representation
+        if job.url and job.url.strip():
+            clean_url = job.url.strip().rstrip("/")
+            db_job_id = hashlib.md5(clean_url.encode("utf-8")).hexdigest()[:12]
+        else:
+            clean_title = "".join(ch for ch in job.title.lower() if ch.isalnum() or ch.isspace()).strip()
+            db_job_id = hashlib.md5(clean_title.encode("utf-8")).hexdigest()[:12]
+
         with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute("""
-                    INSERT INTO jobs (slug, job_id, company, title, location, url, description, score, applicants, source, platform)
+                    INSERT INTO jobs (job_id, slug, company, title, location, url, description, score, applicants, source, platform)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (slug) DO UPDATE SET
-                        job_id = EXCLUDED.job_id,
+                    ON CONFLICT (job_id) DO UPDATE SET
+                        slug = EXCLUDED.slug,
                         company = EXCLUDED.company,
                         title = EXCLUDED.title,
                         location = EXCLUDED.location,
@@ -179,7 +188,7 @@ def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "l
                         source = EXCLUDED.source,
                         platform = EXCLUDED.platform
                 """, (
-                    slug, job.job_id, job.company, job.title, job.location, job.url, 
+                    db_job_id, slug, job.company, job.title, job.location, job.url, 
                     clean_jd_text(text), None, job.applicants, "url", platform
                 ))
             conn.commit()

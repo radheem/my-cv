@@ -511,80 +511,9 @@ def cmd_status(args: argparse.Namespace) -> int:
 
 
 def cmd_db_push(args: argparse.Namespace) -> int:
-    from .db import get_conn
-    from . import documents
-    import yaml
+    from .db import migrate_legacy_data
     
-    slugs = [args.slug] if getattr(args, "slug", None) else [
-        d.name for d in _jobs_dir().iterdir() if d.is_dir() and (d / "index.md").exists()
-    ]
-    
-    count = 0
-    with get_conn() as conn:
-        for slug in slugs:
-            app_dir = _jobs_dir() / slug
-            if not app_dir.exists():
-                print(f"Warning: directory not found for {slug}")
-                continue
-            
-            def read_file_safe(filename):
-                p = app_dir / filename
-                return p.read_text(encoding="utf-8") if p.exists() else ""
-
-            cv_en = read_file_safe("cv.md")
-            cv_de = read_file_safe("cv.de.md")
-            cover_letter_en = read_file_safe("cover-letter.md")
-            cover_letter_de = read_file_safe("cover-letter.de.md")
-            index_md = read_file_safe("index.md")
-
-            status = "draft"
-            recipient = ""
-            clusters = []
-            
-            if index_md:
-                try:
-                    meta, _ = documents.split_front_matter(index_md)
-                    status = meta.get("status") or "draft"
-                    clusters = meta.get("clusters") or []
-                except Exception:
-                    pass
-            if cover_letter_en:
-                try:
-                    meta, _ = documents.split_front_matter(cover_letter_en)
-                    recipient = meta.get("recipient") or ""
-                except Exception:
-                    pass
-
-            with conn.cursor() as cur:
-                # Update application body
-                cur.execute("""
-                    UPDATE applications SET
-                        status = %s,
-                        recipient = %s,
-                        cv_en = %s,
-                        cv_de = %s,
-                        cover_letter_en = %s,
-                        cover_letter_de = %s,
-                        clusters = %s,
-                        updated_at = NOW()
-                    WHERE slug = %s
-                """, (status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters, slug))
-                
-                # If no row was updated (meaning job wasn't in db first), insert it!
-                if cur.rowcount == 0:
-                    # Let's insert a dummy job and then the application
-                    cur.execute("""
-                        INSERT INTO jobs (slug, company, title, source, platform)
-                        VALUES (%s, %s, %s, %s, %s)
-                        ON CONFLICT (slug) DO NOTHING
-                    """, (slug, slug, slug, "file", "other"))
-                    
-                    cur.execute("""
-                        INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    """, (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, clusters))
-            count += 1
-        conn.commit()
+    count = migrate_legacy_data(str(_jobs_dir()))
     print(f"Pushed {count} applications from disk to PostgreSQL.")
     return 0
 
@@ -702,7 +631,7 @@ def cmd_db_export(args: argparse.Namespace) -> int:
                 SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
                        a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
                        a.drive_url, a.clusters
-                FROM jobs j JOIN applications a ON j.slug = a.slug
+                FROM jobs j JOIN applications a ON j.job_id = a.job_id
             """)
             for r in cur.fetchall():
                 slug = r["slug"]

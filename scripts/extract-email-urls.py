@@ -11,6 +11,7 @@ import pathlib
 # Fix for module import in bash pipes
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from engine.linkedin.jobs import load_seen
+from engine.workflows.gmail_ingest import extract_urls_from_text, parse_and_normalize_job_url
 
 def main():
     payload = sys.stdin.read()
@@ -38,13 +39,13 @@ def main():
             if not isinstance(m, dict):
                 continue
             body = m.get("body") or ""
-            # Match LinkedIn job URLs, e.g., https://www.linkedin.com/jobs/view/1234567/
-            matches = re.finditer(r"linkedin\.com/jobs/view/(\d+)", body)
-            for match in matches:
-                job_id = match.group(1)
+            # Match any vendor-agnostic job URLs
+            for url in extract_urls_from_text(body):
+                parsed = parse_and_normalize_job_url(url)
+                job_id = parsed["job_id"]
                 if job_id not in seen_ledger and job_id not in found_ids:
                     found_ids.add(job_id)
-                    unseen_urls.append(f"https://www.linkedin.com/jobs/view/{job_id}/")
+                    unseen_urls.append(url)
 
     for url in unseen_urls:
         print(url)

@@ -25,8 +25,8 @@ def init_db():
     """Initialize the jobs and applications tables."""
     schema_sql = """
     CREATE TABLE IF NOT EXISTS jobs (
-        slug VARCHAR(255) PRIMARY KEY,
-        job_id VARCHAR(100) UNIQUE,
+        job_id VARCHAR(100) PRIMARY KEY,
+        slug VARCHAR(255) NOT NULL,
         company VARCHAR(255) NOT NULL,
         title VARCHAR(255) NOT NULL,
         location VARCHAR(255),
@@ -40,7 +40,8 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS applications (
-        slug VARCHAR(255) PRIMARY KEY REFERENCES jobs(slug) ON DELETE CASCADE,
+        job_id VARCHAR(100) PRIMARY KEY REFERENCES jobs(job_id) ON DELETE CASCADE,
+        slug VARCHAR(255) NOT NULL,
         status VARCHAR(50) NOT NULL DEFAULT 'draft',
         recipient VARCHAR(255),
         cv_en TEXT,
@@ -127,30 +128,14 @@ def migrate_legacy_data(applications_dir: str = "applications") -> int:
             elif "fraunhofer" in url:
                 platform = "fraunhofer"
 
-            # Parse job ID from manifest or slug or URL
-            job_id = None
-            manifest_json = app_dir / "manifest.json"
-            if manifest_json.exists():
-                try:
-                    import json
-                    m_data = json.loads(manifest_json.read_text(encoding="utf-8"))
-                    job_id = str(m_data.get("job_id", "")) if m_data.get("job_id") else None
-                except Exception:
-                    pass
-            
-            if not job_id and url:
-                # Extract job ID from URL
-                m = re.search(r"(\d{7,})/?$", url.rstrip("/"))
-                if m:
-                    job_id = m.group(1)
-                    
-            if not job_id:
-                # Extract trailing digits from slug
-                m = re.search(r"(\d+)$", slug)
-                if m:
-                    job_id = m.group(1)
-                else:
-                    job_id = f"legacy-{slug}"
+            # Generate stable job_id based on hashing rules
+            import hashlib
+            if url and url.strip():
+                clean_url = url.strip().rstrip("/")
+                job_id = hashlib.md5(clean_url.encode("utf-8")).hexdigest()[:12]
+            else:
+                clean_title = "".join(ch for ch in title.lower() if ch.isalnum() or ch.isspace()).strip()
+                job_id = hashlib.md5(clean_title.encode("utf-8")).hexdigest()[:12]
 
             # Read content files
             def read_file_safe(filename):
@@ -175,21 +160,22 @@ def migrate_legacy_data(applications_dir: str = "applications") -> int:
             with conn.cursor() as cur:
                 # Insert job first
                 cur.execute("""
-                    INSERT INTO jobs (slug, job_id, company, title, url, description, source, platform)
+                    INSERT INTO jobs (job_id, slug, company, title, url, description, source, platform)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (slug) DO UPDATE SET
-                        job_id = EXCLUDED.job_id,
+                    ON CONFLICT (job_id) DO UPDATE SET
+                        slug = EXCLUDED.slug,
                         company = EXCLUDED.company,
                         title = EXCLUDED.title,
                         url = EXCLUDED.url,
                         description = EXCLUDED.description
-                """, (slug, job_id, company, title, url, description, "file", platform))
+                """, (job_id, slug, company, title, url, description, "file", platform))
 
                 # Insert application
                 cur.execute("""
-                    INSERT INTO applications (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (slug) DO UPDATE SET
+                    INSERT INTO applications (job_id, slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (job_id) DO UPDATE SET
+                        slug = EXCLUDED.slug,
                         status = EXCLUDED.status,
                         recipient = EXCLUDED.recipient,
                         cv_en = EXCLUDED.cv_en,
@@ -198,7 +184,7 @@ def migrate_legacy_data(applications_dir: str = "applications") -> int:
                         cover_letter_de = EXCLUDED.cover_letter_de,
                         drive_url = EXCLUDED.drive_url,
                         clusters = EXCLUDED.clusters
-                """, (slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters))
+                """, (job_id, slug, status, recipient, cv_en, cv_de, cover_letter_en, cover_letter_de, drive_url, clusters))
             
             count += 1
         conn.commit()

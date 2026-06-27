@@ -96,9 +96,27 @@ def test_scoring_passed_through(tmp_path):
     assert out["scoring"]["must_have"] == ["go", "python"]
 
 
+def test_gmail_alerts_override_defaults(tmp_path):
+    p = _write(
+        tmp_path,
+        """
+        gmail_alerts:
+          linkedin: "custom-linkedin@test.com"
+        searches:
+          - keywords: "x"
+        """,
+    )
+    out = config.resolve_search(path=p)
+    alerts = out["gmail_alerts"]
+    assert alerts["linkedin"] == "custom-linkedin@test.com"
+    assert alerts["glassdoor"] == "noreply@glassdoor.com"  # fallback from default
+    assert alerts["indeed"] == "donotreply@jobalert.indeed.com"  # fallback from default
+
+
 def test_repo_search_config_is_valid():
     """The committed config/search.yml must load and every search must have keywords."""
     out = config.resolve_search()
     assert out["searches"], "config/search.yml defines no searches"
     for s in out["searches"]:
         assert s["keywords"] and s["name"]
+    assert out["gmail_alerts"]["linkedin"] == "jobalerts-noreply@linkedin.com"

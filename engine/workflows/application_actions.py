@@ -34,7 +34,7 @@ def update_application_status_workflow(slug: str, status: str) -> str:
         
     args = argparse.Namespace(
         slug=resolved_slug,
-        status=status,
+        state=status,
         action=None
     )
     try:
@@ -47,7 +47,7 @@ def update_application_status_workflow(slug: str, status: str) -> str:
 
 def sync_status_to_sheets_workflow() -> str:
     """Push database status changes to Google Sheets."""
-    args = argparse.Namespace(action="push", slug=None, status=None)
+    args = argparse.Namespace(slug="push", state=None)
     try:
         cli.cmd_status(args)
         return "SUCCESS: Application statuses synchronized to Google Sheets."

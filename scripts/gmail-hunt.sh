@@ -19,6 +19,7 @@ while [[ $# -gt 0 ]]; do
     --limit)  LIMIT="$2"; shift 2 ;;
     --order)  ORDER="$2"; shift 2 ;;
     --dry-run) DRY_RUN=true; shift ;;
+    --inside-uv) shift ;;
     *) echo "Unknown arg: $1"; exit 1 ;;
   esac
 done
@@ -32,15 +33,6 @@ if [[ -f .env ]]; then
   set -o allexport
   source .env
   set +o allexport
-fi
-
-# Force execution through uv run if uv is available and we're not already running inside it
-if [[ "${1:-}" != "--inside-uv" ]]; then
-  if command -v uv &>/dev/null; then
-    exec uv run "$0" --inside-uv "$@"
-  fi
-else
-  shift # remove --inside-uv
 fi
 
 PYTHON="python3"
@@ -78,11 +70,18 @@ if [[ ${#URLS[@]} -eq 0 ]]; then
   exit 0
 fi
 
+# Slice the URLs list to our limit so we don't try to crawl hundreds of postings sequentially
+ACTIVE_URLS=("${URLS[@]}")
+if [[ ${#ACTIVE_URLS[@]} -gt $LIMIT ]]; then
+  echo "  Slicing to first $LIMIT URLs to respect --limit..."
+  ACTIVE_URLS=("${ACTIVE_URLS[@]:0:$LIMIT}")
+fi
+
 echo ""
 echo "── Step 2: Capture Job Descriptions ─────────────────────"
 
 NEW_SLUGS=()
-for url in "${URLS[@]}"; do
+for url in "${ACTIVE_URLS[@]}"; do
     echo "  Capturing: $url"
     if [[ "$DRY_RUN" == "true" ]]; then
         echo "    [dry-run] xvfb_run cv-tailor capture \"$url\""
