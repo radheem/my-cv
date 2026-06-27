@@ -10,15 +10,15 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
-- [ ] Task: Create `data/guides/mcp-insights.md`
-    - [ ] Write a detailed markdown guide documenting delays, scraping pacing, session warming, and timeout handling.
-- [ ] Task: Implement the 4 tools
-    - [ ] Add `get_mcp_workflows` tool to `engine/mcp/server.py`.
-    - [ ] Add `get_mcp_insights` tool to `engine/mcp/server.py`.
-    - [ ] Add `get_cv_guide` tool to `engine/mcp/server.py`.
-    - [ ] Add `get_cover_letter_guide` tool to `engine/mcp/server.py`.
-- [ ] Task: Test Verification
-    - [ ] Run test suite and ensure all tests pass (Green Phase).
+- [x] Task: Create `data/guides/mcp-insights.md`
+    - [x] Write a detailed markdown guide documenting delays, scraping pacing, session warming, and timeout handling.
+- [x] Task: Implement the 4 tools (253546b)
+    - [x] Add `get_mcp_workflows` tool to `engine/mcp/server.py`.
+    - [x] Add `get_mcp_insights` tool to `engine/mcp/server.py`.
+    - [x] Add `get_cv_guide` tool to `engine/mcp/server.py`.
+    - [x] Add `get_cover_letter_guide` tool to `engine/mcp/server.py`.
+- [x] Task: Test Verification
+    - [x] Run test suite and ensure all tests pass (Green Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and Finalization
