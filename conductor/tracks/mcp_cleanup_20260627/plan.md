@@ -25,7 +25,7 @@
     - [x] Update docstring for `create_application_from_job` to indicate it is Step 3.
     - [x] Remove any unused imports in `engine/mcp/server.py`.
     - [x] Rerun test suite to verify no breakage from import cleanup.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Refactor MCP Server Tools' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Refactor MCP Server Tools' (Protocol in workflow.md)
 
 ## Phase 3: End-to-End Testing
 - [ ] Task: Create E2E test for the 3-step pipeline
