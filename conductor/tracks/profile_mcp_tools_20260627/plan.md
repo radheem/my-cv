@@ -6,7 +6,7 @@
     - [x] Write failing test `test_mcp_get_user_projects` in `tests/test_mcp_server.py`.
     - [x] Write failing test `test_mcp_get_master_cv` in `tests/test_mcp_server.py`.
     - [x] Run tests and verify they fail (Red Phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
 - [ ] Task: Implement `get_user_profile`
