@@ -1,12 +1,12 @@
 # Implementation Plan: MCP Guides and Workflows Tools
 
 ## Phase 1: Setup and Testing
-- [ ] Task: Create unit tests for the 4 new tools
-    - [ ] Write failing test `test_mcp_get_mcp_workflows` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_get_mcp_insights` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_get_cv_guide` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_get_cover_letter_guide` in `tests/test_mcp_server.py`.
-    - [ ] Run tests and verify they fail (Red Phase).
+- [x] Task: Create unit tests for the 4 new tools (1bdc481)
+    - [x] Write failing test `test_mcp_get_mcp_workflows` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_get_mcp_insights` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_get_cv_guide` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_get_cover_letter_guide` in `tests/test_mcp_server.py`.
+    - [x] Run tests and verify they fail (Red Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
