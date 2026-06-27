@@ -25,4 +25,4 @@ This plan follows standard practices for Python script modifications with tests.
 - [x] Task: Update MCP tools in `engine/mcp/server.py` (0899cc0)
     - [x] Replace `search_gmail_alerts` with three new MCP tools mapping to the new workflows.
     - [x] Update `tests/test_mcp_server.py` to cover the new modular tool definitions.
-- [~] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) (0899cc0)
