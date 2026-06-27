@@ -1,11 +1,11 @@
 # Implementation Plan: Profile MCP Tools
 
 ## Phase 1: Setup and Testing
-- [ ] Task: Create unit tests for the new profile tools
-    - [ ] Write failing test `test_mcp_get_user_profile` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_get_user_projects` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test `test_mcp_get_master_cv` in `tests/test_mcp_server.py`.
-    - [ ] Run tests and verify they fail (Red Phase).
+- [x] Task: Create unit tests for the new profile tools (2b4be34)
+    - [x] Write failing test `test_mcp_get_user_profile` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_get_user_projects` in `tests/test_mcp_server.py`.
+    - [x] Write failing test `test_mcp_get_master_cv` in `tests/test_mcp_server.py`.
+    - [x] Run tests and verify they fail (Red Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Testing' (Protocol in workflow.md)
 
 ## Phase 2: Implementation
