@@ -13,10 +13,12 @@ The MCP server connects directly to your PostgreSQL database and exposes a unifi
 *   `query`: Evaluates safe, read-only `SELECT` and `WITH` statements, preventing SQL injections or mutations, and capping return results to a hard **1,000-row limit**.
 
 ### 🚀 Programmatic Action Workflows (Safe, Non-Shell Python Actions)
-*   `search_gmail_alerts`: Triggers the complete Gmail alert-to-application ingestion pipeline.
-*   `create_application`: Programmatically generates tailored CVs and cover letter drafts on disk.
+*   `list_gmail_jobs`: Searches Gmail for alerts from a specified provider (e.g. `linkedin`, `glassdoor`, `indeed`) and returns a lightweight list of discovered jobs with tentative metadata (including `job_id`, `company`, `role`, `job_url`, and `brief_description`).
+*   `extract_job_details`: Spawns an isolated Chromium browser via Playwright to crawl the full job description of a specified URL and commits it securely to the database `jobs` table.
+*   `create_application_from_job`: Triggers the downstream LLM-tailoring pipeline for a given job slug, compiles Markdown files locally into bilingual PDFs via LaTeX, uploads them to Google Drive, and synchronizes status with Google Sheets.
+*   `create_application`: Programmatically generates tailored CVs and cover letter drafts on disk from a generic file/url.
 *   `score_jobs`: Scores and prioritizes unscored database job descriptions against your master profile terms.
-*   `update_application_status`: Updates job tracking lifecycles.
+*   `update_application_status`: Updates job tracking lifecycles in the PostgreSQL database.
 *   `sync_status_to_sheets`: Synchronizes PostgreSQL application statuses directly with Google Sheets.
 
 ---
@@ -106,7 +108,7 @@ Configure your client to execute the CLI command directly:
 The MCP container is pre-configured with Docker-awareness. It checks if it is running inside Docker, and automatically replaces `localhost` inside your `.env` `DATABASE_URL` with the Docker Compose hostname `db`. No manual configuration is required.
 
 ### Playwright / Xvfb Errors?
-Mutating tasks (like `search_gmail_alerts`) navigate through Playwright. Inside the container, these tasks run securely because the `mcp` service is bound to Xvfb on display `:99`. If you ever experience issues, inspect browser logs:
+Mutating tasks (like `extract_job_details`) navigate through Playwright. Inside the container, these tasks run securely because the `mcp` service is bound to Xvfb on display `:99`. If you ever experience issues, inspect browser logs:
 ```bash
 docker compose exec mcp ls -la /tmp
 ```
