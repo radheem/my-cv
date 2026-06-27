@@ -26,3 +26,11 @@
     - [x] Remove any unused imports in `engine/mcp/server.py`.
     - [x] Rerun test suite to verify no breakage from import cleanup.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Refactor MCP Server Tools' (Protocol in workflow.md)
+
+## Phase 3: End-to-End Testing
+- [ ] Task: Create E2E test for the 3-step pipeline
+    - [ ] Create mock email with a job listing in `tests/test_mcp_server.py`.
+    - [ ] Query Gmail using `list_gmail_linkedin_jobs` and verify the `job_url` is parsed and returned.
+    - [ ] Fetch the job using `extract_job_details` with the returned URL and verify the record is saved.
+    - [ ] Create an application using `create_application_from_job` with the saved job slug and verify application files are mocked/generated.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: End-to-End Testing' (Protocol in workflow.md)
