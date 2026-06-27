@@ -13,9 +13,11 @@ The MCP server connects directly to your PostgreSQL database and exposes a unifi
 *   `query`: Evaluates safe, read-only `SELECT` and `WITH` statements, preventing SQL injections or mutations, and capping return results to a hard **1,000-row limit**.
 
 ### 🚀 Programmatic Action Workflows (Safe, Non-Shell Python Actions)
-*   `list_gmail_jobs`: Searches Gmail for alerts from a specified provider (e.g. `linkedin`, `glassdoor`, `indeed`) and returns a lightweight list of discovered jobs with tentative metadata (including `job_id`, `company`, `role`, `job_url`, and `brief_description`).
-*   `extract_job_details`: Spawns an isolated Chromium browser via Playwright to crawl the full job description of a specified URL and commits it securely to the database `jobs` table.
-*   `create_application_from_job`: Triggers the downstream LLM-tailoring pipeline for a given job slug, compiles Markdown files locally into bilingual PDFs via LaTeX, uploads them to Google Drive, and synchronizes status with Google Sheets.
+*   `list_gmail_linkedin_jobs` / `list_gmail_glassdoor_jobs` / `list_gmail_indeed_jobs`: Step 1 (Gmail Path). Searches Gmail for alerts from a specific provider and returns a lightweight list of discovered jobs with tentative metadata (including `job_id`, `company`, `role`, `job_url`, and `brief_description`).
+*   `fetch_public_job_url`: Step 1 (Direct Path - Preferred). Downloads a public webpage's HTML and extracts its clean, readable plain text, bypassing heavy browser crawlers entirely.
+*   `save_job_description`: Step 2 (Direct Path - Preferred). Saves a job description directly to the PostgreSQL database and files, returning the generated slug.
+*   `extract_job_details`: Step 2 (Scraper Path). Spawns an isolated Chromium browser via Playwright to crawl the full job description. Use only when active LinkedIn cookies are warm; prone to CAPTCHAs on public pages.
+*   `create_application_from_job`: Step 3 of the workflow. Triggers the downstream LLM-tailoring pipeline for a given job slug, compiles Markdown files locally into bilingual PDFs via LaTeX, uploads them to Google Drive, and synchronizes status with Google Sheets.
 *   `create_application`: Programmatically generates tailored CVs and cover letter drafts on disk from a generic file/url.
 *   `score_jobs`: Scores and prioritizes unscored database job descriptions against your master profile terms.
 *   `update_application_status`: Updates job tracking lifecycles in the PostgreSQL database.

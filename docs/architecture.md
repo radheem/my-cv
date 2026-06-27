@@ -146,8 +146,8 @@ See [Setup](setup.md) to run it end to end.
 
 These sequence diagrams detail the end-to-end execution path for each of our core modular workflows, illustrating their specific purposes and interactions with external resources.
 
-### 1. Gmail Alert Job Listing Workflow (`list_gmail_jobs`)
-*   **Purpose:** To securely query your Gmail inbox via the Apps Script API Proxy for unread job alert emails from a specified provider (e.g., LinkedIn, Glassdoor, Indeed), parse their bodies to extract target links, normalize them, and compile a clean, lightweight list of newly discovered postings with tentative metadata (including `job_id`, `company`, `role`, and `brief_description`) without executing any heavy web-scraping or modifications.
+### 1. Gmail Alert Job Listing Workflow (`list_gmail_[provider]_jobs`)
+*   **Purpose:** To securely query your Gmail inbox via the Apps Script API Proxy for unread job alert emails from a specified provider (LinkedIn, Glassdoor, or Indeed) using specialized tools (`list_gmail_linkedin_jobs`, `list_gmail_glassdoor_jobs`, `list_gmail_indeed_jobs`), parse their bodies to extract target links, normalize them, and compile a clean, lightweight list of newly discovered postings with tentative metadata (including `job_id`, `company`, `role`, and `brief_description`) without executing any heavy web-scraping or modifications.
 
 ```mermaid
 sequenceDiagram
@@ -158,8 +158,8 @@ sequenceDiagram
     participant Config as config/search.yml
     participant Gmail as Gmail (via Proxy)
 
-    Client->>Server: tools/call list_gmail_jobs(provider, limit)
-    Server->>WF: Invoke list_gmail_jobs_workflow
+    Client->>Server: tools/call list_gmail_linkedin_jobs(query, limit)
+    Server->>WF: Invoke list_gmail_jobs_workflow("linkedin", query, limit)
     WF->>Config: resolve_search() to get provider's alert email
     Config-->>WF: Return alert email address
     WF->>Gmail: search_emails(query, limit)
