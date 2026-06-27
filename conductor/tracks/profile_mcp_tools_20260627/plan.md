@@ -22,6 +22,6 @@
 ## Phase 3: Documentation and Finalization
 - [x] Task: Update Runbooks (009eea0)
     - [x] Update `docs/runbooks/mcp-server.md` to list the three new read-only tools under the "Read-Only Database Queries" or a new "Read-Only Profile Data" section.
-- [ ] Task: Final Test Verification
-    - [ ] Run the full test suite (`pytest`) to guarantee no regressions.
+- [x] Task: Final Test Verification
+    - [x] Run the full test suite (`pytest`) to guarantee no regressions.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Documentation and Finalization' (Protocol in workflow.md)
