@@ -386,5 +386,91 @@ def test_mcp_get_cover_letter_guide():
     assert "letter" in res.lower() or "salutation" in res.lower()
 
 
+def test_mcp_create_application_async_success(monkeypatch):
+    from engine.mcp import server
+    from engine.db import get_conn
+    import time
+    import json
+
+    # Insert mock job to satisfy DB constraints
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('success-job-123', 'mock-acme-slug', 'Acme', 'Engineer', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            # Ensure no stale app record exists
+            cur.execute("DELETE FROM applications WHERE slug = 'mock-acme-slug'")
+            conn.commit()
+
+    # Mock workflow to simulate a fast success
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "Complete success!")
+
+    # 1. Trigger generation
+    res = json.loads(server.create_application_from_job("mock-acme-slug"))
+    assert res["status"] == "generating"
+    
+    # 2. Let background thread run for a split second
+    time.sleep(0.5)
+
+
+def test_mcp_create_application_async_failure(monkeypatch):
+    from engine.mcp import server
+    from engine.db import get_conn
+    import time
+    import json
+
+    # Insert mock job to satisfy DB constraints
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('fail-job-123', 'mock-fail-slug', 'Acme Fail', 'Engineer', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            # Ensure no stale app record exists
+            cur.execute("DELETE FROM applications WHERE slug = 'mock-fail-slug'")
+            conn.commit()
+
+    # Mock workflow to simulate a failure
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "ERROR: Something went wrong")
+
+    # 1. Trigger generation
+    res = json.loads(server.create_application_from_job("mock-fail-slug"))
+    assert res["status"] == "generating"
+    
+    # 2. Let background thread run and fail
+    time.sleep(0.5)
+
+
+def test_mcp_job_delete_reinstatement():
+    from engine.mcp import server
+    import json
+
+    # Save a job
+    save_res = server.save_job_description(
+        company="Soft Delete Corp",
+        title="Soft Engineer",
+        url="https://softdelete.com/jobs/1",
+        description="This is a soft delete test job."
+    )
+    assert "SUCCESS" in save_res
+    
+    # Delete the job
+    del_res = server.delete_job("soft-delete-corp-soft-engineer-52d3a3")
+    assert "SUCCESS" in del_res
+
+    # Save the exact same job again
+    save_res_again = server.save_job_description(
+        company="Soft Delete Corp",
+        title="Soft Engineer",
+        url="https://softdelete.com/jobs/1",
+        description="This is a soft delete test job."
+    )
+    assert "SUCCESS" in save_res_again
+
+
+
 
 
