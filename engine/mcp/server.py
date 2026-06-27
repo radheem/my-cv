@@ -223,6 +223,78 @@ def extract_job_details(url: str) -> str:
     return extract_job_details_workflow(url)
 
 
+import queue
+import threading
+
+# Global serial execution queue for tailoring applications
+_tailor_queue = queue.Queue()
+_tailor_worker_started = False
+_tailor_lock = threading.Lock()
+
+
+def _tailor_consumer_worker():
+    global _tailor_worker_started
+    while True:
+        try:
+            # Block indefinitely until a job is pushed to the queue
+            slug = _tailor_queue.get()
+            log.info(f"Serially processing queued tailoring job for slug: {slug}")
+            
+            # Transition the application row status to 'generating' in the database
+            try:
+                with get_conn() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("""
+                            UPDATE applications 
+                            SET status = 'generating', updated_at = CURRENT_TIMESTAMP 
+                            WHERE slug = %s
+                        """, (slug,))
+                        conn.commit()
+            except Exception as e:
+                log.exception(f"Failed to update status to generating for slug: {slug}")
+
+            # Run the actual tailoring workflow
+            try:
+                res = create_application_from_job_workflow(slug)
+                if res.startswith("ERROR"):
+                    log.error(f"Queued tailoring failed for {slug}: {res}")
+                    _mark_application_failed(slug)
+            except Exception as bg_e:
+                log.exception(f"Queued tailoring worker crashed for slug: {slug}")
+                _mark_application_failed(slug)
+            finally:
+                _tailor_queue.task_done()
+        except Exception as e:
+            log.exception("Error in global tailor consumer worker loop")
+            import time
+            time.sleep(1)
+
+
+def _mark_application_failed(slug: str):
+    try:
+        with get_conn() as conn_failed:
+            with conn_failed.cursor() as cur_failed:
+                cur_failed.execute("""
+                    UPDATE applications 
+                    SET status = 'failed', updated_at = CURRENT_TIMESTAMP 
+                    WHERE slug = %s
+                """, (slug,))
+                conn_failed.commit()
+    except Exception as db_err:
+        log.exception(f"Failed to mark application as failed in DB: {db_err}")
+
+
+def _ensure_tailor_worker():
+    global _tailor_worker_started
+    with _tailor_lock:
+        if not _tailor_worker_started:
+            worker_thread = threading.Thread(target=_tailor_consumer_worker, name="TailorConsumerWorker")
+            worker_thread.daemon = True
+            worker_thread.start()
+            _tailor_worker_started = True
+            log.info("Initialized global FIFO queue tailor consumer worker thread.")
+
+
 @mcp.tool()
 def create_application_from_job(slug: str) -> str:
     """Step 3 of the job application workflow. Generate tailored job application documents (CV/CL in English and German) for a specific job slug (obtained from `extract_job_details`), render them to PDFs, upload them to Google Drive, and synchronize application status."""
@@ -236,55 +308,26 @@ def create_application_from_job(slug: str) -> str:
                     return json.dumps({"error": f"Job with slug '{slug}' not found in database. Cannot create application."})
                 job_id = row["job_id"]
 
-                # 2. Insert or update the application row setting status to 'generating'
+                # 2. Insert or update the application row setting status to 'queued'
                 cur.execute("""
                     INSERT INTO applications (job_id, slug, status)
-                    VALUES (%s, %s, 'generating')
-                    ON CONFLICT (job_id) DO UPDATE SET status = 'generating', updated_at = CURRENT_TIMESTAMP
+                    VALUES (%s, %s, 'queued')
+                    ON CONFLICT (job_id) DO UPDATE SET status = 'queued', updated_at = CURRENT_TIMESTAMP
                 """, (job_id, slug))
                 conn.commit()
 
-        # 3. Spawn background worker thread
-        def bg_worker():
-            try:
-                res = create_application_from_job_workflow(slug)
-                if res.startswith("ERROR"):
-                    log.error(f"Background tailoring failed: {res}")
-                    with get_conn() as conn_failed:
-                        with conn_failed.cursor() as cur_failed:
-                            cur_failed.execute("""
-                                UPDATE applications 
-                                SET status = 'failed' 
-                                WHERE slug = %s
-                            """, (slug,))
-                            conn_failed.commit()
-            except Exception as bg_e:
-                log.exception(f"Background worker thread crashed for slug: {slug}")
-                try:
-                    with get_conn() as conn_failed:
-                        with conn_failed.cursor() as cur_failed:
-                            cur_failed.execute("""
-                                UPDATE applications 
-                                SET status = 'failed' 
-                                WHERE slug = %s
-                            """, (slug,))
-                            conn_failed.commit()
-                except Exception:
-                    pass
-
-        import threading
-        thread = threading.Thread(target=bg_worker)
-        thread.daemon = True
-        thread.start()
+        # 3. Ensure background worker is running and push to queue
+        _ensure_tailor_worker()
+        _tailor_queue.put(slug)
 
         return json.dumps({
-            "status": "generating",
+            "status": "queued",
             "slug": slug,
-            "message": "Application tailoring has been started in the background. You can monitor its progress by calling get_application."
+            "message": "Application tailoring has been added to the sequential background queue. You can monitor its progress by calling get_application."
         })
     except Exception as e:
-        log.exception(f"Failed to start async application creation for slug: {slug}")
-        return json.dumps({"error": f"Failed to start application tailoring: {str(e)}"})
+        log.exception(f"Failed to queue application creation for slug: {slug}")
+        return json.dumps({"error": f"Failed to queue application tailoring: {str(e)}"})
 
 
 @mcp.tool()

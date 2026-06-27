@@ -168,7 +168,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
     
     res_create = json.loads(server.create_application_from_job("mock-acme-slug"))
-    assert res_create["status"] == "generating"
+    assert res_create["status"] == "queued"
 
 
 def test_mcp_3step_pipeline_e2e(monkeypatch):
@@ -262,7 +262,7 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
             conn.commit()
 
     application_res = json.loads(server.create_application_from_job(target_slug))
-    assert application_res["status"] == "generating"
+    assert application_res["status"] == "queued"
 
 
 def test_mcp_fetch_public_job_url(monkeypatch):
@@ -335,7 +335,7 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
 
     # 3. Create the application using the returned slug
     application_res = json.loads(server.create_application_from_job(target_slug))
-    assert application_res["status"] == "generating"
+    assert application_res["status"] == "queued"
 
 
 def test_mcp_get_user_profile():
@@ -421,7 +421,7 @@ def test_mcp_create_application_async_success(monkeypatch):
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-acme-slug"))
-    assert res["status"] == "generating"
+    assert res["status"] == "queued"
     
     # 2. Let background thread run for a split second
     time.sleep(0.5)
@@ -450,7 +450,7 @@ def test_mcp_create_application_async_failure(monkeypatch):
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-fail-slug"))
-    assert res["status"] == "generating"
+    assert res["status"] == "queued"
     
     # 2. Let background thread run and fail
     time.sleep(0.5)
@@ -516,7 +516,7 @@ def test_mcp_stress_batch_creation_delete(monkeypatch):
     # 2. Trigger asynchronous application creation in batch (all 3 triggered back-to-back!)
     for slug in slugs:
         res = json.loads(server.create_application_from_job(slug))
-        assert res["status"] == "generating"
+        assert res["status"] == "queued"
 
     # 3. Soft delete all 3 jobs
     for slug in slugs:
