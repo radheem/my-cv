@@ -123,13 +123,13 @@ def list_gmail_indeed_jobs(query: str = "is:unread", limit: int = 10) -> str:
 
 @mcp.tool()
 def extract_job_details(url: str) -> str:
-    """Execute Playwright scraper in an isolated process to extract the full job description from a given URL and save the completed record into the PostgreSQL database jobs table."""
+    """Step 2 of the job application workflow. Execute Playwright scraper in an isolated process to extract the full job description from a given URL (obtained from a `list_gmail_*_jobs` tool) and save the completed record into the PostgreSQL database. Returns the database record including the job slug."""
     return extract_job_details_workflow(url)
 
 
 @mcp.tool()
 def create_application_from_job(slug: str) -> str:
-    """Generate tailored job application documents (CV/CL in English and German) for a specific job slug, render them to PDFs, upload them to Google Drive, and synchronize application status."""
+    """Step 3 of the job application workflow. Generate tailored job application documents (CV/CL in English and German) for a specific job slug (obtained from `extract_job_details`), render them to PDFs, upload them to Google Drive, and synchronize application status."""
     return create_application_from_job_workflow(slug)
 
 
