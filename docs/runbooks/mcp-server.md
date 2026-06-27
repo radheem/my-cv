@@ -12,6 +12,11 @@ The MCP server connects directly to your PostgreSQL database and exposes a unifi
 *   `cv_tailor_ontology`: Exposes the database schema layouts, column types, and relationships (the perfect "decoder ring" for connecting agents).
 *   `query`: Evaluates safe, read-only `SELECT` and `WITH` statements, preventing SQL injections or mutations, and capping return results to a hard **1,000-row limit**.
 
+### 👤 Read-Only Profile Data
+*   `get_user_profile`: Returns the parsed biographical and narrative context (from `data/profile.yml`) as structured JSON.
+*   `get_user_projects`: Returns your complete technical portfolio (from `data/projects.yml`) as structured JSON.
+*   `get_master_cv`: Returns your complete canonical Master CV in raw, markdown format (from `data/master-cv.md`).
+
 ### 🚀 Programmatic Action Workflows (Safe, Non-Shell Python Actions)
 *   `list_gmail_linkedin_jobs` / `list_gmail_glassdoor_jobs` / `list_gmail_indeed_jobs`: Step 1 (Gmail Path). Searches Gmail for alerts from a specific provider and returns a lightweight list of discovered jobs with tentative metadata (including `job_id`, `company`, `role`, `job_url`, and `brief_description`).
 *   `fetch_public_job_url`: Step 1 (Direct Path - Preferred). Downloads a public webpage's HTML and extracts its clean, readable plain text, bypassing heavy browser crawlers entirely.
