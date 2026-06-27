@@ -67,31 +67,37 @@ def test_mcp_list_and_get_tools():
     assert "results" in res_search
 
 
-def test_mcp_search_gmail_platform_tools(monkeypatch):
+def test_mcp_specialized_gmail_tools(monkeypatch):
     from engine import gmail
     from engine.mcp import server
+    import json
 
+    mock_body = """
+    Software Engineer
+    Acme Corp
+    Munich
+    https://www.linkedin.com/jobs/view/12345/
+    """
     monkeypatch.setattr(gmail, "search_emails", lambda query, limit, include_bodies: [
-        {"threadId": "123", "subject": "Mock Job Alert", "messages": [
-            {"id": "msg1", "sender": "test@test.com", "subject": None, "snippet": "Job details"}
+        {"threadId": "123", "subject": "Mock Alert", "messages": [
+            {"id": "msg1", "sender": "test@test.com", "subject": "Mock Alert", "body": mock_body}
         ]}
     ])
 
-    # Test LinkedIn Tool
-    res_li = json.loads(server.search_gmail_linkedin_jobs(limit=2))
-    assert "threads" in res_li
-    assert len(res_li["threads"]) == 1
-    assert res_li["threads"][0]["messages"][0]["subject"] == "Mock Job Alert"
+    # Test specialized LinkedIn tool
+    res_li = json.loads(server.list_gmail_linkedin_jobs(limit=2))
+    assert isinstance(res_li, list)
+    assert len(res_li) == 1
+    assert res_li[0]["job_id"] == "12345"
+    assert res_li[0]["company"] == "Acme Corp"
 
-    # Test Glassdoor Tool
-    res_gd = json.loads(server.search_gmail_glassdoor_jobs(limit=2))
-    assert "threads" in res_gd
-    assert len(res_gd["threads"]) == 1
+    # Test specialized Glassdoor tool
+    res_gd = json.loads(server.list_gmail_glassdoor_jobs(limit=2))
+    assert isinstance(res_gd, list)
 
-    # Test Indeed Tool
-    res_ind = json.loads(server.search_gmail_indeed_jobs(limit=2))
-    assert "threads" in res_ind
-    assert len(res_ind["threads"]) == 1
+    # Test specialized Indeed tool
+    res_ind = json.loads(server.list_gmail_indeed_jobs(limit=2))
+    assert isinstance(res_ind, list)
 
 
 def test_mcp_new_gmail_modular_tools(monkeypatch):
@@ -99,7 +105,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     from engine import gmail
     import json
     
-    # 1. Test list_gmail_jobs
+    # 1. Test specialized linkedin tool (list_gmail_jobs was removed)
     mock_body = """
     Software Engineer
     Acme Corp
@@ -112,7 +118,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
         ]}
     ])
     
-    res = json.loads(server.list_gmail_jobs(provider="linkedin", query="is:unread", limit=2))
+    res = json.loads(server.list_gmail_linkedin_jobs(query="is:unread", limit=2))
     assert isinstance(res, list)
     assert len(res) == 1
     assert res[0]["job_id"] == "12345"
