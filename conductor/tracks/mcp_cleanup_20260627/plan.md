@@ -1,12 +1,12 @@
 # Implementation Plan: MCP Tool Cleanup
 
 ## Phase 1: Setup and Refactor Tests
-- [ ] Task: Update test cases to target new specialized tools
-    - [ ] Write failing test for `list_gmail_linkedin_jobs` in `tests/test_mcp_server.py` and `tests/test_gmail_workflows.py`.
-    - [ ] Write failing test for `list_gmail_glassdoor_jobs` in `tests/test_mcp_server.py`.
-    - [ ] Write failing test for `list_gmail_indeed_jobs` in `tests/test_mcp_server.py`.
-    - [ ] Update any test asserting against the presence or functionality of `list_gmail_jobs` to instead assert on the new specialized tools.
-    - [ ] Run the tests and confirm they fail.
+- [x] Task: Update test cases to target new specialized tools (addebd3)
+    - [x] Write failing test for `list_gmail_linkedin_jobs` in `tests/test_mcp_server.py` and `tests/test_gmail_workflows.py`.
+    - [x] Write failing test for `list_gmail_glassdoor_jobs` in `tests/test_mcp_server.py`.
+    - [x] Write failing test for `list_gmail_indeed_jobs` in `tests/test_mcp_server.py`.
+    - [x] Update any test asserting against the presence or functionality of `list_gmail_jobs` to instead assert on the new specialized tools.
+    - [x] Run the tests and confirm they fail.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Refactor Tests' (Protocol in workflow.md)
 
 ## Phase 2: Refactor MCP Server Tools
