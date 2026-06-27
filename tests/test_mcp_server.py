@@ -170,3 +170,87 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     res_create = server.create_application_from_job("mock-acme-slug")
     assert "Complete" in res_create
     assert calls == ["new", "pdf", "upload", "status"]
+
+
+def test_mcp_3step_pipeline_e2e(monkeypatch):
+    from engine.mcp import server
+    from engine import gmail, cli
+    import engine.workflows.gmail_ingest as gi
+    import multiprocessing
+    import json
+
+    # --- STEP 1 Mocking ---
+    # Send a dummy email mock
+    dummy_email_body = """
+    Check out this job alert:
+    Senior Cloud Engineer
+    Acme Systems
+    Berlin
+    https://www.linkedin.com/jobs/view/999999/
+    """
+    monkeypatch.setattr(gmail, "search_emails", lambda query, limit, include_bodies: [
+        {"threadId": "thread_999", "subject": "LinkedIn Jobs", "messages": [
+            {"id": "msg_999", "sender": "jobalerts-noreply@linkedin.com", "subject": "LinkedIn Jobs", "body": dummy_email_body}
+        ]}
+    ])
+
+    # --- STEP 2 Mocking ---
+    monkeypatch.setattr(gi, "_capture_jobs_worker_func", lambda urls: (["acme-systems-senior-cloud-engineer-999999"], ["Successfully captured"]))
+
+    # Mock multiprocessing for Step 2
+    class MockProcess:
+        def __init__(self, target, args):
+            self.target = target
+            self.args = args
+        def start(self):
+            self.target(*self.args)
+        def join(self):
+            pass
+            
+    class MockQueue:
+        def __init__(self):
+            self.val = None
+        def put(self, val):
+            self.val = val
+        def get(self):
+            return self.val
+            
+    class MockContext:
+        def Queue(self):
+            return MockQueue()
+        def Process(self, target, args):
+            return MockProcess(target, args)
+            
+    monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
+
+    # --- STEP 3 Mocking ---
+    cli_calls = []
+    monkeypatch.setattr(cli, "cmd_new", lambda args: cli_calls.append("new"))
+    monkeypatch.setattr(cli, "cmd_pdf", lambda args: cli_calls.append("pdf"))
+    monkeypatch.setattr(cli, "cmd_upload", lambda args: cli_calls.append("upload"))
+    monkeypatch.setattr(cli, "cmd_status", lambda args: cli_calls.append("status"))
+
+    # --- PIPELINE RUN ---
+    
+    # 1. Query gmail to discover the job listing
+    jobs_list_res = json.loads(server.list_gmail_linkedin_jobs(limit=1))
+    assert isinstance(jobs_list_res, list)
+    assert len(jobs_list_res) == 1
+    
+    discovered_job = jobs_list_res[0]
+    assert discovered_job["job_id"] == "999999"
+    assert discovered_job["company"] == "Acme Systems"
+    job_url = discovered_job["job_url"]
+    assert job_url == "https://www.linkedin.com/jobs/view/999999/"
+
+    # 2. Extract job details using the returned URL
+    extraction_res = server.extract_job_details(job_url)
+    assert "SUCCESS" in extraction_res
+    assert "acme-systems-senior-cloud-engineer-999999" in extraction_res
+    
+    # 3. Create the application using the returned job slug
+    target_slug = "acme-systems-senior-cloud-engineer-999999"
+    application_res = server.create_application_from_job(target_slug)
+    assert "Complete" in application_res
+    assert cli_calls == ["new", "pdf", "upload", "status"]
+
