@@ -20,9 +20,9 @@
     - [x] Add `list_gmail_glassdoor_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
     - [x] Add `list_gmail_indeed_jobs` function in `engine/mcp/server.py` that delegates to `list_gmail_jobs_workflow`.
     - [x] Run test suite and ensure all tests pass (Green Phase).
-- [ ] Task: Update Tool Descriptions and Imports
-    - [ ] Update docstring for `extract_job_details` to indicate it is Step 2.
-    - [ ] Update docstring for `create_application_from_job` to indicate it is Step 3.
-    - [ ] Remove any unused imports in `engine/mcp/server.py`.
-    - [ ] Rerun test suite to verify no breakage from import cleanup.
+- [x] Task: Update Tool Descriptions and Imports (fba3fa7)
+    - [x] Update docstring for `extract_job_details` to indicate it is Step 2.
+    - [x] Update docstring for `create_application_from_job` to indicate it is Step 3.
+    - [x] Remove any unused imports in `engine/mcp/server.py`.
+    - [x] Rerun test suite to verify no breakage from import cleanup.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Refactor MCP Server Tools' (Protocol in workflow.md)
