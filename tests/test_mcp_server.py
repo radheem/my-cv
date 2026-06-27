@@ -254,3 +254,75 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
     assert "Complete" in application_res
     assert cli_calls == ["new", "pdf", "upload", "status"]
 
+
+def test_mcp_fetch_public_job_url(monkeypatch):
+    from engine.mcp import server
+    import urllib.request
+    from io import BytesIO
+
+    # Mock urllib.request.urlopen to return mock HTML
+    mock_html = b"<html><body><h1>Senior Developer</h1><p>We are hiring at Custom Corp!</p></body></html>"
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=None: BytesIO(mock_html))
+
+    res = server.fetch_public_job_url("https://custom.com/jobs/987")
+    assert "Senior Developer" in res
+    assert "Custom Corp" in res
+
+
+def test_mcp_save_job_description():
+    from engine.mcp import server
+    import json
+
+    res = server.save_job_description(
+        company="Direct Corp",
+        title="Direct Engineer",
+        url="https://direct.com/jobs/555",
+        description="This is a direct job description.",
+        location="Berlin"
+    )
+    assert "SUCCESS" in res
+    assert "direct-corp-direct-engineer" in res
+
+
+def test_mcp_direct_pipeline_e2e(monkeypatch):
+    from engine.mcp import server
+    from engine import cli
+    import urllib.request
+    from io import BytesIO
+    import json
+
+    # --- STEP 1: Mock fetch ---
+    mock_html = b"<html><body><h1>Platform Architect</h1><p>We need a platform architect at Cloud Systems in Munich.</p></body></html>"
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=None: BytesIO(mock_html))
+
+    # --- STEP 2: Mock create application CLI actions ---
+    cli_calls = []
+    monkeypatch.setattr(cli, "cmd_new", lambda args: cli_calls.append("new"))
+    monkeypatch.setattr(cli, "cmd_pdf", lambda args: cli_calls.append("pdf"))
+    monkeypatch.setattr(cli, "cmd_upload", lambda args: cli_calls.append("upload"))
+    monkeypatch.setattr(cli, "cmd_status", lambda args: cli_calls.append("status"))
+
+    # --- PIPELINE RUN ---
+
+    # 1. Fetch the raw job page text
+    raw_text = server.fetch_public_job_url("https://cloudsystems.com/jobs/111/")
+    assert "Platform Architect" in raw_text
+
+    # 2. Save the job description directly
+    save_res = server.save_job_description(
+        company="Cloud Systems",
+        title="Platform Architect",
+        url="https://cloudsystems.com/jobs/111/",
+        description=raw_text,
+        location="Munich"
+    )
+    assert "SUCCESS" in save_res
+    assert "cloud-systems-platform-architect" in save_res
+
+    # 3. Create the application using the returned slug
+    target_slug = "cloud-systems-platform-architect-d76c66"
+    application_res = server.create_application_from_job(target_slug)
+    assert "Complete" in application_res
+    assert cli_calls == ["new", "pdf", "upload", "status"]
+
+
