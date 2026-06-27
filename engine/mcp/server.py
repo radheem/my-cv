@@ -226,7 +226,65 @@ def extract_job_details(url: str) -> str:
 @mcp.tool()
 def create_application_from_job(slug: str) -> str:
     """Step 3 of the job application workflow. Generate tailored job application documents (CV/CL in English and German) for a specific job slug (obtained from `extract_job_details`), render them to PDFs, upload them to Google Drive, and synchronize application status."""
-    return create_application_from_job_workflow(slug)
+    try:
+        # 1. Check if the job exists in the database
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT job_id FROM jobs WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if not row:
+                    return json.dumps({"error": f"Job with slug '{slug}' not found in database. Cannot create application."})
+                job_id = row["job_id"]
+
+                # 2. Insert or update the application row setting status to 'generating'
+                cur.execute("""
+                    INSERT INTO applications (job_id, slug, status)
+                    VALUES (%s, %s, 'generating')
+                    ON CONFLICT (job_id) DO UPDATE SET status = 'generating', updated_at = CURRENT_TIMESTAMP
+                """, (job_id, slug))
+                conn.commit()
+
+        # 3. Spawn background worker thread
+        def bg_worker():
+            try:
+                res = create_application_from_job_workflow(slug)
+                if res.startswith("ERROR"):
+                    log.error(f"Background tailoring failed: {res}")
+                    with get_conn() as conn_failed:
+                        with conn_failed.cursor() as cur_failed:
+                            cur_failed.execute("""
+                                UPDATE applications 
+                                SET status = 'failed' 
+                                WHERE slug = %s
+                            """, (slug,))
+                            conn_failed.commit()
+            except Exception as bg_e:
+                log.exception(f"Background worker thread crashed for slug: {slug}")
+                try:
+                    with get_conn() as conn_failed:
+                        with conn_failed.cursor() as cur_failed:
+                            cur_failed.execute("""
+                                UPDATE applications 
+                                SET status = 'failed' 
+                                WHERE slug = %s
+                            """, (slug,))
+                            conn_failed.commit()
+                except Exception:
+                    pass
+
+        import threading
+        thread = threading.Thread(target=bg_worker)
+        thread.daemon = True
+        thread.start()
+
+        return json.dumps({
+            "status": "generating",
+            "slug": slug,
+            "message": "Application tailoring has been started in the background. You can monitor its progress by calling get_application."
+        })
+    except Exception as e:
+        log.exception(f"Failed to start async application creation for slug: {slug}")
+        return json.dumps({"error": f"Failed to start application tailoring: {str(e)}"})
 
 
 @mcp.tool()
@@ -326,6 +384,45 @@ def get_job(slug: str) -> str:
     except Exception as e:
         log.exception("Failed to get job")
         return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def delete_job(slug: str) -> str:
+    """Soft-delete a job posting from the database. Sets status to 'deleted' and releases unique constraints on the job's ID and slug, allowing identical future JDs to be re-captured successfully."""
+    try:
+        import time
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                # 1. Fetch current job_id to ensure it exists and has not been deleted yet
+                cur.execute("SELECT job_id, status FROM jobs WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if not row:
+                    return json.dumps({"error": f"Job with slug '{slug}' not found or already deleted."})
+                
+                job_id, current_status = row["job_id"], row["status"]
+                if current_status == "deleted":
+                    return json.dumps({"message": f"Job '{slug}' is already soft-deleted."})
+
+                # 2. Append timestamped suffix to avoid primary key/unique constraint collisions on future crawls
+                suffix = f"-deleted-{int(time.time())}"
+                new_job_id = job_id + suffix
+                new_slug = slug + suffix
+
+                # 3. Clean up any associated application row first to satisfy FK dependencies
+                cur.execute("DELETE FROM applications WHERE job_id = %s", (job_id,))
+
+                # 4. Soft delete the job and apply suffixes to release unique constraints
+                cur.execute("""
+                    UPDATE jobs 
+                    SET job_id = %s, slug = %s, status = 'deleted' 
+                    WHERE job_id = %s
+                """, (new_job_id, new_slug, job_id))
+                conn.commit()
+
+        return f"SUCCESS: Job '{slug}' has been soft-deleted. Suffix applied to release constraints."
+    except Exception as e:
+        log.exception(f"Failed to delete job: {slug}")
+        return f"ERROR: Failed to delete job: {str(e)}"
 
 
 @mcp.tool()

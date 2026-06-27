@@ -167,9 +167,8 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     monkeypatch.setattr(cli, "cmd_upload", lambda args: calls.append("upload"))
     monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
     
-    res_create = server.create_application_from_job("mock-acme-slug")
-    assert "Complete" in res_create
-    assert calls == ["new", "pdf", "upload", "status"]
+    res_create = json.loads(server.create_application_from_job("mock-acme-slug"))
+    assert res_create["status"] == "generating"
 
 
 def test_mcp_3step_pipeline_e2e(monkeypatch):
@@ -250,9 +249,20 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
     
     # 3. Create the application using the returned job slug
     target_slug = "acme-systems-senior-cloud-engineer-999999"
-    application_res = server.create_application_from_job(target_slug)
-    assert "Complete" in application_res
-    assert cli_calls == ["new", "pdf", "upload", "status"]
+    
+    # Insert mock job into DB to satisfy async check constraints
+    from engine.db import get_conn
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('999999', %s, 'Acme Systems', 'Senior Cloud Engineer', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """, (target_slug,))
+            conn.commit()
+
+    application_res = json.loads(server.create_application_from_job(target_slug))
+    assert application_res["status"] == "generating"
 
 
 def test_mcp_fetch_public_job_url(monkeypatch):
@@ -317,13 +327,15 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
         location="Munich"
     )
     assert "SUCCESS" in save_res
-    assert "cloud-systems-platform-architect" in save_res
+    
+    import re
+    slug_match = re.search(r"slug '([^']+)'", save_res)
+    assert slug_match is not None
+    target_slug = slug_match.group(1)
 
     # 3. Create the application using the returned slug
-    target_slug = "cloud-systems-platform-architect-d76c66"
-    application_res = server.create_application_from_job(target_slug)
-    assert "Complete" in application_res
-    assert cli_calls == ["new", "pdf", "upload", "status"]
+    application_res = json.loads(server.create_application_from_job(target_slug))
+    assert application_res["status"] == "generating"
 
 
 def test_mcp_get_user_profile():
@@ -457,8 +469,13 @@ def test_mcp_job_delete_reinstatement():
     )
     assert "SUCCESS" in save_res
     
+    import re
+    slug_match = re.search(r"slug '([^']+)'", save_res)
+    assert slug_match is not None
+    slug = slug_match.group(1)
+
     # Delete the job
-    del_res = server.delete_job("soft-delete-corp-soft-engineer-52d3a3")
+    del_res = server.delete_job(slug)
     assert "SUCCESS" in del_res
 
     # Save the exact same job again
