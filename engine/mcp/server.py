@@ -104,6 +104,100 @@ def query(sql: str) -> str:
 
 
 @mcp.tool()
+def fetch_public_job_url(url: str) -> str:
+    """Step 1 (Direct Path - Preferred). Download a public webpage's HTML and extract its clean, readable plain text.
+    Use this tool on public job links to retrieve their description text without using heavy browser scrapers.
+    """
+    import re
+    import html
+    import urllib.request
+
+    try:
+        # Configure a realistic User-Agent to avoid basic bot blocks
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        )
+        
+        # Open URL with standard 15s timeout
+        with urllib.request.urlopen(req, timeout=15) as response:
+            html_content = response.read().decode("utf-8", errors="ignore")
+
+        # 1. Remove script, style, head, header, footer, nav tags and their content
+        text = re.sub(r'<(script|style|head|header|footer|nav)\b[^>]*>([\s\S]*?)</\1>', '', html_content, flags=re.IGNORECASE)
+        
+        # 2. Replace block tags and list/table cells with line breaks or spaces
+        text = re.sub(r'</?(p|div|br|h[1-6]|li|tr|th|td|blockquote)\b[^>]*>', '\n', text, flags=re.IGNORECASE)
+        
+        # 3. Strip all other HTML tags
+        text = re.sub(r'<[^>]+>', ' ', text)
+        
+        # 4. Unescape HTML entities (e.g., &amp; -> &, &nbsp; -> space)
+        text = html.unescape(text)
+        
+        # 5. Clean up redundant white spaces and empty lines
+        lines = [line.strip() for line in text.splitlines()]
+        clean_lines = []
+        for line in lines:
+            if line:
+                clean_lines.append(line)
+            elif not clean_lines or clean_lines[-1] != "":
+                clean_lines.append("")
+        
+        return "\n".join(clean_lines).strip()
+    except Exception as e:
+        log.exception(f"Failed to fetch public URL: {url}")
+        return f"ERROR: Failed to fetch public webpage: {str(e)}"
+
+
+@mcp.tool()
+def save_job_description(
+    company: str,
+    title: str,
+    url: str,
+    description: str,
+    location: str = "Remote",
+    applicants: int = None
+) -> str:
+    """Step 2 (Direct Path - Preferred). Save a job description directly to the database and filesystem.
+    Use this tool as the primary/default way to save job postings after fetching their content 
+    using fast, public tools (like fetch_public_job_url) or manual text extraction. This bypasses the browser 
+    crawler completely, preventing timeouts and CAPTCHA blockages. Returns the generated job slug.
+    """
+    try:
+        import datetime
+        import hashlib
+        from ..linkedin.jobs import Job, write_jd, slugify
+
+        # Compute stable hash-based job_id matching the system's URL hashing convention
+        clean_url = url.strip().rstrip("/")
+        job_id = hashlib.md5(clean_url.encode("utf-8")).hexdigest()[:12]
+
+        job = Job(
+            job_id=job_id,
+            title=title.strip(),
+            company=company.strip(),
+            location=location.strip() if location else "Remote",
+            url=url.strip(),
+            applicants=applicants
+        )
+        captured_at = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+        
+        # write_jd handles database upsert AND local backup file writing
+        write_jd(job, description, "vault/jds", captured_at, source="manual")
+        
+        # Generate the slug
+        slug = slugify(job.company, job.title, job.job_id)
+        
+        return f"SUCCESS: Job saved with slug '{slug}'."
+    except Exception as e:
+        log.exception("Failed to save job description directly")
+        return f"ERROR: Failed to save job description: {str(e)}"
+
+
+@mcp.tool()
 def list_gmail_linkedin_jobs(query: str = "is:unread", limit: int = 10) -> str:
     """Step 1 of the job application workflow. Search Gmail alerts from LinkedIn and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
     return list_gmail_jobs_workflow("linkedin", query, limit)
