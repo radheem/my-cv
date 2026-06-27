@@ -424,6 +424,66 @@ def get_master_cv() -> str:
         return f"ERROR: Failed to load master CV: {str(e)}"
 
 
+@mcp.tool()
+def get_mcp_workflows() -> str:
+    """Retrieve the supported system ingestion and application creation flowcharts and comparison matrix in markdown format (from docs/mcp-workflows.md)."""
+    try:
+        import pathlib
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        workflows_path = root / "docs" / "mcp-workflows.md"
+        if not workflows_path.exists():
+            return "ERROR: Workflows documentation file not found at docs/mcp-workflows.md"
+        return workflows_path.read_text(encoding="utf-8")
+    except Exception as e:
+        log.exception("Failed to load workflows documentation")
+        return f"ERROR: Failed to load workflows documentation: {str(e)}"
+
+
+@mcp.tool()
+def get_mcp_insights() -> str:
+    """Retrieve operational best practices and troubleshooting insights in markdown format (from data/guides/mcp-insights.md), such as pacing, delays, session warming, and timeout handling."""
+    try:
+        import pathlib
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        insights_path = root / "data" / "guides" / "mcp-insights.md"
+        if not insights_path.exists():
+            return "ERROR: Operational insights guide not found at data/guides/mcp-insights.md"
+        return insights_path.read_text(encoding="utf-8")
+    except Exception as e:
+        log.exception("Failed to load operational insights")
+        return f"ERROR: Failed to load operational insights: {str(e)}"
+
+
+@mcp.tool()
+def get_cv_guide() -> str:
+    """Retrieve the comprehensive tactical CV writing guidelines in markdown format (from data/guides/how-to-write-a-cv.md) including bullet point formulation and layout rules."""
+    try:
+        import pathlib
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        cv_guide_path = root / "data" / "guides" / "how-to-write-a-cv.md"
+        if not cv_guide_path.exists():
+            return "ERROR: CV writing guide not found at data/guides/how-to-write-a-cv.md"
+        return cv_guide_path.read_text(encoding="utf-8")
+    except Exception as e:
+        log.exception("Failed to load CV guide")
+        return f"ERROR: Failed to load CV guide: {str(e)}"
+
+
+@mcp.tool()
+def get_cover_letter_guide() -> str:
+    """Retrieve tactical cover letter writing guidelines in markdown format (from data/guides/how-to-write-a-cover-letter.md) including structural paragraph and tone rules."""
+    try:
+        import pathlib
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        cover_guide_path = root / "data" / "guides" / "how-to-write-a-cover-letter.md"
+        if not cover_guide_path.exists():
+            return "ERROR: Cover letter guide not found at data/guides/how-to-write-a-cover-letter.md"
+        return cover_guide_path.read_text(encoding="utf-8")
+    except Exception as e:
+        log.exception("Failed to load cover letter guide")
+        return f"ERROR: Failed to load cover letter guide: {str(e)}"
+
+
 def main():
     import os
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
