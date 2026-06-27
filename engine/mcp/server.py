@@ -375,6 +375,55 @@ def score_jobs(top: int = 10) -> str:
     return score_jobs_workflow(top)
 
 
+@mcp.tool()
+def get_user_profile() -> str:
+    """Retrieve the user's complete profile as parsed JSON (from data/profile.yml), including contact info and narrative."""
+    try:
+        import pathlib
+        import yaml
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        profile_path = root / "data" / "profile.yml"
+        if not profile_path.exists():
+            return json.dumps({"error": "Profile file not found at data/profile.yml"})
+        data = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
+        return json.dumps(data, cls=CustomEncoder)
+    except Exception as e:
+        log.exception("Failed to load user profile")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def get_user_projects() -> str:
+    """Retrieve the user's projects as parsed JSON (from data/projects.yml), detailing their technical portfolio."""
+    try:
+        import pathlib
+        import yaml
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        projects_path = root / "data" / "projects.yml"
+        if not projects_path.exists():
+            return json.dumps({"error": "Projects file not found at data/projects.yml"})
+        data = yaml.safe_load(projects_path.read_text(encoding="utf-8"))
+        return json.dumps(data, cls=CustomEncoder)
+    except Exception as e:
+        log.exception("Failed to load user projects")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def get_master_cv() -> str:
+    """Retrieve the user's canonical Master CV in raw Markdown format (from data/master-cv.md) containing full career history."""
+    try:
+        import pathlib
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        cv_path = root / "data" / "master-cv.md"
+        if not cv_path.exists():
+            return "ERROR: Master CV file not found at data/master-cv.md"
+        return cv_path.read_text(encoding="utf-8")
+    except Exception as e:
+        log.exception("Failed to load master CV")
+        return f"ERROR: Failed to load master CV: {str(e)}"
+
+
 def main():
     import os
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
