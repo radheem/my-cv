@@ -1,6 +1,9 @@
 # Job Description — Senior Go Backend Developer
 
 ```
+# Job Description — Senior Go Backend Developer
+
+```
 ---
 source: linkedin
 url: "https://www.linkedin.com/jobs/view/4430446260/"
@@ -52,4 +55,5 @@ Opportunity to work on systems serving hundreds of millions of users worldwide
 Interested? Get in touch for a confidential conversation.
 
 … more
+```
 ```

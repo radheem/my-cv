@@ -3,8 +3,14 @@ recipient: ""
 company: "Pertemps Network Group"
 ---
 
-Building a data platform that quietly handles hundreds of millions of daily events requires a careful balance between raw throughput and predictable latency. I want to bring that balance to the Senior Go Backend Developer role at your partner company. My background centers on designing distributed backends where event-driven pipelines and cloud-native infrastructure work together without becoming a maintenance burden. I focus on systems that scale gracefully while remaining straightforward to debug and operate.
+## 1. Why [Company]?
 
-At a stealth data platform, I replaced a heavy sidecar dependency with native NATS JetStream for real-time messaging. I also switched to direct gRPC calls to simplify the deployment topology. This change significantly reduced operational overhead and improved request routing. That same event-driven approach guided a Kafka metrics pipeline where I structured a pub/sub flow to fan out per-user performance data into multiple storage targets for downstream analytics. I also built a multi-vendor integration layer that used schema-driven contracts to safely route third-party traffic into a microservices mesh deployed on Kubernetes. These experiences taught me how to keep high-volume data flowing reliably while leaving room for rapid iteration and clear observability. I regularly apply these patterns when designing APIs and optimizing database performance for large datasets.
+A data platform that serves hundreds of millions of users must process real-time events without ever feeling heavy to the people building on top of it. I am applying for the Senior Go Backend Developer role because I want to help engineer that kind of quiet, predictable scale. Your team’s focus on event-driven architectures and high-volume data pipelines aligns directly with the systems I enjoy designing most.
 
-I am ready to contribute to a team that values clean distributed architecture and scalable data processing. I am available for full-time work immediately and can relocate within Germany within two to three weeks. A qualifying offer would only require a standard employment contract, as my Blue Card status eliminates any visa sponsorship overhead. I look forward to discussing how my background aligns with your engineering goals.
+## 2. Why me?
+
+I have spent the last five years building distributed backends where reliability and throughput matter more than clever shortcuts. On a recent Go microservices platform, I replaced a heavy sidecar framework with native NATS JetStream for messaging and direct gRPC communication. This shift reduced latency and made the event pipeline easier to monitor and debug. I also designed a Kafka-based metrics pipeline for a separate infrastructure project, where streaming data was fanned out to multiple storage backends for real-time analysis. These experiences taught me how to keep Go services lean, how to structure event-driven flows, and how to optimize database queries before they become bottlenecks.
+
+## 3. Why now?
+
+I am ready to bring this operational discipline to a larger-scale environment where distributed systems and cloud-native tooling are the daily standard. I am available to start immediately and can relocate to Hamburg within two to three weeks. I am already based in Germany and hold Blue Card eligibility, so no visa sponsorship is required. I look forward to discussing how I can contribute to your engineering team.

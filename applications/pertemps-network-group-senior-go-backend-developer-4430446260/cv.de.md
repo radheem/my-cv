@@ -3,41 +3,36 @@ tagline: "Senior Go Backend Developer"
 ---
 
 ## Berufserfahrung
-
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
-- Entwarf und implementierte skalierbare Backend-Services, dokumentierte Architektur und API-Verträge für verteilte Systeme.
-- Leitete Systemdesign- und Code-Reviews, durchsetzte Architekturstandards und optimierte die Service-Zuverlässigkeit.
-- Containerisierte Backend-Services und optimierte CI/CD-Bereitstellungs-Pipelines mittels Docker und Kubernetes.
+- Leitete das Systemdesign und Code-Reviews für neue Backend-Services und optimierte MySQL- und MongoDB-Datenflüsse für Produktions-Workloads.
+- Containerisierte Backend-Services und verbesserte CI/CD-Deployment-Pipelines, um skalierbare Container-Release auf AWS EC2 und Kubernetes zu ermöglichen.
+- Verfasste umfassende technische Dokumentation und betreute Junior-Entwickler durch strukturierte Code-Reviews.
 
 ### Bluefin Exchange — Senior Software Engineer
 *Pakistan · 06/2021 – 08/2023*
-- Entwickelte Systemdesign-Verbesserungen und eigenständige Lösungen für durchsatzstarke Börsen-Services.
-- Diente als Systemexperte für Code- und Design-Reviews, optimierte die Service-Leistungsfähigkeit und Release-Lebenszyklen.
-- Verwaltete Release-Prozesse und technische Dokumentation für Kern-Börsenplattformen und betreute dabei Junior-Entwickler.
+- Entwickelte und pflegte Go-basierte Backend-Services und Microservices und integrierte Kafka für hochdurchsatzfähige, ereignisgesteuerte Messaging-Systeme.
+- Optimierte Datenzugriffsmuster für PostgreSQL und DynamoDB und implementierte Systemdesign-Verbesserungen für Exchange-Scale-Workloads.
+- Verwaltete Release-Prozesse und Infrastructure-as-Code mit Terraform und Kubernetes sowie leitete Junior-Entwickler bei kritischen Plattforminitiativen.
 
 ### Seed Labs — Software Engineer
 *Pakistan · 06/2020 – 06/2021*
-- Recherchierte und schlug skalierbare Lösungen für datenintensive Backend-Implementierungen unter seniorer Betreuung vor.
-- Lieferte produktionsreife Services in kollaborativen Engineering-Teams mit Fokus auf Systemdesign und Implementierung.
-- Entwickelte Datenpipelines zur Analyse, Bereinigung und Visualisierung operativer Metriken für das Reporting an Stakeholder.
+- Implementierte Backend-Lösungen und Datenpipelines mit Python und NodeJS, mit Fokus auf MySQL- und MongoDB-Optimierung für Stakeholder-Einblicke.
+- Containerisierte Anwendungen mit Docker und bereitete sie auf AWS EC2 bereit, um reproduzierbare und skalierbare Entwicklungsumgebungen zu gewährleisten.
+- Forschte und implementierte Systemdesigns unter senioraler Betreuung und übersetzte Datenanalysen in produktionsreife Features.
 
 ## Ausbildung
-
 ### Technical University of Ilmenau
-*Master of Research, Computer Systems and Engineering · 04/2024 – Present*
-
+*Master of Research, Computer Systems and Engineering · 04/2024 – heute*
 ### National University of Computer and Engineering Sciences
 *Bachelor of Science, Computer Science · 06/2016 – 08/2020*
 
 ## Projekte
-
-- **IRS Platform (Stealth)** — Entwickelte Go-Mikrodienste mit gRPC und NATS JetStream für Low-Latency-Messaging, orchestrierte best-effort ETL-Pipelines nach PostgreSQL und DocumentDB und bereitete die Plattform auf Kubernetes mit kustomize und Cilium vor.
-- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Konzipierte eine containerisierte Backend-Pipeline mit AES-256-GCM-Verschlüsselung und reproduzierbaren Generierungs-Manifests, integrierte Playwright-gesteuerte Ingestion-Flows und versionierte Anwendungsnachverfolgung, bereitgestellt über GitHub Actions.
-- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Konsolidierte ein verteiltes 5G-Testfeld in kompositionsfähige Docker Compose-Stacks, entwickelte eine Kafka-Metriken-Pub/Sub-Pipeline für pro-UE-KPM-Daten und integrierte Python-xApps über E2 zur Verteilung von Telemetriedaten an InfluxDB und MongoDB.
+- **IRS Platform (Stealth)** — Entwickelte Go-Microservices mit gRPC-Gateway und Protobuf-first-APIs, migrierte zu nativem NATS JetStream für verteiltes Messaging und orchestrierte best-effort ETL-Pipelines in PostgreSQL, Dgraph und DocumentDB, allesamt auf Kubernetes mit Cilium-Netzwerk bereitgestellt.
+- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Architektierte eine containerisierte Backend-Automatisierungspipeline mit in-Browser-AES-256-GCM-Verschlüsselung und reproduzierbaren Generierungs-Manifesten, verwaltete versioniertes Application-Tracking und sicherte CI/CD-Deployments über GitHub Actions.
+- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Entwickelte eine Kafka-Metriken-Pub/Sub-Pipeline zur Verteilung von per-UE-KPM-Daten an InfluxDB, MongoDB und AIMLFW-kompatible Speicher, konsolidiert in composablen Docker-Compose-Stacks, die skalierbare Multi-Node-gNB-Anbindungen über Shared-Bridge-Netzwerke ermöglichen.
 
 ## Kenntnisse
-
 - **Sprachen** — Englisch (fließend), Deutsch (A2)
 - **Programmiersprachen** — Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
 - **Verteilte Systeme** — Kafka, gRPC, NATS JetStream, NATS KV, Hatchet, Dapr, MCP

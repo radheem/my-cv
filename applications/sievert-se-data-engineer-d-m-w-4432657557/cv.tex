@@ -1,0 +1,136 @@
+\documentclass[11pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Data \& Platform Engineer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Architected and documented backend services with MySQL and MongoDB, improving data layer reliability and deployment consistency via Dockerized environments.
+  \item Led system design and code reviews, establishing data modeling standards and independent problem-solving workflows for the engineering team.
+  \item Optimized cloud resource utilization on AWS (EC2, S3) and Kubernetes, streamlining CI/CD pipelines for data-aware microservices.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Developed Python and Go services backed by PostgreSQL and DynamoDB, implementing robust data access patterns and Kafka-based event streaming for real-time data ingestion.
+  \item Maintained release processes and infrastructure-as-code with Terraform and Kubernetes, ensuring scalable cloud architecture and reliable data platform deployments.
+  \item Led junior engineers and reviewed system designs, fostering a team-oriented approach to solving complex data pipeline and backend challenges.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Analyzed, cleaned, and visualized datasets using Python and MySQL/MongoDB to deliver actionable insights and support data-driven stakeholder reporting.
+  \item Delivered full-stack solutions in collaborative teams, applying Python and scikit-learn for data processing and model integration on AWS EC2.
+  \item Researched and implemented data architecture patterns, ensuring clean data flows and reproducible analysis pipelines.
+\bulletsend
+\vspace{3pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 – Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projects}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Built a high-throughput Kafka pub/sub data pipeline that ingests per-UE KPM metrics and fans them out to InfluxDB 3, MongoDB, and AIMLFW-compatible InfluxDB 2, orchestrated via Python xApps and composable Docker Compose stacks.}
+  \project{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Engineered a Python-driven data processing and versioning pipeline that applies a unit-tested ranker to filter and order structured project/skill data, while maintaining a Git-tracked application tracker with encrypted storage and reproducible manifest generation.}
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Designed a durable, retryable ETL pipeline (extract → chunk → embed → index) orchestrated by Hatchet with per-step fault tolerance, streaming real-time progress via NATS JetStream and indexing vector embeddings with pgvector (HNSW) on a cloud-native k3d cluster.}
+\end{itemize}
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Languages:} English (fluent), Deutsch (A2)
+  \item \textbf{Programming Languages:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Databases \& Persistence:} Snowflake, PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, pgvector
+  \item \textbf{AI / ML Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
+  \item \textbf{Cloud-Native \& Infra:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Data \& Platform Engineer}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{Al Hilal Invest — Senior Software Engineer}{Pakistan}{11/2023 – 03/2024}
+\bullets
+  \item Entwarf und dokumentierte Backend-Services mit MySQL und MongoDB, erhöhte die Zuverlässigkeit der Datenschicht und die Deployment-Konsistenz durch Dockerisierte Umgebungen.
+  \item Leitete Systemdesign und Code-Reviews, etablierte Datenmodellierungsstandards und eigenständige Problemlösungsworkflows für das Engineering-Team.
+  \item Optimierte die Cloud-Ressourcennutzung auf AWS (EC2, S3) und Kubernetes, straffte CI/CD-Pipelines für datenbewusste Microservices ein.
+\bulletsend
+\vspace{3pt}
+\role{Bluefin Exchange — Senior Software Engineer}{Pakistan}{06/2021 – 08/2023}
+\bullets
+  \item Entwickelte Python- und Go-Services mit PostgreSQL und DynamoDB als Datenbasis, implementierte robuste Datenzugriffsmuster und Kafka-basiertes Event-Streaming für die Echtzeit-Datenerfassung.
+  \item Pflegte Release-Prozesse und Infrastructure-as-Code mit Terraform und Kubernetes, sicherte eine skalierbare Cloud-Architektur und zuverlässige Deployments der Datenplattform.
+  \item Leitete Junior-Entwickler und überprüfte Systemdesigns, förderte einen teamorientierten Ansatz zur Lösung komplexer Datenpipeline- und Backend-Herausforderungen.
+\bulletsend
+\vspace{3pt}
+\role{Seed Labs — Software Engineer}{Pakistan}{06/2020 – 06/2021}
+\bullets
+  \item Analysierte, bereinigte und visualisierte Datensätze mit Python und MySQL/MongoDB, um handlungsrelevante Erkenntnisse zu liefern und datengetriebenes Stakeholder-Reporting zu unterstützen.
+  \item Lieferte Full-Stack-Lösungen in kollaborativen Teams, setzte Python und scikit-learn für Datenverarbeitung und Modellintegration auf AWS EC2 ein.
+  \item Recherchierte und implementierte Datenarchitekturmuster, stellte saubere Datenflüsse und reproduzierbare Analyse-Pipelines sicher.
+\bulletsend
+\vspace{3pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 – heute}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 – 08/2020}
+
+\section{Projekte}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \project{O-RAN Testbed (Open5GS + RIC + OCUDU gNB)}{https://radheem.github.io/my-cv/projects/oran-testbed/}{Entwickelte eine hochdurchsatzfähige Kafka-Pub/Sub-Datenpipeline, die pro-UE-KPM-Metriken erfasst und an InfluxDB 3, MongoDB und AIMLFW-kompatible InfluxDB 2 weiterleitet, orchestriert über Python-xApps und komposable Docker-Compose-Stacks.}
+  \project{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}{https://radheem.github.io/my-cv/projects/cv-tailor/}{Entwickelte eine Python-gesteuerte Datenverarbeitungs- und Versionierungs-Pipeline, die einen unit-getesteten Ranker zur Filterung und Sortierung strukturierter Projekt-/Skill-Daten einsetzt, während ein Git-versionsverfolgter Bewerbungs-Tracker mit verschlüsselter Speicherung und reproduzierbarer Manifest-Generierung gepflegt wird.}
+  \project{Second Brain (Document RAG)}{https://radheem.github.io/my-cv/projects/second-brain/}{Konzipierte eine robuste, wiederholbare ETL-Pipeline (Extrahieren → Chunking → Embedding → Indexieren), die von Hatchet orchestriert wird und pro Schritt Fehlertoleranz bietet, streamt Echtzeit-Fortschritt über NATS JetStream und indexiert Vektor-Embeddings mit pgvector (HNSW) auf einem cloud-nativen k3d-Cluster.}
+\end{itemize}
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item \textbf{Sprachen:} Englisch (fließend), Deutsch (A2)
+  \item \textbf{Programmiersprachen:} Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item \textbf{Datenbanken \& Persistenz:} Snowflake, PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, pgvector
+  \item \textbf{KI-/ML-Integration:} MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
+  \item \textbf{Cloud-Native \& Infrastruktur:} Kubernetes, kustomize, Skaffold, Helm, Cilium, Docker, Terraform, external-dns
+\end{itemize}
+
+\end{document}

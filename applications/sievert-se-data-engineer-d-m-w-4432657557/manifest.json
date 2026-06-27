@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-06-27T13:23:06+00:00",
+  "generated_at": "2026-06-27T13:03:24+00:00",
   "config_version": 1,
   "provider": "ollama",
   "model": "qwen3.6:35b",
@@ -46,17 +46,15 @@
   "effective_config_sha256": "74c5d26ea08c",
   "decisions": {
     "top_projects": [
-      "irs",
+      "oran-testbed",
       "cv-tailor",
-      "oran-testbed"
+      "second-brain"
     ],
     "clusters": [
       "data-persistence",
-      "distributed-systems",
       "ml-ai",
-      "platform-cloud-native",
-      "web-api"
+      "platform-cloud-native"
     ],
-    "tagline": "Senior Go Backend Developer"
+    "tagline": "Data & Platform Engineer"
   }
 }
