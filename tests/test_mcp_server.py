@@ -326,3 +326,32 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
     assert cli_calls == ["new", "pdf", "upload", "status"]
 
 
+def test_mcp_get_user_profile():
+    from engine.mcp import server
+    import json
+
+    res = server.get_user_profile()
+    assert "ERROR" not in res
+    data = json.loads(res)
+    assert isinstance(data, dict)
+
+
+def test_mcp_get_user_projects():
+    from engine.mcp import server
+    import json
+
+    res = server.get_user_projects()
+    assert "ERROR" not in res
+    data = json.loads(res)
+    assert isinstance(data, (list, dict))
+
+
+def test_mcp_get_master_cv():
+    from engine.mcp import server
+
+    res = server.get_master_cv()
+    assert "ERROR" not in res
+    assert "# " in res or "## " in res
+
+
+
