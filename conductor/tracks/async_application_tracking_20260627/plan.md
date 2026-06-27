@@ -20,7 +20,7 @@
     - [x] In the tool, update `status = 'deleted'`, append `-deleted-<epoch>` suffix to the `job_id` and `slug`, and commit.
 - [x] Task: Test Verification
     - [x] Run test suite and ensure all tests pass (Green Phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Finalization
 - [ ] Task: Final Test Verification

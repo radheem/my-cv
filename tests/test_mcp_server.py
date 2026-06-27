@@ -488,6 +488,43 @@ def test_mcp_job_delete_reinstatement():
     assert "SUCCESS" in save_res_again
 
 
+def test_mcp_stress_batch_creation_delete(monkeypatch):
+    from engine.mcp import server
+    import json
+    import time
+
+    # Mock workflow to avoid slow actual compilation during this stress test
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "Complete success!")
+
+    # 1. Save 3 dummy jobs
+    slugs = []
+    for i in range(1, 4):
+        save_res = server.save_job_description(
+            company=f"Batch Corp {i}",
+            title=f"Batch Engineer {i}",
+            url=f"https://batchcorp.com/jobs/{i}",
+            description=f"This is batch job description {i}."
+        )
+        assert "SUCCESS" in save_res
+        import re
+        slug_match = re.search(r"slug '([^']+)'", save_res)
+        assert slug_match is not None
+        slugs.append(slug_match.group(1))
+
+    assert len(slugs) == 3
+
+    # 2. Trigger asynchronous application creation in batch (all 3 triggered back-to-back!)
+    for slug in slugs:
+        res = json.loads(server.create_application_from_job(slug))
+        assert res["status"] == "generating"
+
+    # 3. Soft delete all 3 jobs
+    for slug in slugs:
+        del_res = server.delete_job(slug)
+        assert "SUCCESS" in del_res
+
+
+
 
 
 
