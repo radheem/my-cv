@@ -9,15 +9,15 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Test Restructure' (Protocol in workflow.md)
 
 ## Phase 2: Implement Composable MCP Tools
-- [ ] Task: Implement `fetch_public_job_url`
-    - [ ] Add `fetch_public_job_url` to `engine/mcp/server.py` using `urllib` or `requests` (with appropriate headers to avoid basic blocks).
-    - [ ] Ensure it strips HTML and returns clean readable text.
-- [ ] Task: Implement `save_job_description`
-    - [ ] Add `save_job_description` to `engine/mcp/server.py`.
-    - [ ] Import `write_jd` and `slugify` from `engine.linkedin.jobs`.
-    - [ ] Hash the URL to create a `job_id`, instantiate the `Job` object, and call `write_jd`.
-    - [ ] Return the generated slug.
-    - [ ] Run unit tests to verify they pass (Green Phase).
+- [x] Task: Implement `fetch_public_job_url`
+    - [x] Add `fetch_public_job_url` to `engine/mcp/server.py` using `urllib` or `requests` (with appropriate headers to avoid basic blocks).
+    - [x] Ensure it strips HTML and returns clean readable text.
+- [x] Task: Implement `save_job_description` (6e51490)
+    - [x] Add `save_job_description` to `engine/mcp/server.py`.
+    - [x] Import `write_jd` and `slugify` from `engine.linkedin.jobs`.
+    - [x] Hash the URL to create a `job_id`, instantiate the `Job` object, and call `write_jd`.
+    - [x] Return the generated slug.
+    - [x] Run unit tests to verify they pass (Green Phase).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Implement Composable MCP Tools' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and E2E Integration
