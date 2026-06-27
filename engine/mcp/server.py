@@ -104,6 +104,24 @@ def query(sql: str) -> str:
 
 
 @mcp.tool()
+def list_gmail_linkedin_jobs(query: str = "is:unread", limit: int = 10) -> str:
+    """Step 1 of the job application workflow. Search Gmail alerts from LinkedIn and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    return list_gmail_jobs_workflow("linkedin", query, limit)
+
+
+@mcp.tool()
+def list_gmail_glassdoor_jobs(query: str = "is:unread", limit: int = 10) -> str:
+    """Step 1 of the job application workflow. Search Gmail alerts from Glassdoor and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    return list_gmail_jobs_workflow("glassdoor", query, limit)
+
+
+@mcp.tool()
+def list_gmail_indeed_jobs(query: str = "is:unread", limit: int = 10) -> str:
+    """Step 1 of the job application workflow. Search Gmail alerts from Indeed and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    return list_gmail_jobs_workflow("indeed", query, limit)
+
+
+@mcp.tool()
 def extract_job_details(url: str) -> str:
     """Execute Playwright scraper in an isolated process to extract the full job description from a given URL and save the completed record into the PostgreSQL database jobs table."""
     return extract_job_details_workflow(url)
