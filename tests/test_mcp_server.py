@@ -354,4 +354,37 @@ def test_mcp_get_master_cv():
     assert "# " in res or "## " in res
 
 
+def test_mcp_get_mcp_workflows():
+    from engine.mcp import server
+
+    res = server.get_mcp_workflows()
+    assert "ERROR" not in res
+    assert "Ingestion" in res or "Sequence" in res or "Pipeline" in res
+
+
+def test_mcp_get_mcp_insights():
+    from engine.mcp import server
+
+    res = server.get_mcp_insights()
+    assert "ERROR" not in res
+    assert "pacing" in res.lower() or "delay" in res.lower()
+
+
+def test_mcp_get_cv_guide():
+    from engine.mcp import server
+
+    res = server.get_cv_guide()
+    assert "ERROR" not in res
+    assert "cv" in res.lower() or "resume" in res.lower() or "write" in res.lower()
+
+
+def test_mcp_get_cover_letter_guide():
+    from engine.mcp import server
+
+    res = server.get_cover_letter_guide()
+    assert "ERROR" not in res
+    assert "letter" in res.lower() or "salutation" in res.lower()
+
+
+
 
