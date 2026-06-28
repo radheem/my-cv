@@ -24,18 +24,18 @@
 
 ## Phase 2: LinkedIn Job Fetcher
 
-- [ ] Task: Implement `fetch_linkedin_job` using TDD
-    - [ ] Step 2.1: Write a failing unit test `test_mcp_fetch_linkedin_job` in `tests/test_mcp_server.py`.
-    - [ ] Step 2.2: Mock `urllib.request.urlopen` in the test to return mock LinkedIn guest job posting HTML.
-    - [ ] Step 2.3: Run the test and verify it fails with an `AttributeError` (tool not defined).
-    - [ ] Step 2.4: Implement `@mcp.tool()` and `fetch_linkedin_job(job_id: str) -> str` in `engine/mcp/server.py`.
-    - [ ] Step 2.5: Implement URL construction to `https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}`.
-    - [ ] Step 2.6: Use `urllib.request` to fetch HTML and run it through `_clean_html()`.
-    - [ ] Step 2.7: Add robust error handling to return clean error strings.
-    - [ ] Step 2.8: Run the test and verify that it passes.
-    - [ ] Step 2.9: Commit changes with message: `feat(mcp): add fetch_linkedin_job tool`
+- [x] Task: Implement `fetch_linkedin_job` using TDD c3775ed
+    - [x] Step 2.1: Write a failing unit test `test_mcp_fetch_linkedin_job` in `tests/test_mcp_server.py`.
+    - [x] Step 2.2: Mock `urllib.request.urlopen` in the test to return mock LinkedIn guest job posting HTML.
+    - [x] Step 2.3: Run the test and verify it fails with an `AttributeError` (tool not defined).
+    - [x] Step 2.4: Implement `@mcp.tool()` and `fetch_linkedin_job(job_id: str) -> str` in `engine/mcp/server.py`.
+    - [x] Step 2.5: Implement URL construction to `https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}`.
+    - [x] Step 2.6: Use `urllib.request` to fetch HTML and run it through `_clean_html()`.
+    - [x] Step 2.7: Add robust error handling to return clean error strings.
+    - [x] Step 2.8: Run the test and verify that it passes.
+    - [x] Step 2.9: Commit changes with message: `feat(mcp): add fetch_linkedin_job tool`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: LinkedIn Job Fetcher' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: LinkedIn Job Fetcher' (Protocol in workflow.md)
 
 
 ## Phase 3: Indeed Job Fetcher
