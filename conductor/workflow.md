@@ -187,6 +187,14 @@ Before marking any task complete, verify:
 - Test authentication and authorization
 - Check form submissions
 
+### End-to-End (E2E) Testing
+- All E2E tests MUST always be executed inside the reproducible Docker Compose environment to ensure total consistency across developer machines and CI.
+- Each track MUST include a dedicated "E2E Testing" phase where the Docker containers are built, deployed, and tested end-to-end to verify multi-service integration (e.g., `mcp`, `db`, and `ingest`).
+- Use the following command sequence to run E2E/integration tests in Docker Compose:
+  ```bash
+  docker compose down -v && docker compose up -d db mcp && docker compose run --rm ingest pytest -v
+  ```
+
 ### Mobile Testing
 - Test on actual iPhone when possible
 - Use Safari developer tools

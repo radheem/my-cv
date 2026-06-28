@@ -604,20 +604,66 @@ def score_jobs(top: int = 10) -> str:
 
 
 @mcp.tool()
-def get_user_profile() -> str:
-    """Retrieve the user's complete profile as parsed JSON (from data/profile.yml), including contact info and narrative."""
+def initialize_agent_session() -> str:
+    """Step 0 (Handshake & Core Context). Welcome, frame, and initialize the agent session.
+    CRITICAL: This tool MUST be called on your very first turn in every session. It serves as the 'Init Handshake' and returns a unified context package containing:
+    1. Operational Mental Model: The strict rules of the 'Ingestion Ingest Trilogy', fetching selection guidelines, and the asynchronous FIFO queue behavior.
+    2. User Profile: Factual personal details loaded from 'data/profile.yml'.
+    3. Master CV: Full written career history loaded from 'data/master-cv.md'.
+    4. Operational Insights: Best practices regarding delays, rate limits, and troubleshooting.
+    This collapses multiple rounds of context querying into exactly one call, saving significant API token usage and preventing operational mistakes.
+    """
     try:
         import pathlib
         import yaml
+        
         root = pathlib.Path(__file__).resolve().parent.parent.parent
+        
+        # 1. Load User Profile
         profile_path = root / "data" / "profile.yml"
-        if not profile_path.exists():
-            return json.dumps({"error": "Profile file not found at data/profile.yml"})
-        data = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
-        return json.dumps(data, cls=CustomEncoder)
+        profile_data = {}
+        if profile_path.exists():
+            profile_data = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
+            
+        # 2. Load Master CV
+        cv_path = root / "data" / "master-cv.md"
+        cv_data = ""
+        if cv_path.exists():
+            cv_data = cv_path.read_text(encoding="utf-8")
+            
+        # 3. Load Operational Insights
+        insights_path = root / "data" / "guides" / "mcp-insights.md"
+        insights_data = ""
+        if insights_path.exists():
+            insights_data = insights_path.read_text(encoding="utf-8")
+
+        # 4. Construct unified payload
+        payload = {
+            "welcome_message": "Welcome to the cv-tailor workspace. Your operational instructions and the user's factual portfolio have been successfully loaded below.",
+            
+            "operational_mental_model": {
+                "3step_ingestion_trilogy_workflow": {
+                    "Step 1: Discover": "Use gmail alert searchers ('list_gmail_*_jobs') to pull unread alert emails and obtain raw links.",
+                    "Step 2: Fetch & Save": "Extract job IDs and fetch postings with dedicated fast guest fetchers, then save with 'save_job_description' to obtain the job slug.",
+                    "Step 3: Tailor": "Call 'create_application_from_job' with the job slug to enqueue asynchronous tailoring."
+                },
+                "strict_fetching_tool_selection_rules": {
+                    "LinkedIn job URLs": "Identify the 10-digit job ID and call 'fetch_linkedin_job' immediately. DO NOT use generic or heavy scraper tools.",
+                    "Indeed job URLs": "Identify the hexadecimal 'jk' parameter and call 'fetch_indeed_job' immediately. DO NOT use generic tools.",
+                    "Other public URLs": "Call 'fetch_public_job_url' to download and clean the page text.",
+                    "Protected/Authenticated LinkedIn pages": "Call 'extract_job_details' (Playwright headless crawler) ONLY as a last resort when public views are completely restricted."
+                },
+                "asynchronous_tailoring_sequential_queue": "Application generation (Step 3) is resource-intensive. It is enqueued asynchronously and processed serially, returning status 'queued' immediately. You MUST call 'get_application' on subsequent turns to monitor the status transition (queued -> generating -> draft) before presenting the results to the user."
+            },
+            
+            "user_profile": profile_data,
+            "master_cv": cv_data,
+            "operational_insights": insights_data
+        }
+        return json.dumps(payload, cls=CustomEncoder)
     except Exception as e:
-        log.exception("Failed to load user profile")
-        return json.dumps({"error": str(e)})
+        log.exception("Failed to initialize agent session")
+        return json.dumps({"error": f"Failed to initialize agent session: {str(e)}"})
 
 
 @mcp.tool()
@@ -635,51 +681,6 @@ def get_user_projects() -> str:
     except Exception as e:
         log.exception("Failed to load user projects")
         return json.dumps({"error": str(e)})
-
-
-@mcp.tool()
-def get_master_cv() -> str:
-    """Retrieve the user's canonical Master CV in raw Markdown format (from data/master-cv.md) containing full career history."""
-    try:
-        import pathlib
-        root = pathlib.Path(__file__).resolve().parent.parent.parent
-        cv_path = root / "data" / "master-cv.md"
-        if not cv_path.exists():
-            return "ERROR: Master CV file not found at data/master-cv.md"
-        return cv_path.read_text(encoding="utf-8")
-    except Exception as e:
-        log.exception("Failed to load master CV")
-        return f"ERROR: Failed to load master CV: {str(e)}"
-
-
-@mcp.tool()
-def get_mcp_workflows() -> str:
-    """Retrieve the supported system ingestion and application creation flowcharts and comparison matrix in markdown format (from docs/mcp-workflows.md)."""
-    try:
-        import pathlib
-        root = pathlib.Path(__file__).resolve().parent.parent.parent
-        workflows_path = root / "docs" / "mcp-workflows.md"
-        if not workflows_path.exists():
-            return "ERROR: Workflows documentation file not found at docs/mcp-workflows.md"
-        return workflows_path.read_text(encoding="utf-8")
-    except Exception as e:
-        log.exception("Failed to load workflows documentation")
-        return f"ERROR: Failed to load workflows documentation: {str(e)}"
-
-
-@mcp.tool()
-def get_mcp_insights() -> str:
-    """Retrieve operational best practices and troubleshooting insights in markdown format (from data/guides/mcp-insights.md), such as pacing, delays, session warming, and timeout handling."""
-    try:
-        import pathlib
-        root = pathlib.Path(__file__).resolve().parent.parent.parent
-        insights_path = root / "data" / "guides" / "mcp-insights.md"
-        if not insights_path.exists():
-            return "ERROR: Operational insights guide not found at data/guides/mcp-insights.md"
-        return insights_path.read_text(encoding="utf-8")
-    except Exception as e:
-        log.exception("Failed to load operational insights")
-        return f"ERROR: Failed to load operational insights: {str(e)}"
 
 
 @mcp.tool()

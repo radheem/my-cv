@@ -379,14 +379,20 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
     assert application_res["status"] == "queued"
 
 
-def test_mcp_get_user_profile():
+def test_mcp_initialize_agent_session():
     from engine.mcp import server
     import json
 
-    res = server.get_user_profile()
+    res = server.initialize_agent_session()
     assert "ERROR" not in res
     data = json.loads(res)
     assert isinstance(data, dict)
+    assert "welcome_message" in data
+    assert "operational_mental_model" in data
+    assert "user_profile" in data
+    assert "master_cv" in data
+    assert "operational_insights" in data
+    assert isinstance(data["user_profile"], dict)
 
 
 def test_mcp_get_user_projects():
@@ -397,30 +403,6 @@ def test_mcp_get_user_projects():
     assert "ERROR" not in res
     data = json.loads(res)
     assert isinstance(data, (list, dict))
-
-
-def test_mcp_get_master_cv():
-    from engine.mcp import server
-
-    res = server.get_master_cv()
-    assert "ERROR" not in res
-    assert "# " in res or "## " in res
-
-
-def test_mcp_get_mcp_workflows():
-    from engine.mcp import server
-
-    res = server.get_mcp_workflows()
-    assert "ERROR" not in res
-    assert "Ingestion" in res or "Sequence" in res or "Pipeline" in res
-
-
-def test_mcp_get_mcp_insights():
-    from engine.mcp import server
-
-    res = server.get_mcp_insights()
-    assert "ERROR" not in res
-    assert "pacing" in res.lower() or "delay" in res.lower()
 
 
 def test_mcp_get_cv_guide():

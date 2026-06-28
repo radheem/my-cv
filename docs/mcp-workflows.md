@@ -101,6 +101,16 @@ sequenceDiagram
 
 This section documents the exact, backend system-level execution flows behind each Model Context Protocol (MCP) tool call.
 
+### 0. Handshake & Core Context Loader
+*Exposed as: `initialize_agent_session`*
+* **Trigger:** Initializing an agent session on turn 1 to load instructions and facts.
+* **Backend Flow:**
+  1. Locates and parses the user's factual profile from `data/profile.yml`.
+  2. Reads the full written career history from `data/master-cv.md`.
+  3. Retrieves the troubleshooting, pacing, and rate limit rules from `data/guides/mcp-insights.md`.
+  4. Combines the profile, CV, and insights with a strict, structured Operational Mental Model explaining how to correctly orchestrate the ingestion trilogy, tool selection guidelines, and queue mechanics.
+  5. Serializes and returns this context package in under 1 second as a single structured JSON response.
+
 ### 1. Gmail Alert Ingestion Tools
 *Exposed as: `list_gmail_linkedin_jobs`, `list_gmail_indeed_jobs`, `list_gmail_glassdoor_jobs`, `list_gmail_fraunhofer_jobs`*
 * **Trigger:** Initiating Step 1 (Gmail Discovery Path) of the job application pipeline.
