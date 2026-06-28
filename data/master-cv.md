@@ -26,11 +26,10 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
 ### cv-tailor - LLM CV/Cover-Letter Tailoring + LinkedIn Automation ([repo](https://github.com/radheem/cv-tailor))
-- Built a Python tool that turns a job posting into a tailored CV + cover letter: a pure, unit-tested ranker selects the top-3 relevant projects and orders skills, and the LLM (Anthropic API or local Ollama) only writes prose around pinned facts so it never fabricates experience.
-- Versioned every application in git as the application tracker, with a status lifecycle (draft -> applied -> interview -> offer/rejected/withdrawn) surfaced on a MkDocs site.
-- Gated per-job documents with in-browser PBKDF2 + AES-256-GCM encryption (the application list itself is encrypted, no API key in CI); GitHub Actions renders, seals, and deploys to GitHub Pages.
-- Added a containerized LinkedIn ingestion flow (Playwright, human-paced, VNC CAPTCHA hand-off) that captures job descriptions and generates applications end-to-end, stopping before submit for human review.
-- Made generation reproducible: each run writes a manifest of model/seed/prompt+input hashes, guarded by a quality-benchmark regression gate.
+- Built a Python CLI and **FastMCP Server** that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
+- Developed an automated **Gmail alert ingestion** pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
+- Integrated a bi-directional **Google Sheets synchronization** using Google Apps Script to track job application lifecycles.
+- Secured documents in Git using client-side **AES-256-GCM** encryption gated on password-protected static Pages.
 
 ### O-RAN OSC AIML Framework - AI/ML Platform Engineering ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
 - Deployed the end-to-end AIML framework on Kubernetes with Helm (training manager, model management, KF adapter, data-extraction, KServe).
@@ -89,6 +88,6 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
 - Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
 - Cloud/Infra: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
-- Systems: gRPC, NATS (JetStream + KV), Hatchet, MCP, Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
+- Systems: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
 - ML/Data: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas
 - Web: ReactJS, NodeJS, NestJS, Django

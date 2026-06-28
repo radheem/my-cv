@@ -56,12 +56,25 @@ An optional containerized flow drives a logged-in LinkedIn session and feeds the
 - Provider, model, temperatures, budgets, and the system **prompts** are user-editable files under `data/` — no code change needed; an absent file = default behavior, and env overrides the file.
 - Every application writes a **`manifest.json`** (model, seed, prompt + input hashes) so a result is re-derivable, and a **quality benchmark** gates against regressions (heuristic + LLM judge).
 
+## Agentic Workflows & Model Context Protocol (FastMCP)
+The CLI can be launched as a fully functional **FastMCP Server** (`make mcp`), exposing database context, taxonomy query capabilities, and document generation workflows to agentic assistants. 
+
+Agents orchestrate our job-hunting pipeline using a robust **3-Step Ingestion Trilogy**:
+1. **Discover:** The server searches **Gmail API alerts** from major job boards (LinkedIn, Indeed, Glassdoor, and Fraunhofer) and compiles an unread queue with tentative metadata.
+2. **Lightweight Ingest:** Bypasses heavy browser automation and CAPTCHAs via dedicated **guest API endpoints** (`fetch_linkedin_job` and `fetch_indeed_job` with automatic JSON/HTML fallback) to fetch raw job postings instantly.
+3. **Score & Tailor:** The agent runs a read-only SQL query (secured via an **SQL Guard parsing layer**) to select the highest scoring roles, saves them, and calls document workflows to compile CVs + cover letters and render LaTeX PDFs.
+
+## Bi-Directional Cloud Status Sync
+To ensure real-time visibility across devices, a bi-directional synchronization pipeline links our local PostgreSQL database with **Google Sheets**. Using a lightweight **Google Apps Script proxy**, lifecycle changes (e.g., advancing from *draft* to *applied* or *interview*) flow seamlessly back and forth on demand.
+
 ## Key achievements
 - Built an **LLM CV/cover generator** whose selection logic is pure and unit-tested, keeping the model on prose and **off facts** (no fabricated experience).
-- Designed a **git-native application tracker** with a commit-driven status lifecycle — no external tooling.
+- Built a high-signal **FastMCP Server** enabling agentic AI assistants to autonomously query local data and trigger tailoring workflows.
+- Implemented a **3-step agentic ingestion pipeline** (Gmail discovery -> guest API fetchers -> PostgreSQL scoring -> PDF render) that bypasses Playwright dynamic crawl blocks.
+- Designed a **git-native application tracker** with a commit-driven status lifecycle and bi-directional **Google Sheets Apps Script sync**.
 - Implemented a **zero-trust static gate**: in-browser PBKDF2 + AES-256-GCM with an encrypted application manifest, deployed by GitHub Actions **without any API key in CI**.
 - Added a **containerized, human-in-the-loop LinkedIn pipeline** (Playwright + Xvfb + VNC) that ingests JDs and drafts applications end-to-end while preserving stop-before-submit.
 - Made generation **reproducible and regression-gated** via per-run manifests and a benchmark harness.
 
 ## Tech stack
-`Python` · `Anthropic API` · `Ollama / OpenAI-compatible` · `Playwright` · `Docker` · `Xvfb + x11vnc` · `MkDocs Material` · `WeasyPrint` · `AES-256-GCM` · `PBKDF2` · `GitHub Actions` · `pytest`
+`Python` · `FastMCP` · `PostgreSQL` · `Google Apps Script` · `Gmail API` · `Anthropic API` · `Ollama / OpenAI-compatible` · `Playwright` · `Docker` · `Xvfb + x11vnc` · `MkDocs Material` · `WeasyPrint` · `AES-256-GCM` · `PBKDF2` · `GitHub Actions` · `pytest`

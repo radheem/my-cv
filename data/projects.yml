@@ -57,16 +57,16 @@ projects:
     weight: 1.1
     doc: projects/cv-tailor.md
     url: "https://github.com/radheem/cv-tailor"
-    summary: "Python tool that turns a job posting into a tailored CV + cover letter — a pure, unit-tested ranker picks projects/skills and the LLM only writes prose — versioned in git behind an in-browser AES-256-GCM gate, with a containerized stop-before-submit LinkedIn ingestion flow."
+    summary: "Python CLI tool and FastMCP server that turns a job posting into a tailored CV + cover letter: pure ranker picks facts and LLM only writes prose, with automated multi-source Gmail alert ingestion (LinkedIn, Indeed, Glassdoor, Fraunhofer), and Google Sheets lifecycle syncing."
     highlights:
-      - "Built a Python tool that turns a job posting into a tailored CV + cover letter: a pure, unit-tested ranker selects the top-3 relevant projects and orders skills, and the LLM (Anthropic API or local Ollama) only writes prose around pinned facts so it never fabricates experience."
-      - "Versioned every application in git as the application tracker, with a status lifecycle (draft -> applied -> interview -> offer/rejected/withdrawn) surfaced on a MkDocs site."
-      - "Gated per-job documents with in-browser PBKDF2 + AES-256-GCM encryption (the application list itself is encrypted, no API key in CI); GitHub Actions renders, seals, and deploys to GitHub Pages."
-      - "Added a containerized LinkedIn ingestion flow (Playwright, human-paced, VNC CAPTCHA hand-off) that captures job descriptions and generates applications end-to-end, stopping before submit for human review."
-      - "Made generation reproducible: each run writes a manifest of model/seed/prompt+input hashes, guarded by a quality-benchmark regression gate."
+      - "Built a Python CLI and FastMCP Server exposing a read-only SQL database (PostgreSQL + read-only SQL Guard) and application generation tools to agentic assistants."
+      - "Implemented an automated Gmail alert ingestion pipeline supporting LinkedIn, Glassdoor, Indeed, and Fraunhofer alerts, parsing bodies to construct a unified discovery queue."
+      - "Created lightweight platform-specific guest API fetchers (LinkedIn jobs-guest and Indeed viewjob with JSON/HTML fallback) to bypass heavy browser overhead and CAPTCHAs."
+      - "Developed a bi-directional status synchronization pipeline with Google Sheets using a Google Apps Script proxy."
+      - "Gated per-job documents with in-browser PBKDF2 + AES-256-GCM encryption; GitHub Actions renders, seals, and deploys to static Pages."
     domains: ["ml", "backend", "platform", "web"]
-    tags: ["python", "llm", "ai", "automation", "playwright", "docker", "devops", "ci-cd", "cryptography", "mkdocs", "web", "github-actions", "ollama", "rag"]
-    stack: ["Python", "Playwright", "Docker", "MkDocs Material", "WeasyPrint", "GitHub Actions", "Anthropic API", "Ollama", "AES-256-GCM"]
+    tags: ["python", "llm", "ai", "automation", "playwright", "docker", "devops", "ci-cd", "cryptography", "mkdocs", "web", "github-actions", "ollama", "rag", "mcp", "fastmcp", "gmail-api", "google-sheets", "postgresql"]
+    stack: ["Python", "Playwright", "Docker", "MkDocs Material", "WeasyPrint", "GitHub Actions", "Anthropic API", "Ollama", "AES-256-GCM", "FastMCP", "PostgreSQL", "Google Apps Script"]
 
   - id: k3d
     name: "HA K3s Cluster Platform (k3d + Cilium)"
