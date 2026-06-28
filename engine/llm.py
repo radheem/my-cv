@@ -21,7 +21,7 @@ import json
 import re
 from typing import Any
 
-from . import config
+from .shared import config
 
 
 def resolve() -> dict[str, Any]:

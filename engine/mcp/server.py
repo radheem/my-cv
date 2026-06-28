@@ -2,7 +2,7 @@ import json
 import logging
 import decimal
 from mcp.server.fastmcp import FastMCP
-from ..db import get_conn
+from ..shared.db import get_conn
 from .sqlguard import guard_and_wrap
 from ..workflows import (
     create_application_workflow,

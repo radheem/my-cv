@@ -8,7 +8,7 @@ import pathlib
 
 import pytest
 
-from engine import config
+from engine.shared import config
 
 
 def _write(tmp_path: pathlib.Path, body: str) -> pathlib.Path:

@@ -1,7 +1,7 @@
 import json
 import pytest
 import psycopg
-from engine.db import get_conn, init_db
+from engine.shared.db import get_conn, init_db
 from engine.mcp.server import cv_tailor_ontology, query
 
 
@@ -255,7 +255,7 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
     target_slug = "acme-systems-senior-cloud-engineer-999999"
     
     # Insert mock job into DB to satisfy async check constraints
-    from engine.db import get_conn
+    from engine.shared.db import get_conn
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -440,7 +440,7 @@ def test_mcp_get_cover_letter_guide():
 
 def test_mcp_create_application_async_success(monkeypatch):
     from engine.mcp import server
-    from engine.db import get_conn
+    from engine.shared.db import get_conn
     import time
     import json
 
@@ -469,7 +469,7 @@ def test_mcp_create_application_async_success(monkeypatch):
 
 def test_mcp_create_application_async_failure(monkeypatch):
     from engine.mcp import server
-    from engine.db import get_conn
+    from engine.shared.db import get_conn
     import time
     import json
 

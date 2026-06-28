@@ -18,7 +18,7 @@ def fetch_job_text(source: str) -> str:
     if not path.exists():
         # Fallback to database lookup if it matches a slug
         try:
-            from .db import get_conn
+            from .shared.db import get_conn
             with get_conn() as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT description FROM jobs WHERE slug = %s AND description IS NOT NULL", (source,))

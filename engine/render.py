@@ -10,7 +10,8 @@ from typing import Any
 
 import yaml
 
-from . import config, llm, prompts
+from .shared import config
+from . import llm, prompts
 
 
 def _cover_exemplars() -> str:

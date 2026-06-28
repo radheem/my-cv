@@ -15,7 +15,8 @@ import json
 import pathlib
 from typing import Any
 
-from . import config, llm, prompts
+from .shared import config
+from . import llm, prompts
 from .jobspec import _SYSTEM as _JOBSPEC_SYSTEM
 from .render import _COVER_SYSTEM, _CV_SYSTEM
 

@@ -27,8 +27,8 @@ import urllib.request
 
 import yaml
 
+from .shared import config as config_mod
 from . import (
-    config as config_mod,
     documents,
     fetch,
     gmail,
@@ -373,7 +373,7 @@ def cmd_pdf(args: argparse.Namespace) -> int:
 
 
 def _get_db_tracker_csv() -> str:
-    from .db import get_conn
+    from .shared.db import get_conn
     import csv, io
     _csv_fields = ["slug", "company", "job_title", "status", "date_found",
                    "job_url", "drive_url", "drive_updated", "clusters"]
@@ -418,7 +418,7 @@ def _get_db_tracker_csv() -> str:
 
 
 def _sync_db_remote_statuses(sheet_statuses: dict[str, str]) -> list[str]:
-    from .db import get_conn
+    from .shared.db import get_conn
     changed = []
     with get_conn() as conn:
         with conn.cursor() as cur:
@@ -475,7 +475,7 @@ def cmd_status(args: argparse.Namespace) -> int:
 
     # Update status in PostgreSQL DB
     try:
-        from .db import get_conn
+        from .shared.db import get_conn
         with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (state, slug))
@@ -511,7 +511,7 @@ def cmd_status(args: argparse.Namespace) -> int:
 
 
 def cmd_db_push(args: argparse.Namespace) -> int:
-    from .db import migrate_legacy_data
+    from .shared.db import migrate_legacy_data
     
     count = migrate_legacy_data(str(_jobs_dir()))
     print(f"Pushed {count} applications from disk to PostgreSQL.")
@@ -519,7 +519,7 @@ def cmd_db_push(args: argparse.Namespace) -> int:
 
 
 def cmd_db_pull(args: argparse.Namespace) -> int:
-    from .db import get_conn
+    from .shared.db import get_conn
     from . import documents
     import json
     
@@ -582,7 +582,7 @@ def cmd_db_pull(args: argparse.Namespace) -> int:
 
 
 def cmd_db_export(args: argparse.Namespace) -> int:
-    from .db import get_conn
+    from .shared.db import get_conn
     import csv, json, pathlib
 
     export_dir = pathlib.Path("application-data")
@@ -1212,7 +1212,7 @@ def cmd_gmail_send(args: argparse.Namespace) -> int:
 
 
 def cmd_db_migrate_legacy(args: argparse.Namespace) -> int:
-    from .db import init_db, migrate_legacy_data
+    from .shared.db import init_db, migrate_legacy_data
     init_db()
     count = migrate_legacy_data()
     print(f"Migration completed. Migrated {count} entries into PostgreSQL.")

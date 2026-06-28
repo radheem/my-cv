@@ -96,7 +96,7 @@ def main() -> None:
     # Check if we can connect to database first
     sys.path.insert(0, str(ROOT))
     try:
-        from engine.db import get_conn
+        from engine.shared.db import get_conn
         with get_conn() as conn:
             db_mode = True
             with conn.cursor() as cur:

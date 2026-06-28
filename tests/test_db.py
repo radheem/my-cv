@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import pytest
 import psycopg
-from engine.db import get_conn, init_db
+from engine.shared.db import get_conn, init_db
 
 def test_db_initialization():
     try:
@@ -63,7 +63,7 @@ def test_legacy_migration(tmp_path):
     (app_dir / "cover-letter.de.md").write_text("CL Body DE", encoding="utf-8")
     (app_dir / "job-description.md").write_text("Raw Description Text", encoding="utf-8")
 
-    from engine.db import migrate_legacy_data
+    from engine.shared.db import migrate_legacy_data
     count = migrate_legacy_data(str(tmp_path))
     assert count == 1
 

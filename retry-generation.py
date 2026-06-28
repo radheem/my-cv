@@ -2,7 +2,7 @@ import time
 import json
 import sys
 from engine.mcp.server import create_application_from_job
-from engine.db import get_conn
+from engine.shared.db import get_conn
 
 slugs = [
     "1komma5-senior-iot-cloud-engineer-m-f-d-7a3301710006",

@@ -4,7 +4,7 @@ import logging
 import pathlib
 import re
 from engine import cli, gmail
-from engine.db import get_conn
+from engine.shared.db import get_conn
 
 log = logging.getLogger("cv-tailor-workflows")
 import hashlib
@@ -291,7 +291,7 @@ def extract_job_metadata_from_body(body: str, url: str) -> dict:
 def list_gmail_jobs_workflow(provider: str, query: str = "is:unread", limit: int = 10) -> str:
     """Modular workflow to search Gmail alerts for a provider and return a lightweight list of discovered jobs."""
     import json
-    from engine.config import resolve_search
+    from engine.shared.config import resolve_search
     from engine import gmail
     
     try:

@@ -117,7 +117,7 @@ def jd_frontmatter(job: Job, captured_at: str, *, source: str = "linkedin") -> s
 
 
 def load_seen(path: pathlib.Path) -> dict:
-    from ..db import get_conn
+    from ..shared.db import get_conn
     try:
         with get_conn() as conn:
             with conn.cursor() as cur:
@@ -152,7 +152,7 @@ def write_jd(job: Job, text: str, out_dir, captured_at: str, *, source: str = "l
     slug = slugify(job.company, job.title, job.job_id)
     
     # Upsert into PostgreSQL jobs table
-    from ..db import get_conn
+    from ..shared.db import get_conn
     import hashlib
     try:
         # Determine platform
