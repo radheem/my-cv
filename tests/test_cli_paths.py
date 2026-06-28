@@ -23,7 +23,10 @@ def test_jobs_dir_default_and_override(monkeypatch):
 
 
 def test_status_flips_front_matter(monkeypatch, tmp_path):
+    monkeypatch.setenv("APPS_SCRIPT_URL", "https://script.google.com/macros/s/test/exec")
+    monkeypatch.setenv("APPS_SCRIPT_TOKEN", "mock_token")
     monkeypatch.setenv("CV_TAILOR_JOBS_DIR", str(tmp_path))
+    monkeypatch.setattr(cli, "_push_to_sheets", lambda url, token, path: 3)
     app = tmp_path / "acme-platform-engineer-1"
     app.mkdir()
     (app / "index.md").write_text('---\nstatus: "draft"\ncompany: "Acme"\n---\n\nbody\n')
@@ -34,6 +37,8 @@ def test_status_flips_front_matter(monkeypatch, tmp_path):
 
 
 def test_status_missing_hub(monkeypatch, tmp_path):
+    monkeypatch.setenv("APPS_SCRIPT_URL", "https://script.google.com/macros/s/test/exec")
+    monkeypatch.setenv("APPS_SCRIPT_TOKEN", "mock_token")
     monkeypatch.setenv("CV_TAILOR_JOBS_DIR", str(tmp_path))
     with pytest.raises(SystemExit):
         cli.cmd_status(argparse.Namespace(slug="nope", state="applied"))
