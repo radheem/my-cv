@@ -10,14 +10,14 @@
 
 ## Phase 1: Tool-Level Strict Idempotency
 
-- [ ] Task: Reject finished application generation requests
-    - [ ] Step 1.1: Add a new unit test in `tests/test_mcp_server.py` (`test_mcp_create_application_idempotency`) that creates a mock job and an application with status `'draft'`, then asserts that `create_application_from_job` returns a rejection error.
-    - [ ] Step 1.2: Run the test and verify it fails (Red phase).
-    - [ ] Step 1.3: Update `create_application_from_job` in `engine/mcp/server.py`. After fetching the job, query the `applications` table. If the status is one of `'draft', 'applied', 'interview', 'offer', 'rejected', 'withdrawn'`, return an error JSON explicitly stating it is already finished. Allow `'queued'`, `'generating'`, or `'failed'`.
-    - [ ] Step 1.4: Run the test and verify it passes (Green phase).
-    - [ ] Step 1.5: Commit changes: `feat(mcp): block redundant application generation for finished statuses`
+- [x] Task: Reject finished application generation requests 86eb197
+    - [x] Step 1.1: Add a new unit test in `tests/test_mcp_server.py` (`test_mcp_create_application_idempotency`) that creates a mock job and an application with status `'draft'`, then asserts that `create_application_from_job` returns a rejection error.
+    - [x] Step 1.2: Run the test and verify it fails (Red phase).
+    - [x] Step 1.3: Update `create_application_from_job` in `engine/mcp/server.py`. After fetching the job, query the `applications` table. If the status is one of `'draft', 'applied', 'interview', 'offer', 'rejected', 'withdrawn'`, return an error JSON explicitly stating it is already finished. Allow `'queued'`, `'generating'`, or `'failed'`.
+    - [x] Step 1.4: Run the test and verify it passes (Green phase).
+    - [x] Step 1.5: Commit changes: `feat(mcp): block redundant application generation for finished statuses`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Tool-Level Strict Idempotency' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Tool-Level Strict Idempotency' (Protocol in workflow.md)
 
 ## Phase 2: Worker-Side Duplicate Filtering
 
