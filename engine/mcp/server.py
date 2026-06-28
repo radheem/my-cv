@@ -238,7 +238,7 @@ def save_job_description(
     try:
         import datetime
         import hashlib
-        from ..linkedin.jobs import Job, write_jd, slugify
+        from ..domains.linkedin.jobs import Job, write_jd, slugify
 
         # Compute stable hash-based job_id matching the system's URL hashing convention
         clean_url = url.strip().rstrip("/")

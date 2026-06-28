@@ -1,7 +1,7 @@
 import json
 import pytest
-from engine.workflows.gmail_ingest import list_gmail_jobs_workflow
-from engine import gmail
+from engine.domains.gmail.ingest import list_gmail_jobs_workflow
+from engine.domains.gmail import client as gmail
 
 def test_list_gmail_jobs_workflow_success(monkeypatch):
     # Mock search_emails to return a mock thread with an email body containing job alert links
@@ -69,7 +69,7 @@ def test_list_gmail_jobs_workflow_no_jobs(monkeypatch):
 
 
 def test_extract_job_details_workflow_success(monkeypatch):
-    import engine.workflows.gmail_ingest as gi
+    import engine.domains.gmail.ingest as gi
     import multiprocessing
     
     # Mock the worker function to return a mock slug without launching Playwright
@@ -102,7 +102,7 @@ def test_extract_job_details_workflow_success(monkeypatch):
     monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
     
     # Run extract_job_details_workflow
-    from engine.workflows.gmail_ingest import extract_job_details_workflow
+    from engine.domains.gmail.ingest import extract_job_details_workflow
     res = extract_job_details_workflow("https://www.linkedin.com/jobs/view/1234567/")
     
     assert "SUCCESS" in res
@@ -110,7 +110,7 @@ def test_extract_job_details_workflow_success(monkeypatch):
 
 
 def test_extract_job_details_workflow_invalid_url():
-    from engine.workflows.gmail_ingest import extract_job_details_workflow
+    from engine.domains.gmail.ingest import extract_job_details_workflow
     res = extract_job_details_workflow("https://www.linkedin.com/settings/")
     assert "ERROR" in res
     assert "Invalid" in res
@@ -126,7 +126,7 @@ def test_create_application_from_job_workflow_success(monkeypatch):
     monkeypatch.setattr(cli, "cmd_upload", lambda args: calls.append("upload"))
     monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
     
-    from engine.workflows.gmail_ingest import create_application_from_job_workflow
+    from engine.domains.gmail.ingest import create_application_from_job_workflow
     res = create_application_from_job_workflow("test-slug-123")
     
     assert "Complete" in res

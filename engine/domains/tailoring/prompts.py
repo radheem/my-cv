@@ -15,7 +15,7 @@ from typing import Any
 
 import yaml
 
-from .shared import config
+from engine.shared import config
 
 
 def _sha(text: str) -> str:

@@ -68,7 +68,7 @@ def test_mcp_list_and_get_tools():
 
 
 def test_mcp_specialized_gmail_tools(monkeypatch):
-    from engine import gmail
+    from engine.domains.gmail import client as gmail
     from engine.mcp import server
     import json
 
@@ -106,7 +106,7 @@ def test_mcp_specialized_gmail_tools(monkeypatch):
 
 def test_mcp_new_gmail_modular_tools(monkeypatch):
     from engine.mcp import server
-    from engine import gmail
+    from engine.domains.gmail import client as gmail
     import json
     
     # 1. Test specialized linkedin tool (list_gmail_jobs was removed)
@@ -129,7 +129,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     assert res[0]["company"] == "Acme Corp"
     
     # 2. Test extract_job_details
-    import engine.workflows.gmail_ingest as gi
+    import engine.domains.gmail.ingest as gi
     monkeypatch.setattr(gi, "_capture_jobs_worker_func", lambda urls: (["mock-acme-slug"], ["Successfully captured"]))
     
     # Mock Process and Queue to run inline (preserving monkeypatch!)
@@ -177,8 +177,9 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
 
 def test_mcp_3step_pipeline_e2e(monkeypatch):
     from engine.mcp import server
-    from engine import gmail, cli
-    import engine.workflows.gmail_ingest as gi
+    from engine.domains.gmail import client as gmail
+    from engine import cli
+    import engine.domains.gmail.ingest as gi
     import multiprocessing
     import json
 

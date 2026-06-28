@@ -28,14 +28,16 @@ import urllib.request
 import yaml
 
 from .shared import config as config_mod
+from .domains.gmail import client as gmail
+from .domains.tailoring import (
+    rank,
+    render,
+    jobspec as jobspec_mod,
+)
 from . import (
     documents,
     fetch,
-    gmail,
-    jobspec as jobspec_mod,
     manifest as manifest_mod,
-    rank,
-    render,
 )
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent

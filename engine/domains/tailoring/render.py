@@ -10,7 +10,7 @@ from typing import Any
 
 import yaml
 
-from .shared import config
+from engine.shared import config
 from . import llm, prompts
 
 

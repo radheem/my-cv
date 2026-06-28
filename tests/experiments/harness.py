@@ -116,7 +116,7 @@ def load_projects_catalog() -> list[dict[str, Any]]:
 # --------------------------------------------------------------------------- #
 
 def _tokens(text: str) -> set[str]:
-    from engine import rank
+    from engine.domains.tailoring import rank
     return rank._tokens(text)
 
 

@@ -1,6 +1,6 @@
 import pytest
 import re
-from engine.workflows.gmail_ingest import parse_and_normalize_job_url, extract_urls_from_text
+from engine.domains.gmail.ingest import parse_and_normalize_job_url, extract_urls_from_text
 
 def test_parse_and_normalize_linkedin_urls():
     # Standard view URL

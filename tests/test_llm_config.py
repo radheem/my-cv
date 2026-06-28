@@ -5,7 +5,7 @@ No network, no SDKs required (resolve() and the helpers don't import them).
 
 import pytest
 
-from engine import llm
+from engine.domains.tailoring import llm
 
 _ENV_KEYS = [
     "CV_TAILOR_PROVIDER",

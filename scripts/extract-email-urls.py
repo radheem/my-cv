@@ -10,8 +10,8 @@ import pathlib
 
 # Fix for module import in bash pipes
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from engine.linkedin.jobs import load_seen
-from engine.workflows.gmail_ingest import extract_urls_from_text, parse_and_normalize_job_url
+from engine.domains.linkedin.jobs import load_seen
+from engine.domains.gmail.ingest import extract_urls_from_text, parse_and_normalize_job_url
 
 def main():
     payload = sys.stdin.read()

@@ -3,7 +3,7 @@
 No LaTeX toolchain needed — these check escaping, macro mapping, and bilingual
 assembly on the rendered .tex string."""
 
-from engine import latex
+from engine.domains.tailoring import latex
 
 PROFILE = {
     "name": "Radheem Bin Razi",

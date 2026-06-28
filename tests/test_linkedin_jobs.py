@@ -3,7 +3,7 @@ front-matter, dedup, and the write_jd file contract. No browser, no network."""
 
 import json
 
-from engine.linkedin.jobs import (
+from engine.domains.linkedin.jobs import (
     Job,
     already_seen,
     build_search_url,

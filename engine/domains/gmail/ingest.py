@@ -3,7 +3,8 @@ import datetime
 import logging
 import pathlib
 import re
-from engine import cli, gmail
+from engine import cli
+from . import client as gmail
 from engine.shared.db import get_conn
 
 log = logging.getLogger("cv-tailor-workflows")
@@ -151,7 +152,7 @@ def _capture_jobs_worker_func(urls: list[str]) -> tuple[list[str], list[str]]:
         from playwright_stealth import stealth_sync
     except ImportError:
         stealth_sync = None
-    from engine.linkedin import jobs as J
+    from engine.domains.linkedin import jobs as J
     from engine.cli import _extract_title_company
     
     captured_slugs = []
@@ -182,7 +183,7 @@ def _capture_jobs_worker_func(urls: list[str]) -> tuple[list[str], list[str]]:
                         job.title = title or job.title
                         job.company = company or job.company
                     elif platform == "fraunhofer":
-                        from engine.fraunhofer import jobs as FJ
+                        from engine.domains.fraunhofer import jobs as FJ
                         job = J.Job(job_id=job_id, title="role", company="company", location="", url=view_url)
                         text = FJ.capture_jd(page, job)
                         job.title = FJ._title_from_url(view_url) or job.title
@@ -292,7 +293,7 @@ def list_gmail_jobs_workflow(provider: str, query: str = "is:unread", limit: int
     """Modular workflow to search Gmail alerts for a provider and return a lightweight list of discovered jobs."""
     import json
     from engine.shared.config import resolve_search
-    from engine import gmail
+    from . import client as gmail
     
     try:
         cfg = resolve_search()

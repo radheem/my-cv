@@ -5,8 +5,8 @@ import logging
 
 import pytest
 
-from engine.linkedin import session as S
-from engine.linkedin.session import PageState, classify_page
+from engine.domains.linkedin import session as S
+from engine.domains.linkedin.session import PageState, classify_page
 
 FEED_HTML = '<html><body><nav id="global-nav">Home</nav><div class="feed-identity-module">'
 LOGIN_HTML = '<form><input id="username"><input id="password" name="session_key"></form>'

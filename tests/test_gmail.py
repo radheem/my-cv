@@ -2,7 +2,7 @@ import json
 import urllib.request
 from unittest.mock import MagicMock
 import pytest
-from engine import gmail
+from engine.domains.gmail import client as gmail
 
 def test_search_emails_success(monkeypatch):
     monkeypatch.setenv("APPS_SCRIPT_URL", "https://script.google.com/macros/s/test/exec")

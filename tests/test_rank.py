@@ -9,7 +9,7 @@ import pathlib
 import pytest
 import yaml
 
-from engine import rank
+from engine.domains.tailoring import rank
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PROFILE = yaml.safe_load((ROOT / "data" / "profile.yml").read_text())
