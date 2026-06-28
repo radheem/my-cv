@@ -103,13 +103,41 @@ def query(sql: str) -> str:
         return json.dumps({"error": str(e)})
 
 
+def _clean_html(html_content: str) -> str:
+    """Helper to remove script, style, head, header, footer, nav tags, strip all HTML tags,
+    unescape entities, and clean up redundant whitespace and empty lines."""
+    import re
+    import html
+
+    # 1. Remove script, style, head, header, footer, nav tags and their content
+    text = re.sub(r'<(script|style|head|header|footer|nav)\b[^>]*>([\s\S]*?)</\1>', '', html_content, flags=re.IGNORECASE)
+    
+    # 2. Replace block tags and list/table cells with line breaks or spaces
+    text = re.sub(r'</?(p|div|br|h[1-6]|li|tr|th|td|blockquote)\b[^>]*>', '\n', text, flags=re.IGNORECASE)
+    
+    # 3. Strip all other HTML tags
+    text = re.sub(r'<[^>]+>', ' ', text)
+    
+    # 4. Unescape HTML entities (e.g., &amp; -> &, &nbsp; -> space)
+    text = html.unescape(text)
+    
+    # 5. Clean up redundant white spaces and empty lines
+    lines = [line.strip() for line in text.splitlines()]
+    clean_lines = []
+    for line in lines:
+        if line:
+            clean_lines.append(line)
+        elif not clean_lines or clean_lines[-1] != "":
+            clean_lines.append("")
+    
+    return "\n".join(clean_lines).strip()
+
+
 @mcp.tool()
 def fetch_public_job_url(url: str) -> str:
     """Step 1 (Direct Path - Preferred). Download a public webpage's HTML and extract its clean, readable plain text.
     Use this tool on public job links to retrieve their description text without using heavy browser scrapers.
     """
-    import re
-    import html
     import urllib.request
 
     try:
@@ -125,28 +153,7 @@ def fetch_public_job_url(url: str) -> str:
         with urllib.request.urlopen(req, timeout=15) as response:
             html_content = response.read().decode("utf-8", errors="ignore")
 
-        # 1. Remove script, style, head, header, footer, nav tags and their content
-        text = re.sub(r'<(script|style|head|header|footer|nav)\b[^>]*>([\s\S]*?)</\1>', '', html_content, flags=re.IGNORECASE)
-        
-        # 2. Replace block tags and list/table cells with line breaks or spaces
-        text = re.sub(r'</?(p|div|br|h[1-6]|li|tr|th|td|blockquote)\b[^>]*>', '\n', text, flags=re.IGNORECASE)
-        
-        # 3. Strip all other HTML tags
-        text = re.sub(r'<[^>]+>', ' ', text)
-        
-        # 4. Unescape HTML entities (e.g., &amp; -> &, &nbsp; -> space)
-        text = html.unescape(text)
-        
-        # 5. Clean up redundant white spaces and empty lines
-        lines = [line.strip() for line in text.splitlines()]
-        clean_lines = []
-        for line in lines:
-            if line:
-                clean_lines.append(line)
-            elif not clean_lines or clean_lines[-1] != "":
-                clean_lines.append("")
-        
-        return "\n".join(clean_lines).strip()
+        return _clean_html(html_content)
     except Exception as e:
         log.exception(f"Failed to fetch public URL: {url}")
         return f"ERROR: Failed to fetch public webpage: {str(e)}"
