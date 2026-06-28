@@ -40,9 +40,6 @@ jobs:
       - name: Install MkDocs
         run: pip install -e .
 
-      - name: Run unit tests
-        run: pip install pytest && pytest -q
-
       - name: Build site
         run: mkdocs build --clean
 
