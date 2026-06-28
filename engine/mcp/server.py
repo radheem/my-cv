@@ -160,6 +160,33 @@ def fetch_public_job_url(url: str) -> str:
 
 
 @mcp.tool()
+def fetch_linkedin_job(job_id: str) -> str:
+    """Step 1 (Direct Path - Preferred). Fetch a public LinkedIn job description by job_id.
+    This bypasses heavy browser crawlers and uses the lightweight jobs-guest API.
+    """
+    import urllib.request
+
+    url = f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}"
+    try:
+        # Configure a realistic User-Agent to avoid basic bot blocks
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        )
+        
+        # Open URL with standard 15s timeout
+        with urllib.request.urlopen(req, timeout=15) as response:
+            html_content = response.read().decode("utf-8", errors="ignore")
+
+        return _clean_html(html_content)
+    except Exception as e:
+        log.exception(f"Failed to fetch LinkedIn job ID: {job_id}")
+        return f"ERROR: Failed to fetch LinkedIn job: {str(e)}"
+
+
+@mcp.tool()
 def save_job_description(
     company: str,
     title: str,

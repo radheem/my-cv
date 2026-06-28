@@ -283,6 +283,20 @@ def test_mcp_fetch_public_job_url(monkeypatch):
     assert "Custom Corp" in res
 
 
+def test_mcp_fetch_linkedin_job(monkeypatch):
+    from engine.mcp import server
+    import urllib.request
+    from io import BytesIO
+
+    # Mock urllib.request.urlopen to return mock HTML
+    mock_html = b"<html><body><div class='description'><h1>Staff Python Engineer</h1><p>Join us at TechCorp in Berlin!</p></div></body></html>"
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=None: BytesIO(mock_html))
+
+    res = server.fetch_linkedin_job("4428933791")
+    assert "Staff Python Engineer" in res
+    assert "TechCorp" in res
+
+
 def test_mcp_save_job_description():
     from engine.mcp import server
     import json
