@@ -94,3 +94,71 @@ sequenceDiagram
 | **Anti-Bot Resistance** | High (completely avoids driving a browser) | Prone to CAPTCHAs, requires session maintenance |
 | **Failure Rate** | Low (Direct ingestion, highly reliable) | High on unauthenticated pages (timeouts) |
 | **Requires Display/X11** | No (Pure Python & HTTP) | Yes (runs in virtual framebuffer Xvfb inside Docker) |
+
+---
+
+## 4. System Workflows Behind Each MCP Tool Call
+
+This section documents the exact, backend system-level execution flows behind each Model Context Protocol (MCP) tool call.
+
+### 1. Gmail Alert Ingestion Tools
+*Exposed as: `list_gmail_linkedin_jobs`, `list_gmail_indeed_jobs`, `list_gmail_glassdoor_jobs`, `list_gmail_fraunhofer_jobs`*
+* **Trigger:** Initiating Step 1 (Gmail Discovery Path) of the job application pipeline.
+* **Backend Flow:**
+  1. Connects securely to the Google Apps Script proxy API using credentials loaded from `.env`.
+  2. Queries Gmail using provider-specific queries (e.g., `from:donotreply@jobalert.indeed.com is:unread`).
+  3. Parses the raw email body text to locate potential job postings.
+  4. Normalizes URLs to extract platform-specific job IDs using `parse_and_normalize_job_url`.
+  5. Compiles and returns a lightweight JSON array of newly discovered jobs containing tentative `job_id`, `company`, `role`, `job_url`, and a brief description snippet without modifying any database state.
+
+### 2. Specialized Platform Guest API Fetchers
+*Exposed as: `fetch_linkedin_job`, `fetch_indeed_job`*
+* **Trigger:** Direct fetching of job postings using known IDs (obtained via Gmail alerts or URL extraction) instead of heavy Playwright scraping.
+* **Backend Flow:**
+  1. Accepts a unique platform `job_id` (such as Indeed's `jk` or LinkedIn's guest ID).
+  2. Constructs the canonical public API/direct view URL templates:
+     * **LinkedIn:** `https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}`
+     * **Indeed:** `https://de.indeed.com/viewjob?jk={job_id}`
+  3. Dispatches a standard HTTP request using `urllib.request` with a realistic desktop `User-Agent` string.
+  4. Parses the response content based on the platform:
+     * **LinkedIn (HTML):** Strips head, script, and style tags, formats blocks into structured line breaks, and returns clean plain text via `_clean_html()`.
+     * **Indeed (JSON or HTML Fallback):** Attempts parsing as JSON first, returning a pretty-printed JSON string if successful. If JSON decoding fails, falls back gracefully to treating it as HTML and parsing text via `_clean_html()`.
+  5. Gracefully handles network/HTTP errors (e.g., 403 Forbidden) and returns clean error strings to prevent calling agent failures.
+
+### 3. Generic Guest Fetcher
+*Exposed as: `fetch_public_job_url`*
+* **Trigger:** Reading unstructured job descriptions directly from general public websites.
+* **Backend Flow:**
+  1. Opens a standard HTTP stream with `urllib.request` using custom headers.
+  2. Retrieves and decodes HTML content to UTF-8.
+  3. Feeds the HTML string into a central `_clean_html()` parser:
+     * Strips structural boilerplate: `<script>`, `<style>`, `<head>`, `<header>`, `<footer`, `<nav>`.
+     * Replaces layout tags (e.g. `<p>`, `<div>`, `<br>`, `<li>`) with structured line breaks.
+     * Strips remaining HTML tags, unescapes characters (`&amp;` to `&`), and collapses redundant whitespace.
+  4. Returns the clean, readable plain text of the job description.
+
+### 4. Direct Database Ingest & File Backup
+*Exposed as: `save_job_description`*
+* **Trigger:** Persisting discovered job metadata and description to system storage before starting application tailoring.
+* **Backend Flow:**
+  1. Accepts `company`, `title`, `url`, `description`, `location`, and optional metadata.
+  2. Hashes the URL using MD5 to compute a stable, unique 12-character `job_id`.
+  3. Resolves/generates a unique human-readable `slug` (e.g., `company-title-job_id`).
+  4. Executes an upsert (`INSERT ... ON CONFLICT DO UPDATE`) in the PostgreSQL `jobs` table to persist metadata and raw description text.
+  5. Writes local backup files (`<slug>.txt` with frontmatter and `<slug>.json` metadata) to the filesystem in `vault/jds/`.
+  6. Returns the generated unique job `slug` to the caller.
+
+### 5. Asynchronous Tailoring Engine
+*Exposed as: `create_application_from_job`*
+* **Trigger:** Initiating application creation (CV/Cover Letter rendering) for an ingested job.
+* **Backend Flow:**
+  1. Accepts a unique job `slug`.
+  2. Verifies that the corresponding job description exists in the database.
+  3. Updates the job state in PostgreSQL, inserting/updating an application row with status set to `'queued'`.
+  4. Pushes the job slug to a global, thread-safe FIFO Queue (`_tailor_queue`).
+  5. A dedicated serial consumer background thread (`_tailor_consumer_worker`) pops the job, advances the state in PostgreSQL to `'generating'`, and runs the LLM tailoring engine to produce tailored CV + Cover Letter Markdown files.
+  6. Compiles LaTeX documents locally (using standard `latexmk` or inside a TeX Live container) to generate high-quality English/German PDFs.
+  7. Uploads the finalized packages to Google Drive via an Apps Script proxy.
+  8. Synchronizes the application status back to the Google Sheets tracker.
+  9. Marks the application state as `'draft'` (or `'failed'` on crash).
+
