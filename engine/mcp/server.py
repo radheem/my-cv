@@ -135,8 +135,8 @@ def _clean_html(html_content: str) -> str:
 
 @mcp.tool()
 def fetch_public_job_url(url: str) -> str:
-    """Step 1 (Direct Path - Preferred). Download a public webpage's HTML and extract its clean, readable plain text.
-    Use this tool on public job links to retrieve their description text without using heavy browser scrapers.
+    """Step 1 (Direct Path - Generic). Download a public job description webpage's HTML and extract its clean, readable plain text.
+    CRITICAL: Use this tool ONLY for generic, non-LinkedIn and non-Indeed public webpages. If you are dealing with a LinkedIn URL, you MUST extract the job ID and use the 'fetch_linkedin_job' tool instead. If you have an Indeed URL, you MUST extract the job ID and use 'fetch_indeed_job' instead. This tool bypasses heavy browser overhead and is extremely fast.
     """
     import urllib.request
 
@@ -161,8 +161,8 @@ def fetch_public_job_url(url: str) -> str:
 
 @mcp.tool()
 def fetch_linkedin_job(job_id: str) -> str:
-    """Step 1 (Direct Path - Preferred). Fetch a public LinkedIn job description by job_id.
-    This bypasses heavy browser crawlers and uses the lightweight jobs-guest API.
+    """Step 1 (Direct Path - LinkedIn Preferred). Fetch a public LinkedIn job description's plain text by job_id.
+    CRITICAL: If the user provides a LinkedIn job link (e.g. linkedin.com/jobs/view/... or linkedin.com/jobs-guest/...), DO NOT use 'fetch_public_job_url' or 'extract_job_details'. Instead, extract the 10-digit numeric job ID from the link and call this 'fetch_linkedin_job' tool immediately. It accesses the lightweight, public guest API directly and returns clean text in under 2 seconds without requiring browser automation or logging in.
     """
     import urllib.request
 
@@ -188,8 +188,8 @@ def fetch_linkedin_job(job_id: str) -> str:
 
 @mcp.tool()
 def fetch_indeed_job(job_id: str) -> str:
-    """Step 1 (Direct Path - Preferred). Fetch a public Indeed job description by job_id (jk parameter).
-    Bypasses dynamic browser crawling and falls back gracefully to HTML text extraction if JSON is unavailable.
+    """Step 1 (Direct Path - Indeed Preferred). Fetch an Indeed job description by job_id (jk parameter).
+    CRITICAL: If the user provides an Indeed job link, DO NOT use 'fetch_public_job_url'. Instead, extract the hexadecimal job ID (from the 'jk' URL parameter) and call this 'fetch_indeed_job' tool immediately. It requests Indeed's direct API view and returns pretty-printed JSON (or falls back cleanly to scraping and extracting plain text if the API is restricted). Bypasses browser CAPTCHAs.
     """
     import urllib.request
     import json
@@ -268,32 +268,40 @@ def save_job_description(
 
 @mcp.tool()
 def list_gmail_linkedin_jobs(query: str = "is:unread", limit: int = 10) -> str:
-    """Step 1 of the job application workflow. Search Gmail alerts from LinkedIn and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    """Step 1 (Gmail Alerts Discovery - LinkedIn). Scan unread Gmail search alerts from LinkedIn and return a lightweight list of newly discovered jobs.
+    Use this to pull newly received opportunities into your processing pipeline. To extract the job description text afterward, extract the job_id from the return values and pass it directly to the 'fetch_linkedin_job' tool.
+    """
     return list_gmail_jobs_workflow("linkedin", query, limit)
 
 
 @mcp.tool()
 def list_gmail_glassdoor_jobs(query: str = "is:unread", limit: int = 10) -> str:
-    """Step 1 of the job application workflow. Search Gmail alerts from Glassdoor and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    """Step 1 (Gmail Alerts Discovery - Glassdoor). Scan unread Gmail search alerts from Glassdoor and return a lightweight list of newly discovered jobs.
+    Use this to pull newly received opportunities into your processing pipeline. To extract the job description text afterward, use the returned job_url with the 'fetch_public_job_url' tool.
+    """
     return list_gmail_jobs_workflow("glassdoor", query, limit)
 
 
 @mcp.tool()
 def list_gmail_indeed_jobs(query: str = "is:unread", limit: int = 10) -> str:
-    """Step 1 of the job application workflow. Search Gmail alerts from Indeed and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    """Step 1 (Gmail Alerts Discovery - Indeed). Scan unread Gmail search alerts from Indeed and return a lightweight list of newly discovered jobs.
+    Use this to pull newly received opportunities into your processing pipeline. To extract the job description text afterward, extract the 'jk' parameter (job_id) from the returned job_url and pass it directly to the 'fetch_indeed_job' tool.
+    """
     return list_gmail_jobs_workflow("indeed", query, limit)
 
 
 @mcp.tool()
 def list_gmail_fraunhofer_jobs(query: str = "is:unread", limit: int = 10) -> str:
-    """Step 1 of the job application workflow. Search Gmail alerts from Fraunhofer and return a lightweight list of discovered jobs containing tentative job_id, company, role, job_url, and brief_description. Use the returned `job_url` with the `extract_job_details` tool."""
+    """Step 1 (Gmail Alerts Discovery - Fraunhofer). Scan unread Gmail search alerts from Fraunhofer and return a lightweight list of newly discovered jobs.
+    Use this to pull newly received opportunities into your processing pipeline. To extract the job description text afterward, use the returned job_url with the 'fetch_public_job_url' tool.
+    """
     return list_gmail_jobs_workflow("fraunhofer", query, limit)
 
 
 @mcp.tool()
 def extract_job_details(url: str) -> str:
-    """Step 2 (Scraper Path). Execute Playwright scraper in an isolated process to extract the full job description from a given URL and save the completed record into the PostgreSQL database.
-    WARNING: This tool launches a full headless browser and is only useful when there is an active, warm logged-in LinkedIn session to bypass login walls. It is prone to timeouts and CAPTCHAs on public/unauthenticated pages. For public links, prefer fetching content via 'fetch_public_job_url' and saving via 'save_job_description'.
+    """Step 2 (Scraper Path - Dynamic Crawl). Launch an isolated, headless browser (Playwright) to scrape and extract the job description from a given URL.
+    CRITICAL: This tool is extremely slow (20-40 seconds) and highly prone to security gates or timeouts on public pages. It should ONLY be used for protected, authenticated LinkedIn views where guest APIs are completely restricted and an active, warmed browser session is required. For all public pages, ALWAYS prefer 'fetch_linkedin_job' (for LinkedIn), 'fetch_indeed_job' (for Indeed), or 'fetch_public_job_url' (for generic links) instead, followed by 'save_job_description'.
     """
     return extract_job_details_workflow(url)
 
@@ -372,7 +380,9 @@ def _ensure_tailor_worker():
 
 @mcp.tool()
 def create_application_from_job(slug: str) -> str:
-    """Step 3 of the job application workflow. Generate tailored job application documents (CV/CL in English and German) for a specific job slug (obtained from `extract_job_details`), render them to PDFs, upload them to Google Drive, and synchronize application status."""
+    """Step 3 (Tailoring & PDF Rendering Path). Generate tailored job application documents (CV/CL in English and German) for a specific job slug.
+    Use this tool to trigger the tailoring pipeline. It ranks your projects/skills, calls the LLM, compiles LaTeX PDFs bilingually, uploads them to Google Drive, and syncs status back to Google Sheets. Because LLM generation and PDF compilation are resource-intensive, requests are placed in an asynchronous in-memory background FIFO queue to process sequentially. You can monitor the application state (queued -> generating -> draft) on subsequent turns by calling 'get_application'.
+    """
     try:
         # 1. Check if the job exists in the database
         with get_conn() as conn:
@@ -407,8 +417,9 @@ def create_application_from_job(slug: str) -> str:
 
 @mcp.tool()
 def list_applications(status: str = None, limit: int = 20) -> str:
-    """List tracked job applications from the database, excluding large text fields (CVs, cover letters).
-    Use status (e.g. 'draft', 'applied', 'interview', 'rejected') to filter results."""
+    """List tracked job applications from the database, excluding large text fields (CVs, cover letters) to preserve context.
+    Use this tool to get a lightweight overview of active/historical applications and their current lifecycle statuses (such as draft, applied, interview, offer, rejected).
+    """
     try:
         query_sql = """
             SELECT a.slug, a.status, j.company, j.title, j.score, a.updated_at
@@ -434,7 +445,9 @@ def list_applications(status: str = None, limit: int = 20) -> str:
 
 @mcp.tool()
 def get_application(slug: str) -> str:
-    """Retrieve full details of a specific application, including tailored CVs, cover letters, and Drive links."""
+    """Retrieve full details of a specific application, including tailored CVs, cover letters, and Google Drive package directory links.
+    Use this tool to read completed CVs and Cover Letter markdown drafts, extract Drive directories, or monitor the status (queued, generating, draft, applied) of a requested application.
+    """
     try:
         query_sql = """
             SELECT a.slug, a.status, a.recipient, a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, a.drive_url, a.clusters, a.updated_at,
