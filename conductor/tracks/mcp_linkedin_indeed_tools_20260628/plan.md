@@ -12,14 +12,14 @@
 
 ## Phase 1: Shared Helper Refactoring
 
-- [ ] Task: Extract HTML text cleaning logic to `_clean_html`
-    - [ ] Step 1.1: Identify the regex cleaning logic in `fetch_public_job_url` inside `engine/mcp/server.py`.
-    - [ ] Step 1.2: Implement `_clean_html(html_content: str) -> str` directly before `fetch_public_job_url`.
-    - [ ] Step 1.3: Modify `fetch_public_job_url` to call `_clean_html(html_content)`.
-    - [ ] Step 1.4: Run the test suite using `pytest tests/test_mcp_server.py::test_mcp_fetch_public_job_url` to ensure no regression.
-    - [ ] Step 1.5: Commit changes with message: `refactor(mcp): extract _clean_html helper`
+- [x] Task: Extract HTML text cleaning logic to `_clean_html` f3f4de2
+    - [x] Step 1.1: Identify the regex cleaning logic in `fetch_public_job_url` inside `engine/mcp/server.py`.
+    - [x] Step 1.2: Implement `_clean_html(html_content: str) -> str` directly before `fetch_public_job_url`.
+    - [x] Step 1.3: Modify `fetch_public_job_url` to call `_clean_html(html_content)`.
+    - [x] Step 1.4: Run the test suite using `pytest tests/test_mcp_server.py::test_mcp_fetch_public_job_url` to ensure no regression.
+    - [x] Step 1.5: Commit changes with message: `refactor(mcp): extract _clean_html helper`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Shared Helper Refactoring' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Helper Refactoring' (Protocol in workflow.md)
 
 
 ## Phase 2: LinkedIn Job Fetcher
