@@ -297,6 +297,28 @@ def test_mcp_fetch_linkedin_job(monkeypatch):
     assert "TechCorp" in res
 
 
+def test_mcp_fetch_indeed_job(monkeypatch):
+    from engine.mcp import server
+    import urllib.request
+    from io import BytesIO
+
+    # Test Path A: Indeed returns JSON
+    mock_json = b'{"jobTitle": "DevOps Engineer", "description": "Awesome indeed job"}'
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=None: BytesIO(mock_json))
+
+    res = server.fetch_indeed_job("e1b8d3b1b28dd021")
+    assert "DevOps Engineer" in res
+    assert "Awesome indeed job" in res
+
+    # Test Path B: Indeed returns HTML (JSON decoding fails)
+    mock_html = b"<html><body><h1>Senior SRE</h1><p>Work on cloud infrastructure at Indeed.</p></body></html>"
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=None: BytesIO(mock_html))
+
+    res2 = server.fetch_indeed_job("1d5c55ffd09ccd62")
+    assert "Senior SRE" in res2
+    assert "cloud infrastructure" in res2
+
+
 def test_mcp_save_job_description():
     from engine.mcp import server
     import json

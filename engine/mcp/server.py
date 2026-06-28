@@ -187,6 +187,41 @@ def fetch_linkedin_job(job_id: str) -> str:
 
 
 @mcp.tool()
+def fetch_indeed_job(job_id: str) -> str:
+    """Step 1 (Direct Path - Preferred). Fetch a public Indeed job description by job_id (jk parameter).
+    Bypasses dynamic browser crawling and falls back gracefully to HTML text extraction if JSON is unavailable.
+    """
+    import urllib.request
+    import json
+
+    url = f"https://de.indeed.com/viewjob?jk={job_id}"
+    try:
+        # Configure a realistic User-Agent to avoid basic bot blocks
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        )
+        
+        # Open URL with standard 15s timeout
+        with urllib.request.urlopen(req, timeout=15) as response:
+            content = response.read().decode("utf-8", errors="ignore")
+
+        # Try to parse response as JSON first
+        try:
+            data = json.loads(content)
+            return json.dumps(data, indent=2, ensure_ascii=False)
+        except json.JSONDecodeError:
+            # Fall back to cleaning HTML to support HTML rendering path
+            return _clean_html(content)
+            
+    except Exception as e:
+        log.exception(f"Failed to fetch Indeed job ID: {job_id}")
+        return f"ERROR: Failed to fetch Indeed job: {str(e)}"
+
+
+@mcp.tool()
 def save_job_description(
     company: str,
     title: str,
