@@ -37,13 +37,13 @@
 
 ## Phase 3: Presentation Layer & Testing
 
-- [ ] Task: Update Interfaces and Test Suite
-    - [ ] Step 3.1: Update import statements in `engine/cli.py` to route through the new `domains.` and `shared.` paths.
-    - [ ] Step 3.2: Update import statements in `engine/mcp/server.py` and `engine/mcp/sqlguard.py`.
-    - [ ] Step 3.3: Recursively update imports in the entire `tests/` directory.
-    - [ ] Step 3.4: Run the full `pytest` suite and resolve any lingering ModuleNotFound errors until 100% passing.
+- [x] Task: Update Interfaces and Test Suite d43adda, 0ac47f6
+    - [x] Step 3.1: Update import statements in `engine/cli.py` to route through the new `domains.` and `shared.` paths.
+    - [x] Step 3.2: Update import statements in `engine/mcp/server.py` and `engine/mcp/sqlguard.py`.
+    - [x] Step 3.3: Recursively update imports in the entire `tests/` directory.
+    - [x] Step 3.4: Run the full `pytest` suite and resolve any lingering ModuleNotFound errors until 100% passing.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Presentation Layer & Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Presentation Layer & Testing' (Protocol in workflow.md)
 
 
 ## Phase 4: Documentation Structure
