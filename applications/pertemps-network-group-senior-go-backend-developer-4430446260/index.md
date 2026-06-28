@@ -2,7 +2,7 @@
 job_title: "Senior Go Backend Developer"
 company: "Pertemps Network Group"
 job_url: ""
-status: "draft"
+status: "applied"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-27"
 drive_url: "https://drive.google.com/drive/folders/1sl-e6HEJjtRDRDdDAThziBMk6qZrDso-"
