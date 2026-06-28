@@ -21,18 +21,18 @@
 
 ## Phase 2: Domain Isolation
 
-- [ ] Task: Establish `gmail`, `linkedin`, and `fraunhofer` domains
-    - [ ] Step 2.1: Create directories under `engine/domains/` for each specific domain.
-    - [ ] Step 2.2: Move `engine/gmail.py` and related ingest workflows to `engine/domains/gmail/`.
-    - [ ] Step 2.3: Move the existing `engine/linkedin/` and `engine/fraunhofer/` directories inside `engine/domains/`.
-    - [ ] Step 2.4: Update global imports pointing to these files.
+- [x] Task: Establish `gmail`, `linkedin`, and `fraunhofer` domains c79a6f8
+    - [x] Step 2.1: Create directories under `engine/domains/` for each specific domain.
+    - [x] Step 2.2: Move `engine/gmail.py` and related ingest workflows to `engine/domains/gmail/`.
+    - [x] Step 2.3: Move the existing `engine/linkedin/` and `engine/fraunhofer/` directories inside `engine/domains/`.
+    - [x] Step 2.4: Update global imports pointing to these files.
 
-- [ ] Task: Establish the `tailoring` domain
-    - [ ] Step 2.5: Create `engine/domains/tailoring/`.
-    - [ ] Step 2.6: Move `engine/rank.py`, `engine/llm.py`, `engine/render.py`, `engine/latex.py`, `engine/jobspec.py`, and `engine/prompts.py` to the `tailoring` domain.
-    - [ ] Step 2.7: Update global imports pointing to these files.
+- [x] Task: Establish the `tailoring` domain c79a6f8
+    - [x] Step 2.5: Create `engine/domains/tailoring/`.
+    - [x] Step 2.6: Move `engine/rank.py`, `engine/llm.py`, `engine/render.py`, `engine/latex.py`, `engine/jobspec.py`, and `engine/prompts.py` to the `tailoring` domain.
+    - [x] Step 2.7: Update global imports pointing to these files.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Domain Isolation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Domain Isolation' (Protocol in workflow.md)
 
 
 ## Phase 3: Presentation Layer & Testing
