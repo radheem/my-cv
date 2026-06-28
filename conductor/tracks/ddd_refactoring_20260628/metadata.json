@@ -1,0 +1,8 @@
+{
+  "track_id": "ddd_refactoring_20260628",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-28T14:00:00Z",
+  "updated_at": "2026-06-28T14:00:00Z",
+  "description": "Refactor the engine directory using Domain-Driven Design (DDD) principles to create a composable and extendible structure."
+}

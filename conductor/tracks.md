@@ -4,6 +4,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [ ] **Track: Domain-Driven Design (DDD) Restructuring**
+*Link: [./tracks/ddd_refactoring_20260628/](./tracks/ddd_refactoring_20260628/)*
+
+---
+
 - [x] **Track: LinkedIn and Indeed MCP Tools**
 *Link: [./tracks/mcp_linkedin_indeed_tools_20260628/](./tracks/mcp_linkedin_indeed_tools_20260628/)*
 
