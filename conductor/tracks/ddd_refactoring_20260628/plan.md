@@ -10,13 +10,13 @@
 
 ## Phase 1: Shared Infrastructure Foundation
 
-- [ ] Task: Establish the `shared` domain
-    - [ ] Step 1.1: Create directory `engine/shared/`.
-    - [ ] Step 1.2: Move `engine/config.py`, `engine/db.py`, and generic utility files to `engine/shared/`.
-    - [ ] Step 1.3: Run a global search-and-replace to update all import paths pointing to `engine.db` and `engine.config`.
-    - [ ] Step 1.4: Run the test suite to ensure the database and config layers still load.
+- [x] Task: Establish the `shared` domain c79a6f8
+    - [x] Step 1.1: Create directory `engine/shared/`.
+    - [x] Step 1.2: Move `engine/config.py`, `engine/db.py`, and generic utility files to `engine/shared/`.
+    - [x] Step 1.3: Run a global search-and-replace to update all import paths pointing to `engine.db` and `engine.config`.
+    - [x] Step 1.4: Run the test suite to ensure the database and config layers still load.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Shared Infrastructure Foundation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Infrastructure Foundation' (Protocol in workflow.md)
 
 
 ## Phase 2: Domain Isolation
