@@ -1,31 +1,38 @@
-# cv-tailor — LLM CV/Cover-Letter Tailoring + LinkedIn Automation
+# cv-tailor — LLM CV/Cover-Letter Tailoring & Agentic Job-Hunting Pipeline
 
-A Python tool that turns a **job posting** into a **tailored CV + cover letter**, versions every application in **git**, and publishes them as a **password-gated MkDocs site**. A pure, unit-tested ranker decides *what* to feature; the LLM only writes prose around facts pinned in a master CV, so it never fabricates experience. A containerized LinkedIn flow captures job descriptions and drafts applications end-to-end — and always **stops before submit** for human review.
+A Python CLI and **FastMCP Server** that automates the job application tailoring process, manages application lifecycle tracking via **PostgreSQL**, and publishes password-gated portfolios to **GitHub Pages**. A pure, unit-tested ranker selects top projects and orders skills, leaving the LLM to write prose around pinned master CV facts (zero fabrication). Automates discovery via **Gmail alert parsing** (LinkedIn, Indeed, Glassdoor, Fraunhofer), performs lightning-fast fetching via platform-specific **guest API endpoints**, and synchronizes pipeline states bi-directionally with **Google Sheets**.
 
 !!! abstract "At a glance"
-    **Domain**: LLM application / automation &nbsp;·&nbsp; **Repo**: [github.com/radheem/cv-tailor](https://github.com/radheem/cv-tailor) &nbsp;·&nbsp; **Stack**: Python · Playwright · Docker · MkDocs · GitHub Actions
+    **Domain**: LLM Agent Tools / Workflow Automation &nbsp;·&nbsp; **Repo**: [github.com/radheem/cv-tailor](https://github.com/radheem/cv-tailor) &nbsp;·&nbsp; **Stack**: Python · FastMCP · PostgreSQL · Google Apps Script · Docker · MkDocs
 
 > This very site is built and gated by cv-tailor. The public repo ships a fictional **John Doe**
 > persona; the private twin runs the same engine on real data.
 
 ## What it is
-Two halves separated by a hard boundary:
+A secure, distributed pipeline connecting local agentic automation with cloud visibility:
 
-- **Generation** runs **locally**, costs money, needs review, and commits Markdown. It extracts a structured **JobSpec** from a posting, ranks projects + skills against it deterministically, then has an LLM write the CV/cover prose.
-- **Render + gate + deploy** runs in **CI with no API key**. It builds the MkDocs site, renders PDFs, and **AES-256-GCM-encrypts** the per-job documents — and the manifest of applications — before deploying to GitHub Pages.
+- **Local FastMCP Server & Database:** Exposes a secure, read-only SQL parsing layer and generation workflows to agentic assistants. Manages application state in PostgreSQL and discovers roles automatically via Gmail alert body parsing.
+- **Lightweight Scraping & Ingestion:** Uses specialized guest API endpoints (`fetch_linkedin_job` and `fetch_indeed_job` with JSON/HTML fallback) to download postings under 2 seconds, completely avoiding dynamic browser CAPTCHA walls.
+- **LaTeX Compilation & Storage:** Generates English/German Markdown documents and compiles them locally via `latexmk` into professional PDFs. Packages are uploaded automatically to Google Drive, and statuses sync with Google Sheets.
+- **Render + gate + deploy:** Runs in CI with no API key. Encrypts documents with AES-256-GCM at build time (password derived client-side via PBKDF2) and deploys safely to static GitHub Pages.
 
 ## How it works
 
 ```mermaid
 flowchart TB
-  subgraph local["Local CLI (Anthropic API or local Ollama)"]
-    JD[Job URL / file] --> SPEC[JobSpec] --> RANK[rank: top-3 projects + skills]
-    RANK --> OUT[docs/jobs/&lt;slug&gt;/ cv.md · cover-letter.md · index.md]
-  end
-  subgraph ci["GitHub Actions (no API key)"]
-    OUT --> MK[mkdocs build] --> PDF[WeasyPrint PDFs] --> ENC[AES-seal gated HTML + PDF + manifest] --> DEP[deploy Pages]
-  end
-  GATE[One sign-in page · password → PBKDF2 → AES-GCM] -.decrypts.-> DEP
+    subgraph local["Local System & FastMCP Server"]
+        GMAIL[(Gmail Alert Ingestion)] -->|Extract Link| QUEUE[(PostgreSQL Queue)]
+        GUEST[Lightweight Fetchers<br/>LinkedIn & Indeed APIs] -->|Raw Postings| QUEUE
+        QUEUE -->|Score & Select| RANK[Deterministic Ranker]
+        RANK -->|Tailor & Compile| LaTeX[LaTeX Engine]
+    end
+    subgraph cloud["Cloud Integrations"]
+        LaTeX -->|Compile PDFs| DRIVE[(Google Drive)]
+        QUEUE -->|Push Status| SHEETS[(Google Sheets Tracker)]
+    end
+    subgraph ci["GitHub Actions (no API key)"]
+        local -.git push.-> MK[mkdocs build] --> ENC[AES-seal gated HTML + PDF] --> DEP[deploy Pages]
+    end
 ```
 
 ## Deterministic ranking, LLM prose only
