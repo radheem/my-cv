@@ -393,6 +393,16 @@ def create_application_from_job(slug: str) -> str:
                     return json.dumps({"error": f"Job with slug '{slug}' not found in database. Cannot create application."})
                 job_id = row["job_id"]
 
+                # Check if an application already exists and its current status
+                cur.execute("SELECT status FROM applications WHERE job_id = %s", (job_id,))
+                app_row = cur.fetchone()
+                if app_row:
+                    status = app_row["status"]
+                    if status in ("draft", "applied", "interview", "offer", "rejected", "withdrawn"):
+                        return json.dumps({
+                            "error": f"An application for slug '{slug}' is already finished and finalized with status '{status}'. Cannot re-enqueue application tailoring."
+                        })
+
                 # 2. Insert or update the application row setting status to 'queued'
                 cur.execute("""
                     INSERT INTO applications (job_id, slug, status)

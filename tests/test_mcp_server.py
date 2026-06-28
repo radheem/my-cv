@@ -421,6 +421,33 @@ def test_mcp_get_cover_letter_guide():
     assert "letter" in res.lower() or "salutation" in res.lower()
 
 
+def test_mcp_create_application_idempotency():
+    from engine.mcp import server
+    from engine.shared.db import get_conn
+    import json
+
+    # 1. Insert mock job and application with status 'draft'
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('idempotency-job-123', 'mock-idempotent-slug', 'ACME Corp', 'Software Architect', 'file', 'other', 'JD text')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            cur.execute("""
+                INSERT INTO applications (job_id, slug, status)
+                VALUES ('idempotency-job-123', 'mock-idempotent-slug', 'draft')
+                ON CONFLICT (job_id) DO UPDATE SET status = 'draft'
+            """)
+            conn.commit()
+
+    # 2. Assert that calling create_application_from_job returns a rejection error
+    res_str = server.create_application_from_job("mock-idempotent-slug")
+    res = json.loads(res_str)
+    assert "error" in res
+    assert "already finished" in res["error"].lower() or "already generated" in res["error"].lower()
+
+
 def test_mcp_create_application_async_success(monkeypatch):
     from engine.mcp import server
     from engine.shared.db import get_conn
