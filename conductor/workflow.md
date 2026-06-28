@@ -188,12 +188,33 @@ Before marking any task complete, verify:
 - Check form submissions
 
 ### End-to-End (E2E) Testing
-- All E2E tests MUST always be executed inside the reproducible Docker Compose environment to ensure total consistency across developer machines and CI.
-- Each track MUST include a dedicated "E2E Testing" phase where the Docker containers are built, deployed, and tested end-to-end to verify multi-service integration (e.g., `mcp`, `db`, and `ingest`).
-- Use the following command sequence to run E2E/integration tests in Docker Compose:
-  ```bash
-  docker compose down -v && docker compose up -d db mcp && docker compose run --rm ingest pytest -v
-  ```
+- **Mandatory Final Phase for All Tracks:** Every single track plan generated MUST contain a final phase dedicated strictly to **End-to-End Testing**. No track can be marked complete without passing this E2E phase.
+- **Why Run Locally against Docker?** The production Docker image does not include development-only packages like `pytest` to keep production image sizes lean and secure. Therefore, E2E/Integration testing MUST be executed by running the test suite **locally on the host machine** while connecting to the **PostgreSQL database running inside the Docker container**.
+- **Foolproof E2E Verification Workflow for AI Agents:**
+  Follow these exact steps in sequence to run the E2E verification:
+  
+  1. **Clean and Start the Containerized Database:**
+     Stop any existing containers, wipe volumes, and start the database and MCP containers in detached mode:
+     ```bash
+     docker compose down -v && docker compose up -d db mcp
+     ```
+  
+  2. **Verify Database Port is Open:**
+     Ensure the local postgres port (5432) is receiving connections.
+  
+  3. **Run the Full Test Suite Locally:**
+     Use `uv` (which loads our virtual environment on the host) to run the tests. Since the container maps `5432:5432` to localhost, the local tests will connect directly to the containerized database:
+     ```bash
+     uv run pytest -v
+     ```
+     *Expected Output:* 100% of all unit and integration tests pass cleanly.
+  
+  4. **Run the E2E Live Pipeline Script:**
+     Execute the live integration script to verify discovery, guest fetching, scoring, saving, and sequential queueing:
+     ```bash
+     uv run test-live-pipeline.py
+     ```
+     *Expected Output:* `SUCCESS: Job saved...` followed by enqueuing logs and async worker initiation.
 
 ### Mobile Testing
 - Test on actual iPhone when possible
