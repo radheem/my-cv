@@ -4,6 +4,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [ ] **Track: Create Application Queue Idempotency**
+*Link: [./tracks/queue_idempotency_20260628/](./tracks/queue_idempotency_20260628/)*
+
+---
+
 - [x] **Track: Domain-Driven Design (DDD) Restructuring**
 *Link: [./tracks/ddd_refactoring_20260628/](./tracks/ddd_refactoring_20260628/)*
 

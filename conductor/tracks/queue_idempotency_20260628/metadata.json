@@ -1,0 +1,8 @@
+{
+  "track_id": "queue_idempotency_20260628",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-28T16:00:00Z",
+  "updated_at": "2026-06-28T16:00:00Z",
+  "description": "Add idempotency to the create application functionality to handle duplicate async requests cleanly."
+}
