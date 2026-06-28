@@ -56,3 +56,13 @@
     - [x] Step 4.5: Create `docs/domains/tailoring.md` detailing the core ranking, LLM generation, and LaTeX compilation logic.
 
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Documentation Structure' (Protocol in workflow.md)
+
+
+## Phase 5: End-to-End Testing
+
+- [x] Task: Run E2E Deployment Tests inside Docker Compose f1f92b4
+    - [x] Step 5.1: Build and start the PostgreSQL database and MCP server containers: `docker compose up -d db mcp`.
+    - [x] Step 5.2: Execute the full `pytest` suite inside the `ingest` container: `docker compose run --rm ingest pytest -v`.
+    - [x] Step 5.3: Verify that 100% of the unit and integration tests pass successfully in the container environment.
+
+- [x] Task: Conductor - User Manual Verification 'Phase 5: End-to-End Testing' (Protocol in workflow.md)
