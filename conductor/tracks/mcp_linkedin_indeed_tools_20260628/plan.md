@@ -40,17 +40,17 @@
 
 ## Phase 3: Indeed Job Fetcher
 
-- [ ] Task: Implement `fetch_indeed_job` using TDD
-    - [ ] Step 3.1: Write a failing unit test `test_mcp_fetch_indeed_job` in `tests/test_mcp_server.py`.
-    - [ ] Step 3.2: Mock `urllib.request.urlopen` in the test to support both JSON and HTML responses for testing fallback.
-    - [ ] Step 3.3: Run the test and verify it fails with an `AttributeError` (tool not defined).
-    - [ ] Step 3.4: Implement `@mcp.tool()` and `fetch_indeed_job(job_id: str) -> str` in `engine/mcp/server.py`.
-    - [ ] Step 3.5: Implement URL construction to `https://de.indeed.com/viewjob?jk={job_id}`.
-    - [ ] Step 3.6: Fetch response via `urllib.request`.
-    - [ ] Step 3.7: Attempt `json.loads` parsing. If successful, pretty-print with indentation.
-    - [ ] Step 3.8: On parsing failure, fall back to cleaning HTML with `_clean_html()`.
-    - [ ] Step 3.9: Add robust error handling to return clean error strings.
-    - [ ] Step 3.10: Run the test and verify that both HTML fallback and JSON paths pass.
-    - [ ] Step 3.11: Commit changes with message: `feat(mcp): add fetch_indeed_job tool`
+- [x] Task: Implement `fetch_indeed_job` using TDD 4686185
+    - [x] Step 3.1: Write a failing unit test `test_mcp_fetch_indeed_job` in `tests/test_mcp_server.py`.
+    - [x] Step 3.2: Mock `urllib.request.urlopen` in the test to support both JSON and HTML responses for testing fallback.
+    - [x] Step 3.3: Run the test and verify it fails with an `AttributeError` (tool not defined).
+    - [x] Step 3.4: Implement `@mcp.tool()` and `fetch_indeed_job(job_id: str) -> str` in `engine/mcp/server.py`.
+    - [x] Step 3.5: Implement URL construction to `https://de.indeed.com/viewjob?jk={job_id}`.
+    - [x] Step 3.6: Fetch response via `urllib.request`.
+    - [x] Step 3.7: Attempt `json.loads` parsing. If successful, pretty-print with indentation.
+    - [x] Step 3.8: On parsing failure, fall back to cleaning HTML with `_clean_html()`.
+    - [x] Step 3.9: Add robust error handling to return clean error strings.
+    - [x] Step 3.10: Run the test and verify that both HTML fallback and JSON paths pass.
+    - [x] Step 3.11: Commit changes with message: `feat(mcp): add fetch_indeed_job tool`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Indeed Job Fetcher' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Indeed Job Fetcher' (Protocol in workflow.md)
