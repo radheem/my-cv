@@ -51,6 +51,7 @@ def test_duckdb_get_conn_structure(tmp_path, monkeypatch):
     # Mock the directory lookups to point to our tmp_path
     monkeypatch.setattr("engine.shared.db._get_vault_jds_dir", lambda: jds_dir)
     monkeypatch.setattr("engine.shared.db._get_applications_dir", lambda: apps_dir)
+    monkeypatch.setattr("engine.shared.db.DB_FILE_PATH", str(tmp_path / "test_cv_tailor.db"))
 
     # Call get_conn
     conn = get_conn()

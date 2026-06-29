@@ -2,22 +2,9 @@ import asyncio
 import json
 import os
 import pytest
-import psycopg
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from engine.shared.db import get_conn, init_db
-
-@pytest.fixture(scope="module")
-def db_conn():
-    """Fixture to verify database connectivity. Skips tests if offline."""
-    try:
-        with get_conn() as conn:
-            # Simple test query to ensure connection is live
-            with conn.cursor() as cur:
-                cur.execute("SELECT 1")
-            yield conn
-    except psycopg.OperationalError:
-        pytest.skip("PostgreSQL offline. Skipping MCP E2E client tests.")
 
 @pytest.fixture(scope="module")
 def server_params():
@@ -25,14 +12,11 @@ def server_params():
     return StdioServerParameters(
         command="uv",
         args=["run", "cv-tailor-mcp"],
-        env={
-            **os.environ,
-            "DATABASE_URL": os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor"),
-        }
+        env=os.environ
     )
 
 @pytest.mark.anyio
-async def test_mcp_e2e_server_capabilities(db_conn, server_params):
+async def test_mcp_e2e_server_capabilities(server_params):
     """E2E Test: list tools and verify server capabilities."""
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
@@ -50,7 +34,7 @@ async def test_mcp_e2e_server_capabilities(db_conn, server_params):
             assert "list_applications" in tool_names
 
 @pytest.mark.anyio
-async def test_mcp_e2e_sql_queries_and_guard(db_conn, server_params):
+async def test_mcp_e2e_sql_queries_and_guard(server_params):
     """E2E Test: run read-only SQL queries via 'query' tool and confirm SQL Guard restricts mutations."""
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
@@ -72,7 +56,7 @@ async def test_mcp_e2e_sql_queries_and_guard(db_conn, server_params):
             assert "only select / with queries" in data_err["error"].lower()
 
 @pytest.mark.anyio
-async def test_mcp_e2e_async_tailoring(db_conn, server_params):
+async def test_mcp_e2e_async_tailoring(server_params):
     """E2E Test: trigger async tailoring and verify queued status."""
     # Ensure a mock job exists in the DB to test queueing
     with get_conn() as conn:
@@ -100,7 +84,7 @@ async def test_mcp_e2e_async_tailoring(db_conn, server_params):
 async def run_standalone():
     """Standalone runner for direct script execution."""
     print("════════════════════════════════════════════════════════")
-    print("  Standalone PostgreSQL MCP Server E2E Client Test")
+    print("  Standalone DuckDB MCP Server E2E Client Test")
     print("════════════════════════════════════════════════════════\n")
     
     params = StdioServerParameters(
@@ -112,8 +96,8 @@ async def run_standalone():
     try:
         with get_conn():
             pass
-    except Exception:
-        print("  ERROR: PostgreSQL is offline. Standalone test requires live DB.")
+    except Exception as e:
+        print(f"  ERROR: DuckDB initialization failed: {e}")
         return
 
     print("── Connecting to MCP Server via Stdio...")
