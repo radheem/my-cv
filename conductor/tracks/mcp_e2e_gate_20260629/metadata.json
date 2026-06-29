@@ -1,0 +1,8 @@
+{
+  "track_id": "mcp_e2e_gate_20260629",
+  "type": "bug_chore",
+  "status": "new",
+  "created_at": "2026-06-29T12:30:00Z",
+  "updated_at": "2026-06-29T12:30:00Z",
+  "description": "fix the issue and create e2e test for the mcp and make running the mcp e2e test the acceptance gate for all future tracks"
+}

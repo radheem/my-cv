@@ -26,3 +26,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fraunhofer Job Alerts MCP Tool**
 *Link: [./tracks/fraunhofer_ingestion_20260627/](./tracks/fraunhofer_ingestion_20260627/)*
+
+---
+
+- [ ] **Track: Fix DDD Import Regression & Establish MCP E2E Quality Gate**
+*Link: [./tracks/mcp_e2e_gate_20260629/](./tracks/mcp_e2e_gate_20260629/)*
