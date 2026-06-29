@@ -172,7 +172,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
     
     res_create = json.loads(server.create_application_from_job("mock-acme-slug"))
-    assert res_create["status"] == "queued"
+    assert res_create["status"] in ("queued", "generating")
 
 
 def test_mcp_3step_pipeline_e2e(monkeypatch):
@@ -267,7 +267,7 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
             conn.commit()
 
     application_res = json.loads(server.create_application_from_job(target_slug))
-    assert application_res["status"] == "queued"
+    assert application_res["status"] in ("queued", "generating")
 
 
 def test_mcp_fetch_public_job_url(monkeypatch):
@@ -376,7 +376,7 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
 
     # 3. Create the application using the returned slug
     application_res = json.loads(server.create_application_from_job(target_slug))
-    assert application_res["status"] == "queued"
+    assert application_res["status"] in ("queued", "generating")
 
 
 def test_mcp_initialize_agent_session():
@@ -448,6 +448,48 @@ def test_mcp_create_application_idempotency():
     assert "already finished" in res["error"].lower() or "already generated" in res["error"].lower()
 
 
+def test_mcp_stress_duplicate_queue_filtering(monkeypatch):
+    from engine.mcp import server
+    from engine.shared.db import get_conn
+    import json
+    import time
+
+    # 1. Insert mock job
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('stress-dup-job-123', 'mock-stress-slug', 'ACME', 'SRE', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            cur.execute("DELETE FROM applications WHERE slug = 'mock-stress-slug'")
+            conn.commit()
+
+    # 2. Mock workflow and count calls
+    calls = []
+    def mock_workflow(slug):
+        calls.append(slug)
+        time.sleep(0.1)
+        return "SUCCESS"
+
+    monkeypatch.setattr(server, "create_application_from_job_workflow", mock_workflow)
+
+    # 3. Trigger 3 consecutive requests
+    res1 = json.loads(server.create_application_from_job("mock-stress-slug"))
+    res2 = json.loads(server.create_application_from_job("mock-stress-slug"))
+    res3 = json.loads(server.create_application_from_job("mock-stress-slug"))
+
+    assert res1["status"] in ("queued", "generating")
+    assert res2["status"] in ("queued", "generating")
+    assert res3["status"] in ("queued", "generating")
+
+    # 4. Wait for worker to empty the queue
+    time.sleep(0.5)
+
+    # Assert that the actual tailoring was executed EXACTLY once
+    assert len(calls) == 1
+
+
 def test_mcp_create_application_async_success(monkeypatch):
     from engine.mcp import server
     from engine.shared.db import get_conn
@@ -471,7 +513,7 @@ def test_mcp_create_application_async_success(monkeypatch):
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-acme-slug"))
-    assert res["status"] == "queued"
+    assert res["status"] in ("queued", "generating")
     
     # 2. Let background thread run for a split second
     time.sleep(0.5)
@@ -500,7 +542,7 @@ def test_mcp_create_application_async_failure(monkeypatch):
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-fail-slug"))
-    assert res["status"] == "queued"
+    assert res["status"] in ("queued", "generating")
     
     # 2. Let background thread run and fail
     time.sleep(0.5)
@@ -566,7 +608,7 @@ def test_mcp_stress_batch_creation_delete(monkeypatch):
     # 2. Trigger asynchronous application creation in batch (all 3 triggered back-to-back!)
     for slug in slugs:
         res = json.loads(server.create_application_from_job(slug))
-        assert res["status"] == "queued"
+        assert res["status"] in ("queued", "generating")
 
     # 3. Soft delete all 3 jobs
     for slug in slugs:

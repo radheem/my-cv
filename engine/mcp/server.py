@@ -323,18 +323,28 @@ def _tailor_consumer_worker():
             slug = _tailor_queue.get()
             log.info(f"Serially processing queued tailoring job for slug: {slug}")
             
-            # Transition the application row status to 'generating' in the database
+            # Transition the application row status to 'generating' in the database atomically
+            is_valid_task = False
             try:
                 with get_conn() as conn:
                     with conn.cursor() as cur:
                         cur.execute("""
                             UPDATE applications 
                             SET status = 'generating', updated_at = CURRENT_TIMESTAMP 
-                            WHERE slug = %s
+                            WHERE slug = %s AND status IN ('queued', 'failed')
+                            RETURNING status
                         """, (slug,))
+                        row = cur.fetchone()
+                        if row:
+                            is_valid_task = True
                         conn.commit()
             except Exception as e:
                 log.exception(f"Failed to update status to generating for slug: {slug}")
+
+            if not is_valid_task:
+                log.info(f"Discarding redundant or duplicate queued task for slug: {slug}")
+                _tailor_queue.task_done()
+                continue
 
             # Run the actual tailoring workflow
             try:
@@ -401,6 +411,18 @@ def create_application_from_job(slug: str) -> str:
                     if status in ("draft", "applied", "interview", "offer", "rejected", "withdrawn"):
                         return json.dumps({
                             "error": f"An application for slug '{slug}' is already finished and finalized with status '{status}'. Cannot re-enqueue application tailoring."
+                        })
+                    if status == "generating":
+                        return json.dumps({
+                            "status": "generating",
+                            "slug": slug,
+                            "message": "Application tailoring is already actively generating. No new action taken."
+                        })
+                    if status == "queued":
+                        return json.dumps({
+                            "status": "queued",
+                            "slug": slug,
+                            "message": "Application tailoring is already enqueued and waiting in line. No new action taken."
                         })
 
                 # 2. Insert or update the application row setting status to 'queued'
