@@ -50,6 +50,13 @@ _DEFAULTS: dict[str, Any] = {
     "tailoring": {
         "ranking_file": "data/ranking.yml",
         "taxonomy_file": "data/taxonomy.yml",
+        "cv_variants": {
+            "platform-cloud-native": "platform-cloud-native.md",
+            "ml-ai": "ml-ai.md",
+            "distributed-systems": "distributed-systems.md",
+            "data-persistence": "data-persistence.md",
+            "5g-oran": "telecom-5g-oran.md",
+        },
     },
 }
 
