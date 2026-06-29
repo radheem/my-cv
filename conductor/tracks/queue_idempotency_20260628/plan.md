@@ -21,14 +21,14 @@
 
 ## Phase 2: Worker-Side Duplicate Filtering
 
-- [ ] Task: Ignore redundant queue tasks in the background worker
-    - [ ] Step 2.1: Write a unit test `test_mcp_stress_duplicate_queue_filtering` that mocks the `create_application_from_job_workflow`. Submit the same slug to the queue 3 times. Verify the background worker calls the workflow exactly 1 time instead of 3.
-    - [ ] Step 2.2: Run the test and verify it fails (Red phase).
-    - [ ] Step 2.3: Modify `_tailor_consumer_worker` in `engine/mcp/server.py`. After popping a `slug` from the queue, query its current status. If the status is `'generating'`, skip processing and `continue`. To avoid race conditions, use an atomic `UPDATE applications SET status = 'generating' WHERE slug = %s AND status IN ('queued', 'failed') RETURNING status` to grab the lock. If no row is returned, `continue`.
-    - [ ] Step 2.4: Run the test and verify it passes (Green phase).
-    - [ ] Step 2.5: Commit changes: `feat(mcp): implement worker-side duplicate filtering for queued tasks`
+- [x] Task: Ignore redundant queue tasks in the background worker a0657b3
+    - [x] Step 2.1: Write a unit test `test_mcp_stress_duplicate_queue_filtering` that mocks the `create_application_from_job_workflow`. Submit the same slug to the queue 3 times. Verify the background worker calls the workflow exactly 1 time instead of 3.
+    - [x] Step 2.2: Run the test and verify it fails (Red phase).
+    - [x] Step 2.3: Modify `_tailor_consumer_worker` in `engine/mcp/server.py`. After popping a `slug` from the queue, query its current status. If the status is `'generating'`, skip processing and `continue`. To avoid race conditions, use an atomic `UPDATE applications SET status = 'generating' WHERE slug = %s AND status IN ('queued', 'failed') RETURNING status` to grab the lock. If no row is returned, `continue`.
+    - [x] Step 2.4: Run the test and verify it passes (Green phase).
+    - [x] Step 2.5: Commit changes: `feat(mcp): implement worker-side duplicate filtering for queued tasks`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Worker-Side Duplicate Filtering' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Worker-Side Duplicate Filtering' (Protocol in workflow.md)
 
 ## Phase 3: End-to-End Testing
 
