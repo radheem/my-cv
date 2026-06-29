@@ -1,16 +1,16 @@
 # Implementation Plan: Fix DDD Import Regression & Establish MCP E2E Quality Gate
 
-## Phase 1: Fix Domain Import Regression
+## Phase 1: Fix Domain Import Regression [checkpoint: a631421]
 
-- [ ] Task: Fix Domain Relative Imports
-    - [ ] Step 1.1: Fix the inline relative `latex` import in `engine/cli.py` (L212 in `_render_tex`).
-    - [ ] Step 1.2: Fix the inline relative `linkedin` imports in `engine/cli.py` (L871 in `_build_linkedin_session`, L955 and L956 in `_do_ingest`, and L1078 in `cmd_capture`).
-    - [ ] Step 1.3: Fix the inline relative `fraunhofer` import in `engine/cli.py` (L1056 in `cmd_hunt`).
-    - [ ] Step 1.4: Fix the inline relative `linkedin` imports in `engine/pixel_capture.py` (L100 in `_derive_source_and_job_id` and L160 in `capture_screenshot`).
-- [ ] Task: Verify Relative Imports Fixed
-    - [ ] Step 1.5: Run unit tests to confirm no regressions: `uv run pytest`.
-    - [ ] Step 1.6: Manually test compiling a bilingual PDF for an existing application (e.g. `flix-middle-software-engineer-m-f-d-670a0995e3fe`) via CLI: `uv run engine/cli.py pdf flix-middle-software-engineer-m-f-d-670a0995e3fe`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Fix Domain Import Regression' (Protocol in workflow.md)
+- [x] Task: Fix Domain Relative Imports
+    - [x] Step 1.1: Fix the inline relative `latex` import in `engine/cli.py` (L212 in `_render_tex`).
+    - [x] Step 1.2: Fix the inline relative `linkedin` imports in `engine/cli.py` (L871 in `_build_linkedin_session`, L955 and L956 in `_do_ingest`, and L1078 in `cmd_capture`).
+    - [x] Step 1.3: Fix the inline relative `fraunhofer` import in `engine/cli.py` (L1056 in `cmd_hunt`).
+    - [x] Step 1.4: Fix the inline relative `linkedin` imports in `engine/pixel_capture.py` (L100 in `_derive_source_and_job_id` and L160 in `capture_screenshot`).
+- [x] Task: Verify Relative Imports Fixed
+    - [x] Step 1.5: Run unit tests to confirm no regressions: `uv run pytest`.
+    - [x] Step 1.6: Manually test compiling a bilingual PDF for an existing application (e.g. `flix-middle-software-engineer-m-f-d-670a0995e3fe`) via CLI: `uv run engine/cli.py pdf flix-middle-software-engineer-m-f-d-670a0995e3fe`.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Fix Domain Import Regression' (Protocol in workflow.md)
 
 ## Phase 2: Implement MCP E2E Test Suite
 
