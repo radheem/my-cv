@@ -163,24 +163,16 @@ upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<i
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
 	$(UV_RUN) cv-tailor upload "$(ID)"
 
-.PHONY: db-push
-db-push: ## Push filesystem application markdown files to the database: make db-push [ID=<slug>]
-	$(UV_RUN) cv-tailor db push $(ID)
-
-.PHONY: db-pull
-db-pull: ## Pull database application markdown files to the filesystem: make db-pull [ID=<slug>]
-	$(UV_RUN) cv-tailor db pull $(ID)
-
 .PHONY: db-export
-db-export: ## Export the entire database state to application-data/ on disk
+db-export: ## Export the local DuckDB state to application-data/ on disk
 	$(UV_RUN) cv-tailor db export
 
 .PHONY: sheet-push
-sheet-push: ## Push PostgreSQL application statuses and metadata to Google Sheets
+sheet-push: ## Push local application statuses and metadata to Google Sheets
 	$(UV_RUN) cv-tailor status push
 
 .PHONY: sheet-pull
-sheet-pull: ## Pull Google Sheets status changes and metadata back to PostgreSQL
+sheet-pull: ## Pull Google Sheets status changes and metadata back to local files
 	$(UV_RUN) cv-tailor status pull
 
 .PHONY: status
@@ -212,14 +204,14 @@ public-pdf: ## Compile the public 1-page CV PDF (latex/resume.tex → doc-pages/
 # ---- Test & quality --------------------------------------------------------
 
 .PHONY: test
-test: ## Run the unit tests (ranking + render logic; no browser, no API key)
-	$(UV_RUN) pytest -q
+test: ## Run the entire unit and integration test suite (DuckDB + E2E + ranking)
+	$(UV_RUN) pytest
 
 .PHONY: check
 check: test build ## Pre-push sanity: run tests, then build the portfolio
 
 .PHONY: mcp
-mcp: ## Start the cv-tailor PostgreSQL MCP server
+mcp: ## Start the cv-tailor DuckDB MCP server
 	$(UV_RUN) cv-tailor-mcp
 
 # ---- Housekeeping ----------------------------------------------------------
