@@ -6,13 +6,13 @@
 - [x] Task: Update the `docker-compose.yml` to remove the `db` service. 03d573a
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Dependencies Update' (Protocol in workflow.md) 03d573a
 
-## Phase 2: DuckDB Engine Implementation
-- [ ] Task: Rewrite `engine/shared/db.py` to initialize an in-memory DuckDB connection.
-    - [ ] Sub-task: Implement a function to parse all `vault/jds/*.json` files into a `jobs` table.
-    - [ ] Sub-task: Implement a function to parse frontmatter from all `applications/*/index.md` files into an `applications` table.
-- [ ] Task: Refactor the MCP SQL guard (`engine/mcp/sqlguard.py` if applicable) or ensure DuckDB's execution of read-only queries remains secure.
-- [ ] Task: Update the `cv-tailor_query` MCP tool logic in `engine/mcp/server.py` to execute against the DuckDB connection.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: DuckDB Engine Implementation' (Protocol in workflow.md)
+## Phase 2: DuckDB Engine Implementation [checkpoint: e600f81]
+- [x] Task: Rewrite `engine/shared/db.py` to initialize an in-memory DuckDB connection. e600f81
+    - [x] Sub-task: Implement a function to parse all `vault/jds/*.json` files into a `jobs` table. e600f81
+    - [x] Sub-task: Implement a function to parse frontmatter from all `applications/*/index.md` files into an `applications` table. e600f81
+- [x] Task: Refactor the MCP SQL guard (`engine/mcp/sqlguard.py` if applicable) or ensure DuckDB's execution of read-only queries remains secure. e600f81
+- [x] Task: Update the `cv-tailor_query` MCP tool logic in `engine/mcp/server.py` to execute against the DuckDB connection. e600f81
+- [x] Task: Conductor - User Manual Verification 'Phase 2: DuckDB Engine Implementation' (Protocol in workflow.md) e600f81
 
 ## Phase 3: Filesystem Write Operations
 - [ ] Task: Refactor `engine/domains/linkedin/jobs.py` (`write_jd`) to eliminate Postgres `INSERT/UPDATE` operations, ensuring it exclusively manages `vault/jds/` JSON files and creates/updates `index.md` appropriately.
