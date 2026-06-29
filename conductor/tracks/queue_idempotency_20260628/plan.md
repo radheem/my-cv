@@ -32,9 +32,9 @@
 
 ## Phase 3: End-to-End Testing
 
-- [ ] Task: Run E2E Deployment Tests inside Docker Compose
-    - [ ] Step 3.1: Build and start the PostgreSQL database and MCP server containers: `docker compose up -d db mcp`.
-    - [ ] Step 3.2: Execute the full `pytest` suite inside the `ingest` container: `docker compose run --rm ingest uv run pytest -v`.
-    - [ ] Step 3.3: Verify that 100% of the unit and integration tests pass successfully in the container environment.
+- [x] Task: Run E2E Deployment Tests inside Docker Compose a0657b3
+    - [x] Step 3.1: Build and start the PostgreSQL database and MCP server containers: `docker compose up -d db mcp`.
+    - [x] Step 3.2: Execute the full `pytest` suite inside the `ingest` container: `docker compose run --rm ingest uv run pytest -v`.
+    - [x] Step 3.3: Verify that 100% of the unit and integration tests pass successfully in the container environment.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: End-to-End Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: End-to-End Testing' (Protocol in workflow.md)
