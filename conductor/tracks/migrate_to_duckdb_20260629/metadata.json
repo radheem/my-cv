@@ -1,0 +1,8 @@
+{
+  "track_id": "migrate_to_duckdb_20260629",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-29T10:00:00Z",
+  "updated_at": "2026-06-29T10:00:00Z",
+  "description": "migrate db to duckdb"
+}
