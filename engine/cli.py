@@ -436,15 +436,14 @@ def _sync_db_remote_statuses(sheet_statuses: dict[str, str]) -> list[str]:
 
 def cmd_status(args: argparse.Namespace) -> int:
     """Pull sheet → sync remote changes → apply local status → push CSV back to sheet."""
+    from .shared.db import init_db
     url, token = os.environ.get("APPS_SCRIPT_URL"), os.environ.get("APPS_SCRIPT_TOKEN")
     if not url or not token:
         raise SystemExit("set APPS_SCRIPT_URL and APPS_SCRIPT_TOKEN in .env (see apps-script/README.md)")
 
     if args.slug == "push":
-        print("Pushing local database state to Google Sheets...")
-        csv_data = _get_db_tracker_csv()
-        csv_path = _jobs_dir() / "tracker.csv"
-        csv_path.write_text(csv_data, encoding="utf-8")
+        print("Pushing local state to Google Sheets...")
+        csv_path = _write_tracker()
         n = _push_to_sheets(url, token, csv_path)
         print(f"pushed {n} rows to sheet")
         return 0
@@ -452,11 +451,15 @@ def cmd_status(args: argparse.Namespace) -> int:
     elif args.slug == "pull":
         print("pulling from sheet ...")
         sheet_statuses = _pull_sheet_statuses(url, token)
-        changed = _sync_db_remote_statuses(sheet_statuses)
+        changed = _sync_remote_statuses(sheet_statuses)
         if changed:
-            print(f"  synced {len(changed)} remote change(s) directly to DB:")
+            print(f"  synced {len(changed)} remote change(s) directly to local files:")
             for c in changed:
                 print(f"    {c}")
+            # Refresh local DuckDB cache with new statuses
+            init_db()
+            # Regenerate tracker.csv with updated values
+            _write_tracker()
         else:
             print("  no remote status changes")
         return 0
@@ -475,19 +478,7 @@ def cmd_status(args: argparse.Namespace) -> int:
         print(f"warning: '{state}' is not a standard status ({', '.join(_STATUSES)})",
               file=sys.stderr)
 
-    # Update status in PostgreSQL DB
-    try:
-        from .shared.db import get_conn
-        with get_conn() as conn:
-            with conn.cursor() as cur:
-                cur.execute("UPDATE applications SET status = %s WHERE slug = %s", (state, slug))
-                if cur.rowcount == 0:
-                    print(f"warning: Slug '{slug}' not found in database applications table.", file=sys.stderr)
-            conn.commit()
-    except Exception as e:
-        print(f"warning: Database update skipped ({e}).", file=sys.stderr)
-
-    # Also update local index.md status for consistency (if present)
+    # Update local index.md status (the single source of truth)
     hub = _jobs_dir() / slug / "index.md"
     if hub.exists():
         text = hub.read_text(encoding="utf-8")
@@ -495,18 +486,15 @@ def cmd_status(args: argparse.Namespace) -> int:
         if n > 0:
             hub.write_text(new, encoding="utf-8")
 
-    # Push updated CSV to sheet
-    try:
-        csv_data = _get_db_tracker_csv()
-        csv_path = _jobs_dir() / "tracker.csv"
-        csv_path.write_text(csv_data, encoding="utf-8")
-    except Exception:
-        # Fallback to local files index.md metadata parsing
-        csv_path = _write_tracker()
+    # Refresh local DuckDB cache
+    init_db()
+
+    # Always auto-generate tracker.csv on modification
+    csv_path = _write_tracker()
 
     if url and token:
         _push_to_sheets(url, token, csv_path)
-        print(f"set {slug} → {state} (synced with DB & Sheets)")
+        print(f"set {slug} → {state} (synced with Files & Sheets)")
     else:
         print(f"set {slug} → {state} (review diff + commit)")
     return 0

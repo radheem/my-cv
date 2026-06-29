@@ -145,6 +145,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
             
     import multiprocessing
     monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
     
     res_extract = server.extract_job_details("https://www.linkedin.com/jobs/view/12345/")
     assert "SUCCESS" in res_extract
@@ -223,6 +224,7 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
             return MockProcess(target, args)
             
     monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
 
     # --- STEP 3 Mocking ---
     cli_calls = []
@@ -349,6 +351,7 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
     monkeypatch.setattr(cli, "cmd_pdf", lambda args: cli_calls.append("pdf"))
     monkeypatch.setattr(cli, "cmd_upload", lambda args: cli_calls.append("upload"))
     monkeypatch.setattr(cli, "cmd_status", lambda args: cli_calls.append("status"))
+    monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
 
     # --- PIPELINE RUN ---
 
@@ -470,6 +473,14 @@ def test_mcp_stress_duplicate_queue_filtering(monkeypatch):
         return "SUCCESS"
 
     monkeypatch.setattr(server, "create_application_from_job_workflow", mock_workflow)
+
+    # Empty the queue to ensure zero interference from previous tests
+    while not server._tailor_queue.empty():
+        try:
+            server._tailor_queue.get_nowait()
+            server._tailor_queue.task_done()
+        except Exception:
+            break
 
     # 3. Trigger 3 consecutive requests
     res1 = json.loads(server.create_application_from_job("mock-stress-slug"))

@@ -106,9 +106,8 @@ def test_build_search_url_reproduces_example():
 
 def test_dedup_roundtrip(tmp_path):
     from unittest.mock import patch
-    import psycopg
     p = tmp_path / ".seen.json"
-    with patch("engine.shared.db.get_conn", side_effect=psycopg.OperationalError("Offline")):
+    with patch("engine.shared.db.get_conn", side_effect=RuntimeError("Database offline")):
         assert load_seen(p) == {}
         seen = {"1": "acme-eng-1"}
         save_seen(p, seen)
