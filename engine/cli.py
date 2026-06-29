@@ -209,7 +209,7 @@ def _read_md(app: pathlib.Path, name: str) -> tuple[dict, str]:
 
 def _render_tex(slug: str) -> pathlib.Path:
     """Write cv.tex + cover-letter.tex from the (bilingual) Markdown sources."""
-    from . import latex
+    from .domains.tailoring import latex
 
     app = _jobs_dir() / slug
     if not app.is_dir():
@@ -868,7 +868,7 @@ def _make_session():
     A TTY resolves login challenges via stdin; otherwise (Xvfb/CI) it polls a file
     inbox under vault/challenges. The persistent profile (vault/profile) keeps us
     logged in across runs."""
-    from .linkedin.session import FileInboxResolver, LinkedInSession, StdinResolver
+    from .domains.linkedin.session import FileInboxResolver, LinkedInSession, StdinResolver
 
     vault = os.environ.get("CV_TAILOR_VAULT", "vault")
     user_data_dir = os.environ.get("LINKEDIN_USER_DATA_DIR", f"{vault}/profile")
@@ -952,8 +952,8 @@ def _do_ingest(searches: list[dict], out_dir: pathlib.Path) -> dict:
     all and `.seen.json` dedups across the whole run."""
     import logging
 
-    from .linkedin import jobs as J
-    from .linkedin.humanize import human_pause
+    from .domains.linkedin import jobs as J
+    from .domains.linkedin.humanize import human_pause
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 
@@ -1053,7 +1053,7 @@ def cmd_hunt(args: argparse.Namespace) -> int:
         _do_ingest(linkedin_searches, out_dir)
 
     if fraunhofer_searches:
-        from .fraunhofer import jobs as FJ
+        from .domains.fraunhofer import jobs as FJ
 
         for spec in fraunhofer_searches:
             name = spec.get("name") or spec.get("keywords", "fraunhofer")
@@ -1075,7 +1075,7 @@ def cmd_capture(args: argparse.Namespace) -> int:
     currentJobId=<id>) to vault/jds/<slug>.txt (+ .json sidecar), using the logged-in
     session — so we get the real description behind the auth wall. Feed the resulting
     file to `cv-tailor new` (which reads the sidecar for the posting URL)."""
-    from .linkedin import jobs as J
+    from .domains.linkedin import jobs as J
 
     job_id = _job_id_from_url(args.url)
     view_url = f"https://www.linkedin.com/jobs/view/{job_id}/"

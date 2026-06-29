@@ -29,5 +29,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Fix DDD Import Regression & Establish MCP E2E Quality Gate**
+- [~] **Track: Fix DDD Import Regression & Establish MCP E2E Quality Gate**
 *Link: [./tracks/mcp_e2e_gate_20260629/](./tracks/mcp_e2e_gate_20260629/)*

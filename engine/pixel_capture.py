@@ -97,7 +97,7 @@ def _derive_source_and_job_id(source: str) -> tuple[str, str]:
     Other URL     → ("web", md5_12char)
     Local file    → ("file", md5_12char)
     """
-    from .linkedin.jobs import extract_job_id
+    from .domains.linkedin.jobs import extract_job_id
 
     if source.startswith(("http://", "https://")):
         job_id = extract_job_id(source)
@@ -157,7 +157,7 @@ def capture_screenshot(
 
     Returns the Path to the written vault/jds/<slug>.txt file.
     """
-    from .linkedin.jobs import Job, clean_jd_text, write_jd
+    from .domains.linkedin.jobs import Job, clean_jd_text, write_jd
 
     client = _ollama_client()
     source_label, job_id = _derive_source_and_job_id(source)
