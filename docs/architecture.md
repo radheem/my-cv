@@ -99,13 +99,13 @@ flowchart LR
 
 ## Application records, status & database
 
-The absolute source of truth for all application metadata, raw job descriptions, and tailored CV/letter text is a local **PostgreSQL 17 database** (running in Docker Compose). 
+The absolute source of truth for all application metadata, raw job descriptions, and tailored CV/letter text is the **local filesystem** under `applications/<slug>/` and `vault/jds/*.json`.
 
-While final generated files reside under `applications/<slug>/` on disk, status transitions and syncing are backed by PostgreSQL:
-- **Bi-directional Sync**: `make db-push` and `make db-pull` allow syncing text content between local files and the database.
-- **Sheets Sync**: `make sheet-push` and `make sheet-pull` synchronize statuses with Google Sheets directly from the database by joining schemas.
-- **Seen Jobs**: The PostgreSQL `jobs` table replaces all legacy JSON seen files, providing bulletproof deduplication.
-- **Flat Backups**: `make db-export` dumps the complete database tables, job logs, and markdown files back to disk at `/application-data/` for version control.
+A local PostgreSQL database is no longer used. Instead, `cv-tailor` implements a zero-config, serverless setup:
+- **Filesystem Source of Truth**: All status transitions, Drive links, and metadata are written directly to the frontmatter of `applications/<slug>/index.md`.
+- **In-Memory DuckDB Cache**: For complex queries, analytical scoring, and MCP agent search capabilities, an in-memory **DuckDB engine** dynamically registers local JSON and Markdown files as SQL tables on the fly.
+- **Google Sheets Sync**: Status changes are pulled from Google Sheets directly to `index.md` files on disk, and pushed back by compiling `applications/tracker.csv` directly from files.
+- **Seen Jobs**: Scraped jobs are saved as JSON files in `vault/jds/` which serves as the discovery queue and Seen check.
 
 ## Repository layout
 
@@ -127,10 +127,10 @@ While final generated files reside under `applications/<slug>/` on disk, status 
 
 ## Model Context Protocol (MCP) Server
 
-To enable fully autonomous, conversational job hunt metrics and application tracking, the project embeds a PostgreSQL **Model Context Protocol (MCP) Server**. 
+To enable fully autonomous, conversational job hunt metrics and application tracking, the project embeds a serverless **DuckDB Model Context Protocol (MCP) Server**. 
 
 Using a strict, comment-aware `sqlguard` whitelisting query parser, the server exposes two powerful tools to AI agents:
-1.  **`cv_tailor_ontology()`**: Exposes the table layouts, columns, types, and FK joins of our schema so agents understand the database out-of-the-box.
+1.  **`cv_tailor_ontology()`**: Exposes the table layouts, columns, types, and FK joins of our schema so agents understand the database layout out-of-the-box.
 2.  **`query(sql)`**: Evaluates read-only `SELECT` / `WITH` statements, preventing SQL injection or mutations, and capping return records to a hard 1000-row limit.
 
 Start the server locally or wire it into your desktop clients via:

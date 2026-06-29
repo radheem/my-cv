@@ -33,10 +33,7 @@ cp .env.example .env                # then edit and fill in keys (VNC, APPS_SCRI
 make docker-build
 ```
 
-### Step 3: Start the PostgreSQL Database
-```bash
-docker compose up -d db
-```
+No database setup or PostgreSQL container is required. `cv-tailor` uses a zero-config file-based architecture where local files (`vault/jds/` and `applications/`) are the source of truth, and DuckDB is utilized as an in-memory query engine.
 
 ## 1. Generate a tailored application
 
@@ -76,13 +73,11 @@ compiles with local `latexmk` or the `texlive/texlive` Docker image. PDFs are gi
 
 ```bash
 make upload ID=<slug>                       # compile + push PDFs to Drive; writes drive_url
-make status ID=<slug> STATUS=applied        # advance lifecycle status in PostgreSQL
-make sheet-push                             # push all database application statuses to Google Sheets
-make sheet-pull                             # pull Google Sheets status modifications back to PostgreSQL
-make db-export                              # backup and export database tables to disk (application-data/)
+cv-tailor status <slug> applied             # advance lifecycle status in applications/<slug>/index.md
+cv-tailor sync-sheets                       # pull Google Sheets status modifications and push local statuses back
 ```
 
-Upload and sheet sync need `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` and `DATABASE_URL` in `.env` (PostgreSQL runs locally in Docker: `docker compose up -d db`). Status transitions are stored directly in the database. Backup exports reside on-disk under `/application-data/`.
+Upload and sheet sync need `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` in `.env`. Status transitions are stored directly in the local `index.md` files. Backup exports reside on-disk under `/application-data/` if needed.
 
 ## 4. Run the tests
 

@@ -15,7 +15,7 @@ dependencies = [
     "mkdocs-material>=9.5",
     "pyyaml>=6",
     "markdown>=3.6",
-    "psycopg[binary]>=3.1.18",
+    "duckdb>=1.0.0",
 ]
 
 [project.optional-dependencies]
@@ -51,7 +51,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["engine", "engine.linkedin", "engine.fraunhofer"]
+packages = ["engine"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -32,18 +32,6 @@ services:
     # extra_hosts:               # uncomment if the generation endpoint host needs a static map
     #   - "internal-llm-host:10.0.0.0"
 
-  db:
-    image: postgres:17-alpine
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: cv_tailor
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   mcp:
     build: .
     image: my-cv-ingest:latest
@@ -54,11 +42,6 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       MCP_TRANSPORT: streamable-http
-      PGHOST: db
-      PGPORT: "5432"
-      PGDATABASE: cv_tailor
-      PGUSER: postgres
-      PGPASSWORD: postgres
       DISPLAY: ":99"
       LINKEDIN_USER_DATA_DIR: /app/vault/profile
       CV_TAILOR_VAULT: /app/vault
@@ -71,9 +54,4 @@ services:
       - ./config:/app/config:ro
     ports:
       - "5000:5000"
-    depends_on:
-      - db
     command: ["python", "-m", "engine.mcp.server"]
-
-volumes:
-  pgdata:
