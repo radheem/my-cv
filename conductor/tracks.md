@@ -31,3 +31,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix DDD Import Regression & Establish MCP E2E Quality Gate**
 *Link: [./tracks/mcp_e2e_gate_20260629/](./tracks/mcp_e2e_gate_20260629/)*
+
+---
+
+- [ ] **Track: Core CV Variants and Hybrid Selection Engine**
+*Link: [./tracks/cv_variants_20260629/](./tracks/cv_variants_20260629/)*
