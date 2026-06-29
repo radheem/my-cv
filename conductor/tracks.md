@@ -34,5 +34,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Migrate Database to DuckDB**
+- [x] **Track: Migrate Database to DuckDB**
 *Link: [./tracks/migrate_to_duckdb_20260629/](./tracks/migrate_to_duckdb_20260629/)*
