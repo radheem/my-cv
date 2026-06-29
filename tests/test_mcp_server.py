@@ -1,6 +1,5 @@
 import json
 import pytest
-import psycopg
 from engine.shared.db import get_conn, init_db
 from engine.mcp.server import cv_tailor_ontology, query
 
@@ -13,12 +12,6 @@ def test_mcp_ontology():
 
 
 def test_mcp_query():
-    try:
-        with get_conn():
-            pass
-    except psycopg.OperationalError:
-        pytest.skip("PostgreSQL offline. Skipping MCP server queries integration test.")
-
     init_db()
     
     # 1. Test basic COUNT (integer output)
@@ -43,16 +36,10 @@ def test_mcp_query():
     # 4. Test execution isolation & error packaging on syntax failure
     res_err = json.loads(query("SELECT invalid_column_name_xyz FROM jobs"))
     assert "error" in res_err
-    assert "does not exist" in res_err["error"]
+    assert "does not exist" in res_err["error"].lower() or "not found" in res_err["error"].lower()
 
 
 def test_mcp_list_and_get_tools():
-    try:
-        with get_conn():
-            pass
-    except psycopg.OperationalError:
-        pytest.skip("PostgreSQL offline. Skipping MCP server tools test.")
-
     from engine.mcp.server import list_applications, get_application, list_jobs, get_job, search_jobs
     
     # Run tests on the list tools
@@ -170,6 +157,16 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     monkeypatch.setattr(cli, "cmd_pdf", lambda args: calls.append("pdf"))
     monkeypatch.setattr(cli, "cmd_upload", lambda args: calls.append("upload"))
     monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
+    
+    # Insert mock job into DB to satisfy async check constraints
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('acme-job-12345', 'mock-acme-slug', 'Acme Corp', 'Software Engineer', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            conn.commit()
     
     res_create = json.loads(server.create_application_from_job("mock-acme-slug"))
     assert res_create["status"] in ("queued", "generating")
