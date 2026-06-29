@@ -1,9 +1,9 @@
 # Implementation Plan: 5 Core Static CV Variants
 
-## Phase 1: Storage & Configuration
+## Phase 1: Storage & Configuration [checkpoint: a30e4ed]
 - [x] Task: Create the `data/cv-variants/` directory. (a944791)
 - [x] Task: Update `engine/shared/config.py` (or similar configuration file) to include a mapping dictionary that links the taxonomy cluster keys (e.g., `ml-ai`) to their respective static markdown filenames (`ml-ai.md`). (a944791)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Storage & Configuration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Storage & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Selection Engine Implementation
 - [ ] Task: Create a new module or function (e.g., in `engine/rank.py` or `engine/workflows/application_actions.py`) named `select_best_cv_variant`.
