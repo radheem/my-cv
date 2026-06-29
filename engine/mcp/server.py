@@ -352,6 +352,43 @@ def _tailor_consumer_worker():
                 if res.startswith("ERROR"):
                     log.error(f"Queued tailoring failed for {slug}: {res}")
                     _mark_application_failed(slug)
+                else:
+                    log.info(f"Queued tailoring succeeded for {slug}: {res}")
+                    # Transition status to 'draft' and set drive_url atomically in database
+                    try:
+                        from engine.cli import _jobs_dir
+                        from engine import documents
+                        app_dir = _jobs_dir() / slug
+                        index_md = app_dir / "index.md"
+                        drive_url = None
+                        if index_md.exists():
+                            try:
+                                meta, _ = documents.split_front_matter(index_md.read_text(encoding="utf-8"))
+                                drive_url = meta.get("drive_url")
+                            except Exception:
+                                log.exception(f"Failed to parse index.md for drive_url extraction: {slug}")
+
+                        with get_conn() as conn:
+                            with conn.cursor() as cur:
+                                # 1. Update the original application row setting status to 'draft' and drive_url
+                                cur.execute("""
+                                    UPDATE applications
+                                    SET status = 'draft', drive_url = %s, updated_at = CURRENT_TIMESTAMP
+                                    WHERE slug = %s AND status = 'generating'
+                                """, (drive_url or None, slug))
+                                
+                                # 2. Delete any duplicate/orphaned rows created by migrate_legacy_data
+                                # where the slug matches but status is 'draft' and job_id doesn't match original
+                                cur.execute("""
+                                    DELETE FROM applications
+                                    WHERE slug = %s AND status = 'draft' AND job_id != (
+                                        SELECT job_id FROM jobs WHERE slug = %s AND status != 'deleted' LIMIT 1
+                                    )
+                                """, (slug, slug))
+                                
+                                conn.commit()
+                    except Exception as e:
+                        log.exception(f"Failed to update status to draft and set drive_url for slug: {slug}")
             except Exception as bg_e:
                 log.exception(f"Queued tailoring worker crashed for slug: {slug}")
                 _mark_application_failed(slug)

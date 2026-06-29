@@ -1,85 +1,138 @@
 import asyncio
 import json
 import os
-import sys
+import pytest
+import psycopg
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from engine.shared.db import get_conn, init_db
 
-async def main():
-    print("════════════════════════════════════════════════════════")
-    print("  PostgreSQL MCP Server E2E Client Test")
-    print("════════════════════════════════════════════════════════\n")
+@pytest.fixture(scope="module")
+def db_conn():
+    """Fixture to verify database connectivity. Skips tests if offline."""
+    try:
+        with get_conn() as conn:
+            # Simple test query to ensure connection is live
+            with conn.cursor() as cur:
+                cur.execute("SELECT 1")
+            yield conn
+    except psycopg.OperationalError:
+        pytest.skip("PostgreSQL offline. Skipping MCP E2E client tests.")
 
-    # Configure server parameters for local Stdio launch
-    server_params = StdioServerParameters(
+@pytest.fixture(scope="module")
+def server_params():
+    """Returns the local stdio launch parameters for the cv-tailor MCP server."""
+    return StdioServerParameters(
         command="uv",
         args=["run", "cv-tailor-mcp"],
         env={
             **os.environ,
-            "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/cv_tailor",
-            "LINKEDIN_PACE": "1"
+            "DATABASE_URL": os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cv_tailor"),
         }
     )
 
-    print("── Step 1: Connecting to MCP Server via Stdio...")
+@pytest.mark.anyio
+async def test_mcp_e2e_server_capabilities(db_conn, server_params):
+    """E2E Test: list tools and verify server capabilities."""
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the session
             await session.initialize()
-            print("  Successfully initialized client session.")
-
-            # 1. List registered tools
-            print("\n── Step 2: Listing Registered Tools...")
+            
+            # List tools
             tools_response = await session.list_tools()
             tool_names = [t.name for t in tools_response.tools]
-            print(f"  Found {len(tool_names)} tools:")
-            for name in sorted(tool_names):
-                print(f"    - {name}")
-
-            assert "search_gmail_alerts" in tool_names
-            assert "create_application" in tool_names
-            assert "list_jobs" in tool_names
-            assert "query" in tool_names
-
-            # 2. Call list_jobs to verify database query
-            print("\n── Step 3: Verifying 'list_jobs' Database Tool...")
-            jobs_res = await session.call_tool("list_jobs", {"unapplied_only": False, "limit": 2})
-            jobs_data = json.loads(jobs_res.content[0].text)
-            print(f"  Query result keys: {list(jobs_data.keys())}")
-            if "jobs" in jobs_data:
-                print(f"  Found {len(jobs_data['jobs'])} existing job records in database.")
-
-            # 3. Call search_gmail_alerts to fetch, parse, and score top 1 job
-            print("\n── Step 4: Executing 'search_gmail_alerts' (Limit 1)...")
-            search_res = await session.call_tool(
-                "search_gmail_alerts",
-                {"filter_query": "linkedin job alert", "limit": 1}
-            )
-            print("  Ingestion logs:")
-            print(search_res.content[0].text)
-
-            # 4. Use list_jobs to find the highest-scoring unapplied job slug
-            print("\n── Step 5: Finding Highest Scoring Unapplied Job Slug...")
-            unapplied_res = await session.call_tool("list_jobs", {"unapplied_only": True, "limit": 1})
-            unapplied_data = json.loads(unapplied_res.content[0].text)
             
-            if not unapplied_data.get("jobs"):
-                print("  No unapplied jobs found to tailor. Exiting.")
-                return
+            # Verify required tools are registered
+            assert "cv_tailor_ontology" in tool_names
+            assert "query" in tool_names
+            assert "list_jobs" in tool_names
+            assert "create_application_from_job" in tool_names
+            assert "list_applications" in tool_names
 
-            target_job = unapplied_data["jobs"][0]
-            target_slug = target_job["slug"]
-            print(f"  Target Job found: {target_job['company']} - {target_job['title']} (Slug: {target_slug})")
+@pytest.mark.anyio
+async def test_mcp_e2e_sql_queries_and_guard(db_conn, server_params):
+    """E2E Test: run read-only SQL queries via 'query' tool and confirm SQL Guard restricts mutations."""
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            
+            # 1. Test a valid read-only query
+            res = await session.call_tool("query", {"sql": "SELECT COUNT(*) FROM jobs"})
+            assert res.content and len(res.content) > 0
+            data = json.loads(res.content[0].text)
+            assert "rows" in data
+            assert len(data["rows"]) == 1
+            assert "count" in data["rows"][0]
+            
+            # 2. Test SQL Guard rejection on mutations
+            res_err = await session.call_tool("query", {"sql": "DROP TABLE jobs"})
+            assert res_err.content and len(res_err.content) > 0
+            data_err = json.loads(res_err.content[0].text)
+            assert "error" in data_err
+            assert "only select / with queries" in data_err["error"].lower()
 
-            # 5. Call create_application to generate CV/Cover Letter drafts
-            print(f"\n── Step 6: Executing 'create_application' on slug: '{target_slug}'...")
-            app_res = await session.call_tool("create_application", {"source": target_slug})
-            print("  Application results:")
-            print(app_res.content[0].text)
+@pytest.mark.anyio
+async def test_mcp_e2e_async_tailoring(db_conn, server_params):
+    """E2E Test: trigger async tailoring and verify queued status."""
+    # Ensure a mock job exists in the DB to test queueing
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform)
+                VALUES ('e2e-mcp-test-job-999', 'e2e-mcp-test-slug-999', 'E2E Corp', 'E2E Engineer', 'file', 'other')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            conn.commit()
 
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            
+            # Trigger async tailoring
+            res = await session.call_tool("create_application_from_job", {"slug": "e2e-mcp-test-slug-999"})
+            assert res.content and len(res.content) > 0
+            data = json.loads(res.content[0].text)
+            
+            # Confirm status is queued or generating
+            assert "status" in data
+            assert data["status"] in ("queued", "generating")
+
+async def run_standalone():
+    """Standalone runner for direct script execution."""
+    print("════════════════════════════════════════════════════════")
+    print("  Standalone PostgreSQL MCP Server E2E Client Test")
+    print("════════════════════════════════════════════════════════\n")
+    
+    params = StdioServerParameters(
+        command="uv",
+        args=["run", "cv-tailor-mcp"],
+        env=os.environ
+    )
+    
+    try:
+        with get_conn():
+            pass
+    except Exception:
+        print("  ERROR: PostgreSQL is offline. Standalone test requires live DB.")
+        return
+
+    print("── Connecting to MCP Server via Stdio...")
+    async with stdio_client(params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            print("  Successfully connected.")
+            
+            tools_response = await session.list_tools()
+            tool_names = [t.name for t in tools_response.tools]
+            print(f"  Found {len(tool_names)} tools: {', '.join(tool_names)}")
+            
+            print("\n── Testing read-only query...")
+            res = await session.call_tool("query", {"sql": "SELECT COUNT(*) FROM jobs"})
+            print(f"  Result: {res.content[0].text}")
+            
     print("\n════════════════════════════════════════════════════════")
-    print("  E2E MCP Client Test Executed Successfully!")
+    print("  Standalone E2E MCP Client Test Executed Successfully!")
     print("════════════════════════════════════════════════════════")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run_standalone())

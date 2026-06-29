@@ -203,11 +203,13 @@ Before marking any task complete, verify:
      Ensure the local postgres port (5432) is receiving connections.
   
   3. **Run the Full Test Suite Locally:**
-     Use `uv` (which loads our virtual environment on the host) to run the tests. Since the container maps `5432:5432` to localhost, the local tests will connect directly to the containerized database:
+     Use `uv` (which loads our virtual environment on the host) to run the tests. Since the container maps `5432:5432` to localhost, the local tests will connect directly to the containerized database. Crucially, this must include our dedicated MCP E2E integration test suite (`tests/test_mcp_e2e_client.py`):
      ```bash
      uv run pytest -v
+     # Or run the MCP E2E test suite specifically:
+     uv run pytest -v tests/test_mcp_e2e_client.py
      ```
-     *Expected Output:* 100% of all unit and integration tests pass cleanly.
+     *Expected Output:* 100% of all unit, integration, and E2E client tests pass cleanly.
   
   4. **Run the E2E Live Pipeline Script:**
      Execute the live integration script to verify discovery, guest fetching, scoring, saving, and sequential queueing:
@@ -302,6 +304,7 @@ A task is complete when:
 7. Implementation notes added to `plan.md`
 8. Changes committed with proper message
 9. Git note with task summary attached to the commit
+10. MCP E2E integration test suite (`tests/test_mcp_e2e_client.py`) executes and passes successfully as a mandatory quality gate.
 
 ## Emergency Procedures
 
