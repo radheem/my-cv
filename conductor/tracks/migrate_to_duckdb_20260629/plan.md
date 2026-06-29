@@ -1,10 +1,10 @@
 # Implementation Plan: Migrate DB to DuckDB
 
-## Phase 1: Infrastructure & Dependencies Update
-- [ ] Task: Remove `psycopg` dependencies from `pyproject.toml`, `Makefile`, and `requirements.txt` (if applicable) and replace them with `duckdb`.
-- [ ] Task: Update documentation (`docs/setup.md`, `docs/architecture.md`) to reflect the removal of PostgreSQL and Docker, emphasizing the zero-config DuckDB approach.
-- [ ] Task: Update the `docker-compose.yml` to remove the `db` service.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Dependencies Update' (Protocol in workflow.md)
+## Phase 1: Infrastructure & Dependencies Update [checkpoint: 03d573a]
+- [x] Task: Remove `psycopg` dependencies from `pyproject.toml`, `Makefile`, and `requirements.txt` (if applicable) and replace them with `duckdb`. 03d573a
+- [x] Task: Update documentation (`docs/setup.md`, `docs/architecture.md`) to reflect the removal of PostgreSQL and Docker, emphasizing the zero-config DuckDB approach. 03d573a
+- [x] Task: Update the `docker-compose.yml` to remove the `db` service. 03d573a
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Dependencies Update' (Protocol in workflow.md) 03d573a
 
 ## Phase 2: DuckDB Engine Implementation
 - [ ] Task: Rewrite `engine/shared/db.py` to initialize an in-memory DuckDB connection.
