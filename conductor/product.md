@@ -1,5 +1,5 @@
 # Initial Concept
-The `cv-tailor` project is a localized Python CLI tool and static site generator that fully automates the job application tailoring process. Its primary goal is to generate job-tailored CVs and cover letters, render them as bilingual LaTeX PDFs, store them securely in Google Drive, track application statuses locally (and via PostgreSQL), and maintain a public-facing MkDocs portfolio hosted on GitHub Pages.
+The `cv-tailor` project is a localized Python CLI tool and static site generator that fully automates the job application tailoring process. Its primary goal is to generate job-tailored CVs and cover letters, render them as bilingual LaTeX PDFs, store them securely in Google Drive, track application statuses locally (via DuckDB), and maintain a public-facing MkDocs portfolio hosted on GitHub Pages.
 
 # Target Audience
 - **Primary User:** The project creator (Radheem Bin Razi), utilizing the tool for managing a highly efficient, automated personal job application process.
@@ -12,7 +12,7 @@ The `cv-tailor` project is a localized Python CLI tool and static site generator
 - **Modular & Unified Pipeline:** Supports both a unified pipeline and a modular, on-demand trilogy (listing, detailed extraction, and application creation) to support interactive and incremental agent use.
 
 # Key Features
-1. **JD Ingestion & Scoring:** Scrapes job descriptions from URLs or Gmail alerts, evaluates them against the user profile, and stores them in a local PostgreSQL database.
+1. **JD Ingestion & Scoring:** Scrapes job descriptions from URLs or Gmail alerts, evaluates them against the user profile, and stores them in a local DuckDB database file.
 2. **AI-Assisted Tailoring:** Leverages LLMs and Jinja2 templates to rewrite prose, optimizing the CV/cover letter for the ingested JD requirements.
 3. **Bilingual Support:** Automatically generates both English (`.md`) and German (`.de.md`) tailored artifacts.
 4. **LaTeX to PDF Rendering:** Transforms Markdown content into polished `.tex` and `.pdf` files utilizing local `latexmk` or a Docker-based TeX Live environment.

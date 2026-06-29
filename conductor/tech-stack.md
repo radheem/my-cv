@@ -2,7 +2,7 @@
 
 ## Core Technologies
 - **Programming Language:** Python (>=3.12)
-- **Database:** PostgreSQL (using `psycopg[binary]>=3.1.18`)
+- **Database:** Local file-based DuckDB (using `duckdb>=1.0.0`)
 
 ## Document & Site Generation
 - **Templating:** Jinja2
