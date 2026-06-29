@@ -20,7 +20,7 @@
 - [x] Task: Implement the "Auto-export CSVs" logic to automatically regenerate `applications/tracker.csv` whenever a status is updated locally. 06319f2
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Filesystem Write Operations' (Protocol in workflow.md) 06319f2
 
-## Phase 4: Integrations & Cleanup
-- [ ] Task: Update Google Sheets sync logic (`_push_to_sheets`, `_pull_sheet_statuses`, `_sync_remote_statuses`) in `engine/cli.py` to seamlessly read/write from the file system and DuckDB engine.
-- [ ] Task: Audit and repair all unit tests in `tests/` that previously mocked or required PostgreSQL to now use DuckDB or mock the filesystem.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Integrations & Cleanup' (Protocol in workflow.md)
+## Phase 4: Integrations & Cleanup [checkpoint: 57e6bc7]
+- [x] Task: Update Google Sheets sync logic (`_push_to_sheets`, `_pull_sheet_statuses`, `_sync_remote_statuses`) in `engine/cli.py` to seamlessly read/write from the file system and DuckDB engine. cb7d43a
+- [x] Task: Audit and repair all unit tests in `tests/` that previously mocked or required PostgreSQL to now use DuckDB or mock the filesystem. 57e6bc7
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Integrations & Cleanup' (Protocol in workflow.md) 57e6bc7
