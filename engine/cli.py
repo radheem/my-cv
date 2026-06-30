@@ -264,6 +264,18 @@ def cmd_new(args: argparse.Namespace) -> int:
         sidecar = pathlib.Path(args.source).with_suffix(".json")
         if sidecar.exists():
             job_url = (json.loads(sidecar.read_text(encoding="utf-8")) or {}).get("url", "")
+        else:
+            # Fallback to database lookup for URL
+            try:
+                from .shared.db import get_conn
+                with get_conn() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT url FROM jobs WHERE slug = ? OR job_id = ?", (str(args.source), str(args.source)))
+                        row = cur.fetchone()
+                        if row and row["url"]:
+                            job_url = row["url"]
+            except Exception:
+                pass
     print("Extracting JobSpec ...", file=sys.stderr)
     spec = jobspec_mod.extract_jobspec(job_text)
     tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
