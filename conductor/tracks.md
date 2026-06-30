@@ -41,3 +41,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Closed-Loop Gmail Application Status Sync**
 *Link: [./tracks/gmail_status_sync_20260630/](./tracks/gmail_status_sync_20260630/)*
+
+---
+
+- [ ] **Track: Taxonomy Realignment & Cover Letter Structure Update**
+*Link: [./tracks/taxonomy_cover_letter_20260630/](./tracks/taxonomy_cover_letter_20260630/)*
