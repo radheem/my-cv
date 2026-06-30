@@ -6,12 +6,12 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Storage & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Selection Engine Implementation
-- [ ] Task: Create a new module or function (e.g., in `engine/rank.py` or `engine/workflows/application_actions.py`) named `select_best_cv_variant`.
-    - [ ] Sub-task: Implement logic to read the cluster ranking scores for a job description.
-    - [ ] Sub-task: Implement deterministic single-winner selection.
-    - [ ] Sub-task: Implement the LLM tie-breaker logic. The prompt must inject the JD and the list of tied variant names, and extract the single best match.
-    - [ ] Sub-task: Implement the explicit "Fail & Alert" fallback if the LLM call fails or returns an invalid option.
-- [ ] Task: Write unit tests verifying deterministic selection, tie-breaker prompting, and failure fallbacks.
+- [x] Task: Create a new module or function (e.g., in `engine/rank.py` or `engine/workflows/application_actions.py`) named `select_best_cv_variant`. (42eb76f)
+    - [x] Sub-task: Implement logic to read the cluster ranking scores for a job description. (42eb76f)
+    - [x] Sub-task: Implement deterministic single-winner selection. (42eb76f)
+    - [x] Sub-task: Implement the LLM tie-breaker logic. The prompt must inject the JD and the list of tied variant names, and extract the single best match. (42eb76f)
+    - [x] Sub-task: Implement the explicit "Fail & Alert" fallback if the LLM call fails or returns an invalid option. (42eb76f)
+- [x] Task: Write unit tests verifying deterministic selection, tie-breaker prompting, and failure fallbacks. (42eb76f)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Selection Engine Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Application Pipeline Integration
