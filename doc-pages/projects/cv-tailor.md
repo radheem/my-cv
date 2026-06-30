@@ -1,37 +1,30 @@
 # cv-tailor — LLM CV/Cover-Letter Tailoring & Agentic Job-Hunting Pipeline
 
-A Python CLI and **FastMCP Server** that automates the job application tailoring process, manages application lifecycle tracking via **PostgreSQL**, and publishes password-gated portfolios to **GitHub Pages**. A pure, unit-tested ranker selects top projects and orders skills, leaving the LLM to write prose around pinned master CV facts (zero fabrication). Automates discovery via **Gmail alert parsing** (LinkedIn, Indeed, Glassdoor, Fraunhofer), performs lightning-fast fetching via platform-specific **guest API endpoints**, and synchronizes pipeline states bi-directionally with **Google Sheets**.
+A Python CLI and **FastMCP Server** that automates the job application tailoring process, manages application lifecycle tracking via a filesystem-first architecture cached in **DuckDB**, and uploads tailored PDF application packages to **Google Drive**, with live tracking status synchronized with **Google Sheets**. A pure, unit-tested ranker selects top projects and orders skills, leaving the LLM to write prose around pinned master CV facts (zero fabrication). Automates discovery via **Gmail alert parsing** (LinkedIn, Indeed, Glassdoor, Fraunhofer), performs lightning-fast fetching via platform-specific **guest API endpoints**, and synchronizes pipeline states bi-directionally.
 
 !!! abstract "At a glance"
-    **Domain**: LLM Agent Tools / Workflow Automation &nbsp;·&nbsp; **Repo**: [github.com/radheem/cv-tailor](https://github.com/radheem/cv-tailor) &nbsp;·&nbsp; **Stack**: Python · FastMCP · PostgreSQL · Google Apps Script · Docker · MkDocs
-
-> This very site is built and gated by cv-tailor. The public repo ships a fictional **John Doe**
-> persona; the private twin runs the same engine on real data.
+    **Domain**: LLM Agent Tools / Workflow Automation &nbsp;·&nbsp; **Repo**: [github.com/radheem/cv-tailor](https://github.com/radheem/cv-tailor) &nbsp;·&nbsp; **Stack**: Python · FastMCP · DuckDB · Google Apps Script · Google Drive · Google Sheets · Docker · MkDocs
 
 ## What it is
 A secure, distributed pipeline connecting local agentic automation with cloud visibility:
 
-- **Local FastMCP Server & Database:** Exposes a secure, read-only SQL parsing layer and generation workflows to agentic assistants. Manages application state in PostgreSQL and discovers roles automatically via Gmail alert body parsing.
+- **Local FastMCP Server & Database:** Exposes a secure, read-only SQL parsing layer and generation workflows to agentic assistants. Manages application state in a local filesystem-first architecture with transient **DuckDB** SQL caching and discovers roles automatically via Gmail alert body parsing.
 - **Lightweight Scraping & Ingestion:** Uses specialized guest API endpoints (`fetch_linkedin_job` and `fetch_indeed_job` with JSON/HTML fallback) to download postings under 2 seconds, completely avoiding dynamic browser CAPTCHA walls.
-- **LaTeX Compilation & Storage:** Generates English/German Markdown documents and compiles them locally via `latexmk` into professional PDFs. Packages are uploaded automatically to Google Drive, and statuses sync with Google Sheets.
-- **Render + gate + deploy:** Runs in CI with no API key. Encrypts documents with AES-256-GCM at build time (password derived client-side via PBKDF2) and deploys safely to static GitHub Pages.
+- **LaTeX Compilation & Storage:** Generates English/German Markdown documents and compiles them locally via `latexmk` into professional PDFs. Tailored application packages (bilingual CVs and Cover Letters) are automatically uploaded to **Google Drive** for secure sharing and visibility, while statuses sync with **Google Sheets**.
 
 ## How it works
 
 ```mermaid
 flowchart TB
     subgraph local["Local System & FastMCP Server"]
-        GMAIL[(Gmail Alert Ingestion)] -->|Extract Link| QUEUE[(PostgreSQL Queue)]
+        GMAIL[(Gmail Alert Ingestion)] -->|Extract Link| QUEUE[(DuckDB Cache)]
         GUEST[Lightweight Fetchers<br/>LinkedIn & Indeed APIs] -->|Raw Postings| QUEUE
         QUEUE -->|Score & Select| RANK[Deterministic Ranker]
         RANK -->|Tailor & Compile| LaTeX[LaTeX Engine]
     end
-    subgraph cloud["Cloud Integrations"]
-        LaTeX -->|Compile PDFs| DRIVE[(Google Drive)]
+    subgraph cloud["Cloud Integrations (Google Workspace)"]
+        LaTeX -->|Upload PDFs| DRIVE[(Google Drive Applications)]
         QUEUE -->|Push Status| SHEETS[(Google Sheets Tracker)]
-    end
-    subgraph ci["GitHub Actions (no API key)"]
-        local -.git push.-> MK[mkdocs build] --> ENC[AES-seal gated HTML + PDF] --> DEP[deploy Pages]
     end
 ```
 
@@ -65,11 +58,11 @@ Our composable analysis pipeline clusters crawled jobs within target domains to 
 There is no spreadsheet or external tracker:
 
 - Each role is a folder of Markdown under git — diff a CV across roles, roll back an edit, see exactly what was sent and when.
-- A `status` field drives the lifecycle **draft → applied → interview → offer | rejected | withdrawn**; commits are the audit trail and the gated dashboard shows a status badge.
+- A `status` field drives the lifecycle **draft → applied → interview → offer | rejected | withdrawn**; commits are the audit trail and your synchronized **Google Sheets** tracker displays live tracking status.
 
-## Private by construction
-- Tailored CVs, cover letters, their PDFs, **and the list of which roles are being chased** are **AES-256-GCM** encrypted at build time — safe even on static hosting.
-- The password is never in the bundle: the browser derives the key with **PBKDF2** and decrypts client-side (`vault.js`). No role or company name leaks before sign-in.
+## Secure Google Workspace Publishing
+- Tailored CVs, cover letters, and LaTeX PDFs are automatically uploaded to **Google Drive** for secure sharing and visibility.
+- This provides an inherently private, organized Workspace hub for your application documents and folder structure.
 
 ## LinkedIn ingestion (stop-before-submit)
 An optional containerized flow drives a logged-in LinkedIn session and feeds the generator:
@@ -95,11 +88,11 @@ Agents orchestrate our job-hunting pipeline using a robust **3-Step Ingestion Tr
     <source src="../video/cv-tailor/fetch-gmail-job-alerts-converted.mp4" type="video/mp4">
     Your browser does not support the video tag — <a href="../video/cv-tailor/fetch-gmail-job-alerts-converted.mp4">download the clip</a>.
   </video>
-  <figcaption>Step 1 (Discover): Ingesting unread Gmail alerts from LinkedIn, Indeed, Glassdoor, and Fraunhofer into the PostgreSQL queue.</figcaption>
+  <figcaption>Step 1 (Discover): Ingesting unread Gmail alerts from LinkedIn, Indeed, Glassdoor, and Fraunhofer into the DuckDB cache.</figcaption>
 </figure>
 
 ## Bi-Directional Cloud Status Sync
-To ensure real-time visibility across devices, a bi-directional synchronization pipeline links our local PostgreSQL database with **Google Sheets**. Using a lightweight **Google Apps Script proxy**, lifecycle changes (e.g., advancing from *draft* to *applied* or *interview*) flow seamlessly back and forth on demand.
+To ensure real-time visibility across devices, a bi-directional synchronization pipeline links our local **DuckDB** database with **Google Sheets**. Using a lightweight **Google Apps Script proxy**, lifecycle changes (e.g., advancing from *draft* to *applied* or *interview*) flow seamlessly back and forth on demand.
 
 <figure markdown>
   <video controls preload="none" width="100%" style="max-width:900px;border-radius:6px">
@@ -112,11 +105,11 @@ To ensure real-time visibility across devices, a bi-directional synchronization 
 ## Key achievements
 - Built an **LLM CV/cover generator** whose selection logic is pure and unit-tested, keeping the model on prose and **off facts** (no fabricated experience).
 - Built a high-signal **FastMCP Server** enabling agentic AI assistants to autonomously query local data and trigger tailoring workflows.
-- Implemented a **3-step agentic ingestion pipeline** (Gmail discovery -> guest API fetchers -> PostgreSQL scoring -> PDF render) that bypasses Playwright dynamic crawl blocks.
+- Implemented a **3-step agentic ingestion pipeline** (Gmail discovery -> guest API fetchers -> DuckDB scoring -> PDF render) that bypasses Playwright dynamic crawl blocks.
 - Designed a **git-native application tracker** with a commit-driven status lifecycle and bi-directional **Google Sheets Apps Script sync**.
-- Implemented a **zero-trust static gate**: in-browser PBKDF2 + AES-256-GCM with an encrypted application manifest, deployed by GitHub Actions **without any API key in CI**.
+- Integrated a secure **Google Workspace publishing workflow** that automatically uploads compiled bilingually tailored PDF packages to **Google Drive** for secure multi-device visibility.
 - Added a **containerized, human-in-the-loop LinkedIn pipeline** (Playwright + Xvfb + VNC) that ingests JDs and drafts applications end-to-end while preserving stop-before-submit.
 - Made generation **reproducible and regression-gated** via per-run manifests and a benchmark harness.
 
 ## Tech stack
-`Python` · `FastMCP` · `PostgreSQL` · `Google Apps Script` · `Gmail API` · `Anthropic API` · `Ollama / OpenAI-compatible` · `Playwright` · `Docker` · `Xvfb + x11vnc` · `MkDocs Material` · `WeasyPrint` · `AES-256-GCM` · `PBKDF2` · `GitHub Actions` · `pytest`
+`Python` · `FastMCP` · `DuckDB` · `Google Apps Script` · `Gmail API` · `Anthropic API` · `Ollama / OpenAI-compatible` · `Playwright` · `Docker` · `Xvfb + x11vnc` · `MkDocs Material` · `WeasyPrint` · `Google Drive` · `Google Sheets` · `pytest`
