@@ -51,11 +51,11 @@ _DEFAULTS: dict[str, Any] = {
         "ranking_file": "data/ranking.yml",
         "taxonomy_file": "data/taxonomy.yml",
         "cv_variants": {
-            "platform-cloud-native": "platform-cloud-native.md",
-            "ml-ai": "ml-ai.md",
-            "distributed-systems": "distributed-systems.md",
-            "data-persistence": "data-persistence.md",
-            "5g-oran": "telecom-5g-oran.md",
+            "information-management": "information-management.md",
+            "ai-ml": "ai-ml.md",
+            "platform-engineer": "platform-engineer.md",
+            "distributed-system": "distributed-system.md",
+            "telecommunication": "telecommunication.md",
         },
     },
 }

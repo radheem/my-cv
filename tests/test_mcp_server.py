@@ -635,7 +635,7 @@ def test_mcp_analysis_tools():
             cur.execute("DELETE FROM applications")
         conn.commit()
 
-    # Seed 1 matching job for platform-cloud-native
+    # Seed 1 matching job for platform-engineer
     server.save_job_description(
         company="Platform Systems",
         title="Cloud Architect",
@@ -644,7 +644,7 @@ def test_mcp_analysis_tools():
     )
 
     # 1. Test analyze_cluster_keywords
-    res = json.loads(server.analyze_cluster_keywords("platform-cloud-native"))
+    res = json.loads(server.analyze_cluster_keywords("platform-engineer"))
     assert "signals" in res
     assert res["signals"]["analysis_metadata"]["analyzed_jobs_count"] == 1
     
@@ -653,7 +653,7 @@ def test_mcp_analysis_tools():
     assert "Kubernetes" in infra_terms
 
     # 2. Test suggest_taxonomy_updates
-    res_sug = json.loads(server.suggest_taxonomy_updates("platform-cloud-native"))
+    res_sug = json.loads(server.suggest_taxonomy_updates("platform-engineer"))
     assert "suggestions" in res_sug
 
 

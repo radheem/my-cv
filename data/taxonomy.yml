@@ -23,17 +23,13 @@ aliases:
 # Clusters: named groups of canonical tags. A project or job belongs to a cluster
 # when its (alias-normalized) token set intersects that cluster's tags.
 clusters:
-  platform-cloud-native:
-    tags: [kubernetes, cilium, ebpf, helm, docker, gitops, devops, infra, platform, sre, networking, dns, cert-manager, cloud]
-  distributed-systems:
-    tags: [distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend]
-  ml-ai:
-    tags: [ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, data-science]
-  5g-oran:
-    tags: [5g, oran, ric, telecom, sdn, multus]
-  web-api:
-    tags: [web, frontend, api, react, node, fullstack, static-site, canvas, game, dashboard]
-  data-persistence:
-    tags: [database, sql, postgresql, data, persistence, etl, analytics, charts]
-  observability:
-    tags: [observability, monitoring, metrics, tracing, reliability]
+  information-management:
+    tags: [database, sql, postgresql, data, persistence, etl, analytics, charts, scrapers, webscraping, transactional, datalake, design]
+  ai-ml:
+    tags: [ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, inference, model-training, deployment, agentic, agents, training]
+  platform-engineer:
+    tags: [kubernetes, cilium, ebpf, helm, docker, gitops, devops, platform, sre, networking, dns, cloud, observability, monitoring, metrics, tracing, reliability]
+  distributed-system:
+    tags: [distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend, fullstack, web, react, node, api, architecture]
+  telecommunication:
+    tags: [5g, oran, telecom, sdn, multus, open5gs, radio, ran, wireless]

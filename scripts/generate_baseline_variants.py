@@ -74,33 +74,33 @@ def main():
     # 5 variants definitions mapping to taxonomy clusters
     variants_defs = [
         {
-            "key": "platform-cloud-native",
-            "tagline": "Senior Cloud Platform Engineer",
-            "tags": "kubernetes, cilium, ebpf, helm, docker, gitops, devops, infra, platform, sre, networking",
-            "projects": ["irs-platform", "cv-tailor", "second-brain"]
+            "key": "information-management",
+            "tagline": "Senior Data & Database Systems Platform Engineer",
+            "tags": "database, sql, postgresql, data, persistence, etl, analytics, charts, scrapers, webscraping, transactional, datalake, design",
+            "projects": ["irs-platform", "second-brain", "cv-tailor"]
         },
         {
-            "key": "ml-ai",
+            "key": "ai-ml",
             "tagline": "AI & MLOps Platform Engineer",
-            "tags": "ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, data-science, python",
+            "tags": "ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, inference, model-training, deployment, agentic, agents, training",
             "projects": ["second-brain", "cv-tailor", "oran-aiml"]
         },
         {
-            "key": "distributed-systems",
+            "key": "platform-engineer",
+            "tagline": "Senior Cloud Platform & Observability Engineer",
+            "tags": "kubernetes, cilium, ebpf, helm, docker, gitops, devops, platform, sre, networking, dns, cloud, observability, monitoring, metrics, tracing, reliability",
+            "projects": ["irs-platform", "cv-tailor", "second-brain"]
+        },
+        {
+            "key": "distributed-system",
             "tagline": "Senior Backend & Distributed Systems Engineer",
-            "tags": "distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend, go",
+            "tags": "distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend, fullstack, web, react, node, api, architecture",
             "projects": ["irs-platform", "second-brain", "cv-tailor"]
         },
         {
-            "key": "data-persistence",
-            "tagline": "Senior Data Platform Engineer",
-            "tags": "database, sql, postgresql, data, persistence, etl, analytics, charts, snowflake, bigquery",
-            "projects": ["irs-platform", "second-brain", "cv-tailor"]
-        },
-        {
-            "key": "5g-oran",
-            "tagline": "Senior O-RAN & Systems Engineer",
-            "tags": "5g, oran, ric, telecom, sdn, multus, open5gs, srsran",
+            "key": "telecommunication",
+            "tagline": "Senior O-RAN & Telecommunications Software Engineer",
+            "tags": "5g, oran, telecom, sdn, multus, open5gs, radio, ran, wireless",
             "projects": ["oran-testbed", "srsran-testbed", "oran-aiml"]
         }
     ]
@@ -135,9 +135,6 @@ def main():
             
             # Format filename
             filename = f"{key}.md"
-            if key == "5g-oran":
-                filename = "telecom-5g-oran.md"
-                
             out_file = out_dir / filename
             
             # Prepend standard tagline block if missing

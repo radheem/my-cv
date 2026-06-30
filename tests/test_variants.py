@@ -15,10 +15,10 @@ def taxonomy_fixture():
             "postgresql": ["postgres"],
         },
         "clusters": {
-            "platform-cloud-native": {"tags": ["kubernetes", "k8s", "cilium", "helm"]},
-            "ml-ai": {"tags": ["ml", "ai", "llm", "rag"]},
-            "distributed-systems": {"tags": ["distributed", "microservices", "grpc", "go"]},
-            "data-persistence": {"tags": ["postgresql", "postgres", "sql", "database"]},
+            "platform-engineer": {"tags": ["kubernetes", "k8s", "cilium", "helm"]},
+            "ai-ml": {"tags": ["ml", "ai", "llm", "rag"]},
+            "distributed-system": {"tags": ["distributed", "microservices", "grpc", "go"]},
+            "information-management": {"tags": ["postgresql", "postgres", "sql", "database"]},
         },
     }
 
@@ -39,13 +39,13 @@ def _spec(**kw):
 
 def test_score_job_clusters(taxonomy_fixture):
     spec = _spec(must_haves=["Kubernetes", "Cilium"], stack=["Go", "gRPC"])
-    # Score for platform should be positive since "Kubernetes" and "Cilium" are under platform-cloud-native
+    # Score for platform should be positive since "Kubernetes" and "Cilium" are under platform-engineer
     # Must-haves score weight is 3.0, so 2 matches = 2 * 3.0 = 6.0
     scores = variants.score_job_clusters(spec, taxonomy_fixture)
     
-    assert scores["platform-cloud-native"] > 0
-    assert scores["distributed-systems"] > 0
-    assert scores["ml-ai"] == 0
+    assert scores["platform-engineer"] > 0
+    assert scores["distributed-system"] > 0
+    assert scores["ai-ml"] == 0
 
 
 @patch("engine.shared.config.load")
@@ -53,17 +53,17 @@ def test_select_best_cv_variant_single_winner(mock_config_load, taxonomy_fixture
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {
-                "platform-cloud-native": "platform-cloud-native.md",
-                "ml-ai": "ml-ai.md",
-                "distributed-systems": "distributed-systems.md",
-                "data-persistence": "data-persistence.md",
+                "platform-engineer": "platform-engineer.md",
+                "ai-ml": "ai-ml.md",
+                "distributed-system": "distributed-system.md",
+                "information-management": "information-management.md",
             }
         }
     }
     spec = _spec(must_haves=["Kubernetes", "Cilium", "Helm"])  # strongly platform
     
     selected = variants.select_best_cv_variant(spec, "Job description text", taxonomy_fixture)
-    assert selected == "platform-cloud-native.md"
+    assert selected == "platform-engineer.md"
 
 
 @patch("engine.shared.config.load")
@@ -72,21 +72,21 @@ def test_select_best_cv_variant_tie_breaker(mock_stream_text, mock_config_load, 
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {
-                "platform-cloud-native": "platform-cloud-native.md",
-                "ml-ai": "ml-ai.md",
-                "distributed-systems": "distributed-systems.md",
-                "data-persistence": "data-persistence.md",
+                "platform-engineer": "platform-engineer.md",
+                "ai-ml": "ai-ml.md",
+                "distributed-system": "distributed-system.md",
+                "information-management": "information-management.md",
             }
         }
     }
-    # Tying platform and ml-ai equally
+    # Tying platform and ai-ml equally
     spec = _spec(must_haves=["Kubernetes", "ml"])
     
-    # Mock LLM choosing "ml-ai.md"
-    mock_stream_text.return_value = "ml-ai.md"
+    # Mock LLM choosing "ai-ml.md"
+    mock_stream_text.return_value = "ai-ml.md"
     
     selected = variants.select_best_cv_variant(spec, "Job description text", taxonomy_fixture)
-    assert selected == "ml-ai.md"
+    assert selected == "ai-ml.md"
     mock_stream_text.assert_called_once()
 
 
@@ -96,8 +96,8 @@ def test_select_best_cv_variant_tie_breaker_invalid_choice_aborts(mock_stream_te
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {
-                "platform-cloud-native": "platform-cloud-native.md",
-                "ml-ai": "ml-ai.md",
+                "platform-engineer": "platform-engineer.md",
+                "ai-ml": "ai-ml.md",
             }
         }
     }
@@ -161,7 +161,7 @@ def test_cmd_new_variants_pipeline_integration(
     projects_cat = [{"id": "irs-platform", "name": "IRS Platform"}]
     taxonomy = {
         "aliases": {},
-        "clusters": {"platform-cloud-native": {"tags": ["kubernetes"]}}
+        "clusters": {"platform-engineer": {"tags": ["kubernetes"]}}
     }
     mock_load_data.return_value = (profile, projects_cat, "master cv", "cv guide", "cl guide", taxonomy, {})
     
@@ -184,9 +184,9 @@ def test_cmd_new_variants_pipeline_integration(
         encoding="utf-8"
     )
     
-    # We mock ROOT / "data" / "cv-variants" / "platform-cloud-native.md" to point to our temp file
+    # We mock ROOT / "data" / "cv-variants" / "platform-engineer.md" to point to our temp file
     def mock_truediv_side_effect(other):
-        if str(other) == "platform-cloud-native.md":
+        if str(other) == "platform-engineer.md":
             return variant_file
         return mock_root
     
@@ -208,7 +208,7 @@ def test_cmd_new_variants_pipeline_integration(
     from engine.shared import config as shared_config
     real_config = shared_config.load()
     real_config["tailoring"]["cv_variants"] = {
-        "platform-cloud-native": "platform-cloud-native.md"
+        "platform-engineer": "platform-engineer.md"
     }
     
     with patch("engine.shared.config.load") as mock_cfg_load:

@@ -25,10 +25,10 @@ def taxonomy_fixture():
             "go": ["golang"],
         },
         "clusters": {
-            "platform-cloud-native": {
+            "platform-engineer": {
                 "tags": ["kubernetes", "k8s", "cilium", "helm", "docker", "terraform"]
             },
-            "ml-ai": {
+            "ai-ml": {
                 "tags": ["ml", "ai", "llm", "pytorch", "kserve", "pgvector"]
             }
         }
@@ -92,8 +92,8 @@ def seed_jobs_db():
 def test_get_jobs_for_cluster(taxonomy_fixture):
     seed_jobs_db()
     
-    # Extract jobs heavily matched to "platform-cloud-native"
-    platform_jobs = analysis.get_jobs_for_cluster("platform-cloud-native", taxonomy_fixture)
+    # Extract jobs heavily matched to "platform-engineer"
+    platform_jobs = analysis.get_jobs_for_cluster("platform-engineer", taxonomy_fixture)
     assert len(platform_jobs) == 2
     # Verify proper ordering based on score
     # job1 has "Kubernetes", "Helm", "Docker", "Cilium" -> score 4
@@ -105,10 +105,10 @@ def test_get_jobs_for_cluster(taxonomy_fixture):
 def test_extract_cluster_signals(taxonomy_fixture, profile_fixture):
     seed_jobs_db()
 
-    # Extract signals for ML-AI
-    signals = analysis.extract_cluster_signals("ml-ai", taxonomy_fixture, profile_fixture, noise_threshold=0.1)
+    # Extract signals for ai-ml
+    signals = analysis.extract_cluster_signals("ai-ml", taxonomy_fixture, profile_fixture, noise_threshold=0.1)
 
-    assert signals["analysis_metadata"]["target_cluster"] == "ml-ai"
+    assert signals["analysis_metadata"]["target_cluster"] == "ai-ml"
     assert signals["analysis_metadata"]["analyzed_jobs_count"] == 1
 
     # Verify programming languages
@@ -133,7 +133,7 @@ def test_extract_cluster_signals(taxonomy_fixture, profile_fixture):
 def test_gap_analyzer():
     # Sample Stage 1 extraction output
     analysis_json = {
-        "analysis_metadata": {"target_cluster": "platform-cloud-native"},
+        "analysis_metadata": {"target_cluster": "platform-engineer"},
         "domain_signals": {
             "programming_languages": [{"term": "Go", "frequency": 0.8, "is_core": True}],
             "platforms_infrastructure": [
@@ -190,7 +190,7 @@ def test_cmd_analyze(mock_config_load, mock_load_data, taxonomy_fixture, profile
     monkeypatch.setattr("engine.cli.ROOT", tmp_path)
     variant_dir = tmp_path / "data" / "cv-variants"
     variant_dir.mkdir(parents=True, exist_ok=True)
-    (variant_dir / "ml-ai.md").write_text("# My AI CV\nPyTorch, KServe")
+    (variant_dir / "ai-ml.md").write_text("# My AI CV\nPyTorch, KServe")
 
     seed_jobs_db()
     
@@ -198,11 +198,11 @@ def test_cmd_analyze(mock_config_load, mock_load_data, taxonomy_fixture, profile
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {
-                "ml-ai": "ml-ai.md"
+                "ai-ml": "ai-ml.md"
             }
         }
     }
 
-    # Run cmd_analyze for ml-ai
-    rc = cmd_analyze(argparse.Namespace(cluster="ml-ai"))
+    # Run cmd_analyze for ai-ml
+    rc = cmd_analyze(argparse.Namespace(cluster="ai-ml"))
     assert rc == 0
