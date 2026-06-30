@@ -5,14 +5,14 @@
 - [x] Task: Update `engine/shared/config.py` (or similar configuration file) to include a mapping dictionary that links the taxonomy cluster keys (e.g., `ml-ai`) to their respective static markdown filenames (`ml-ai.md`). (a944791)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Storage & Configuration' (Protocol in workflow.md)
 
-## Phase 2: Selection Engine Implementation
+## Phase 2: Selection Engine Implementation [checkpoint: 1fffa16]
 - [x] Task: Create a new module or function (e.g., in `engine/rank.py` or `engine/workflows/application_actions.py`) named `select_best_cv_variant`. (42eb76f)
     - [x] Sub-task: Implement logic to read the cluster ranking scores for a job description. (42eb76f)
     - [x] Sub-task: Implement deterministic single-winner selection. (42eb76f)
     - [x] Sub-task: Implement the LLM tie-breaker logic. The prompt must inject the JD and the list of tied variant names, and extract the single best match. (42eb76f)
     - [x] Sub-task: Implement the explicit "Fail & Alert" fallback if the LLM call fails or returns an invalid option. (42eb76f)
 - [x] Task: Write unit tests verifying deterministic selection, tie-breaker prompting, and failure fallbacks. (42eb76f)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Selection Engine Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Selection Engine Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Application Pipeline Integration
 - [ ] Task: Refactor the `new` application generation command (likely `engine/cli.py` -> `cmd_new` or the underlying generative workflow).
