@@ -28,5 +28,5 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Initial Baseline Setup' (Protocol in workflow.md)
 
 ## Phase 5: End-to-End Testing
-- [ ] Task: Execute the full `make test` test suite (including MCP E2E tests).
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: End-to-End Testing' (Protocol in workflow.md)
+- [x] Task: Execute the full `make test` test suite (including MCP E2E tests). (0eb8849)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: End-to-End Testing' (Protocol in workflow.md)
