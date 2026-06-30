@@ -139,3 +139,94 @@ tagline: "Test"
     assert len(extracted) == 2
     assert extracted[0]["id"] == "irs-platform"
     assert extracted[1]["id"] == "cv-tailor"
+
+
+@patch("engine.cli._jobs_dir")
+@patch("engine.cli._load_data")
+@patch("engine.fetch.fetch_job_text")
+@patch("engine.domains.tailoring.jobspec.extract_jobspec")
+@patch("engine.domains.tailoring.render.render_cover_letter")
+@patch("engine.cli.ROOT")
+def test_cmd_new_variants_pipeline_integration(
+    mock_root, mock_render_cl, mock_extract, mock_fetch, mock_load_data, mock_jobs_dir, tmp_path
+):
+    import argparse
+    from engine import cli
+    
+    # 1. Setup mock jobs directory
+    mock_jobs_dir.return_value = tmp_path
+    
+    # 2. Setup mock data load
+    profile = {"summary": "A developer."}
+    projects_cat = [{"id": "irs-platform", "name": "IRS Platform"}]
+    taxonomy = {
+        "aliases": {},
+        "clusters": {"platform-cloud-native": {"tags": ["kubernetes"]}}
+    }
+    mock_load_data.return_value = (profile, projects_cat, "master cv", "cv guide", "cl guide", taxonomy, {})
+    
+    # 3. Setup mock webpage fetch and jobspec extraction
+    mock_fetch.return_value = "Wanted: Kubernetes expert."
+    mock_extract.return_value = {
+        "title": "Platform Engineer",
+        "company": "Acme",
+        "must_haves": ["Kubernetes"],
+    }
+    mock_render_cl.return_value = "Mocked cover letter body."
+    
+    # 4. Setup mock ROOT and variant file
+    mock_root.resolve.return_value = mock_root
+    mock_root.__truediv__.return_value = mock_root  # ROOT / "data"
+    
+    variant_file = tmp_path / "mock-variant.md"
+    variant_file.write_text(
+        "---\ntagline: \"Original Tagline\"\n---\n\n## Experience\n- Bullet.\n\n## Projects\n- **IRS Platform** — Description.\n",
+        encoding="utf-8"
+    )
+    
+    # We mock ROOT / "data" / "cv-variants" / "platform-cloud-native.md" to point to our temp file
+    def mock_truediv_side_effect(other):
+        if str(other) == "platform-cloud-native.md":
+            return variant_file
+        return mock_root
+    
+    mock_root.__truediv__.side_effect = mock_truediv_side_effect
+    
+    # 5. Run cmd_new
+    args = argparse.Namespace(
+        source="https://example.com/job/123",
+        slug="acme-platform-123",
+        provider="anthropic",
+        model=None,
+        ollama_url=None,
+        no_translate=True,
+        no_save_db=True,
+        recipient=None
+    )
+    
+    # We patch config.load inside cmd_new
+    from engine.shared import config as shared_config
+    real_config = shared_config.load()
+    real_config["tailoring"]["cv_variants"] = {
+        "platform-cloud-native": "platform-cloud-native.md"
+    }
+    
+    with patch("engine.shared.config.load") as mock_cfg_load:
+        mock_cfg_load.return_value = real_config
+        rc = cli.cmd_new(args)
+        
+    assert rc == 0
+    
+    # Verify the generated application files
+    app_folder = tmp_path / "acme-platform-123"
+    assert app_folder.exists()
+    
+    # Read generated cv.md
+    cv_content = (app_folder / "cv.md").read_text(encoding="utf-8")
+    assert 'tagline: "Platform Engineer"' in cv_content
+    assert '## Experience' in cv_content
+    
+    # Read generated cover-letter.md
+    cl_content = (app_folder / "cover-letter.md").read_text(encoding="utf-8")
+    assert "Mocked cover letter body." in cl_content
+

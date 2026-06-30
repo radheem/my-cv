@@ -274,8 +274,24 @@ def cmd_new(args: argparse.Namespace) -> int:
     out = _jobs_dir() / slug
     out.mkdir(parents=True, exist_ok=True)
 
-    print("Rendering CV ...", file=sys.stderr)
-    tagline, cv_body = render.render_cv(spec, tailoring, master_cv, cv_guide)
+    print("Selecting CV variant ...", file=sys.stderr)
+    from .domains.tailoring import variants
+    aliases_flat = rank.invert_aliases(taxonomy.get("aliases", {}))
+    variant_name = variants.select_best_cv_variant(spec, job_text, taxonomy, aliases_flat)
+    variant_file = ROOT / "data" / "cv-variants" / variant_name
+    if not variant_file.exists():
+        raise SystemExit(
+            f"CRITICAL ERROR: CV variant file '{variant_name}' does not exist in 'data/cv-variants/'. "
+            "Please run 'scripts/generate_baseline_variants.py' or create it first."
+        )
+    variant_content = variant_file.read_text(encoding="utf-8")
+    cv_meta, cv_body = documents.split_front_matter(variant_content)
+    tagline = spec.get("title") or cv_meta.get("tagline") or "Senior Software Engineer"
+    
+    cv_projects = variants.extract_projects_from_cv(variant_content, projects)
+    if cv_projects:
+        tailoring["top_projects"] = cv_projects
+
     print("Rendering cover letter ...", file=sys.stderr)
     cl_body = render.render_cover_letter(
         spec, tailoring, profile.get("summary", ""), job_text, cl_guide,
