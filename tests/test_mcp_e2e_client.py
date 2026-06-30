@@ -32,6 +32,8 @@ async def test_mcp_e2e_server_capabilities(server_params):
             assert "list_jobs" in tool_names
             assert "create_application_from_job" in tool_names
             assert "list_applications" in tool_names
+            assert "analyze_cluster_keywords" in tool_names
+            assert "suggest_taxonomy_updates" in tool_names
 
 @pytest.mark.anyio
 async def test_mcp_e2e_sql_queries_and_guard(server_params):

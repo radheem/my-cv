@@ -624,6 +624,40 @@ def test_mcp_stress_batch_creation_delete(monkeypatch):
         assert "SUCCESS" in del_res
 
 
+def test_mcp_analysis_tools():
+    from engine.mcp import server
+    init_db()
+
+    # Clear previous database state to isolate
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs")
+            cur.execute("DELETE FROM applications")
+        conn.commit()
+
+    # Seed 1 matching job for platform-cloud-native
+    server.save_job_description(
+        company="Platform Systems",
+        title="Cloud Architect",
+        url="https://platformsystems.com/jobs/1",
+        description="We are seeking a Kubernetes expert. Required: Helm, Docker, and Cilium. Knowledge of Terraform and Go is an advantage."
+    )
+
+    # 1. Test analyze_cluster_keywords
+    res = json.loads(server.analyze_cluster_keywords("platform-cloud-native"))
+    assert "signals" in res
+    assert res["signals"]["analysis_metadata"]["analyzed_jobs_count"] == 1
+    
+    # Check categorized signal
+    infra_terms = [t["term"] for t in res["signals"]["domain_signals"]["platforms_infrastructure"]]
+    assert "Kubernetes" in infra_terms
+
+    # 2. Test suggest_taxonomy_updates
+    res_sug = json.loads(server.suggest_taxonomy_updates("platform-cloud-native"))
+    assert "suggestions" in res_sug
+
+
+
 
 
 

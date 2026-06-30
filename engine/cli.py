@@ -1237,6 +1237,79 @@ def cmd_db_migrate_legacy(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_analyze(args: argparse.Namespace) -> int:
+    profile, _, _, _, _, taxonomy, _ = _load_data()
+    from .domains.tailoring import analysis
+    from engine.shared import config
+
+    cluster_key = args.cluster
+    cfg = config.load()
+    cv_variants = cfg.get("tailoring", {}).get("cv_variants", {})
+    
+    print(f"\n======================================================================")
+    print(f"  COMPOSE PIPELINE: CLUSTER ANALYSIS FOR '{cluster_key.upper()}'")
+    print(f"======================================================================\n")
+
+    # 1. Run Extractor
+    signals = analysis.extract_cluster_signals(cluster_key, taxonomy, profile)
+    num_jobs = signals["analysis_metadata"]["analyzed_jobs_count"]
+    if num_jobs == 0:
+        print(f"No job postings found heavily matching cluster '{cluster_key}' in the database.\n")
+        return 0
+
+    print(f"Analyzed {num_jobs} matching job descriptions from your database.")
+    print(f"Timestamp: {signals['analysis_metadata']['timestamp']}\n")
+
+    # 2. Print Signals
+    print("--- HIGH-FREQUENCY TECHNICAL SIGNALS ---")
+    for category, terms in signals["domain_signals"].items():
+        if not terms:
+            continue
+        header = category.replace("_", " ").title()
+        print(f"\n  [{header}]")
+        for t in terms:
+            core_marker = " [CORE]" if t["is_core"] else ""
+            print(f"    - {t['term']} (Freq: {int(t['frequency']*100)}%){core_marker}")
+
+    # 3. Print Thematic Phrases
+    if signals["thematic_phrases"]:
+        print("\n\n--- CORE THEMATIC PHRASES & CONTEXTS ---")
+        for p in signals["thematic_phrases"]:
+            print(f'\n  "... {p} ..."')
+
+    # 4. Print Gap Analysis (Consumer A)
+    variant_name = cv_variants.get(cluster_key)
+    if variant_name:
+        variant_file = ROOT / "data" / "cv-variants" / variant_name
+        if variant_file.exists():
+            print(f"\n\n--- KEYWORD GAP REPORT vs CV VARIANT '{variant_name}' ---")
+            cv_content = variant_file.read_text(encoding="utf-8")
+            gap = analysis.gap_analyzer(signals, cv_content)
+            
+            # Print matching
+            print(f"\n  [Matching Keywords - {len(gap['matching_signals'])} found]")
+            for m in gap["matching_signals"]:
+                print(f"    ✔ {m['term']} (Freq: {int(m['frequency']*100)}%)")
+                
+            # Print missing
+            print(f"\n  [Missing Keywords - {len(gap['missing_signals'])} missing] 🌟 Action Items")
+            for m in gap["missing_signals"]:
+                print(f"    ❌ {m['term']} (Freq: {int(m['frequency']*100)}%) --> Add to {variant_name}")
+        else:
+            print(f"\n\n[Variant Warning] CV variant file '{variant_name}' mapped but not found on disk at 'data/cv-variants/'.")
+
+    # 5. Print Taxonomy Suggestions (Consumer B)
+    suggestions = analysis.taxonomy_sync(signals, taxonomy)
+    if suggestions:
+        print("\n\n--- UNMAPPED MARKET TERMS (TAXONOMY UPDATE SUGGESTIONS) ---")
+        for sug in suggestions:
+            print(f"\n  - Suggested term: '{sug['term']}' (found in {int(sug['frequency']*100)}% of matching jobs)")
+            print(f"    Action: {sug['suggested_action']}")
+            
+    print(f"\n======================================================================\n")
+    return 0
+
+
 def _add_provider_flags(p: argparse.ArgumentParser) -> None:
     p.add_argument("--provider", choices=["anthropic", "ollama"], default=None,
                    help="generation backend (default: anthropic; ollama = OpenAI-compatible)")
@@ -1344,6 +1417,10 @@ def main(argv: list[str] | None = None) -> int:
     p_archive = sub.add_parser("archive", help="move Drive folder to Archive/, set status withdrawn")
     p_archive.add_argument("slug", help="application slug or numeric job id")
     p_archive.set_defaults(func=cmd_archive)
+
+    p_analyze = sub.add_parser("analyze", help="analyze saved jobs for a specific cluster and check keyword gaps")
+    p_analyze.add_argument("--cluster", required=True, help="the taxonomy cluster to analyze (e.g. ml-ai)")
+    p_analyze.set_defaults(func=cmd_analyze)
 
     p_gmail = sub.add_parser("gmail", help="Gmail operations via Apps Script proxy")
     gmail_sub = p_gmail.add_subparsers(dest="gmail_cmd", required=True)

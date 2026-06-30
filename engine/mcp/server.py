@@ -782,6 +782,81 @@ def get_cover_letter_guide() -> str:
         return f"ERROR: Failed to load cover letter guide: {str(e)}"
 
 
+@mcp.tool()
+def analyze_cluster_keywords(cluster: str) -> str:
+    """Analyze all saved jobs in the database heavily matching the target cluster, extract core technical signals, and run a keyword gap analysis against your corresponding CV variant. Use this to find which keywords are missing from your resume."""
+    try:
+        import yaml
+        import pathlib
+        from ..shared import config
+        from ..domains.tailoring import analysis
+
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        taxonomy_path = root / "data" / "taxonomy.yml"
+        profile_path = root / "data" / "profile.yml"
+
+        if not taxonomy_path.exists() or not profile_path.exists():
+            return json.dumps({"error": "Taxonomy or Profile configuration file not found."})
+
+        taxonomy = yaml.safe_load(taxonomy_path.read_text(encoding="utf-8")) or {}
+        profile = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
+
+        # 1. Run Extractor
+        signals = analysis.extract_cluster_signals(cluster, taxonomy, profile)
+        if signals["analysis_metadata"]["analyzed_jobs_count"] == 0:
+            return json.dumps({"error": f"No job postings found heavily matching cluster '{cluster}' in the database."})
+
+        # 2. Run Gap Analyzer if variant exists
+        cfg = config.load()
+        cv_variants = cfg.get("tailoring", {}).get("cv_variants", {})
+        variant_name = cv_variants.get(cluster)
+        gap_report = None
+        if variant_name:
+            variant_file = root / "data" / "cv-variants" / variant_name
+            if variant_file.exists():
+                cv_content = variant_file.read_text(encoding="utf-8")
+                gap_report = analysis.gap_analyzer(signals, cv_content)
+
+        return json.dumps({
+            "signals": signals,
+            "gap_report": gap_report
+        }, cls=CustomEncoder)
+    except Exception as e:
+        log.exception(f"Failed to analyze cluster keywords for: {cluster}")
+        return json.dumps({"error": f"Failed to analyze cluster keywords: {str(e)}"})
+
+
+@mcp.tool()
+def suggest_taxonomy_updates(cluster: str) -> str:
+    """Scan unmapped market terms from saved jobs in the target cluster, and suggest which high-frequency technical terms should be added to taxonomy.yml to keep your categorization up to date."""
+    try:
+        import yaml
+        import pathlib
+        from ..domains.tailoring import analysis
+
+        root = pathlib.Path(__file__).resolve().parent.parent.parent
+        taxonomy_path = root / "data" / "taxonomy.yml"
+        profile_path = root / "data" / "profile.yml"
+
+        if not taxonomy_path.exists() or not profile_path.exists():
+            return json.dumps({"error": "Taxonomy or Profile configuration file not found."})
+
+        taxonomy = yaml.safe_load(taxonomy_path.read_text(encoding="utf-8")) or {}
+        profile = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
+
+        # 1. Run Extractor
+        signals = analysis.extract_cluster_signals(cluster, taxonomy, profile)
+        if signals["analysis_metadata"]["analyzed_jobs_count"] == 0:
+            return json.dumps({"error": f"No job postings found heavily matching cluster '{cluster}' in the database."})
+
+        # 2. Run Taxonomy Sync
+        suggestions = analysis.taxonomy_sync(signals, taxonomy)
+        return json.dumps({"suggestions": suggestions}, cls=CustomEncoder)
+    except Exception as e:
+        log.exception(f"Failed to suggest taxonomy updates for: {cluster}")
+        return json.dumps({"error": f"Failed to suggest taxonomy updates: {str(e)}"})
+
+
 def main():
     import os
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
