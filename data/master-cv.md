@@ -17,10 +17,10 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Built a per-user authenticated browser-session service (Playwright) with gateway consistent-hashing and an AES-256-GCM credential vault.
 - Built a best-effort ETL side-channel into PostgreSQL (sqlc), Dgraph, and DocumentDB, orchestrated by Hatchet with declarative routing; verified by a Ginkgo E2E gate.
 - Integrated multiple bot-protected third-party vendors via an adaptor/anti-corruption contract with CUE-based schema mapping.
-- Deployed with Kubernetes, kustomize, Skaffold, Cilium, and external-dns.
+- Deployed with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all Go microservices.
 
 ### Second Brain - Self-Hosted Document RAG ([repo](https://github.com/radheem/my-notebook))
-- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries that survives worker crashes.
+- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries, instrumented with OpenTelemetry and custom Grafana dashboards.
 - Designed real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
 - Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
 - Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
@@ -42,13 +42,13 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Consolidated a single-host 5G SA testbed into composable Docker Compose stacks (core, gNB ZMQ/UHD, RIC, monitoring, pub/sub) where the 5GC and Near-RT RIC publish host ports so any number of gNBs - local or remote - can attach over shared bridge networks.
 - Ran the gNB on the open-source OCUDU CU/DU (srsRAN heritage), building one image for both ZMQ virtual RF and UHD over-the-air on a USRP B210 SDR.
 - Integrated the O-RAN SC Near-RT RIC over E2 with Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC.
-- Built a Kafka metrics pub/sub pipeline: xApps publish per-UE KPM to Kafka and a consumer fans each message to InfluxDB 3 (Grafana), MongoDB, and an AIMLFW-compatible InfluxDB 2.
+- Built a Kafka metrics pub/sub pipeline: xApps publish per-UE KPM to Kafka, fanned out to InfluxDB 3 (with custom Grafana dashboards for cellular KPIs) and MongoDB.
 
 ### 5G Testbed - srsRAN and Open5GS, Kubernetes ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
 - Built a Kubernetes-based end-to-end 5G testbed (kubeadm) running srsRAN gNB and Open5GS core as pods, with Multus CNI multi-homing (N2/N3/N6) and ZeroMQ virtual RF.
 - Ran host UEs as Docker containers in network namespaces via a macvlan bridge; implemented GTP tunneling and MTU-aware routing with policy-based steering.
 - Integrated an O-RAN SC Near-RT RIC over E2 with Python xApps (E2SM-KPM/RC) and an ONOS SDN controller.
-- Added Prometheus/Grafana observability; achieved 50+ Mbps TCP throughput and validated UE-to-UE hairpin routing via UPF.
+- Configured comprehensive Prometheus and Grafana monitoring stacks inside the Kubernetes cluster to capture real-time UPF network throughput, pod CPU profiles, and gNB radio metrics; achieved 50+ Mbps TCP throughput.
 
 ## Experience
 
@@ -63,9 +63,10 @@ Pakistan | 11/2023 - 03/2024
 Pakistan | 06/2021 - 08/2023
 - Identified system design improvements and proposed solutions independently.
 - Reviewed code and design decisions as a system expert for select services.
+- Integrated Prometheus logging, OpenTelemetry metrics, and Grafana alerts to monitor transaction engine throughput and Kafka consumer group lag, reducing latency spikes.
 - Maintained release processes and documentation for a set of exchange services.
 - Led teams of junior engineers on project initiatives.
-- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes.
+- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes, Prometheus, Grafana, OpenTelemetry.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021

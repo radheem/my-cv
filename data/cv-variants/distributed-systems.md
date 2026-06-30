@@ -14,9 +14,9 @@ Pakistan | 11/2023 - 03/2024
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
 - Architected and maintained high-throughput backend services using Go and Python, leveraging Kafka for event-driven messaging and distributed state management.
-- Identified and implemented system design improvements to optimize microservice communication, data consistency, and backend performance across PostgreSQL and DynamoDB.
+- Instrumented event-driven microservices with OpenTelemetry tracing, enabling end-to-end tracking of financial transactions across Kafka partitions and PostgreSQL write pools.
 - Led engineering teams and reviewed code/design decisions, establishing standards for scalable backend architecture, release processes, and distributed system reliability.
-- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes.
+- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes, Prometheus, Grafana, OpenTelemetry.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
@@ -36,7 +36,7 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ## Projects
 
 ### Information Retrieval System (IRS) - Distributed Systems Platform
-- Built Go microservices with gRPC and gRPC-Gateway using Protobuf-first APIs and Buf tooling.
+- Built Go microservices with gRPC (Protobuf) and native NATS JetStream, instrumenting NATS message headers with OpenTelemetry trace context propagation to debug cross-network request chains.
 - Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC.
 - Built an MCP (Model Context Protocol) integration exposing the platform to LLM agents as declarative, hot-reloadable tools via a config-driven toolbox server.
 - Built a per-user authenticated browser-session service (Playwright) with gateway consistent-hashing and an AES-256-GCM credential vault.

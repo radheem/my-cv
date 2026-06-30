@@ -13,7 +13,7 @@ Pakistan | 11/2023 - 03/2024
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
 - Architected and implemented infrastructure-as-code solutions using Terraform, managing Kubernetes clusters and containerized deployments for high-throughput exchange microservices.
-- Maintained robust release processes and platform documentation, streamlining GitOps workflows and enhancing SRE monitoring across distributed Go/Python services.
+- Developed infrastructure observability standards using Prometheus and Grafana, logging real-time transaction engine KPIs and tuning alerts to prevent Kafka consumer group lag.
 - Reviewed system design and code decisions as a platform expert, optimizing Docker-based deployments and Kafka event-driven pipelines for scalability, fault tolerance, and networking efficiency.
 - Led engineering teams on platform initiatives, mentoring junior engineers on cloud-native best practices, infrastructure standards, and distributed systems design.
 
@@ -40,8 +40,8 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
 
 ### Second Brain - Self-Hosted Document RAG
-- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries that survives worker crashes.
-- Designed real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
+- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries, instrumented with OpenTelemetry and custom Grafana dashboards.
+- Configured comprehensive Prometheus monitoring and Grafana alerts to track ingestion pipeline performance, monitoring CPU/memory profiles of llama.cpp inference servers.
 - Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
 - Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
@@ -52,7 +52,7 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Built a per-user authenticated browser-session service (Playwright) with gateway consistent-hashing and an AES-256-GCM credential vault.
 - Built a best-effort ETL side-channel into PostgreSQL (sqlc), Dgraph, and DocumentDB, orchestrated by Hatchet with declarative routing; verified by a Ginkgo E2E gate.
 - Integrated multiple bot-protected third-party vendors via an adaptor/anti-corruption contract with CUE-based schema mapping.
-- Deployed with Kubernetes, kustomize, Skaffold, Cilium, and external-dns.
+- Designed and executed cloud-native deployments on Kubernetes with Cilium, external-dns, and cert-manager, utilizing OpenTelemetry for end-to-end distributed tracing across Go microservices.
 
 ## Skills
 

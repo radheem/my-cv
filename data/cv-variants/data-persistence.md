@@ -13,12 +13,12 @@ Pakistan | 11/2023 - 03/2024
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- Architected and maintained high-throughput data persistence layers using PostgreSQL and DynamoDB for financial transactional systems.
+- Architected and maintained high-throughput data persistence layers using PostgreSQL and DynamoDB, configuring Grafana dashboards to monitor read-write replication lag, capacity usage trends, and slow queries.
 - Designed event-driven data pipelines leveraging Kafka for real-time state synchronization and analytics across exchange services.
 - Reviewed system designs and code to enforce data integrity, persistence best practices, and scalable architecture standards.
 - Maintained rigorous release processes and documentation for high-volume data exchange services.
 - Led engineering teams in delivering data-centric platform initiatives and cross-functional project execution.
-- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes.
+- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes, Prometheus, Grafana, OpenTelemetry.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
@@ -44,7 +44,7 @@ Self-hosted RAG document-intelligence service: durable Hatchet ingestion pipelin
 Python CLI and FastMCP server that transforms job postings into tailored CVs and cover letters via a pure ranker fact-picking architecture; features automated multi-source Gmail alert ingestion (LinkedIn, Indeed, Glassdoor, Fraunhofer) and bi-directional Google Sheets lifecycle synchronization for persistent application tracking.
 
 ### Information Retrieval System (IRS)
-Distributed data platform featuring a best-effort ETL side-channel into PostgreSQL (sqlc), Dgraph, and DocumentDB, orchestrated by Hatchet with declarative routing and Ginkgo E2E verification; leverages NATS KV for session state persistence and gRPC for high-throughput data retrieval.
+Distributed data platform featuring a best-effort ETL side-channel into PostgreSQL (sqlc), Dgraph, and DocumentDB orchestrated by Hatchet, adding Prometheus scraping to monitor database connection pools and write latencies; leverages NATS KV for session state persistence and gRPC for high-throughput data retrieval.
 
 ## Skills
 

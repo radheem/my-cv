@@ -36,9 +36,9 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ## Projects
 
 ### Second Brain (Document RAG) — Self-hosted RAG document-intelligence service: durable Hatchet ingestion, local llama.cpp inference, pgvector semantic search, NATS JetStream progress streaming on a k3d homelab.
-- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries that survives worker crashes.
+- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries, instrumented with OpenTelemetry and custom Grafana dashboards.
 - Designed real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
-- Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
+- Monitored pipeline latency and GPU/VRAM consumption on llama.cpp servers using Grafana, optimizing chunking/embedding batch sizes for local inference.
 - Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 ([repo](https://github.com/radheem/my-notebook))
 
@@ -52,7 +52,7 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ### O-RAN AIML Framework — End-to-end AI/ML platform for O-RAN 5G networks (Kubeflow + KServe) driven by a custom Python client/SDK. 15-credit research project, graded 1.0 (A).
 - Deployed the end-to-end AIML framework on Kubernetes with Helm (training manager, model management, KF adapter, data-extraction, KServe).
 - Built a config-driven Python client/SDK automating the full ML lifecycle: feature group -> model -> pipeline -> training job -> inference.
-- Authored Kubeflow training/retraining pipelines in Python (kfp) with TensorFlow/Keras and scikit-learn (QoE per-cell throughput prediction).
+- Authored Kubeflow training/retraining pipelines in Python (kfp) with TensorFlow/Keras and scikit-learn (QoE prediction), instrumenting training jobs with Prometheus metrics to track training duration and model loss.
 - Served models via KServe; wired InfluxDB feature sources, a Cassandra feature store, and MinIO/LeoFS (S3) artifact storage.
 - Delivered as a 15-credit research project in the integrated communications systems group (German grade 1.0).
 ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
