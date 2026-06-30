@@ -457,12 +457,18 @@ def generic_search_workflow(query: str, limit: int = 10, include_bodies: bool = 
 
 
 def check_application_updates_workflow(slug: str, limit: int = 5) -> str:
-    """Lookup target application metadata from the database, build a targeted search query, and return matching emails."""
+    """Lookup target application metadata from the database or filesystem, build a targeted search query, and return matching emails."""
     import json
     import datetime
-    from engine.shared.db import get_conn
+    from engine.shared.db import get_conn, _get_applications_dir
+    from engine import documents
+
+    company = ""
+    job_title = ""
+    date_str = ""
 
     try:
+        # 1. Try DB join first
         with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute("""
@@ -473,19 +479,32 @@ def check_application_updates_workflow(slug: str, limit: int = 5) -> str:
                 """, (slug,))
                 row = cur.fetchone()
 
-        if not row:
-            return json.dumps({"error": f"No active application found matching slug '{slug}' in database."})
-
-        company = row["company"] or ""
-        created_at = row["created_at"]
-
-        # Format date string for search constraint
-        if isinstance(created_at, str):
-            date_str = created_at[:10].replace("-", "/")
-        elif isinstance(created_at, (datetime.datetime, datetime.date)):
-            date_str = created_at.strftime("%Y/%m/%d")
+        if row:
+            company = row["company"] or ""
+            created_at = row["created_at"]
+            if isinstance(created_at, str):
+                date_str = created_at[:10].replace("-", "/")
+            elif isinstance(created_at, (datetime.datetime, datetime.date)):
+                date_str = created_at.strftime("%Y/%m/%d")
+            else:
+                date_str = "2026/01/01"
         else:
-            date_str = "2026/01/01"
+            # 2. Fall back to filesystem markdown if DB job cache is missing
+            app_dir = _get_applications_dir() / slug
+            index_path = app_dir / "index.md"
+            if index_path.exists():
+                meta, _ = documents.split_front_matter(index_path.read_text(encoding="utf-8"))
+                company = meta.get("company", "")
+                job_title = meta.get("job_title", "")
+                dt_found = meta.get("date_found", "")
+                if dt_found:
+                    # Parse YYYY-MM-DD to YYYY/MM/DD
+                    date_str = str(dt_found).replace("-", "/")
+                else:
+                    date_str = "2026/01/01"
+
+        if not company:
+            return json.dumps({"error": f"No active application or filesystem metadata found matching slug '{slug}'."})
 
         company_escaped = company.replace('"', '\\"')
         query_str = f'"{company_escaped}" AND ("Application" OR "Interview" OR "Status" OR "Offer" OR "Resume" OR "CV") after:{date_str}'
