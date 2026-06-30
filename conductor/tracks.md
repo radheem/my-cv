@@ -31,3 +31,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix DDD Import Regression & Establish MCP E2E Quality Gate**
 *Link: [./tracks/mcp_e2e_gate_20260629/](./tracks/mcp_e2e_gate_20260629/)*
+
+---
+
+- [ ] **Track: Composable Clustered Analysis Pipeline & Keyword Gap Analyzer**
+*Link: [./tracks/analysis_pipeline_20260629/](./tracks/analysis_pipeline_20260629/)*
