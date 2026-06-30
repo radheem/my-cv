@@ -31,40 +31,41 @@ def fetch_job_text(source: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def _fetch_worker(q, target_url):
+    import sys
+    import os
+    # Redirect standard input/output to protect parent MCP Stdio channel, keeping stderr for tracebacks
+    sys.stdin = open(os.devnull, "r")
+    sys.stdout = open(os.devnull, "w")
+
+    try:
+        from playwright.sync_api import sync_playwright
+        try:
+            from playwright_stealth import stealth_sync
+        except ImportError:
+            stealth_sync = None
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                if stealth_sync:
+                    stealth_sync(page)
+                page.goto(target_url, wait_until="load", timeout=30000)
+                text = page.inner_text("body")
+                q.put((True, text))
+            finally:
+                browser.close()
+    except Exception as e:
+        q.put((False, e))
+
+
 def _fetch_url(url: str) -> str:
     import multiprocessing
 
-    def worker(q, target_url):
-        import sys
-        import os
-        # Redirect standard input/output to protect parent MCP Stdio channel, keeping stderr for tracebacks
-        sys.stdin = open(os.devnull, "r")
-        sys.stdout = open(os.devnull, "w")
-
-        try:
-            from playwright.sync_api import sync_playwright
-            try:
-                from playwright_stealth import stealth_sync
-            except ImportError:
-                stealth_sync = None
-
-            with sync_playwright() as p:
-                browser = p.chromium.launch()
-                try:
-                    page = browser.new_page()
-                    if stealth_sync:
-                        stealth_sync(page)
-                    page.goto(target_url, wait_until="load", timeout=30000)
-                    text = page.inner_text("body")
-                    q.put((True, text))
-                finally:
-                    browser.close()
-        except Exception as e:
-            q.put((False, e))
-
     ctx = multiprocessing.get_context("spawn")
     q = ctx.Queue()
-    p = ctx.Process(target=worker, args=(q, url))
+    p = ctx.Process(target=_fetch_worker, args=(q, url))
     p.start()
     success, result = q.get()
     p.join()
