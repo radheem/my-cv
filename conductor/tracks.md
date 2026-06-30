@@ -34,5 +34,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Core CV Variants and Hybrid Selection Engine**
+- [x] **Track: Core CV Variants and Hybrid Selection Engine**
 *Link: [./tracks/cv_variants_20260629/](./tracks/cv_variants_20260629/)*
