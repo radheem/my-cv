@@ -15,11 +15,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Selection Engine Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Application Pipeline Integration
-- [ ] Task: Refactor the `new` application generation command (likely `engine/cli.py` -> `cmd_new` or the underlying generative workflow).
-    - [ ] Sub-task: Replace the full LLM CV generation step with a file copy from `data/cv-variants/<selected>.md` to `applications/<slug>/cv.md`.
-    - [ ] Sub-task: Implement dynamic `tagline` retitling: parse the frontmatter of the copied file and overwrite the tagline with the target job title.
-    - [ ] Sub-task: Update the cover letter generation prompt to use the text of the *selected static variant* as its factual context, instead of the generic `master-cv.md`.
-- [ ] Task: Fix and update all relevant unit and integration tests to account for the new static-copy behavior.
+- [x] Task: Refactor the `new` application generation command (likely `engine/cli.py` -> `cmd_new` or the underlying generative workflow). (0895e0a)
+    - [x] Sub-task: Replace the full LLM CV generation step with a file copy from `data/cv-variants/<selected>.md` to `applications/<slug>/cv.md`. (0895e0a)
+    - [x] Sub-task: Implement dynamic `tagline` retitling: parse the frontmatter of the copied file and overwrite the tagline with the target job title. (0895e0a)
+    - [x] Sub-task: Update the cover letter generation prompt to use the text of the *selected static variant* as its factual context, instead of the generic `master-cv.md`. (0895e0a)
+- [x] Task: Fix and update all relevant unit and integration tests to account for the new static-copy behavior. (0895e0a)
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Application Pipeline Integration' (Protocol in workflow.md)
 
 ## Phase 4: Initial Baseline Setup
