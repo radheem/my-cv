@@ -132,3 +132,87 @@ def test_create_application_from_job_workflow_success(monkeypatch):
     assert "Complete" in res
     assert "Successfully" in res
     assert calls == ["new", "pdf", "upload", "status"]
+
+
+def test_generic_search_workflow(monkeypatch):
+    from engine.domains.gmail.ingest import generic_search_workflow
+    
+    monkeypatch.setattr(gmail, "search_emails", lambda query, limit, include_bodies: [
+        {
+            "id": "thread_123",
+            "messages": [
+                {
+                    "id": "msg_456",
+                    "subject": "Test General Email",
+                    "from": "sender@test.com",
+                    "date": "2026-06-30",
+                    "snippet": "Simple snippet text",
+                    "body": "Rich full body content"
+                }
+            ]
+        }
+    ])
+
+    res_str = generic_search_workflow("invoice", limit=5, include_bodies=True)
+    res = json.loads(res_str)
+
+    assert "emails" in res
+    assert len(res["emails"]) == 1
+    assert res["emails"][0]["subject"] == "Test General Email"
+    assert res["emails"][0]["body"] == "Rich full body content"
+
+
+def test_check_application_updates_workflow(monkeypatch):
+    from engine.shared.db import get_conn, init_db
+    from engine.domains.gmail.ingest import check_application_updates_workflow
+    
+    init_db()
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs")
+            cur.execute("DELETE FROM applications")
+            # Insert a job
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, created_at)
+                VALUES ('e2e-job-id', 'polymodal-slug', 'Polymodal', 'Data Engineer', 'file', 'other', '2026-06-30 12:00:00')
+            """)
+            # Insert an application
+            cur.execute("""
+                INSERT INTO applications (job_id, slug, status, cv_en)
+                VALUES ('e2e-job-id', 'polymodal-slug', 'applied', 'some cv')
+            """)
+        conn.commit()
+
+    # Mock search_emails
+    searches = []
+    monkeypatch.setattr(gmail, "search_emails", lambda query, limit, include_bodies: (
+        searches.append(query) or [
+            {
+                "id": "thread_abc123",
+                "messages": [
+                    {
+                        "id": "msg_xyz",
+                        "subject": "Interview Invite",
+                        "from": "recruiter@polymodal.com",
+                        "date": "2026-06-30",
+                        "snippet": "Let's schedule an interview",
+                        "body": "Hi Radheem, we loved your CV..."
+                    }
+                ]
+            }
+        ]
+    ))
+
+    res_str = check_application_updates_workflow("polymodal-slug")
+    res = json.loads(res_str)
+
+    assert "emails" in res
+    assert len(res["emails"]) == 1
+    assert res["emails"][0]["from"] == "recruiter@polymodal.com"
+    assert res["emails"][0]["body"] == "Hi Radheem, we loved your CV..."
+    
+    # Verify the generated query string
+    assert len(searches) == 1
+    assert "Polymodal" in searches[0]
+    assert "after:2026/06/30" in searches[0]
+

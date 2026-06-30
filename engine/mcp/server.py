@@ -12,6 +12,8 @@ from ..workflows import (
     list_gmail_jobs_workflow,
     extract_job_details_workflow,
     create_application_from_job_workflow,
+    generic_search_workflow,
+    check_application_updates_workflow,
 )
 
 log = logging.getLogger("cv-tailor-mcp")
@@ -296,6 +298,22 @@ def list_gmail_fraunhofer_jobs(query: str = "is:unread", limit: int = 10) -> str
     Use this to pull newly received opportunities into your processing pipeline. To extract the job description text afterward, use the returned job_url with the 'fetch_public_job_url' tool.
     """
     return list_gmail_jobs_workflow("fraunhofer", query, limit)
+
+
+@mcp.tool()
+def search_gmail(query: str, limit: int = 10, include_bodies: bool = True) -> str:
+    """Search your Gmail account for any generic search query terms (e.g. invoices, confirmation numbers, company names, or sender emails).
+    Returns a JSON payload containing matching message details, senders, subjects, dates, snippets, and full body text (if include_bodies is True).
+    """
+    return generic_search_workflow(query, limit, include_bodies)
+
+
+@mcp.tool()
+def check_application_updates(slug: str, limit: int = 5) -> str:
+    """Lookup the company and job title of a targeted job application in your local DuckDB database, automatically construct a time-scoped targeted search query, and search your Gmail for recruiter responses (e.g. interview invitations or rejections).
+    Use this to retrieve email bodies so you can classify them and update the application status in the database.
+    """
+    return check_application_updates_workflow(slug, limit)
 
 
 @mcp.tool()
@@ -716,6 +734,7 @@ def initialize_agent_session() -> str:
                     "Step 2: Fetch & Save": "Extract job IDs and fetch postings with dedicated fast guest fetchers, then save with 'save_job_description' to obtain the job slug.",
                     "Step 3: Tailor": "Call 'create_application_from_job' with the job slug to enqueue asynchronous tailoring."
                 },
+                "closed_loop_application_status_check": "To follow up or check status on an active application, call 'check_application_updates(slug)'. This automatically queries Gmail for recruiter responses (invites or rejections) scoped to that application's timeline. You must analyze the returned email bodies, determine the updated application state ('interview', 'rejected', etc.), call 'update_application_status', and run 'sync_status_to_sheets'.",
                 "strict_fetching_tool_selection_rules": {
                     "LinkedIn job URLs": "Identify the 10-digit job ID and call 'fetch_linkedin_job' immediately. DO NOT use generic or heavy scraper tools.",
                     "Indeed job URLs": "Identify the hexadecimal 'jk' parameter and call 'fetch_indeed_job' immediately. DO NOT use generic tools.",

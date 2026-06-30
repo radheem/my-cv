@@ -412,3 +412,86 @@ def create_application_from_job_workflow(slug: str) -> str:
         
     logs.append("=== Application Tailoring Pipeline Complete ===")
     return "\n".join(logs)
+
+
+def generic_search_workflow(query: str, limit: int = 10, include_bodies: bool = True) -> str:
+    """Modular workflow to search Gmail for any generic query terms."""
+    import json
+    from . import client as gmail
+
+    try:
+        threads = gmail.search_emails(query, limit, include_bodies=include_bodies)
+    except Exception as e:
+        log.exception(f"Gmail search failed for query '{query}'")
+        return json.dumps({"error": f"Gmail search failed: {str(e)}"})
+
+    results = []
+    for t in threads:
+        thread_id = t.get("id", "")
+        for m in t.get("messages", []):
+            msg_id = m.get("id", "")
+            subject = m.get("subject", "")
+            sender = m.get("from", "")
+            date = m.get("date", "")
+            snippet = m.get("snippet", "")
+            body = m.get("body", "") if include_bodies else ""
+
+            msg_entry = {
+                "thread_id": thread_id,
+                "message_id": msg_id,
+                "from": sender,
+                "date": date,
+                "subject": subject,
+                "snippet": snippet
+            }
+            if include_bodies:
+                msg_entry["body"] = body
+
+            results.append(msg_entry)
+            if len(results) >= limit:
+                break
+        if len(results) >= limit:
+            break
+
+    return json.dumps({"emails": results})
+
+
+def check_application_updates_workflow(slug: str, limit: int = 5) -> str:
+    """Lookup target application metadata from the database, build a targeted search query, and return matching emails."""
+    import json
+    import datetime
+    from engine.shared.db import get_conn
+
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT j.company, j.title, j.created_at
+                    FROM jobs j
+                    JOIN applications a ON j.job_id = a.job_id
+                    WHERE a.slug = ?
+                """, (slug,))
+                row = cur.fetchone()
+
+        if not row:
+            return json.dumps({"error": f"No active application found matching slug '{slug}' in database."})
+
+        company = row["company"] or ""
+        created_at = row["created_at"]
+
+        # Format date string for search constraint
+        if isinstance(created_at, str):
+            date_str = created_at[:10].replace("-", "/")
+        elif isinstance(created_at, (datetime.datetime, datetime.date)):
+            date_str = created_at.strftime("%Y/%m/%d")
+        else:
+            date_str = "2026/01/01"
+
+        company_escaped = company.replace('"', '\\"')
+        query_str = f'"{company_escaped}" AND ("Application" OR "Interview" OR "Status" OR "Offer" OR "Resume" OR "CV") after:{date_str}'
+        
+        return generic_search_workflow(query_str, limit=limit, include_bodies=True)
+    except Exception as e:
+        log.exception(f"Failed to check application updates for slug: {slug}")
+        return json.dumps({"error": f"Failed to check application updates: {str(e)}"})
+

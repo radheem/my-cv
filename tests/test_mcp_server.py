@@ -657,6 +657,63 @@ def test_mcp_analysis_tools():
     assert "suggestions" in res_sug
 
 
+def test_mcp_gmail_search_tools(monkeypatch):
+    from engine.mcp import server
+    from engine.shared.db import get_conn, init_db
+    from engine.domains.gmail import client as gmail
+
+    init_db()
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs")
+            cur.execute("DELETE FROM applications")
+            # Insert a job
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, created_at)
+                VALUES ('e2e-job-id-mcp', 'mcp-slug', 'CompanyA', 'SRE', 'file', 'other', '2026-06-30 12:00:00')
+            """)
+            # Insert an application
+            cur.execute("""
+                INSERT INTO applications (job_id, slug, status, cv_en)
+                VALUES ('e2e-job-id-mcp', 'mcp-slug', 'applied', 'some cv')
+            """)
+        conn.commit()
+
+    # Mock search_emails
+    searches = []
+    monkeypatch.setattr(gmail, "search_emails", lambda query, limit, include_bodies: (
+        searches.append(query) or [
+            {
+                "id": "thread_111",
+                "messages": [
+                    {
+                        "id": "msg_222",
+                        "subject": "Interview",
+                        "from": "recruiter@companya.com",
+                        "date": "2026-06-30",
+                        "snippet": "Schedule call",
+                        "body": "Hi, let's schedule an interview call"
+                    }
+                ]
+            }
+        ]
+    ))
+
+    # 1. Test generic search tool
+    res_gen = json.loads(server.search_gmail(query="invoices", limit=2, include_bodies=True))
+    assert "emails" in res_gen
+    assert len(res_gen["emails"]) == 1
+    assert res_gen["emails"][0]["body"] == "Hi, let's schedule an interview call"
+
+    # 2. Test targeted updates tool
+    res_upd = json.loads(server.check_application_updates(slug="mcp-slug", limit=2))
+    assert "emails" in res_upd
+    assert len(res_upd["emails"]) == 1
+    assert "CompanyA" in searches[1]
+    assert "after:2026/06/30" in searches[1]
+
+
+
 
 
 
