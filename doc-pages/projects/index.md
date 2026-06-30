@@ -12,8 +12,8 @@ A personal **document-intelligence** service that ingests PDFs, articles, and no
 
 [:octicons-arrow-right-24: Read more](second-brain.md)
 
-## :material-file-document-edit: cv-tailor — LLM CV/Cover Tailoring + LinkedIn Automation
-A Python tool that turns a job posting into a **tailored CV + cover letter**: a **pure, unit-tested ranker** picks the top-3 relevant projects and orders skills, and the LLM (Anthropic or local **Ollama**) only writes prose around facts pinned in a master CV — so it never fabricates experience. Every application is versioned in **git** with a status lifecycle, published behind an **in-browser PBKDF2 + AES-256-GCM gate** (deployed by GitHub Actions with no API key), and an optional containerized **Playwright** LinkedIn flow ingests JDs and drafts applications end-to-end — always **stopping before submit**. ([repo](https://github.com/radheem/cv-tailor))
+## :material-file-document-edit: cv-tailor — LLM CV/Cover Tailoring & Agentic Pipeline
+A Python CLI and **FastMCP Server** that automates the job application tailoring process, manages application lifecycle tracking via a filesystem-first architecture cached in **DuckDB**, and automatically uploads compiled PDF application packages to **Google Drive**, with live tracking status synchronized with **Google Sheets**. A **pure, unit-tested ranker** DETERMINISTICALLY selects the top-3 relevant projects and orders skills, and the LLM only writes prose around facts pinned in a master CV — so it never fabricates experience. Features a 3-step agentic ingestion pipeline (Gmail alerts discovery -> lightweight guest API fetchers -> DuckDB scoring -> PDF rendering) and an optional containerized **Playwright** LinkedIn flow that ingests JDs and drafts applications end-to-end — always **stopping before submit**. ([repo](https://github.com/radheem/cv-tailor))
 
 [:octicons-arrow-right-24: Read more](cv-tailor.md)
 
