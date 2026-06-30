@@ -22,10 +22,10 @@
 - [x] Task: Fix and update all relevant unit and integration tests to account for the new static-copy behavior. (0895e0a)
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Application Pipeline Integration' (Protocol in workflow.md)
 
-## Phase 4: Initial Baseline Setup
+## Phase 4: Initial Baseline Setup [checkpoint: 6df8252]
 - [x] Task: Write a utility script `scripts/generate_baseline_variants.py` that utilizes the Anthropic API to read `data/master-cv.md` and dynamically generate the first draft of the 5 variant markdown files into `data/cv-variants/`. (d5c3d00)
 - [x] Task: Execute the script to bootstrap the variants. (d5c3d00)
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Initial Baseline Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Initial Baseline Setup' (Protocol in workflow.md)
 
 ## Phase 5: End-to-End Testing
 - [ ] Task: Execute the full `make test` test suite (including MCP E2E tests).
