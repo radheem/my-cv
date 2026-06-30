@@ -42,6 +42,25 @@ The selection core (`engine/rank.py`) is **pure and unit-tested** — no LLM in 
 - Picks the **top-3 projects** and orders the skill groups per posting.
 - Only `jobspec` extraction and `render` call the LLM, and only to write prose around the already-selected facts. Tailoring is reordering and emphasis, **never invention** — facts are pinned to a master CV.
 
+## Clustered Job Market & Keyword Gap Analysis
+Our composable analysis pipeline clusters crawled jobs within target domains to automatically extract technical market signals, compile unmapped terms, and highlight keyword gaps:
+
+<figure markdown>
+  <video controls preload="none" width="100%" style="max-width:900px;border-radius:6px">
+    <source src="../video/cv-tailor/cv-tailor-analysing-job-market-converted.mp4" type="video/mp4">
+    Your browser does not support the video tag — <a href="../video/cv-tailor/cv-tailor-analysing-job-market-converted.mp4">download the clip</a>.
+  </video>
+  <figcaption>Market Trend Extractor: Aggregating target job descriptions within a taxonomy cluster to discover core technical signals and unmapped industry terms.</figcaption>
+</figure>
+
+<figure markdown>
+  <video controls preload="none" width="100%" style="max-width:900px;border-radius:6px">
+    <source src="../video/cv-tailor/analysing-cv-converted.mp4" type="video/mp4">
+    Your browser does not support the video tag — <a href="../video/cv-tailor/analysing-cv-converted.mp4">download the clip</a>.
+  </video>
+  <figcaption>Keyword Gap Analyzer: Running a real-time gap report of active job trends against a target CV variant to pinpoint missing keywords.</figcaption>
+</figure>
+
 ## Git as the application tracker
 There is no spreadsheet or external tracker:
 
@@ -71,8 +90,24 @@ Agents orchestrate our job-hunting pipeline using a robust **3-Step Ingestion Tr
 2. **Lightweight Ingest:** Bypasses heavy browser automation and CAPTCHAs via dedicated **guest API endpoints** (`fetch_linkedin_job` and `fetch_indeed_job` with automatic JSON/HTML fallback) to fetch raw job postings instantly.
 3. **Score & Tailor:** The agent runs a read-only SQL query (secured via an **SQL Guard parsing layer**) to select the highest scoring roles, saves them, and calls document workflows to compile CVs + cover letters and render LaTeX PDFs.
 
+<figure markdown>
+  <video controls preload="none" width="100%" style="max-width:900px;border-radius:6px">
+    <source src="../video/cv-tailor/fetch-gmail-job-alerts-converted.mp4" type="video/mp4">
+    Your browser does not support the video tag — <a href="../video/cv-tailor/fetch-gmail-job-alerts-converted.mp4">download the clip</a>.
+  </video>
+  <figcaption>Step 1 (Discover): Ingesting unread Gmail alerts from LinkedIn, Indeed, Glassdoor, and Fraunhofer into the PostgreSQL queue.</figcaption>
+</figure>
+
 ## Bi-Directional Cloud Status Sync
 To ensure real-time visibility across devices, a bi-directional synchronization pipeline links our local PostgreSQL database with **Google Sheets**. Using a lightweight **Google Apps Script proxy**, lifecycle changes (e.g., advancing from *draft* to *applied* or *interview*) flow seamlessly back and forth on demand.
+
+<figure markdown>
+  <video controls preload="none" width="100%" style="max-width:900px;border-radius:6px">
+    <source src="../video/cv-tailor/cv-tailor-application-status-update-feature-converted.mp4" type="video/mp4">
+    Your browser does not support the video tag — <a href="../video/cv-tailor/cv-tailor-application-status-update-feature-converted.mp4">download the clip</a>.
+  </video>
+  <figcaption>Closed-Loop Sync: Updating application lifecycle states locally and pushing them to Google Sheets bi-directionally on demand.</figcaption>
+</figure>
 
 ## Key achievements
 - Built an **LLM CV/cover generator** whose selection logic is pure and unit-tested, keeping the model on prose and **off facts** (no fabricated experience).
