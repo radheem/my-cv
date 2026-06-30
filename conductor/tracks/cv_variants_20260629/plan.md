@@ -23,8 +23,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Application Pipeline Integration' (Protocol in workflow.md)
 
 ## Phase 4: Initial Baseline Setup
-- [ ] Task: Write a utility script `scripts/generate_baseline_variants.py` that utilizes the Anthropic API to read `data/master-cv.md` and dynamically generate the first draft of the 5 variant markdown files into `data/cv-variants/`.
-- [ ] Task: Execute the script to bootstrap the variants.
+- [x] Task: Write a utility script `scripts/generate_baseline_variants.py` that utilizes the Anthropic API to read `data/master-cv.md` and dynamically generate the first draft of the 5 variant markdown files into `data/cv-variants/`. (d5c3d00)
+- [x] Task: Execute the script to bootstrap the variants. (d5c3d00)
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Initial Baseline Setup' (Protocol in workflow.md)
 
 ## Phase 5: End-to-End Testing
