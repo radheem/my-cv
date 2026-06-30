@@ -184,7 +184,18 @@ class LinkedInSession:
 
     def context(self, playwright):
         """Launch a persistent, headed context (recognized-device profile, decisions D1)."""
-        pathlib.Path(self.user_data_dir).mkdir(parents=True, exist_ok=True)
+        user_data_path = pathlib.Path(self.user_data_dir)
+        user_data_path.mkdir(parents=True, exist_ok=True)
+        
+        # Remove any stale Chromium singleton lock to prevent TargetClosedError
+        lock_file = user_data_path / "SingletonLock"
+        if lock_file.exists() or lock_file.is_symlink():
+            try:
+                lock_file.unlink(missing_ok=True)
+                log.info(f"Removed stale Chromium singleton lock file: {lock_file}")
+            except Exception as e:
+                log.warning(f"Failed to remove singleton lock file {lock_file}: {e}")
+
         self._ctx = playwright.chromium.launch_persistent_context(
             self.user_data_dir,
             headless=self.headless,
