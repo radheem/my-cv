@@ -36,3 +36,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Composable Clustered Analysis Pipeline & Keyword Gap Analyzer**
 *Link: [./tracks/analysis_pipeline_20260629/](./tracks/analysis_pipeline_20260629/)*
+
+---
+
+- [ ] **Track: Closed-Loop Gmail Application Status Sync**
+*Link: [./tracks/gmail_status_sync_20260630/](./tracks/gmail_status_sync_20260630/)*
