@@ -177,7 +177,7 @@ def _experience(lines: list[str]) -> str:
                 out.append("\\bullets")
                 out += ["  \\item " + inline(b) for b in bullets]
                 out.append("\\bulletsend")
-            out.append("\\vspace{3pt}")
+            out.append("\\vspace{1.5pt}")
         else:
             i += 1
     return "\n".join(out)
@@ -304,7 +304,7 @@ def _parse_projects_with_bullets(lines: list[str], portfolio: str) -> str:
                 out.append("\\bullets")
                 out += ["  \\item " + inline(b) for b in bullets]
                 out.append("\\bulletsend")
-            out.append("\\vspace{2pt}")
+            out.append("\\vspace{1.0pt}")
         else:
             i += 1
     return "\n".join(out[:-1] if out else out)  # drop trailing \vspace
@@ -411,7 +411,7 @@ def render_cv_tex(en_body: str, de_body: str, profile: dict, projects: list[dict
     en_tex, urls = _render_cv_block(en_body, None, projects, portfolio)
     de_tex, _ = _render_cv_block(de_body, urls, projects, portfolio)
     return "\n".join([
-        "\\documentclass[11pt,a4paper]{resume}",
+        "\\documentclass[10pt,a4paper]{resume}",
         "",
         _link_macros(profile),
         "",
@@ -439,10 +439,11 @@ def render_cv_tex(en_body: str, de_body: str, profile: dict, projects: list[dict
 
 def _letter_block(body: str, company: str, attn: str, salutation: str,
                   signoff: str, name: str) -> str:
-    # Line-by-line parser to cleanly support H2/H3 headings while keeping multi-line paragraphs folded.
+    # Line-by-line parser to cleanly support H2/H3 headings and bullet lists while keeping multi-line paragraphs folded.
     lines = body.splitlines()
     formatted_blocks = []
     current_para = []
+    in_bullets = False
     
     for line in lines:
         line_str = line.strip()
@@ -457,13 +458,30 @@ def _letter_block(body: str, company: str, attn: str, salutation: str,
             if current_para:
                 formatted_blocks.append(inline(" ".join(current_para)))
                 current_para = []
+            if in_bullets:
+                formatted_blocks.append("\\bulletsend")
+                in_bullets = False
             title = inline(heading_match.group(1))
             formatted_blocks.append(f"\\vspace{{8pt}}\\noindent\\textbf{{{title}}}\\par\\vspace{{3pt}}")
+        elif line_str.startswith(("- ", "* ")):
+            if current_para:
+                formatted_blocks.append(inline(" ".join(current_para)))
+                current_para = []
+            if not in_bullets:
+                formatted_blocks.append("\\bullets")
+                in_bullets = True
+            bullet_text = line_str[2:].strip()
+            formatted_blocks.append(f"  \\item {inline(bullet_text)}")
         else:
+            if in_bullets:
+                formatted_blocks.append("\\bulletsend")
+                in_bullets = False
             current_para.append(line_str)
             
     if current_para:
         formatted_blocks.append(inline(" ".join(current_para)))
+    if in_bullets:
+        formatted_blocks.append("\\bulletsend")
         
     paras = "\n\n".join(formatted_blocks)
     return "\n".join([

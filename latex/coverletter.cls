@@ -30,9 +30,13 @@
 \RequirePackage{microtype}
 \RequirePackage{xcolor}
 \RequirePackage[hidelinks]{hyperref}
+\RequirePackage{enumitem}
 
 \definecolor{linkblue}{RGB}{0,84,159}
 \hypersetup{colorlinks=true,urlcolor=linkblue,linkcolor=linkblue}
+
+\newcommand{\bullets}{\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt,partopsep=0pt,itemsep=3pt,parsep=0pt]}
+\newcommand{\bulletsend}{\end{itemize}}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{8pt}

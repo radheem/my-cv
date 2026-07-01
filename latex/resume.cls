@@ -21,7 +21,7 @@
 % German version (hyphenation, \today). See the bilingual application templates.
 \RequirePackage[main=english,ngerman]{babel}
 \RequirePackage{lmodern}
-\RequirePackage[top=1.1cm,bottom=1.1cm,left=1.5cm,right=1.5cm]{geometry}
+\RequirePackage[top=0.9cm,bottom=0.9cm,left=1.3cm,right=1.3cm]{geometry}
 \RequirePackage{titlesec}
 \RequirePackage{enumitem}
 \RequirePackage{microtype}
@@ -38,7 +38,7 @@
 
 % ---- Section headings: small-caps + full-width rule (MIT CV style) ----------
 \titleformat{\section}{\large\scshape\bfseries}{}{0pt}{}[\vspace{-6pt}\rule{\linewidth}{0.8pt}]
-\titlespacing{\section}{0pt}{7pt}{4pt}
+\titlespacing{\section}{0pt}{3pt}{1pt}
 
 % ---- Helper macros ----------------------------------------------------------
 % Single-line role/education header: bold title (left), location + dates (right).
@@ -48,7 +48,7 @@
 \newcommand{\project}[3]{%
   \item \href{#2}{\textbf{#1}} — #3%
 }
-\newcommand{\bullets}{\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]}
+\newcommand{\bullets}{\begin{itemize}[leftmargin=1.4em,nosep,topsep=1pt,partopsep=0pt,itemsep=1.5pt,parsep=0pt]}
 \newcommand{\bulletsend}{\end{itemize}}
 % Two-line entry (classic one-column / "MIT" résumé style, per source/cvs/sample-cv.png):
 %   \entry{Bold organisation}{Location}      -> line 1, location right-aligned
