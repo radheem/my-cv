@@ -6,25 +6,24 @@ tagline: "Senior Cloud Platform & Observability Engineer"
 
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Orchestrated cloud-native deployments and improved CI/CD pipelines by dockerizing backend services and leveraging Kubernetes on AWS EC2/S3 infrastructure.
-- Led system design and code reviews, establishing architectural standards for scalable platform services and deployment processes.
-- Developed and documented new platform features and integrations across NodeJS, PHP, TypeScript, and ReactJS stacks.
-- Tech: Kubernetes, Docker, AWS (EC2, S3), MySQL, MongoDB, NodeJS, PHP, TypeScript, ReactJS
+- Containerized and orchestrated backend services using Docker and Kubernetes, standardizing deployment pipelines and improving platform reliability across microservices.
+- Architected and documented scalable cloud infrastructure on AWS (EC2, S3), conducting system design reviews to enhance platform resilience and fault tolerance.
+- Streamlined DevOps workflows and release processes, reducing deployment friction and establishing consistent engineering practices for the platform team.
+Tech: Kubernetes, Docker, AWS (EC2, S3), NodeJS, TypeScript, PHP, ReactJS, MySQL, MongoDB
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- Engineered observability and SRE practices by integrating Prometheus logging, OpenTelemetry metrics, and Grafana alerts to monitor transaction engine throughput and Kafka consumer group lag, directly reducing latency spikes.
-- Maintained and automated release processes for core exchange services using Terraform and Kubernetes, ensuring platform reliability and consistent deployments.
-- Identified and implemented system design improvements, reviewing code and architecture as a technical lead for select platform services.
-- Led engineering teams on platform initiatives, mentoring junior engineers on distributed systems, cloud-native best practices, and DevOps workflows.
-- Tech: Kubernetes, Terraform, Docker, Prometheus, Grafana, OpenTelemetry, Kafka, Go, Python, NodeJS, PostgreSQL, DynamoDB, TypeScript, ReactJS
+- Engineered comprehensive observability stacks integrating Prometheus, OpenTelemetry, and Grafana to monitor transaction engine throughput and Kafka consumer group lag, proactively mitigating latency spikes and ensuring SRE reliability targets.
+- Designed and maintained robust release processes and platform documentation, establishing DevOps best practices for continuous integration and deployment.
+- Led system architecture reviews and code reviews for critical exchange services, optimizing Go/Node.js microservices for cloud-native scalability and operational reliability.
+Tech: Kubernetes, Docker, Prometheus, OpenTelemetry, Grafana, Kafka, Terraform, Go, Python, NodeJS, PostgreSQL, DynamoDB, ReactJS, TypeScript
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
-- Containerized and deployed data processing services using Docker on AWS EC2, establishing foundational cloud infrastructure and DevOps practices.
-- Researched and proposed system designs for data pipelines, delivering solutions under senior engineering mentorship.
-- Analyzed, cleaned, and visualized large-scale datasets to drive platform insights and stakeholder reporting.
-- Tech: Docker, AWS EC2, Python, NodeJS, MongoDB, MySQL, scikit-learn, TensorFlow
+- Containerized data processing and ML workloads using Docker, deploying them on AWS EC2 infrastructure to support scalable cloud-native architectures.
+- Researched and implemented distributed system designs, collaborating in agile teams to deliver reliable, data-driven backend solutions under senior mentorship.
+- Automated data ingestion and visualization pipelines, establishing foundational DevOps practices for reproducible engineering workflows and platform stability.
+Tech: Docker, AWS EC2, Python, NodeJS, TensorFlow, scikit-learn, MongoDB, MySQL
 
 ## Education
 
@@ -36,31 +35,30 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### cv-tailor - LLM CV/Cover-Letter Tailoring + LinkedIn Automation
-- Built a Python CLI and **FastMCP Server** that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
-- Developed an automated **Gmail alert ingestion** pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
-- Integrated a bi-directional **Google Sheets synchronization** using Google Apps Script to track job application lifecycles.
-- Secured documents in Git using client-side **AES-256-GCM** encryption gated on password-protected static Pages.
+- **Information Retrieval System (IRS) - Distributed Systems Platform**
+  - Deployed and managed a cloud-native platform on Kubernetes with kustomize, Skaffold, Cilium, and external-dns, ensuring robust networking, DNS resolution, and platform reliability.
+  - Integrated OpenTelemetry distributed tracing and Prometheus metric collection across all Go microservices, establishing comprehensive observability and SRE monitoring baselines.
+  - Migrated messaging and state management from Dapr to native NATS JetStream and KV, optimizing platform reliability and reducing operational overhead.
+  - Orchestrated declarative ETL pipelines with Hatchet and verified reliability via Ginkgo E2E gates, ensuring data consistency across PostgreSQL, Dgraph, and DocumentDB.
 
-### Second Brain - Self-Hosted Document RAG
-- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries, instrumented with OpenTelemetry and custom Grafana dashboards.
-- Designed real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
-- Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
-- Implemented vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
+- **Second Brain - Self-Hosted Document RAG**
+  - Built a durable, retryable document-ingestion pipeline with Hatchet, instrumented with OpenTelemetry and custom Grafana dashboards for real-time observability and metrics tracking.
+  - Designed real-time progress streaming over NATS JetStream + SSE, implementing durable streams and KV current-state tracking for platform reliability and state management.
+  - Deployed cloud-native on k3d with cert-manager TLS and ExternalDNS, maintaining local llama.cpp inference servers behind an OpenAI-compatible API for secure, private processing.
+  - Implemented vector search with pgvector (HNSW, cosine), optimizing semantic retrieval performance within a self-hosted Kubernetes homelab environment.
 
-### Information Retrieval System (IRS) - Distributed Systems Platform
-- Deployed with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all Go microservices.
-- Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC.
-- Built an MCP (Model Context Protocol) integration exposing the platform to LLM agents as declarative, hot-reloadable tools via a config-driven toolbox server.
-- Built a per-user authenticated browser-session service (Playwright) with gateway consistent-hashing and an AES-256-GCM credential vault.
-- Built a best-effort ETL side-channel into PostgreSQL (sqlc), Dgraph, and DocumentDB, orchestrated by Hatchet with declarative routing; verified by a Ginkgo E2E gate.
-- Integrated multiple bot-protected third-party vendors via an adaptor/anti-corruption contract with CUE-based schema mapping.
+- **cv-tailor - LLM CV/Cover-Letter Tailoring + LinkedIn Automation**
+  - Developed a Python CLI and FastMCP Server that automates CV/Cover letter tailoring using unit-tested project ranking, ensuring reliable LLM output generation and platform security.
+  - Engineered an automated Gmail alert ingestion pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching, integrating bi-directional Google Sheets synchronization for lifecycle tracking.
+  - Secured sensitive documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages, enforcing platform data integrity and access control standards.
 
 ## Skills
 
-- Languages (spoken): English (fluent), Deutsch (A2)
-- Cloud & Platform: Kubernetes, Cilium, Helm, Docker, kustomize, Skaffold, Terraform, AWS (EC2, RDS, DynamoDB, S3), external-dns, k3d, GitOps, DevOps, SRE
-- Observability & Reliability: OpenTelemetry, Prometheus, Grafana, VictoriaMetrics, distributed tracing, metrics collection, alerting, platform reliability, latency optimization
-- Networking & Messaging: NATS (JetStream + KV), Kafka, gRPC, ZeroMQ, Multus CNI, macvlan, GTP tunneling, policy-based routing, DNS management
-- Databases & Storage: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, MinIO/LeoFS
-- Programming & Frameworks: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP, FastMCP, Hatchet, MCP, Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, ReactJS, NodeJS, NestJS, Django
+- Languages (spoken): English (fluent), German / Deutsch (A2)
+- Cloud & Platform Infrastructure: Kubernetes, Docker, Helm, kustomize, Skaffold, Cilium, external-dns, Terraform, AWS (EC2, RDS, DynamoDB)
+- Observability, Monitoring & SRE: OpenTelemetry, Prometheus, VictoriaMetrics, Grafana, distributed tracing, metrics collection, reliability engineering, alerting
+- Networking & Distributed Systems: gRPC, NATS (JetStream + KV), Kafka, Dapr, ebpf/Cilium networking, DNS resolution
+- Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
+- Databases & Storage: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+- ML & Data Engineering: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas
+- Web & Backend Frameworks: ReactJS, NodeJS, NestJS, Django

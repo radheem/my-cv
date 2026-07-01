@@ -266,29 +266,48 @@ def _education(lines: list[str]) -> str:
     return "\n".join(out[:-1] if out else out)  # drop trailing \vspace
 
 
-def _project_items(lines: list[str]) -> list[tuple[str, str]]:
-    """- **Name** — description  →  [(name, description)]."""
-    items = []
-    for ln in lines:
-        s = ln.lstrip()
-        if not s.startswith(("- ", "* ")):
-            continue
-        s = s[2:].strip()
-        m = re.match(r"\*\*(.+?)\*\*\s*[—–-]\s*(.*)", s)
-        if m:
-            items.append((m.group(1).strip(), m.group(2).strip()))
-        else:  # no bold name — best effort split on the first dash
-            parts = _DASH.split(s, 1)
-            items.append((parts[0].strip(), parts[1].strip() if len(parts) > 1 else ""))
-    return items
+def _parse_projects_with_bullets(lines: list[str], portfolio: str) -> str:
+    """Parse projects structured as H3 headings followed by bullet points, embedding any [repo](url) link if found."""
+    out, i, n = [], 0, len(lines)
+    while i < n:
+        ln = lines[i].strip()
+        if ln.startswith("### "):
+            head = ln[4:].strip()
+            # Extract markdown repo links if any, e.g. [repo](url)
+            repo_url = ""
+            m = re.search(r"\[repo\]\((.+?)\)", head)
+            if m:
+                repo_url = m.group(1)
+                # Remove [repo](url) and any trailing punctuation/whitespace from the displayed name
+                head = re.sub(r"\s*\[repo\]\(.+?\)", "", head)
+            
+            # Format the header
+            if repo_url:
+                head_str = f"\\href{{{_escape_url(repo_url)}}}{{{inline(head)}}}"
+            else:
+                head_str = inline(head)
 
-
-def _projects(items: list[tuple[str, str]], urls: list[str]) -> str:
-    out = ["\\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]"]
-    for (name, desc), url in zip(items, urls):
-        out.append("  \\project{%s}{%s}{%s}" % (inline(name), _escape_url(url), inline(desc)))
-    out.append("\\end{itemize}")
-    return "\n".join(out)
+            i = _skip_blank(lines, i + 1)
+            bullets = []
+            while i < n:
+                s = lines[i].lstrip()
+                if s.startswith(("- ", "* ")):
+                    bullets.append(s[2:].strip())
+                    i += 1
+                elif not lines[i].strip():
+                    i += 1
+                else:
+                    break
+            
+            out.append("\\role{%s}{}{}" % head_str)
+            if bullets:
+                out.append("\\bullets")
+                out += ["  \\item " + inline(b) for b in bullets]
+                out.append("\\bulletsend")
+            out.append("\\vspace{2pt}")
+        else:
+            i += 1
+    return "\n".join(out[:-1] if out else out)  # drop trailing \vspace
 
 
 def _skills(lines: list[str]) -> str:
@@ -374,10 +393,7 @@ def _render_cv_block(body: str, urls: list[str] | None, projects: list[dict], po
         elif kind == "education":
             parts.append(_education(lines))
         elif kind == "projects":
-            items = _project_items(lines)
-            if resolved is None:
-                resolved = _resolve_urls(items, projects, portfolio)
-            parts.append(_projects(items, resolved + [f"{portfolio}/projects/"] * 5))
+            parts.append(_parse_projects_with_bullets(lines, portfolio))
         elif kind == "skills":
             parts.append(_skills(lines))
         else:
