@@ -9,35 +9,37 @@ Verified professional credentials from top academic institutions and industry le
 
 ## Verified Credentials
 
-<div class="grid cards" markdown>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; margin-bottom: 30px;">
 
--   :material-school: __Deep Learning Specialization__
-    
-    <div style="border: 2px solid #004D40; border-radius: 8px; padding: 20px; background-color: #F0FDF4; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-top: 12px; margin-bottom: 12px; font-family: 'DM Sans', sans-serif;">
-      <div style="font-size: 0.75em; text-transform: uppercase; color: #15803D; font-weight: 700; letter-spacing: 0.05em;">DeepLearning.AI — Coursera</div>
-      <div style="font-size: 1.3em; font-weight: 800; margin-top: 6px; color: #166534; line-height: 1.2;">DEEP LEARNING</div>
-      <div style="font-size: 0.9em; color: #374151; margin-top: 2px; font-weight: 500;">Specialization Certificate</div>
-      <div style="font-size: 0.75em; color: #6B7280; margin-top: 10px;">Completed: **January 2020**</div>
-      <div style="border-top: 1px solid #D1FAE5; margin-top: 16px; padding-top: 10px; font-size: 0.75em; color: #047857; font-weight: 600;">
-        VERIFIED CERTIFICATE: Coursera_dls_specialization.pdf
-      </div>
+  <!-- Card 1: Deep Learning Specialization -->
+  <div style="flex: 1; min-width: 290px; border: 2px solid #004D40; border-radius: 8px; padding: 20px; background-color: #F0FDF4; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+    <div>
+      <div style="font-size: 0.75em; text-transform: uppercase; color: #15803D; font-weight: 700; letter-spacing: 0.05em; font-family: sans-serif;">DeepLearning.AI — Coursera</div>
+      <div style="font-size: 1.3em; font-weight: 800; margin-top: 6px; color: #166534; line-height: 1.2; font-family: sans-serif;">DEEP LEARNING</div>
+      <div style="font-size: 0.9em; color: #374151; margin-top: 2px; font-weight: 500; font-family: sans-serif;">Specialization Certificate</div>
+      <div style="font-size: 0.8em; color: #4B5563; margin-top: 10px; font-family: sans-serif;">Completed: <strong>January 2020</strong></div>
     </div>
-
-    [:material-file-pdf: Specialization Certificate (PDF)](./certificates/deeplearningai_cert/Coursera_dls_specialization.pdf)
-
--   :material-calculator-variant: __Maths for ML: Linear Algebra__
-    
-    <div style="border: 2px solid #0747A6; border-radius: 8px; padding: 20px; background-color: #F0F5FF; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-top: 12px; margin-bottom: 12px; font-family: 'DM Sans', sans-serif;">
-      <div style="font-size: 0.75em; text-transform: uppercase; color: #0747A6; font-weight: 700; letter-spacing: 0.05em;">Imperial College London</div>
-      <div style="font-size: 1.3em; font-weight: 800; margin-top: 6px; color: #1E3A8A; line-height: 1.2;">LINEAR ALGEBRA</div>
-      <div style="font-size: 0.9em; color: #374151; margin-top: 2px; font-weight: 500;">Mathematics for Machine Learning</div>
-      <div style="font-size: 0.75em; color: #6B7280; margin-top: 10px;">Completed: **April 2022**</div>
-      <div style="border-top: 1px solid #DBEAFE; margin-top: 16px; padding-top: 10px; font-size: 0.75em; color: #1D4ED8; font-weight: 600;">
-        VERIFIED CERTIFICATE: LinearAlgebraForMachineLearningCert.pdf
-      </div>
+    <div style="border-top: 1px solid #D1FAE5; margin-top: 16px; padding-top: 12px;">
+      <a href="./certificates/deeplearningai_cert/Coursera_dls_specialization.pdf" style="font-weight: 700; color: #047857; text-decoration: none; font-size: 0.85em; display: inline-flex; align-items: center; gap: 4px; font-family: sans-serif;">
+        View Specialization PDF →
+      </a>
     </div>
+  </div>
 
-    [:material-file-pdf: Linear Algebra Certificate (PDF)](./certificates/mathsForML/LinearAlgebraForMachineLearningCert.pdf)
+  <!-- Card 2: Linear Algebra -->
+  <div style="flex: 1; min-width: 290px; border: 2px solid #0747A6; border-radius: 8px; padding: 20px; background-color: #F0F5FF; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+    <div>
+      <div style="font-size: 0.75em; text-transform: uppercase; color: #0747A6; font-weight: 700; letter-spacing: 0.05em; font-family: sans-serif;">Imperial College London</div>
+      <div style="font-size: 1.3em; font-weight: 800; margin-top: 6px; color: #1E3A8A; line-height: 1.2; font-family: sans-serif;">LINEAR ALGEBRA</div>
+      <div style="font-size: 0.9em; color: #374151; margin-top: 2px; font-weight: 500; font-family: sans-serif;">Mathematics for Machine Learning</div>
+      <div style="font-size: 0.8em; color: #4B5563; margin-top: 10px; font-family: sans-serif;">Completed: <strong>April 2022</strong></div>
+    </div>
+    <div style="border-top: 1px solid #DBEAFE; margin-top: 16px; padding-top: 12px;">
+      <a href="./certificates/mathsForML/LinearAlgebraForMachineLearningCert.pdf" style="font-weight: 700; color: #1D4ED8; text-decoration: none; font-size: 0.85em; display: inline-flex; align-items: center; gap: 4px; font-family: sans-serif;">
+        View Course PDF →
+      </a>
+    </div>
+  </div>
 
 </div>
 
@@ -46,7 +48,7 @@ Verified professional credentials from top academic institutions and industry le
 ## Detailed Curriculum
 
 ### Deep Learning Specialization — DeepLearning.AI
-*Issued by DeepLearning.AI via Coursera · January 2020*
+*Issued via Coursera · January 2020*
 
 A comprehensive 5-course specialization designed and taught by **Andrew Ng**, focusing on the foundations and practical implementation of modern deep learning models.
 
@@ -64,8 +66,9 @@ A comprehensive 5-course specialization designed and taught by **Andrew Ng**, fo
 ---
 
 ### Mathematics for Machine Learning: Linear Algebra — Imperial College London
-*Issued by Imperial College London via Coursera · April 2022*
+*Issued via Coursera · April 2022*
 
 An advanced rigorous program covering the core linear algebra foundations required for machine learning and data science.
 
+*   **[:material-file-pdf: Linear Algebra Course Certificate (PDF)](./certificates/mathsForML/LinearAlgebraForMachineLearningCert.pdf)**
 *   *Syllabus:* Coordinate transformations, vector projections, matrices (eigenvalues & eigenvectors), Singular Value Decomposition (SVD), Principal Component Analysis (PCA) foundations.
