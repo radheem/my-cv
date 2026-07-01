@@ -130,11 +130,13 @@ def _sections(body: str) -> list[tuple[str, str, list[str]]]:
 
 
 def _split_dates(italic: str) -> tuple[str, str]:
-    """``*Pakistan · 06/2021 – 08/2023*`` → ('Pakistan', '06/2021 – 08/2023')."""
+    """``*Pakistan · 06/2021 – 08/2023*`` or ``Pakistan | 06/2021 - 08/2023`` → ('Pakistan', '06/2021 - 08/2023')."""
     text = italic.strip().strip("*").strip()
-    if _MIDDOT in text:
-        left, right = text.rsplit(_MIDDOT, 1)
-        return left.strip(), right.strip()
+    for sep in (" · ", " | ", " - ", " – ", " — "):
+        if sep in text:
+            left, right = text.rsplit(sep, 1)
+            if re.search(r"\d{4}|present", right, re.IGNORECASE):
+                return left.strip(), right.strip()
     return "", text
 
 
@@ -153,9 +155,13 @@ def _experience(lines: list[str]) -> str:
             head = ln[4:].strip()
             i = _skip_blank(lines, i + 1)
             loc, dates = "", ""
-            if i < n and lines[i].strip().startswith("*"):
-                loc, dates = _split_dates(lines[i].strip())
-                i = _skip_blank(lines, i + 1)
+            if i < n:
+                candidate = lines[i].strip()
+                has_date = re.search(r"\d{4}|present", candidate, re.IGNORECASE)
+                is_bullet = candidate.startswith(("- ", "* "))
+                if (candidate.startswith("*") and candidate.endswith("*")) or (has_date and not is_bullet and not candidate.startswith("###")):
+                    loc, dates = _split_dates(candidate)
+                    i = _skip_blank(lines, i + 1)
             bullets = []
             while i < n:
                 s = lines[i].lstrip()
