@@ -6,24 +6,20 @@ tagline: "Senior O-RAN & Telecommunications Software Engineer"
 
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Improved deployment processes and dockerized backend services, streamlining infrastructure provisioning and container orchestration on AWS EC2 and Kubernetes.
-- Led system design and code reviews to ensure architectural consistency, scalability, and reliability across distributed NodeJS, PHP, and TypeScript services.
-- Developed and documented new services and features, integrating MySQL and MongoDB data stores with AWS S3 for secure object storage.
-- Tech: NodeJS, PHP, TypeScript, ReactJS, Docker, MySQL, MongoDB, AWS S3, AWS EC2, Kubernetes.
+- Led system design and code reviews while dockerizing backend services to standardize deployment workflows on Kubernetes and AWS EC2.
+- Developed and documented new microservices and features using NodeJS, TypeScript, and PHP, integrating with MySQL and MongoDB.
+- Streamlined deployment processes and infrastructure configurations to improve service reliability and release velocity.
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- Integrated Prometheus logging, OpenTelemetry metrics, and Grafana alerts to monitor transaction engine throughput and Kafka consumer group lag, reducing latency spikes and enhancing real-time system observability.
-- Identified system design improvements and proposed solutions independently, maintaining rigorous release processes and architectural documentation for core exchange services.
-- Reviewed code and design decisions as a system expert for select services, while leading teams of junior engineers on high-impact project initiatives.
-- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes, Prometheus, Grafana, OpenTelemetry.
+- Integrated Prometheus logging, OpenTelemetry metrics, and Grafana alerts to monitor transaction engine throughput and Kafka consumer group lag, reducing latency spikes.
+- Identified system design improvements and proposed independent solutions while reviewing code and architecture as a senior system expert.
+- Maintained release processes and documentation for core exchange services while mentoring junior engineers on project initiatives.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
-- Researched solutions and proposed designs for implementation, delivering robust, containerized applications using Docker and managing relational (MySQL) and NoSQL (MongoDB) databases on AWS EC2.
-- Analyzed, cleaned, and visualized data to present actionable insights to stakeholders, leveraging Python, scikit-learn, and TensorFlow for data-driven pipelines and model training.
-- Delivered production-ready solutions in cross-functional teams of three under the mentorship of senior engineers, focusing on scalable backend architecture.
-- Tech: Python, scikit-learn, NodeJS, TensorFlow, Docker, MongoDB, MySQL, AWS EC2.
+- Researched and proposed scalable system designs for implementation, delivering solutions in cross-functional teams under senior mentorship.
+- Analyzed, cleaned, and visualized complex datasets using Python, scikit-learn, and TensorFlow to drive data-informed stakeholder decisions.
 
 ## Education
 
@@ -35,27 +31,27 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### O-RAN Testbed (Open5GS + RIC + OCUDU gNB)
-- Composable single-host 5G SA testbed (Open5GS 5GC + O-RAN SC Near-RT RIC + OCUDU/srsRAN gNB, ZMQ/UHD) with Python xApps over E2 and a Kafka metrics pub/sub fan-out to InfluxDB, MongoDB, and an AIMLFW store.
-- Consolidated infrastructure into Docker Compose stacks, enabling flexible gNB attachment over shared bridge networks and supporting both ZMQ virtual RF and UHD over-the-air on USRP B210 SDR.
-- Integrated E2SM-KPM, E2SM-RC (handover), and E2SM-CCC protocols, with real-time cellular KPIs visualized via custom Grafana dashboards.
+### O-RAN Testbed (Open5GS + RIC + OCUDU gNB) ([repo](https://github.com/radheemCorp/oran-testbed))
+- Consolidated a single-host 5G SA testbed into composable Docker Compose stacks (core, gNB ZMQ/UHD, RIC, monitoring, pub/sub) where the 5GC and Near-RT RIC publish host ports so any number of gNBs - local or remote - can attach over shared bridge networks.
+- Ran the gNB on the open-source OCUDU CU/DU (srsRAN heritage), building one image for both ZMQ virtual RF and UHD over-the-air on a USRP B210 SDR.
+- Integrated the O-RAN SC Near-RT RIC over E2 with Python xApps using E2SM-KPM, E2SM-RC (incl. handover), and E2SM-CCC.
 
-### O-RAN AIML Framework
-- End-to-end AI/ML platform for O-RAN 5G networks (Kubeflow + KServe) driven by a custom Python client/SDK. 15-credit research project, graded 1.0 (A).
-- Deployed training managers, model registries, and KServe endpoints on Kubernetes via Helm, automating the full ML lifecycle from feature groups to inference.
-- Authored Kubeflow pipelines in Python (kfp) with TensorFlow/Keras and scikit-learn for QoE per-cell throughput prediction, wired to InfluxDB, Cassandra, and MinIO/LeoFS storage.
+### O-RAN AIML Framework ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
+- Deployed the end-to-end AIML framework on Kubernetes with Helm (training manager, model management, KF adapter, data-extraction, KServe).
+- Config-driven Python client/SDK automating the full ML lifecycle: feature group → model → pipeline → training job → inference.
+- Delivered as a 15-credit research project; German grade 1.0 (A).
 
-### 5G Testbed (srsRAN and Open5GS, Kubernetes)
-- Kubernetes-based end-to-end 5G testbed (kubeadm) running srsRAN gNB and Open5GS core as pods, with Multus CNI multi-homing (N2/N3/N6) and ZeroMQ virtual RF.
-- Integrated an O-RAN SC Near-RT RIC over E2 with Python xApps (E2SM-KPM/RC) and an ONOS SDN controller for policy-based network steering.
-- Configured comprehensive Prometheus and Grafana monitoring stacks to capture real-time UPF network throughput, pod CPU profiles, and gNB radio metrics; achieved 50+ Mbps TCP throughput.
+### 5G Testbed - srsRAN and Open5GS, Kubernetes ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
+- Built a Kubernetes-based end-to-end 5G testbed (kubeadm) running srsRAN gNB and Open5GS core as pods, with Multus CNI multi-homing (N2/N3/N6) and ZeroMQ virtual RF.
+- Integrated an O-RAN SC Near-RT RIC over E2 with Python xApps (E2SM-KPM/RC) and an ONOS SDN controller to manage radio and core network traffic.
+- Configured comprehensive Prometheus and Grafana monitoring stacks inside the Kubernetes cluster to capture real-time UPF network throughput, pod CPU profiles, and gNB radio metrics; achieved 50+ Mbps TCP throughput.
 
 ## Skills
 
-- Languages (spoken): English (fluent), German / Deutsch (A2)
+- Languages (spoken): English (fluent), Deutsch (A2)
 - Cloud/Infra: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
-- Systems/Networking: gRPC, NATS (JetStream + KV), Hatchet, Kafka, OpenTelemetry, VictoriaMetrics, Grafana, Prometheus, MCP (FastMCP)
+- Systems: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
 - ML/Data: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas
 - Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
-- Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
 - Web: ReactJS, NodeJS, NestJS, Django
+- Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP

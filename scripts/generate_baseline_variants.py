@@ -23,9 +23,9 @@ Your task is to write a highly polished, tailored CV variant in GitHub-flavored 
 STRICT CONSTRAINTS:
 1. TRUTH ONLY: Use ONLY factual details, dates, employers, metrics, and technologies present in the provided Master CV and Project Catalog. Do NOT invent or extrapolate any facts.
 2. STRUCTURE: Include ONLY the following sections in this exact order:
-   - ## Experience: Include the 3 roles from the Master CV (Al Hilal Invest, Bluefin Exchange, Seed Labs). Reorder and rephrase the bullet points of each role (truthfully) to heavily emphasize and highlight experience related to the requested target cluster.
+   - ## Experience: Include the 3 roles from the Master CV (Al Hilal Invest, Bluefin Exchange, Seed Labs). Reorder and rephrase the bullet points of each role (truthfully) to heavily emphasize and highlight experience related to the requested target cluster. Limit recent roles to max 3 punchy, single-sentence bullets, and older roles to max 2 bullets.
    - ## Education: Match exactly the Master CV education (TU Ilmenau and NU Fast).
-   - ## Projects: Select and list EXACTLY the 3 specified projects for this cluster. Use the descriptions from the project catalog, slightly tuned if helpful to match the cluster's theme.
+   - ## Projects: Select and list EXACTLY the 3 specified projects for this cluster. Format each project with an H3 heading exactly like '### Project Name'. Underneath each heading, list exactly 2 to 3 concise, punchy bullet points (using '- ') highlighting technical scale and impact. Keep any repo link if provided.
    - ## Skills: Order skills so the technical competencies most relevant to the cluster's tags lead the list. Ensure the Languages row is always at the top of the Skills section (English (fluent), Deutsch (A2)).
 3. FORMAT:
    - Write a frontmatter block at the very top containing only the tagline, e.g.:
@@ -71,37 +71,37 @@ def main():
     master_cv = load_master_cv()
     projects_catalog = load_projects_catalog()
     
-    # 5 variants definitions mapping to taxonomy clusters
+    # 5 variants definitions mapping to taxonomy clusters (exactly 2 projects each for optimal 1-page budget)
     variants_defs = [
         {
             "key": "information-management",
             "tagline": "Senior Data & Database Systems Platform Engineer",
             "tags": "database, sql, postgresql, data, persistence, etl, analytics, charts, scrapers, webscraping, transactional, datalake, design",
-            "projects": ["irs-platform", "second-brain", "cv-tailor"]
+            "projects": ["irs", "second-brain"]
         },
         {
             "key": "ai-ml",
             "tagline": "AI & MLOps Platform Engineer",
             "tags": "ml, ai, llm, rag, mlops, kubeflow, kserve, pgvector, vector-search, inference, model-training, deployment, agentic, agents, training",
-            "projects": ["second-brain", "cv-tailor", "oran-aiml"]
+            "projects": ["second-brain", "oran-aiml"]
         },
         {
             "key": "platform-engineer",
             "tagline": "Senior Cloud Platform & Observability Engineer",
             "tags": "kubernetes, cilium, ebpf, helm, docker, gitops, devops, platform, sre, networking, dns, cloud, observability, monitoring, metrics, tracing, reliability",
-            "projects": ["irs-platform", "cv-tailor", "second-brain"]
+            "projects": ["irs", "cv-tailor"]
         },
         {
             "key": "distributed-system",
             "tagline": "Senior Backend & Distributed Systems Engineer",
             "tags": "distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend, fullstack, web, react, node, api, architecture",
-            "projects": ["irs-platform", "second-brain", "cv-tailor"]
+            "projects": ["irs", "cv-tailor"]
         },
         {
             "key": "telecommunication",
             "tagline": "Senior O-RAN & Telecommunications Software Engineer",
             "tags": "5g, oran, telecom, sdn, multus, open5gs, radio, ran, wireless",
-            "projects": ["oran-testbed", "srsran-testbed", "oran-aiml"]
+            "projects": ["oran-testbed", "srsran-testbed"]
         }
     ]
 
@@ -113,13 +113,15 @@ def main():
         key = variant["key"]
         print(f"  * Generating '{key}' variant ({variant['tagline']})...", file=sys.stderr)
         
-        # Build projects text from catalog
+        # Build projects text from catalog using the new H3 and bullet points pattern!
         p_list = []
         for pid in variant["projects"]:
             proj = next((p for p in projects_catalog if p.get("id") == pid), None)
             if proj:
-                p_list.append(f"- **{proj.get('name')}** — {proj.get('summary')}")
-        projects_text = "\n".join(p_list)
+                repo_link = f" ([repo]({proj['url']}))" if proj.get("url") else ""
+                bullet_lines = "\n".join(f"- {b}" for b in proj.get("highlights", []))
+                p_list.append(f"### {proj.get('name')}{repo_link}\n{bullet_lines}")
+        projects_text = "\n\n".join(p_list)
 
         user_content = USER_PROMPT.format(
             cluster_key=key,

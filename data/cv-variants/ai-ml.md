@@ -6,24 +6,20 @@ tagline: "AI & MLOps Platform Engineer"
 
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Dockerized and containerized backend services, streamlining deployment pipelines and ensuring consistent environments for model serving and inference infrastructure.
-- Architected and deployed cloud-native microservices on Kubernetes and AWS EC2, establishing robust infrastructure for data-intensive and AI-ready workloads.
-- Led system and code reviews, enforcing architectural standards for distributed systems, event-driven messaging, and secure credential management.
-- Developed and documented scalable services using NodeJS, TypeScript, and PHP, integrating with MySQL and MongoDB to support high-throughput data processing.
+- Architected and containerized backend services on Kubernetes and AWS, streamlining deployment pipelines for scalable platform infrastructure.
+- Led system design and code reviews, establishing robust architectural patterns for distributed microservices and cloud-native deployments.
+- Developed and documented high-performance services using NodeJS, TypeScript, and Docker, ensuring reliable backend operations.
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- Engineered high-performance data pipelines and monitoring stacks using Kafka, PostgreSQL, and DynamoDB, optimizing throughput and reducing latency for transaction and AI/ML inference workloads.
-- Integrated OpenTelemetry distributed tracing, Prometheus metrics, and Grafana alerting to monitor system health, consumer group lag, and infrastructure reliability.
-- Identified and implemented system design improvements, leveraging Go and Python to build scalable, cloud-native services on Kubernetes and Terraform.
-- Mentored junior engineers and led project initiatives, establishing best practices for code quality, deployment automation, and observability.
+- Integrated OpenTelemetry, Prometheus, and Grafana across distributed Go/Python services to monitor system throughput and reduce latency spikes.
+- Identified and implemented system design improvements for core exchange services, optimizing infrastructure reliability and observability.
+- Maintained release processes and led junior engineering teams, ensuring consistent deployment standards and platform stability.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
-- Developed and trained machine learning models using Python, TensorFlow, and scikit-learn, focusing on predictive analytics and data-driven feature engineering.
-- Analyzed, cleaned, and visualized complex datasets to extract actionable insights, presenting findings to stakeholders and guiding model iteration cycles.
-- Researched and prototyped AI/ML solutions, designing scalable architectures using Docker, AWS EC2, and MongoDB for model deployment and data storage.
-- Collaborated in cross-functional teams under senior mentorship to deliver production-ready software and ML pipelines.
+- Developed and trained machine learning models using Python, TensorFlow, and scikit-learn, focusing on data-driven predictive solutions.
+- Analyzed, cleaned, and visualized complex datasets to extract actionable insights, supporting stakeholder decision-making and model validation.
 
 ## Education
 
@@ -35,20 +31,26 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### Second Brain (Document RAG)
-Self-hosted RAG document-intelligence service featuring durable Hatchet ingestion, local llama.cpp inference, and pgvector semantic search. Implemented real-time progress streaming via NATS JetStream and deployed on a k3d homelab with cert-manager TLS and ExternalDNS.
+### Second Brain (Document RAG) ([repo](https://github.com/radheem/my-notebook))
+- Durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) featuring per-step timeouts, retries, and OpenTelemetry instrumentation.
+- Real-time progress streaming over NATS JetStream + SSE, with all local inference secured via two llama.cpp servers behind an OpenAI-compatible API.
+- Vector search implemented with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)
-Python CLI tool and FastMCP server that transforms job postings into tailored CVs and cover letters. Utilizes a pure ranker for fact extraction and LLM-only prose generation to prevent hallucinations. Features automated multi-source Gmail alert ingestion (LinkedIn, Indeed, Glassdoor, Fraunhofer) and bi-directional Google Sheets lifecycle syncing.
+### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([repo](https://github.com/radheem/cv-tailor))
+- Built a Python CLI and FastMCP Server automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
+- Developed automated Gmail alert ingestion pipelines and bi-directional Google Sheets synchronization to track job application lifecycles.
+- Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
 
-### O-RAN AIML Framework
-End-to-end AI/ML platform for O-RAN 5G networks built on Kubeflow and KServe, driven by a custom Python client/SDK. Orchestrates the full ML lifecycle from feature groups and training jobs to model deployment and inference. Delivered as a 15-credit research project graded 1.0 (A).
+### O-RAN AIML Framework ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
+- Deployed end-to-end AIML framework on Kubernetes with Helm, featuring a config-driven Python SDK automating the full ML lifecycle (feature group → training → inference).
+- Authored Kubeflow training/retraining pipelines (kfp) with TensorFlow/Keras and scikit-learn, serving models via KServe with integrated feature stores and artifact storage.
 
 ## Skills
 
-- Languages (spoken): English (fluent), Deutsch (A2)
-- AI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, llama.cpp, pgvector, vector-search, RAG, agentic systems, FastMCP, MCP, model-training, inference, deployment
+- Languages (spoken): English (fluent), German / Deutsch (A2)
+- AI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
+- Cloud & Infrastructure: Kubernetes, Helm, kustomize, Skaffold, Docker, Terraform, AWS (EC2, RDS, DynamoDB), Cilium, external-dns
+- Systems & Messaging: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
+- Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
 - Programming Languages: Python, Go, SQL, TypeScript, JavaScript, Bash, PHP
-- Cloud/Infra & Deployment: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
-- Systems & Data: gRPC, NATS (JetStream + KV), Hatchet, Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana, PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
-- Web: ReactJS, NodeJS, NestJS, Django
+- Web & Frameworks: ReactJS, NodeJS, NestJS, Django

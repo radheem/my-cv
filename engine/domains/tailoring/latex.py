@@ -273,13 +273,15 @@ def _parse_projects_with_bullets(lines: list[str], portfolio: str) -> str:
         ln = lines[i].strip()
         if ln.startswith("### "):
             head = ln[4:].strip()
-            # Extract markdown repo links if any, e.g. [repo](url)
+            # Extract markdown repo links if any, e.g. [repo](url) or ([repo](url))
             repo_url = ""
             m = re.search(r"\[repo\]\((.+?)\)", head)
             if m:
                 repo_url = m.group(1)
-                # Remove [repo](url) and any trailing punctuation/whitespace from the displayed name
+                # Remove ([repo](url)) or [repo](url) and any trailing empty parentheses/whitespace
+                head = re.sub(r"\s*\(\s*\[repo\]\(.+?\)\s*\)", "", head)
                 head = re.sub(r"\s*\[repo\]\(.+?\)", "", head)
+                head = re.sub(r"\s*\(\s*\)\s*$", "", head)
             
             # Format the header
             if repo_url:

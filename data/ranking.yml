@@ -21,7 +21,7 @@ field_weights:
 cluster_affinity: 2.0
 
 # How many projects to feature and how many tailored skill lines to emit.
-top_projects: 3
+top_projects: 2
 max_skill_groups: 3
 
 # Preferences. Leave empty for none.

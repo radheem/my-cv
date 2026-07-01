@@ -6,26 +6,20 @@ tagline: "Senior Data & Database Systems Platform Engineer"
 
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Led system design and code reviews for backend services, optimizing data persistence layers, architectural patterns, and database schema design.
-- Dockerized and containerized backend services, improving deployment reliability, infrastructure consistency, and data service isolation.
-- Developed and documented new data-driven services and features, integrating MySQL and MongoDB for robust transactional and document storage.
-- Tech: NodeJS, PHP, TypeScript, ReactJS, Docker, MySQL, MongoDB, AWS S3, AWS EC2, Kubernetes.
+- Architected and dockerized backend services, leading system design reviews to optimize data persistence and transactional workflows across MySQL and MongoDB.
+- Engineered new data-driven features and APIs, establishing robust documentation standards for scalable information management systems.
+- Streamlined deployment pipelines and infrastructure provisioning on AWS EC2 and Kubernetes to support high-availability data services.
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- Identified and implemented system design improvements for high-throughput transactional engines, optimizing data flow, caching strategies, and persistence layers.
-- Integrated PostgreSQL and DynamoDB for scalable transactional data storage, ensuring data integrity and low-latency query performance.
-- Engineered observability pipelines using Prometheus, OpenTelemetry, and Grafana to monitor transaction engine throughput and Kafka consumer group lag, significantly reducing latency spikes.
-- Maintained release processes and technical documentation for core exchange services, ensuring reliable data pipeline operations and system stability.
-- Led engineering teams on project initiatives, mentoring junior developers on database design, distributed system patterns, and data architecture.
-- Tech: ReactJS, NodeJS, Go, Python, TypeScript, Docker, PostgreSQL, DynamoDB, Kafka, Terraform, Kubernetes, Prometheus, Grafana, OpenTelemetry.
+- Optimized transactional engine performance and data persistence by integrating PostgreSQL and DynamoDB, directly reducing latency spikes in high-throughput exchange services.
+- Designed and implemented comprehensive data analytics and monitoring dashboards using Grafana, Prometheus, and OpenTelemetry to track transactional throughput and Kafka consumer lag.
+- Led system design reviews and code architecture for critical database-backed services, mentoring junior engineers on scalable data persistence patterns.
 
 ### Seed Labs - Software Engineer
 Pakistan | 06/2020 - 06/2021
-- Analyzed, cleaned, and transformed raw datasets to generate actionable analytics and visualizations for stakeholder reporting and business insights.
-- Delivered data-driven solutions in cross-functional teams, leveraging Python, scikit-learn, and TensorFlow for predictive modeling and data processing.
-- Researched and proposed architectural designs for data storage and processing, utilizing MySQL and MongoDB for scalable persistence and retrieval.
-- Tech: Python, scikit-learn, NodeJS, TensorFlow, Docker, MongoDB, MySQL, AWS EC2.
+- Engineered data ETL pipelines and analytical workflows using Python and SQL, cleaning and transforming raw datasets for stakeholder reporting.
+- Developed data visualization charts and insights dashboards to communicate analytical findings, leveraging MySQL and MongoDB for persistent data storage.
 
 ## Education
 
@@ -37,30 +31,22 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### Second Brain (Document RAG)
-- Built a durable, retryable document-ingestion and ETL pipeline (extract → chunk → embed → index) using Hatchet, with per-step timeouts and OpenTelemetry instrumentation.
-- Designed real-time data streaming and progress tracking over NATS JetStream + SSE (durable stream + KV current-state).
-- Implemented high-performance vector search and semantic persistence with pgvector (HNSW, cosine) for efficient data retrieval.
-- Deployed cloud-native on k3d with custom Grafana dashboards for pipeline analytics, observability, and system monitoring.
+### Second Brain (Document RAG) ([repo](https://github.com/radheem/my-notebook))
+- Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index), featuring per-step timeouts and crash-resilient retries.
+- Implemented vector search with pgvector (HNSW, cosine) and real-time progress streaming over NATS JetStream + SSE for persistent state tracking.
+- Deployed cloud-native on k3d with cert-manager TLS and ExternalDNS, keeping all inference local via dual llama.cpp servers behind an OpenAI-compatible API.
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)
-- Developed a Python CLI and FastMCP server for automated data extraction and document tailoring, using unit-tested ranking algorithms to ensure factual accuracy and guard against hallucinations.
-- Engineered an automated web-scraping and Gmail alert ingestion pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) with lightweight API fetching and data normalization.
-- Integrated bi-directional Google Sheets synchronization to track, persist, and visualize job application lifecycle analytics.
-- Secured sensitive documents and data in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
-
-### Information Retrieval System (IRS) - Distributed Systems Platform
-- Architected a best-effort ETL side-channel into PostgreSQL (via sqlc), Dgraph, and DocumentDB, orchestrated by Hatchet with declarative routing and Ginkgo E2E verification.
-- Designed and implemented a distributed data persistence layer using native NATS JetStream for messaging and KV state, replacing legacy Dapr dependencies to improve data flow efficiency.
-- Integrated multiple third-party data sources via anti-corruption adapters with CUE-based schema mapping, ensuring clean data ingestion and transactional consistency.
-- Deployed on Kubernetes with Cilium and OpenTelemetry, ensuring robust data pipeline observability, distributed tracing, and system reliability.
+### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([repo](https://github.com/radheem/cv-tailor))
+- Engineered a Python CLI and **FastMCP Server** automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
+- Developed an automated **Gmail alert ingestion** pipeline and lightweight guest API fetching, integrated with bi-directional **Google Sheets synchronization** for lifecycle tracking.
+- Secured sensitive documents in Git using client-side **AES-256-GCM** encryption, gated behind password-protected static Pages.
 
 ## Skills
 
 - Languages (spoken): English (fluent), German / Deutsch (A2)
 - Databases & Persistence: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
-- Data & ETL Orchestration: Kafka, NATS (JetStream + KV), Hatchet, pandas, Kubeflow Pipelines, data extraction pipelines
-- Analytics & Observability: Grafana, OpenTelemetry, VictoriaMetrics, Prometheus, data visualization, pipeline monitoring
-- Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
-- Systems & Infrastructure: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
-- Web & API: ReactJS, NodeJS, NestJS, Django, gRPC, MCP (FastMCP)
+- Data & Analytics: pandas, scikit-learn, Kubeflow Pipelines, KServe, Grafana, VictoriaMetrics
+- Programming Languages: Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+- Systems & ETL/Streaming: Kafka, NATS (JetStream + KV), Hatchet, MCP (FastMCP), gRPC, Dapr, OpenTelemetry
+- Cloud/Infra & Architecture: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
+- Web: ReactJS, NodeJS, NestJS, Django
