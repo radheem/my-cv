@@ -64,7 +64,7 @@ certifications:
   - name: "Deep Learning Specialization"
     issuer: "DeepLearning.AI"
     provider: "Coursera"
-    date: "2026-06"
+    date: "2020-01"
     pdf_path: "certificates/deeplearningai_cert/Coursera_dls_specialization.pdf"
     courses:
       - "Neural Networks and Deep Learning"
@@ -75,5 +75,5 @@ certifications:
   - name: "Mathematics for Machine Learning: Linear Algebra"
     issuer: "Imperial College London"
     provider: "Coursera"
-    date: "2026-06"
+    date: "2022-04"
     pdf_path: "certificates/mathsForML/LinearAlgebraForMachineLearningCert.pdf"
