@@ -58,3 +58,22 @@ skill_groups:
 # Logistics for the cover-letter close.
 availability: "Available full-time now; also open to working-student / part-time."
 relocation: "Based in Germany; can relocate within Germany in ~2-3 weeks. Blue Card-ready — for a qualifying offer the employer only issues the contract; no sponsorship overhead."
+
+# Verified certifications for downstream tailoring and resume compilation.
+certifications:
+  - name: "Deep Learning Specialization"
+    issuer: "DeepLearning.AI"
+    provider: "Coursera"
+    date: "2026-06"
+    pdf_path: "certificates/deeplearningai_cert/Coursera_dls_specialization.pdf"
+    courses:
+      - "Neural Networks and Deep Learning"
+      - "Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization"
+      - "Structuring Machine Learning Projects"
+      - "Convolutional Neural Networks"
+      - "Sequence Models"
+  - name: "Mathematics for Machine Learning: Linear Algebra"
+    issuer: "Imperial College London"
+    provider: "Coursera"
+    date: "2026-06"
+    pdf_path: "certificates/mathsForML/LinearAlgebraForMachineLearningCert.pdf"

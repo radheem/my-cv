@@ -39,6 +39,12 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 ### National University of Computer and Engineering Sciences
 *Bachelor of Science, Computer Science · 06/2016 – 08/2020*
 
+## Certifications
+See the [Certifications](certificates.md) section for full syllabus details and verified PDF credentials:
+
+- **Deep Learning Specialization** (*DeepLearning.AI via Coursera · June 2026*) — 5-course series covering feedforward networks, optimization, CNNs, RNNs, LSTMs, and Transformers.
+- **Mathematics for Machine Learning: Linear Algebra** (*Imperial College London via Coursera · June 2026*) — Vector spaces, coordinate systems, matrices, eigenvalues, eigenvectors, and data projections (PCA).
+
 ## Projects
 See the [Projects](projects/index.md) section for detailed write-ups:
 

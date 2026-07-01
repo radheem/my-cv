@@ -83,6 +83,16 @@ Master of Research, Computer Systems and Engineering | 04/2024 - Present
 ### National University of Computer and Engineering Sciences
 Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
+## Certifications
+
+### DeepLearning.AI
+*Deep Learning Specialization (5-Course Sequence via Coursera) · 06/2026*
+- Neural Networks and Deep Learning; Improving Deep Neural Networks; Structuring Machine Learning Projects; Convolutional Neural Networks (CNNs); Sequence Models (RNN/LSTM/Transformers).
+
+### Imperial College London
+*Mathematics for Machine Learning: Linear Algebra (via Coursera) · 06/2026*
+- Vector spaces, coordinate transformations, matrices, projections, eigenvalues, and eigenvectors for data projection (PCA).
+
 ## Skills
 
 - Languages (spoken): English (fluent), German / Deutsch (A2)
