@@ -49,5 +49,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Landing Page CV & Scannable Cover Letter Prompt Optimization**
+- [x] **Track: Landing Page CV & Scannable Cover Letter Prompt Optimization**
 *Link: [./tracks/landing_page_prompts_20260630/](./tracks/landing_page_prompts_20260630/)*
