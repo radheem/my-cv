@@ -163,6 +163,11 @@ upload: ## Compile + upload PDFs to Google Drive (needs .env): make upload ID=<i
 	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
 	$(UV_RUN) cv-tailor upload "$(ID)"
 
+.PHONY: regenerate
+regenerate: ## Delete existing application files and database row, and re-generate completely: make regenerate ID=<id-or-slug>
+	@test -n "$(ID)" || { echo "ID required (numeric job id or full slug)"; exit 2; }
+	$(UV_RUN) python3 scripts/regenerate_application.py "$(ID)"
+
 .PHONY: db-export
 db-export: ## Export the local DuckDB state to application-data/ on disk
 	$(UV_RUN) cv-tailor db export
