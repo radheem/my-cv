@@ -46,3 +46,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Taxonomy Realignment & Cover Letter Structure Update**
 *Link: [./tracks/taxonomy_cover_letter_20260630/](./tracks/taxonomy_cover_letter_20260630/)*
+
+---
+
+- [ ] **Track: Landing Page CV & Scannable Cover Letter Prompt Optimization**
+*Link: [./tracks/landing_page_prompts_20260630/](./tracks/landing_page_prompts_20260630/)*
