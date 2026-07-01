@@ -2,7 +2,7 @@
 job_title: "Working Student in the Field of NLP"
 company: "Fraunhofer Institute for Secure Information Technology SIT"
 job_url: "https://jobs.fraunhofer.de/job/Darmstadt-Working-Student-in-the-Field-of-NLP-64295/1373711833/"
-status: "applied"
+status: "rejected"
 clusters: ["ml-ai", "web-api"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1SstuaMkZkDzcEbI5i81zS74SoO3j5yt_"

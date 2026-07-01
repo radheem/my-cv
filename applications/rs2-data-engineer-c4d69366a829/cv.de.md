@@ -1,27 +1,26 @@
 ---
-tagline: "Data Engineer"
+tagline: "Data Infrastructure Engineer"
 ---
 
 ## Berufserfahrung
 
-### Bluefin Exchange — Senior Software Engineer
-*Pakistan · 06/2021 – 08/2023*
-- Architektierte und pflegte Python/Go-Mikrodienste sowie REST-APIs und optimierte den Datenfluss zwischen PostgreSQL und DynamoDB.
-- Implementierte Kafka-basierte Event-Pipelines für Echtzeit-Datenstreaming, wodurch Latenz reduziert und die Systemzuverlässigkeit verbessert wurde.
-- Containerisierte Backend-Dienste und automatisierte CI/CD-Workflows, um Release-Prozesse und Deployment-Pipelines zu standardisieren.
-- Leitete Code- und Systemdesign-Reviews und mentorierte Junior-Entwickler in Datenmodellierung und skalierbarer Architektur.
-
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
-- Entwickelte und dokumentierte Backend-Dienste sowie REST-APIs und integrierte MySQL und MongoDB für eine robuste Datenspeicherung.
-- Containerisierte und optimierte Deployment-Prozesse, wodurch die Umgebungskonsistenz und Release-Geschwindigkeit verbessert wurden.
-- Durchführte Systemdesign- und Code-Reviews, um Datenintegrität und eine skalierbare Service-Architektur zu gewährleisten.
+- Backend-Services containerisiert und Bereitstellungs-Pipelines optimiert, um die Release-Zuverlässigkeit und Infrastrukturkonsistenz zu verbessern.
+- Python/Node.js-Services entwickelt und dokumentiert, die auf MySQL und MongoDB basieren, um Datenintegrität und skalierbare Speicherarchitekturen sicherzustellen.
+- Systemdesign und Code Reviews geleitet, um Best Practices in Datenmodellierung, Service-Architektur und Versionskontrolle durchzusetzen.
+
+### Bluefin Exchange — Senior Software Engineer
+*Pakistan · 06/2021 – 08/2023*
+- Release- und CI/CD-Prozesse für datenintensive Börsen-Services gepflegt, um konsistente Deployments und zuverlässige Pipeline-Ausführungen zu gewährleisten.
+- Python- und Go-Mikroservices mit PostgreSQL und Kafka entwickelt, um Datenerfassung, Transaktionsrouting und Echtzeit-ETL-Workflows zu optimieren.
+- Systemdesigns begutachtet und Junior-Engineers in skalierbarer Datenarchitektur, Backend-Performance und Produktionsüberwachung betreut.
 
 ### Seed Labs — Software Engineer
 *Pakistan · 06/2020 – 06/2021*
-- Analysierte, bereinigte und visualisierte komplexe Datensätze mit Python und SQL und lieferte umsetzbare Erkenntnisse für Stakeholder.
-- Entwickelte und bereitete datengetriebene Backend-Dienste mit Python, MySQL und Docker ein, die analytische Workflows unterstützten.
-- Arbeitete in agilen Teams an der Entwicklung und Implementierung skalierbarer Lösungen, mit Fokus auf die Effizienz von Datenpipelines.
+- Datensätze mit Python und MySQL analysiert, bereinigt und visualisiert, um umsetzbare Stakeholder-Erkenntnisse und Reporting bereitzustellen.
+- Produktionsreife Daten- und Backend-Lösungen unter Senior-Mentoring bereitgestellt, mit Fokus auf zuverlässige ETL-Workflows und Datenvalidierung.
+- Services mit Docker containerisiert und Python/Node.js-Stacks integriert, um effiziente Datenverarbeitung und Umgebungswiederverwendbarkeit zu ermöglichen.
 
 ## Ausbildung
 
@@ -33,9 +32,9 @@ tagline: "Data Engineer"
 
 ## Projekte
 
-- **Second Brain (Document RAG)** — Entwickelte eine robuste, fehlerresistente ETL-Pipeline zur Dokumentenaufnahme und Vektorindexierung (pgvector), übertrug Echtzeitfortschritt via NATS JetStream und bereitete die Anwendung cloud-native auf k3d mit lokaler llama.cpp-Inferenz vor.
-- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Entwickelte eine Kafka-gesteuerte ETL-Pipeline zur Verteilung von pro-UE-KPM-Metriken an InfluxDB, MongoDB und Grafana, containerisierte diese via Docker Compose für skalierbares Datenstreaming und Multi-Ziel-Datenlagerung.
-- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Entwickelte eine Python-ETL- und REST-API-Pipeline zur Verarbeitung von Gmail-Benachrichtigungen, zum Abruf externer APIs und zur bidirektionalen Synchronisierung von Daten mit PostgreSQL und Google Sheets, abgesichert durch AES-256-GCM-Verschlüsselung.
+- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Eine Kafka-basierte ETL-Pipeline entwickelt, die pro-UE-KPM-Metriken aus Python-xApps erfasst und an InfluxDB und MongoDB weiterleitet, um nachgelagerte Analysen und Überwachung zu ermöglichen.
+- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Eine Python-gesteuerte ETL- und Erfassungspipeline entwickelt, die Jobmeldungen mehrerer Quellen in eine einheitliche Warteschlange parst, Status mit Google Sheets synchronisiert und Daten in einer schreibgeschützten PostgreSQL-Datenbank mit FastMCP-Schnittstelle speichert.
+- **Second Brain (Document RAG)** — Eine robuste, wiederholbare Dokument-Erfassungspipeline (Hatchet) konzipiert, die Daten extrahiert, chunkt und in pgvector indiziert, wobei der Echtzeitfortschritt über NATS JetStream und SSE gestreamt wird, um eine zuverlässige Datenverarbeitung zu gewährleisten.
 
 ## Kenntnisse
 
@@ -43,4 +42,4 @@ tagline: "Data Engineer"
 - **Programmiersprachen** — Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
 - **Datenbanken & Persistenz** — PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
 - **KI-/ML-Integration** — MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
-- **Web & API** — REST, ReactJS, NodeJS, NestJS, Django, Protocol Buffers, OpenAPI
+- **Cloud-Native & Infrastruktur** — Docker, Kubernetes, kustomize, Skaffold, Helm, Cilium, Terraform, external-dns

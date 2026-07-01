@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Darktrace"
 job_url: "https://www.linkedin.com/jobs/view/4432269032/"
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/164EYS58F_GGMWY28_vLZKUhCh2fpxyYj"

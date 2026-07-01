@@ -37,12 +37,6 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Integrated a bi-directional Google Sheets synchronization using Google Apps Script to track job application lifecycles.
 - Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
 
-### Second Brain (Document RAG) ([repo](https://github.com/radheem/my-notebook))
-- Durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index), per-step timeouts and retries that survive worker crashes.
-- Real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
-- All inference kept local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
-- Vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
-
 ### Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project)
 - Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC, reducing operational overhead and latency.
 - Deployed Go microservices with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all services.

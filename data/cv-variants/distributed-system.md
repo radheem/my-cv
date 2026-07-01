@@ -31,12 +31,7 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### Second Brain (Document RAG) ([repo](https://github.com/radheem/my-notebook))
-- Durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index), per-step timeouts and retries that survive worker crashes.
-- Real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
-- Vector search with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
-
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([repo](https://github.com/radheem/cv-tailor))
+### cv-tailor (LLM CV/Cover Tailoring + Application Management) ([repo](https://github.com/radheem/cv-tailor))
 - Built a Python CLI and **FastMCP Server** that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
 - Developed an automated **Gmail alert ingestion** pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
 - Secured documents in Git using client-side **AES-256-GCM** encryption gated on password-protected static Pages.

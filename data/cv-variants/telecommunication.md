@@ -41,11 +41,6 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Config-driven Python client/SDK automating the full ML lifecycle: feature group → model → pipeline → training job → inference.
 - Delivered as a 15-credit research project; German grade 1.0 (A).
 
-### 5G Testbed - srsRAN and Open5GS, Kubernetes ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
-- Built a Kubernetes-based end-to-end 5G testbed (kubeadm) running srsRAN gNB and Open5GS core as pods, with Multus CNI multi-homing (N2/N3/N6) and ZeroMQ virtual RF.
-- Integrated an O-RAN SC Near-RT RIC over E2 with Python xApps (E2SM-KPM/RC) and an ONOS SDN controller to manage radio and core network traffic.
-- Configured comprehensive Prometheus and Grafana monitoring stacks inside the Kubernetes cluster to capture real-time UPF network throughput, pod CPU profiles, and gNB radio metrics; achieved 50+ Mbps TCP throughput.
-
 ## Skills
 
 - Languages (spoken): English (fluent), Deutsch (A2)

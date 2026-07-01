@@ -66,7 +66,7 @@ def main():
         
     # 3. Run cv-tailor new with the parent job_slug and custom application slug
     print(f"🚀 Running: cv-tailor new '{job_slug}' --slug '{slug}'...")
-    res = subprocess.run(["cv-tailor", "new", job_slug, "--slug", slug], capture_output=True, text=True)
+    res = subprocess.run(["cv-tailor", "new", job_slug, "--slug", slug], capture_output=True, text=True, errors="replace")
     if res.returncode != 0:
         print(f"❌ Failed to run cv-tailor new:\n{res.stderr}")
         sys.exit(res.returncode)
@@ -74,7 +74,7 @@ def main():
     
     # 4. Run cv-tailor pdf
     print(f"🚀 Running: cv-tailor pdf '{slug}'...")
-    res = subprocess.run(["cv-tailor", "pdf", slug], capture_output=True, text=True)
+    res = subprocess.run(["cv-tailor", "pdf", slug], capture_output=True, text=True, errors="replace")
     if res.returncode != 0:
         print(f"❌ Failed to run cv-tailor pdf:\n{res.stderr}")
         sys.exit(res.returncode)
@@ -82,7 +82,7 @@ def main():
     
     # 5. Run cv-tailor upload
     print(f"🚀 Running: cv-tailor upload '{slug}'...")
-    res = subprocess.run(["cv-tailor", "upload", slug], capture_output=True, text=True)
+    res = subprocess.run(["cv-tailor", "upload", slug], capture_output=True, text=True, errors="replace")
     if res.returncode != 0:
         print(f"❌ Failed to run cv-tailor upload:\n{res.stderr}")
         sys.exit(res.returncode)

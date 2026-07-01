@@ -1,7 +1,7 @@
 ---
 job_title: "Machine Learning Engineer (f/m/d)"
 company: "Nia Health GmbH"
-status: "applied"
+status: "rejected"
 clusters: ["ml-ai", "platform-cloud-native", "data-persistence"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1ybGmKMnv1O0qn7gcf_TrfVqEWY1gwRxG"

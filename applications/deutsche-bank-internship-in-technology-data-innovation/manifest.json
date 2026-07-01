@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "generated_at": "2026-07-01T16:27:29+00:00",
+  "config_version": 1,
+  "provider": "ollama",
+  "model": "qwen3.6-35b-awq",
+  "temperature": {
+    "json": 0.0,
+    "text": 0.4
+  },
+  "max_tokens": {
+    "jobspec": 2000,
+    "cv": 16000,
+    "cover": 8000,
+    "judge": 1200
+  },
+  "seed": null,
+  "prompts": {
+    "cv": {
+      "version": 3,
+      "sha256": "a6ce1dc8e85b",
+      "source": "data/prompts/cv.md"
+    },
+    "cover": {
+      "version": 2,
+      "sha256": "a7370016bade",
+      "source": "data/prompts/cover.md"
+    },
+    "jobspec": {
+      "version": 1,
+      "sha256": "6e93487e8b18",
+      "source": "data/prompts/jobspec.md"
+    }
+  },
+  "inputs_sha256": {
+    "data/config.yml": "b0ca71eb98b3",
+    "data/master-cv.md": "516fe34f0838",
+    "data/profile.yml": "7340aeaa19b6",
+    "data/projects.yml": "299a3914b19f",
+    "data/taxonomy.yml": "0820e8d5f068",
+    "data/ranking.yml": "1da51796d17e",
+    "data/guides/how-to-write-a-cv.md": "3148f77eb3b2",
+    "data/guides/how-to-write-a-cover-letter.md": "18e8331f6d97",
+    "data/prompts/exemplars/cover.yml": "c85e0eeaa44a"
+  },
+  "effective_config_sha256": "f9de318f8ff8",
+  "decisions": {
+    "top_projects": [
+      "irs",
+      "cv-tailor",
+      "k3d"
+    ],
+    "clusters": [
+      "ai-ml",
+      "distributed-system",
+      "information-management",
+      "platform-engineer"
+    ],
+    "tagline": "Internship in Technology, Data & Innovation"
+  }
+}

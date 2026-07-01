@@ -1,27 +1,26 @@
 ---
-tagline: "Data Engineer"
+tagline: "Data Infrastructure Engineer"
 ---
 
 ## Experience
 
-### Bluefin Exchange — Senior Software Engineer
-*Pakistan · 06/2021 – 08/2023*
-- Architected and maintained Python/Go microservices and REST APIs, optimizing data flow across PostgreSQL and DynamoDB.
-- Engineered Kafka-based event pipelines for real-time data streaming, reducing latency and improving system reliability.
-- Dockerized backend services and automated CI/CD workflows, standardizing release processes and deployment pipelines.
-- Led code and system design reviews, mentoring junior engineers on data modeling and scalable architecture.
-
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
-- Developed and documented backend services and REST APIs, integrating MySQL and MongoDB for robust data persistence.
-- Dockerized and streamlined deployment processes, improving environment consistency and release velocity.
-- Conducted system design and code reviews, ensuring data integrity and scalable service architecture.
+- Dockerized backend services and streamlined deployment pipelines to improve release reliability and infrastructure consistency.
+- Developed and documented Python/Node.js services backed by MySQL and MongoDB, ensuring data integrity and scalable storage patterns.
+- Led system design and code reviews to enforce best practices in data modeling, service architecture, and version control.
+
+### Bluefin Exchange — Senior Software Engineer
+*Pakistan · 06/2021 – 08/2023*
+- Maintained release and CI/CD processes for data-heavy exchange services, ensuring consistent deployments and reliable pipeline execution.
+- Built Python and Go microservices with PostgreSQL and Kafka, optimizing data ingestion, transaction routing, and real-time ETL workflows.
+- Reviewed system designs and mentored junior engineers on scalable data architecture, backend performance, and production monitoring.
 
 ### Seed Labs — Software Engineer
 *Pakistan · 06/2020 – 06/2021*
-- Analyzed, cleaned, and visualized complex datasets using Python and SQL, delivering actionable insights to stakeholders.
-- Built and deployed data-driven backend services with Python, MySQL, and Docker, supporting analytical workflows.
-- Collaborated in agile teams to design and implement scalable solutions, focusing on data pipeline efficiency.
+- Analyzed, cleaned, and visualized datasets using Python and MySQL to deliver actionable stakeholder insights and reporting.
+- Delivered production-ready data and backend solutions under senior mentorship, focusing on reliable ETL workflows and data validation.
+- Containerized services with Docker and integrated Python/Node.js stacks for efficient data processing and environment reproducibility.
 
 ## Education
 
@@ -33,9 +32,9 @@ tagline: "Data Engineer"
 
 ## Projects
 
-- **Second Brain (Document RAG)** — Engineered a durable, retryable ETL pipeline for document ingestion and vector indexing (pgvector), streaming real-time progress via NATS JetStream and deploying cloud-native on k3d with local llama.cpp inference.
-- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Built a Kafka-driven ETL pipeline to fan out per-UE KPM metrics to InfluxDB, MongoDB, and Grafana, containerized via Docker Compose for scalable data streaming and multi-destination warehousing.
-- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Developed a Python ETL and REST API pipeline to ingest Gmail alerts, fetch guest APIs, and synchronize bidirectional data with PostgreSQL and Google Sheets, secured with AES-256-GCM encryption.
+- **O-RAN Testbed (Open5GS + RIC + OCUDU gNB)** — Engineered a Kafka-based ETL pipeline that ingests per-UE KPM metrics from Python xApps and fans them out to InfluxDB and MongoDB for downstream analytics and monitoring.
+- **cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)** — Built a Python-driven ETL and ingestion pipeline that parses multi-source job alerts into a unified queue, syncs status to Google Sheets, and persists data to a read-only PostgreSQL database with FastMCP exposure.
+- **Second Brain (Document RAG)** — Designed a durable, retryable document ingestion pipeline (Hatchet) that extracts, chunks, and indexes data into pgvector, streaming real-time progress via NATS JetStream and SSE for reliable data processing.
 
 ## Skills
 
@@ -43,4 +42,4 @@ tagline: "Data Engineer"
 - **Programming Languages** — Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
 - **Databases & Persistence** — PostgreSQL, MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
 - **AI / ML Integration** — MCP, Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pgvector, llama.cpp
-- **Web & API** — REST, ReactJS, NodeJS, NestJS, Django, Protocol Buffers, OpenAPI
+- **Cloud-Native & Infra** — Docker, Kubernetes, kustomize, Skaffold, Helm, Cilium, Terraform, external-dns

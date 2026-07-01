@@ -2,7 +2,7 @@
 job_title: "Freelance DevOps/Cloud Infrastructure Engineer"
 company: "Navera"
 job_url: "https://www.linkedin.com/jobs/view/4426860051/"
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1QI2kd8tQC2yvGI4gVz8VckISwO126itX"

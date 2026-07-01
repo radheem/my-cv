@@ -8,23 +8,22 @@ Source of truth (facts): `data/master-cv.md`, `data/profile.yml`, `data/projects
 **Never invent** roles, employers, dates, skills, or metrics.
 
 ## Sections & order
-1. **Header** — name, a short role tagline retitled to fit the job (when honest), and a
-   one-line contact (city · email · portfolio · linkedin · github).
+1. **Body starts at Experience** — the template adds the name, tagline, and contact line.
 2. **Experience** first (experienced hire). Most relevant / recent roles, each with 2-3
-   tight, achievement-focused bullets — reorder and reword bullets to the job.
+  tight, achievement-focused bullets — reorder and reword bullets to the job.
 3. **Education** — TU Ilmenau (M.Sc. Research) and the B.Sc.
-4. **Projects** — top-3 rule below.
+4. **Projects** — top-2 rule below.
 5. **Skills** — skills-order rule below.
 
 A summary paragraph is optional and usually omitted to keep it tight; the cover letter
 carries the narrative.
 
 ## Standing rules
-- **Projects: top 3 only**, highest-relevance first. Rank candidate projects against the
+- **Projects: top 2 only**, highest-relevance first. Rank candidate projects against the
   JD; drop the rest. (`engine/rank.py` produces this ranking.)
 - **Skills order:** `Languages` (spoken) first — always **English (fluent), Deutsch (A2)** —
-  then `Programming Languages`, then 1-3 job-tailored technical lines (e.g. Distributed
-  Systems, Cloud-Native, Databases). Lead each technical line with the JD's must-haves.
+  then `Programming Languages`, then exactly 3 job-tailored technical lines matching the
+  prompt contract (e.g. Languages & Core, Systems & Infrastructure, Databases & Data Engineering).
 
 ## Tailoring
 - Study the JD: emphasise what it repeats or lists first; mirror its real terminology

@@ -2,7 +2,7 @@
 job_title: "Research/Software Engineer (Implied)"
 company: "Fraunhofer Institute for Digital Media Technology IDMT"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1MqTAfgDU032xuBEcsD2arRv2oc-2IbfH"
