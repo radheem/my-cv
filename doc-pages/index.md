@@ -43,12 +43,11 @@ Currently a Master of Research student in **Computer Systems & Engineering at TU
 
     [:octicons-arrow-right-24: Details](projects/irs.md)
 
--   :material-kubernetes: __HA K3s Cluster Platform (k3d + Cilium)__
+-   :material-server-network: __Homelab & Declarative Platform__
 
-    Reboot-resilient HA K3s clusters in Docker, kube-proxy-free in eBPF mode
-    with Cilium L2 LoadBalancer, a sequential-boot orchestrator, and self-healing CNI.
+    Automated, single-node declarative homelab hosting CoreDNS, Tailscale/Headscale ingress, and self-healing local DNS routing.
 
-    [:octicons-arrow-right-24: Details](projects/k3d.md)
+    [:octicons-arrow-right-24: Details](projects/homelab.md)
 
 -   :material-robot: __O-RAN AIML Framework__
 
@@ -57,20 +56,11 @@ Currently a Master of Research student in **Computer Systems & Engineering at TU
 
     [:octicons-arrow-right-24: Details](projects/oran-aiml.md)
 
--   :material-radio-tower: __O-RAN Testbed (Docker)__
+-   :material-file-document-edit: __cv-tailor (Agentic Job-Hunting)__
 
-    Composable 5G SA testbed: Open5GS core, O-RAN Near-RT RIC + Python xApps
-    over E2 (KPM / RC / CCC), an OCUDU gNB (ZMQ/UHD), and a Kafka metrics
-    pub/sub fan-out.
+    Python CLI and FastMCP server for LLM document tailoring; filesystem-first design cached in DuckDB with automatic Google Drive and Sheets sync.
 
-    [:octicons-arrow-right-24: Details](projects/oran-testbed.md)
-
--   :material-server-network: __5G srsRAN Testbed (Kubernetes)__
-
-    Kubernetes 5G testbed (srsRAN + Open5GS) with Multus CNI, an O-RAN RIC
-    over E2, ONOS SDN, and 50+ Mbps throughput.
-
-    [:octicons-arrow-right-24: Details](projects/5g-testbed.md)
+    [:octicons-arrow-right-24: Details](projects/cv-tailor.md)
 
 </div>
 
