@@ -55,8 +55,8 @@ make hunt
 
 ## 4. Verification & Output Location
 
-Job details are captured directly under the PostgreSQL database and temporarily cached locally in `vault/jds/`:
-*   PostgreSQL `jobs` Table — The absolute database source of truth.
-*   `vault/jds/<slug>.txt` — Cleaned text of the job description.
-*   `vault/jds/<slug>.json` — Job title, company, URL, and metadata.
-*   PostgreSQL database queries are executed automatically to deduplicate subsequent searches (avoiding any duplicate JDs).
+Job details are captured directly as files under `vault/jds/` and cached inside the local DuckDB database:
+*   `vault/jds/<slug>.txt` — Cleaned text of the job description (single source of truth).
+*   `vault/jds/<slug>.json` — Job title, company, URL, and metadata (single source of truth).
+*   DuckDB `jobs` Table — Cached database table for querying.
+*   Database queries are executed automatically to deduplicate subsequent searches (avoiding any duplicate JDs).

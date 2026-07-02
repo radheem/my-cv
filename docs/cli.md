@@ -13,17 +13,17 @@ make tailor CMD="new <source>"   # run any raw CLI command in the managed contai
 
 | Command | What it does |
 |---|---|
-| `cv-tailor new <source>` | job → tailored `cv.md`/`cover-letter.md` (+ German) + `index.md` + DB upsert |
+| `cv-tailor new <source>` | job → tailored `cv.md`/`cover-letter.md` (+ German) + `index.md` + file tracking |
 | `cv-tailor translate <slug>` | (re)generate the German `cv.de.md` / `cover-letter.de.md` |
 | `cv-tailor pdf <slug>` | render `.tex` and compile the bilingual PDFs (LaTeX) |
 | `cv-tailor upload <slug>` | compile + upload the PDFs to Google Drive; write `drive_url` |
-| `cv-tailor status <slug> <state>` | advance the lifecycle status directly in PostgreSQL |
-| `cv-tailor status push` | push all database application statuses and metadata to Google Sheets |
-| `cv-tailor status pull` | pull Google Sheets status modifications back to PostgreSQL |
-| `cv-tailor db push [slug]` | push filesystem application markdown files to the database |
-| `cv-tailor db pull [slug]` | pull database application markdown files to the filesystem |
-| `cv-tailor db export` | export the entire database state to disk under `application-data/` |
-| `cv-tailor ingest --keywords …` | capture LinkedIn JDs (containerized) — see [Runbooks](runbooks.md) |
+| `cv-tailor status <slug> <state>` | advance the lifecycle status directly in frontmatter and CSV |
+| `cv-tailor status push` | push all database/filesystem application statuses to Google Sheets |
+| `cv-tailor status pull` | pull Google Sheets status modifications back to local files |
+| `cv-tailor db export` | export the entire DuckDB database cache state to disk under `application-data/` |
+| `cv-tailor analyze --cluster <name>` | analyze saved jobs and perform keyword gap analysis against CV variant |
+| `cv-tailor gmail <cmd>` | execute Gmail API operations (search, read, modify, send) via script proxy |
+| `cv-tailor ingest --keywords …` | capture LinkedIn JDs (containerized) — see [Runbooks](runbooks/) |
 
 ## `cv-tailor new`
 
@@ -66,6 +66,29 @@ cv-tailor track                   # rebuild applications/README.md from front ma
 ```
 `status` regex-edits `index.md` and auto-refreshes `applications/README.md`. Commit the change —
 the message + date are the audit trail.
+
+## `cv-tailor analyze`
+
+```bash
+cv-tailor analyze --cluster <name>
+```
+
+Analyzes all saved job descriptions mapped to the specified taxonomy cluster (e.g. `ml-ai`, `devops`). Extracts high-frequency technical signals and core thematic phrases, and runs a keyword gap report against your corresponding CV variant file in `data/cv-variants/` to highlight missing skills or vocabulary gaps. It also provides taxonomy update suggestions based on unmapped high-frequency market terms.
+
+## `cv-tailor gmail`
+
+```bash
+cv-tailor gmail search --query "subject:interview" [--limit N] [--json] [--include-bodies]
+cv-tailor gmail read <thread_id>
+cv-tailor gmail modify --thread-ids <id>... [--read|--unread] [--star|--unstar]
+cv-tailor gmail send --to <email> --subject <sub> --body <body> [--bulk-file <path>]
+```
+
+Exposes Gmail API capabilities via the deployed Google Apps Script web proxy:
+- `search`: Find email threads matching a standard Gmail query.
+- `read`: Read all message bodies inside a thread.
+- `modify`: Bulk star, unstar, mark read, or mark unread.
+- `send`: Send single or bulk emails.
 
 ## Model support
 

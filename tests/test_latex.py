@@ -36,8 +36,11 @@ CV = """## Experience
 
 ## Projects
 
-- **IRS Platform (Stealth)** — Go microservices & gRPC.
-- **cv-tailor (LLM Tailoring)** — pure ranker + LLM prose.
+### IRS Platform (Stealth) [repo](https://radheem.github.io/my-cv/projects/irs/)
+- Go microservices & gRPC.
+
+### cv-tailor (LLM Tailoring) [repo](https://radheem.github.io/my-cv/projects/cv-tailor/)
+- pure ranker + LLM prose.
 
 ## Skills
 
@@ -57,7 +60,7 @@ def test_inline_bold_and_link():
 
 def test_render_cv_structure_and_escaping():
     tex = latex.render_cv_tex(CV, CV, PROFILE, PROJECTS, "Backend Engineer", "Backend-Ingenieur")
-    assert tex.startswith("\\documentclass[11pt,a4paper]{resume}")
+    assert tex.startswith("\\documentclass[10pt,a4paper]{resume}")
     assert "\\begin{document}" in tex and "\\end{document}" in tex
     # bilingual split
     assert "\\selectlanguage{ngerman}" in tex
@@ -68,7 +71,7 @@ def test_render_cv_structure_and_escaping():
     assert "a\\_b\\_c" in tex
     assert "\\edu{TU Ilmenau}{M.Sc. Research}{04/2024 – Present}" in tex
     # project URL resolved from projects.yml doc path
-    assert "\\project{IRS Platform (Stealth)}{https://radheem.github.io/my-cv/projects/irs/}" in tex
+    assert "\\role{\\href{https://radheem.github.io/my-cv/projects/irs/}{IRS Platform (Stealth)}}{}{}" in tex
     assert "\\item \\textbf{Languages:} English (fluent), Deutsch (A2)" in tex
 
 

@@ -19,8 +19,6 @@ flowchart TB
             PLAY[Playwright Scraper]
             LATEX[Local LaTeX / latexmk]
         end
-        
-        DB[(PostgreSQL Database)]
     end
 
     subgraph External ["External Services"]
@@ -31,15 +29,13 @@ flowchart TB
     end
 
     %% Host connections
-    CLI -->|Read/Write| FILES
-    CLI -->|Query/Update| DB
+    CLI -->|Read/Write/Query| FILES
 
     %% MCP connections
     MCPS -->|Triggers Workflows| ENGINE
-    ENGINE -->|Read/Write| FILES
+    ENGINE -->|Read/Write/Query| FILES
     ENGINE -->|Crawl Pages| PLAY
     ENGINE -->|Compile PDFs| LATEX
-    ENGINE -->|Query/Update| DB
 
     %% External connections
     PLAY -->|Fetch Alerts/Postings| GMAIL
@@ -47,7 +43,7 @@ flowchart TB
     ENGINE -->|Tailor CV/CL| LLM
     ENGINE -->|Upload PDFs| DRIVE
     ENGINE -->|Sync Status| SHEETS
-    DB -->|Resolve host.docker.internal| LLM
+    ENGINE -->|Resolve host.docker.internal| LLM
 ```
 
 ## The two halves
@@ -116,7 +112,7 @@ A local PostgreSQL database is no longer used. Instead, `cv-tailor` implements a
 | `engine/jobspec.py`, `engine/render.py` | LLM calls (local only) incl. German translation |
 | `engine/latex.py` | deterministic Markdown → LaTeX (bilingual) |
 | `engine/cli.py`, `engine/fetch.py` | CLI entrypoint + job fetcher |
-| `engine/db.py` | PostgreSQL database connection, initializations, and legacy migrations |
+| `engine/shared/db.py` | DuckDB database connection wrapper and automatic file preloading |
 | `engine/mcp/` | Model Context Protocol (MCP) server for secure database open-queries |
 | `latex/` | `resume.cls`, `coverletter.cls`, `resume.tex` (public CV) |
 | `scripts/build-application.sh` | compile an app's `.tex` → PDFs |
@@ -176,7 +172,7 @@ sequenceDiagram
 ---
 
 ### 2. Ad-hoc Job Scraping Workflow (`extract_job_details`)
-*   **Purpose:** To take a specific job posting URL, validate and normalize it, spawn a Chromium Playwright browser in a clean, isolated subprocess (to completely isolate standard input/output streams and prevent MCP console channel noise), bypass any anti-bot or session hurdles, scrape the full job description, write a file-system backup, and commit the complete record securely to our PostgreSQL database `jobs` table for future scoring and application tailoring.
+*   **Purpose:** To take a specific job posting URL, validate and normalize it, spawn a Chromium Playwright browser in a clean, isolated subprocess (to completely isolate standard input/output streams and prevent MCP console channel noise), bypass any anti-bot or session hurdles, scrape the full job description, and write a file-system backup under `vault/jds/` which serves as the source of truth for the local serverless DuckDB cache.
 
 ```mermaid
 sequenceDiagram
@@ -186,7 +182,6 @@ sequenceDiagram
     participant WF as extract_job_details_workflow
     participant Sub as Playwright Subprocess
     participant Page as Job Posting Page
-    participant DB as PostgreSQL (jobs table)
 
     Client->>Server: tools/call extract_job_details(url)
     Server->>WF: Invoke extract_job_details_workflow
@@ -195,8 +190,7 @@ sequenceDiagram
     activate Sub
     Sub->>Page: Go to URL (anonymous headless Chromium)
     Page-->>Sub: Return page HTML / Text content
-    Sub->>Sub: J.write_jd() saves to vault/jds/
-    Sub->>DB: INSERT INTO jobs (...) ON CONFLICT DO UPDATE
+    Sub->>Sub: J.write_jd() saves to vault/jds/ (JSON + TXT)
     Sub-->>WF: Put success and slugs on Queue
     deactivate Sub
     WF-->>Server: Return success string with slug
@@ -206,7 +200,7 @@ sequenceDiagram
 ---
 
 ### 3. Bilingual Tailoring & Application Upload Workflow (`create_application_from_job`)
-*   **Purpose:** To execute the downstream application compilation and tracking process for an ingested job slug. It triggers LLM queries to parse the JobSpec, adapts your master resume structure, and writes tailored English and German Markdown packages on disk and to the `applications` database. It then compiles them locally using the containerized LaTeX engine to create polished PDFs, uploads them to your secure Google Drive, and instantly pushes the tracking status to Google Sheets.
+*   **Purpose:** To execute the downstream application compilation and tracking process for an ingested job slug. It triggers LLM queries to parse the JobSpec, adapts your master resume structure, and writes tailored English and German Markdown packages on disk (which serve as the source of truth for the serverless DuckDB cache). It then compiles them locally using the containerized LaTeX engine to create polished PDFs, uploads them to your secure Google Drive, and instantly pushes the tracking status to Google Sheets.
 
 ```mermaid
 sequenceDiagram
@@ -234,7 +228,7 @@ sequenceDiagram
     LLM-->>CLI: Return cover-letter.md
     CLI->>LLM: 5. query() to translate CV & CL to German
     LLM-->>CLI: Return cv.de.md & cover-letter.de.md
-    CLI-->>WF: Success CV & CL generated on disk & applications DB
+    CLI-->>WF: Success CV & CL generated on disk
     
     WF->>CLI: Call cmd_pdf(slug)
     CLI->>LaTeX: Run latexmk -pdf cv.tex / cover-letter.tex
@@ -244,10 +238,10 @@ sequenceDiagram
     WF->>CLI: Call cmd_upload(slug)
     CLI->>Drive: Upload PDFs (via doPost Apps Script)
     Drive-->>CLI: Return Google Drive Folder URL
-    CLI-->>WF: PDFs uploaded & drive_url updated in DB
+    CLI-->>WF: PDFs uploaded & drive_url updated in index.md
     
     WF->>CLI: Call cmd_status(slug="push")
-    CLI->>Sheets: Sync PG state to Google Sheet (pushed rows)
+    CLI->>Sheets: Sync tracker.csv to Google Sheet (pushed rows)
     Sheets-->>CLI: Success sync
     CLI-->>WF: Sheets synchronization successful
     

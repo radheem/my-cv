@@ -11,7 +11,7 @@ The `gmail` domain is responsible for the **Discovery** phase of the job-hunting
     *   Normalizing job posting URLs and extracting platform-specific `job_id` keys.
 *   **Excluded Concerns**:
     *   Scraping actual webpage contents (handled by platform-specific crawler domains).
-    *   Writing job descriptions to the PostgreSQL database (handled by presentation orchestrators).
+    *   Writing job descriptions to disk/database cache (handled by presentation orchestrators).
 
 ## Core Components
 1.  **`client.py` (Gmail Connector)**:

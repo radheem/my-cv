@@ -5,16 +5,15 @@ This runbook covers how to search emails using custom filters, summarize thread 
 ---
 
 ## Prerequisites
-Ensure that your `.env` contains the correct Apps Script and database configurations:
+Ensure that your `.env` contains the correct Apps Script configurations:
 *   `APPS_SCRIPT_URL` — The deployment URL of your Apps Script Web App.
 *   `APPS_SCRIPT_TOKEN` — The secure API token shared with your Apps Script instance.
-*   `DATABASE_URL` — PostgreSQL connection string.
 
 ---
 
 ## 1. Gmail Job Hunt Pipeline (`make gmail-hunt`)
 
-The absolute best way to manage job alerts sent to your Gmail inbox is to run our end-to-end automated pipeline. This pipeline automatically queries Gmail, extracts unseen LinkedIn job URLs from alert emails, crawls and ingests them into PostgreSQL, ranks them, tailors cover letters and CVs on disk, compiles PDFs, and uploads them to Drive!
+The absolute best way to manage job alerts sent to your Gmail inbox is to run our end-to-end automated pipeline. This pipeline automatically queries Gmail, extracts unseen LinkedIn job URLs from alert emails, crawls and ingests them, ranks them, tailors cover letters and CVs on disk, compiles PDFs, and uploads them to Drive!
 
 ```bash
 make gmail-hunt FILTER="subject:'linkedin job alert' is:unread" LIMIT=5 ORDER=top

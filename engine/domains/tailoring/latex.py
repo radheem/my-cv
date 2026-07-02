@@ -244,11 +244,11 @@ def _education(lines: list[str]) -> str:
                 next_ln = lines[i].strip()
                 if next_ln.startswith("*"):
                     # italic line → *Degree · Dates* or just *Dates*
-                    d, dt = _split_dates(next_ln)
                     if heading_degree:
                         # degree already extracted from heading; this line is dates only
-                        dates = dt or d
+                        dates = next_ln.strip().strip("*").strip()
                     else:
+                        d, dt = _split_dates(next_ln)
                         degree, dates = d, dt
                     i = _skip_blank(lines, i + 1)
                 elif next_ln and not next_ln.startswith(("#", "-", "*", ">")):

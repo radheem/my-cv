@@ -1,12 +1,12 @@
-# Runbook — PostgreSQL MCP Server (SSE & STDIO)
+# Runbook — DuckDB MCP Server (SSE & STDIO)
 
-This runbook covers how to launch, configure, connect, and operate the **cv-tailor PostgreSQL MCP (Model Context Protocol) Server**, allowing external AI agents (like Claude Desktop, Claude Code, or Gemini CLI) to securely query your database and execute pipeline actions.
+This runbook covers how to launch, configure, connect, and operate the **cv-tailor DuckDB MCP (Model Context Protocol) Server**, allowing external AI agents (like Claude Desktop, Claude Code, or Gemini CLI) to securely query your database and execute pipeline actions.
 
 ---
 
 ## 1. Overview of Capabilities
 
-The MCP server connects directly to your PostgreSQL database and exposes a unified, secure proxy for the entire job hunting pipeline. It provides two categories of tools:
+The MCP server connects directly to your DuckDB serverless database cache and exposes a unified, secure proxy for the entire job hunting pipeline. It provides two categories of tools:
 
 ### 🛡️ Read-Only Database Queries
 *   `cv_tailor_ontology`: Exposes the database schema layouts, column types, and relationships (the perfect "decoder ring" for connecting agents).
@@ -19,20 +19,20 @@ The MCP server connects directly to your PostgreSQL database and exposes a unifi
 
 ### 📖 Guides & Workflows
 *   `get_mcp_workflows`: Returns the supported system ingestion and application creation flowcharts and comparison matrix (from `docs/mcp-workflows.md`).
-*   `get_mcp_insights`: Returns operational best practices, delays/pacing, warm session, and timeout handling rules (from `data/guides/mcp-insights.md`).
+*   get_mcp_insights: Returns operational best practices, delays/pacing, warm session, and timeout handling rules (from `data/guides/mcp-insights.md`).
 *   `get_cv_guide`: Returns comprehensive, tactical CV writing rules (from `data/guides/how-to-write-a-cv.md`).
 *   `get_cover_letter_guide`: Returns structured cover letter writing guidelines (from `data/guides/how-to-write-a-cover-letter.md`).
 
 ### 🚀 Programmatic Action Workflows (Safe, Non-Shell Python Actions)
 *   `list_gmail_linkedin_jobs` / `list_gmail_glassdoor_jobs` / `list_gmail_indeed_jobs`: Step 1 (Gmail Path). Searches Gmail for alerts from a specific provider and returns a lightweight list of discovered jobs with tentative metadata (including `job_id`, `company`, `role`, `job_url`, and `brief_description`).
 *   `fetch_public_job_url`: Step 1 (Direct Path - Preferred). Downloads a public webpage's HTML and extracts its clean, readable plain text, bypassing heavy browser crawlers entirely.
-*   `save_job_description`: Step 2 (Direct Path - Preferred). Saves a job description directly to the PostgreSQL database and files, returning the generated slug.
+*   `save_job_description`: Step 2 (Direct Path - Preferred). Saves a job description directly to the filesystem (auto-cached by DuckDB), returning the generated slug.
 *   `extract_job_details`: Step 2 (Scraper Path). Spawns an isolated Chromium browser via Playwright to crawl the full job description. Use only when active LinkedIn cookies are warm; prone to CAPTCHAs on public pages.
 *   `create_application_from_job`: Step 3 of the workflow. Triggers the downstream LLM-tailoring pipeline for a given job slug, compiles Markdown files locally into bilingual PDFs via LaTeX, uploads them to Google Drive, and synchronizes status with Google Sheets.
 *   `create_application`: Programmatically generates tailored CVs and cover letter drafts on disk from a generic file/url.
 *   `score_jobs`: Scores and prioritizes unscored database job descriptions against your master profile terms.
-*   `update_application_status`: Updates job tracking lifecycles in the PostgreSQL database.
-*   `sync_status_to_sheets`: Synchronizes PostgreSQL application statuses directly with Google Sheets.
+*   `update_application_status`: Updates job tracking lifecycles directly in index.md.
+*   `sync_status_to_sheets`: Synchronizes database application statuses directly with Google Sheets.
 
 ---
 
@@ -41,12 +41,12 @@ The MCP server connects directly to your PostgreSQL database and exposes a unifi
 This runs the MCP server as a platform-agnostic, background Server-Sent Events (SSE) HTTP microservice. This is the recommended choice as it requires no local Python environment or path configurations on your host.
 
 ### Step 1: Boot the Background Service
-Launch the PostgreSQL database and the MCP server service using Docker Compose:
+Launch the MCP server service using Docker Compose:
 
 ```bash
 # Start in the background:
 make docker-build             # build unified image
-docker compose up -d db mcp   # launch Postgres and MCP service
+docker compose up -d mcp      # launch MCP service (no external db container needed)
 ```
 
 *The server will begin listening on host port **`5000`** with standard Xvfb virtual displays running in the container background (so Playwright runs launched by MCP have an X11 context).*
@@ -92,7 +92,7 @@ make mcp
 ```
 
 ### Step 2: Wire into Claude Desktop / Claude Code
-Configure your client to execute the CLI command directly:
+Configure your client to execute the CLI command directly (no PostgreSQL environment setup required):
 
 ```json
 {
@@ -104,10 +104,7 @@ Configure your client to execute the CLI command directly:
         "/home/radr/pers/radr-cv",
         "run",
         "cv-tailor-mcp"
-      ],
-      "env": {
-        "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/cv_tailor"
-      }
+      ]
     }
   }
 }
@@ -116,9 +113,6 @@ Configure your client to execute the CLI command directly:
 ---
 
 ## 4. Operational Troubleshooting
-
-### DB Connection Refused inside Container?
-The MCP container is pre-configured with Docker-awareness. It checks if it is running inside Docker, and automatically replaces `localhost` inside your `.env` `DATABASE_URL` with the Docker Compose hostname `db`. No manual configuration is required.
 
 ### Playwright / Xvfb Errors?
 Mutating tasks (like `extract_job_details`) navigate through Playwright. Inside the container, these tasks run securely because the `mcp` service is bound to Xvfb on display `:99`. If you ever experience issues, inspect browser logs:

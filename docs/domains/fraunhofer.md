@@ -10,7 +10,7 @@ The `fraunhofer` domain is a specialized scraper submodule designed to harvest j
     *   Extracting the title from Fraunhofer job URLs (`_title_from_url`).
 *   **Excluded Concerns**:
     *   OAuth or email checking (handled by `gmail` domain).
-    *   State updates and PostgreSQL database syncs.
+    *   State updates and database/filesystem synchronization.
 
 ## Core Components
 1.  **`jobs.py` (Fraunhofer Scraper)**:

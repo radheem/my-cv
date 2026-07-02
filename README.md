@@ -56,7 +56,7 @@ local `latexmk`, otherwise the `texlive/texlive` Docker image (auto-detected).
 
 → **Agent / contributor workflow:** [CLAUDE.md](CLAUDE.md)
 → **Google Drive setup:** [apps-script/README.md](apps-script/README.md)
-→ **LinkedIn ingest runbooks:** [docs/runbooks.md](docs/runbooks.md)
+→ **LinkedIn ingest runbooks:** [docs/runbooks/](docs/runbooks/)
 
 ## Layout
 

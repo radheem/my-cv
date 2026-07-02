@@ -383,8 +383,3 @@ def init_db():
     # Re-initialize by opening a connection which triggers preload
     get_conn()
     log.info("Filesystem-first database layer initialized successfully.")
-
-
-def migrate_legacy_data(applications_dir: str = "applications") -> int:
-    """No-op for DuckDB serverless mode."""
-    return 0

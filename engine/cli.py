@@ -346,13 +346,6 @@ def cmd_new(args: argparse.Namespace) -> int:
         print("Translating to German ...", file=sys.stderr)
         _translate_app(slug, tagline)
 
-    # Automatically push newly generated application to database
-    push_args = argparse.Namespace(slug=slug)
-    try:
-        cmd_db_push(push_args)
-    except Exception as e:
-        print(f"Warning: Failed to push new application to database: {e}", file=sys.stderr)
-
     print(f"\nWrote {out}/ (cv, cover-letter [+ .de], job-description, index, manifest).")
     print("Featured projects:", ", ".join(p["name"] for p in tailoring["top_projects"]))
     print(
@@ -525,77 +518,6 @@ def cmd_status(args: argparse.Namespace) -> int:
         print(f"set {slug} → {state} (synced with Files & Sheets)")
     else:
         print(f"set {slug} → {state} (review diff + commit)")
-    return 0
-
-
-def cmd_db_push(args: argparse.Namespace) -> int:
-    from .shared.db import migrate_legacy_data
-    
-    count = migrate_legacy_data(str(_jobs_dir()))
-    print(f"Pushed {count} applications from disk to PostgreSQL.")
-    return 0
-
-
-def cmd_db_pull(args: argparse.Namespace) -> int:
-    from .shared.db import get_conn
-    from . import documents
-    import json
-    
-    slugs = [args.slug] if getattr(args, "slug", None) else []
-    
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            if slugs:
-                cur.execute("""
-                    SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
-                           a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
-                           a.drive_url, a.clusters, j.description
-                    FROM jobs j JOIN applications a ON j.slug = a.slug
-                    WHERE j.slug = %s
-                """, (slugs[0],))
-            else:
-                cur.execute("""
-                    SELECT j.slug, j.company, j.title, j.url, a.status, a.recipient, 
-                           a.cv_en, a.cv_de, a.cover_letter_en, a.cover_letter_de, 
-                           a.drive_url, a.clusters, j.description
-                    FROM jobs j JOIN applications a ON j.slug = a.slug
-                """)
-            rows = cur.fetchall()
-
-    count = 0
-    for r in rows:
-        slug = r["slug"]
-        app_dir = _jobs_dir() / slug
-        app_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Write files
-        def write_file_safe(filename, content):
-            if content is not None:
-                (app_dir / filename).write_text(content, encoding="utf-8")
-
-        write_file_safe("cv.md", r["cv_en"])
-        write_file_safe("cv.de.md", r["cv_de"])
-        write_file_safe("cover-letter.md", r["cover_letter_en"])
-        write_file_safe("cover-letter.de.md", r["cover_letter_de"])
-        write_file_safe("job-description.md", r["description"])
-        
-        # Format index.md
-        index_content = (
-            "---\n"
-            f"job_title: {json.dumps(r['title'])}\n"
-            f"company: {json.dumps(r['company'])}\n"
-            f"job_url: {json.dumps(r['url'] or '')}\n"
-            f"status: {json.dumps(r['status'])}\n"
-            f"clusters: {json.dumps(r['clusters'] or [])}\n"
-            f"drive_url: {json.dumps(r['drive_url'] or '')}\n"
-            "---\n\n"
-            f"# {r['company']} — {r['title']}\n\n"
-            "Tailored application. Source of truth: database.\n"
-        )
-        (app_dir / "index.md").write_text(index_content, encoding="utf-8")
-        count += 1
-        
-    print(f"Pulled {count} applications from PostgreSQL to disk.")
     return 0
 
 
@@ -1229,14 +1151,6 @@ def cmd_gmail_send(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_db_migrate_legacy(args: argparse.Namespace) -> int:
-    from .shared.db import init_db, migrate_legacy_data
-    init_db()
-    count = migrate_legacy_data()
-    print(f"Migration completed. Migrated {count} entries into PostgreSQL.")
-    return 0
-
-
 def cmd_analyze(args: argparse.Namespace) -> int:
     profile, _, _, _, _, taxonomy, _ = _load_data()
     from .domains.tailoring import analysis
@@ -1456,17 +1370,6 @@ def main(argv: list[str] | None = None) -> int:
 
     p_db = sub.add_parser("db", help="Database administrative and synchronization utilities")
     db_sub = p_db.add_subparsers(dest="db_cmd", required=True)
-    
-    pdb_migrate = db_sub.add_parser("migrate-legacy", help="migrate legacy filesystem applications to PostgreSQL")
-    pdb_migrate.set_defaults(func=cmd_db_migrate_legacy)
-
-    pdb_push = db_sub.add_parser("push", help="push filesystem application markdown files to the database")
-    pdb_push.add_argument("slug", nargs="?", help="application slug (optional; pushes all if omitted)")
-    pdb_push.set_defaults(func=cmd_db_push)
-    
-    pdb_pull = db_sub.add_parser("pull", help="pull database application markdown files to the filesystem")
-    pdb_pull.add_argument("slug", nargs="?", help="application slug (optional; pulls all if omitted)")
-    pdb_pull.set_defaults(func=cmd_db_pull)
 
     pdb_export = db_sub.add_parser("export", help="export the entire database state to application-data/ on disk")
     pdb_export.set_defaults(func=cmd_db_export)

@@ -31,7 +31,7 @@ The engine will:
 2. Select the top-3 matching projects and order skills deterministically.
 3. Call the LLM to write beautifully tailored CV and cover letter prose.
 4. Output Markdown files and indexes under: `applications/acme-corp-backend-engineer/`.
-5. Automatically **push** the newly generated application straight into your PostgreSQL database!
+5. Automatically register the newly generated application in your local DuckDB cache.
 
 ---
 
@@ -44,13 +44,13 @@ If you have a direct job URL, `cv-tailor` can dynamically fetch the job descript
 make new SOURCE="https://www.linkedin.com/jobs/view/123456789/" RECIPIENT="Hiring Manager"
 ```
 
-### Pathway 2: Generating from an Ingested File / Database Slug
-If you have already run `make ingest` or `make hunt` and have a captured job inside PostgreSQL:
+### Pathway 2: Generating from an Ingested File / Slug
+If you have already run `make ingest` or `make hunt` and have a captured job in your database cache:
 1. Find the slug of the job using:
    ```bash
    make score
    ```
-2. Run the generator using that database slug directly! Because `fetch_job_text` supports database lookup fallbacks, you do **not** need a local text file:
+2. Run the generator using that slug directly! Because `fetch_job_text` supports database lookup fallbacks, you do **not** need a local text file:
    ```bash
    make new SOURCE=acme-software-engineer-4412345 RECIPIENT="John Doe"
    ```
@@ -66,8 +66,8 @@ You can generate a tailored application directly from a public Fraunhofer job po
 make new SOURCE="https://jobs.fraunhofer.de/job/Ilmenau-Research-Associate-Secure-Development-98693/1234567/"
 ```
 
-### Pathway 2: Generating from an Ingested Database Slug
-If the job has been captured via `make hunt` and lives inside PostgreSQL:
+### Pathway 2: Generating from an Ingested Slug
+If the job has been captured via `make hunt` and lives inside the database cache:
 ```bash
 make new SOURCE=fraunhofer-institute-research-associate-12345
 ```
@@ -79,19 +79,9 @@ make new SOURCE=fraunhofer-institute-research-associate-12345
 Once the application is created under `applications/<slug>/`:
 
 ### Step 1: Review & Manual Edits
-Review the generated `cv.md` and `cover-letter.md` inside `applications/<slug>/`.
+Review the generated `cv.md` and `cover-letter.md` inside `applications/<slug>/`. The local files are your absolute source of truth. Any edits you make here will be immediately reflected in your PDF compilation and automatically cached in DuckDB.
 
-### Step 2: Database Sync (Database as absolute Source of Truth)
-If you make manual edits to the local markdown files on disk and want to save them back to PostgreSQL:
-```bash
-make db-push ID=<slug>
-```
-If you want to discard local edits and pull the clean, original text back from the PostgreSQL database:
-```bash
-make db-pull ID=<slug>
-```
-
-### Step 3: Compile to PDF (Bilingual EN/DE)
+### Step 2: Compile to PDF (Bilingual EN/DE)
 Render and compile the bilingual PDFs using the LaTeX template in the scraper container:
 ```bash
 make pdf ID=<slug>

@@ -51,3 +51,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Landing Page CV & Scannable Cover Letter Prompt Optimization**
 *Link: [./tracks/landing_page_prompts_20260630/](./tracks/landing_page_prompts_20260630/)*
+
+---
+
+- [x] **Track: Docs and Code Cleanup**
+*Link: [./tracks/docs_duckdb_cleanup/](./tracks/docs_duckdb_cleanup/)*

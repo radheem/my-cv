@@ -13,12 +13,12 @@ flowchart TD
     
     subgraph Step 1: Database Ingestion & File Backup
         B --> C[Compute unique db_job_id from normalized URL]
-        C --> D[PostgreSQL Upsert: INSERT ... ON CONFLICT DO UPDATE]
-        D --> E[Write Backup <slug>.txt with frontmatter to vault/jds/]
-        D --> F[Write Backup <slug>.json metadata to vault/jds/]
+        C --> D[Write Backup <slug>.txt with frontmatter to vault/jds/]
+        C --> E[Write Backup <slug>.json metadata to vault/jds/]
+        D & E --> F[DuckDB Serverless Cache auto-loads records]
     end
 
-    E & F --> G[Generate Job Slug: company-title-job_id]
+    F --> G[Generate Job Slug: company-title-job_id]
     
     subgraph Step 2: Application Tailoring & Output Generation
         G --> H(create_application_from_job slug)
@@ -43,13 +43,13 @@ sequenceDiagram
     autonumber
     participant Agent as AI Agent (Client)
     participant MCP as MCP Server
-    participant DB as PostgreSQL Database
+    participant FS as Local Filesystem & DuckDB
 
     Agent->>MCP: call_tool: fetch_public_job_url(url)
     MCP-->>Agent: Return stripped, clean plain-text job content
     Note over Agent: Extract company, title,<br/>location, and description
     Agent->>MCP: call_tool: save_job_description(company, title, url, description, ...)
-    MCP->>DB: Upsert job via write_jd()
+    MCP->>FS: Save as .json and .txt under vault/jds/
     MCP-->>Agent: SUCCESS: Job saved with slug '<slug>'
 ```
 
@@ -63,7 +63,7 @@ sequenceDiagram
     participant MCP as MCP Server
     participant Worker as Background Process (multiprocessing)
     participant Chrome as Playwright (Chromium)
-    participant DB as PostgreSQL Database
+    participant FS as Local Filesystem & DuckDB
 
     Agent->>MCP: call_tool: extract_job_details(url)
     MCP->>Worker: Spawn isolated worker process (with DISPLAY:99 Xvfb)
@@ -77,7 +77,7 @@ sequenceDiagram
         Worker->>Chrome: Wait for settle (networkidle / 8s max)
         Worker->>Chrome: Click "Expand Description" button
         Chrome-->>Worker: Extract page title & clean JD inner_text
-        Worker->>DB: Upsert job via write_jd()
+        Worker->>FS: Save as .json and .txt under vault/jds/
         Worker-->>MCP: Return generated job slug
         MCP-->>Agent: SUCCESS: Captured job with slug '<slug>'
     end
@@ -154,8 +154,8 @@ This section documents the exact, backend system-level execution flows behind ea
   1. Accepts `company`, `title`, `url`, `description`, `location`, and optional metadata.
   2. Hashes the URL using MD5 to compute a stable, unique 12-character `job_id`.
   3. Resolves/generates a unique human-readable `slug` (e.g., `company-title-job_id`).
-  4. Executes an upsert (`INSERT ... ON CONFLICT DO UPDATE`) in the PostgreSQL `jobs` table to persist metadata and raw description text.
-  5. Writes local backup files (`<slug>.txt` with frontmatter and `<slug>.json` metadata) to the filesystem in `vault/jds/`.
+  4. Writes local files (`<slug>.txt` with frontmatter and `<slug>.json` metadata) to the filesystem in `vault/jds/`.
+  5. The local files are automatically registered by the serverless DuckDB cache for scoring and querying.
   6. Returns the generated unique job `slug` to the caller.
 
 ### 5. Asynchronous Tailoring Engine
@@ -163,12 +163,12 @@ This section documents the exact, backend system-level execution flows behind ea
 * **Trigger:** Initiating application creation (CV/Cover Letter rendering) for an ingested job.
 * **Backend Flow:**
   1. Accepts a unique job `slug`.
-  2. Verifies that the corresponding job description exists in the database.
-  3. Updates the job state in PostgreSQL, inserting/updating an application row with status set to `'queued'`.
-  4. Pushes the job slug to a global, thread-safe FIFO Queue (`_tailor_queue`).
-  5. A dedicated serial consumer background thread (`_tailor_consumer_worker`) pops the job, advances the state in PostgreSQL to `'generating'`, and runs the LLM tailoring engine to produce tailored CV + Cover Letter Markdown files.
+  2. Verifies that the corresponding job description files exist under `vault/jds/`.
+  3. Updates the job state directly in the local `index.md` frontmatter, setting status to `'queued'`.
+  4. Pushes the job slug to a global, thread-safe in-memory FIFO Queue (`_tailor_queue`).
+  5. A dedicated serial consumer background thread pops the job, advances the state in the local frontmatter to `'generating'`, and runs the LLM tailoring engine to produce tailored CV + Cover Letter Markdown files.
   6. Compiles LaTeX documents locally (using standard `latexmk` or inside a TeX Live container) to generate high-quality English/German PDFs.
   7. Uploads the finalized packages to Google Drive via an Apps Script proxy.
   8. Synchronizes the application status back to the Google Sheets tracker.
-  9. Marks the application state as `'draft'` (or `'failed'` on crash).
+  9. Marks the application state in `index.md` as `'draft'` (or `'failed'` on crash).
 
