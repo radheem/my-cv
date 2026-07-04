@@ -19,7 +19,7 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Integrated multiple bot-protected third-party vendors via an adaptor/anti-corruption contract with CUE-based schema mapping.
 - Deployed with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all Go microservices.
 
-### Second Brain - Self-Hosted Document RAG ([repo](https://github.com/radheem/my-notebook))
+### My Notebook - Self-Hosted Document RAG ([repo](https://github.com/radheem/my-notebook))
 - Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) with per-step timeouts and retries, instrumented with OpenTelemetry and custom Grafana dashboards.
 - Designed real-time progress streaming over NATS JetStream + SSE (durable stream + KV current-state).
 - Kept all inference local and private via two llama.cpp servers (chat + embeddings) behind an OpenAI-compatible API.
