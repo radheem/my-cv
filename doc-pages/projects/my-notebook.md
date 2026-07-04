@@ -1,4 +1,4 @@
-# Second Brain — Self-Hosted Document RAG
+# My Notebook — Self-Hosted Document RAG
 
 A personal **document-intelligence** service that ingests your PDFs, articles, and notes through a durable pipeline — extract → chunk → embed → summarize → index — then lets you **semantic-search and chat over your own documents** (RAG), running **entirely on a Kubernetes homelab** with no cloud calls. All inference is served locally by `llama.cpp`.
 

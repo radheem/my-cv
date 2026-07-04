@@ -49,7 +49,7 @@ See the [Certifications](certificates.md) section for full syllabus details and 
 See the [Projects](projects/index.md) section for detailed write-ups:
 
 - **[IRS Platform (Stealth)](projects/irs.md)** — distributed Go microservices, MCP integration & data pipelines.
-- **[Second Brain](projects/second-brain.md)** — self-hosted RAG document-intelligence service; durable Hatchet ingestion pipeline, local llama.cpp inference, pgvector semantic search & NATS JetStream progress streaming on a k3d homelab.
+- **[My Notebook](projects/my-notebook.md)** — self-hosted RAG document-intelligence service; durable Hatchet ingestion pipeline, local llama.cpp inference, pgvector semantic search & NATS JetStream progress streaming on a k3d homelab.
 - **[cv-tailor](projects/cv-tailor.md)** — LLM CV/cover-letter tailoring and agentic job-hunting pipeline with a pure, unit-tested ranker (the LLM only writes prose, never invents facts); filesystem-first design cached in DuckDB, with automated Google Drive publishing, live Google Sheets status sync, and a containerized stop-before-submit Playwright LinkedIn flow.
 - **[Gitpress](projects/gitpress.md)** — zero-server blog CMS; Google Docs as the content source, GitHub Actions build pipeline, GitHub Pages hosting & Google Apps Script for forms and analytics — no servers, no monthly bills.
 - **[Homelab & Declarative Platform](projects/homelab.md)** — automated, single-node declarative homelab hosting CoreDNS, Tailscale/Headscale ingress, and self-healing local DNS routing.

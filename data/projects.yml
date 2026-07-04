@@ -38,9 +38,9 @@ projects:
     stack: ["Go", "gRPC", "NATS JetStream", "NATS KV", "Hatchet", "PostgreSQL", "Dgraph", "Kubernetes", "Cilium", "CUE", "MCP"]
 
   - id: second-brain
-    name: "Second Brain (Document RAG)"
+    name: "My Notebook (Document RAG)"
     weight: 1.2
-    doc: projects/second-brain.md
+    doc: projects/my-notebook.md
     url: "https://github.com/radheem/my-notebook"
     summary: "Self-hosted RAG document-intelligence service: durable Hatchet ingestion, local llama.cpp inference, pgvector semantic search, NATS JetStream progress streaming on a k3d homelab."
     highlights:

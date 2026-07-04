@@ -7,10 +7,10 @@ Go microservices ecosystem on native NATS (JetStream + KV) and direct gRPC, with
 
 [:octicons-arrow-right-24: Read more](irs.md)
 
-## :material-brain: Second Brain — Self-Hosted Document RAG
+## :material-brain: My Notebook — Self-Hosted Document RAG
 A personal **document-intelligence** service that ingests PDFs, articles, and notes through a durable **Hatchet** pipeline (extract → chunk → embed → summarize → index), then serves **semantic search and grounded RAG chat over your own documents** — running entirely on a **k3d homelab** with local `llama.cpp` inference (no cloud calls). Uses **pgvector** (HNSW) for similarity search and **NATS JetStream + SSE** for real-time ingestion progress. ([repo](https://github.com/radheem/my-notebook))
 
-[:octicons-arrow-right-24: Read more](second-brain.md)
+[:octicons-arrow-right-24: Read more](my-notebook.md)
 
 ## :material-file-document-edit: cv-tailor — LLM CV/Cover Tailoring & Agentic Pipeline
 A Python CLI and **FastMCP Server** that automates the job application tailoring process, manages application lifecycle tracking via a filesystem-first architecture cached in **DuckDB**, and automatically uploads compiled PDF application packages to **Google Drive**, with live tracking status synchronized with **Google Sheets**. A **pure, unit-tested ranker** DETERMINISTICALLY selects the top-3 relevant projects and orders skills, and the LLM only writes prose around facts pinned in a master CV — so it never fabricates experience. Features a 3-step agentic ingestion pipeline (Gmail alerts discovery -> lightweight guest API fetchers -> DuckDB scoring -> PDF rendering) and an optional containerized **Playwright** LinkedIn flow that ingests JDs and drafts applications end-to-end — always **stopping before submit**. ([repo](https://github.com/radheem/cv-tailor))
