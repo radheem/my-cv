@@ -160,10 +160,10 @@ projects:
     tags: ["web", "frontend", "static-site", "github-actions", "ci-cd", "zero-backend", "automation"]
     stack: ["GitHub Actions", "GitHub Pages", "Google Apps Script", "Static HTML"]
 
-  - id: data-analyser
-    name: "Data Analyser (BigQuery MCP)"
+  - id: data-analyzer
+    name: "Data Analyzer (BigQuery MCP)"
     weight: 1.0
-    doc: projects/data-analyser.md
+    doc: projects/data-analyzer.md
     url: "https://github.com/radheem/big-query"
     summary: "Model Context Protocol (MCP) server providing LLM access to Google BigQuery Political Ads dataset, integrated with Grafana."
     highlights:

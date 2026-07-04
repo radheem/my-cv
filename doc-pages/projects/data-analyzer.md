@@ -1,4 +1,4 @@
-# Data Analyser (BigQuery MCP)
+# Data Analyzer (BigQuery MCP)
 
 An intelligent Model Context Protocol (MCP) and visualization pipeline for Google's public Political Ads transparency dataset.
 
