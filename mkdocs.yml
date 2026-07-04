@@ -75,7 +75,7 @@ nav:
   - Home: index.md
   - Projects:
       - Overview: projects/index.md
-      - Data Analyzer (BigQuery MCP): projects/data-analyzer.md
+      - Data Analyzer: projects/data-analyzer.md
       - IRS Platform (Stealth): projects/irs.md
       - Second Brain (Document RAG): projects/second-brain.md
       - cv-tailor (Agentic Job-Hunting): projects/cv-tailor.md

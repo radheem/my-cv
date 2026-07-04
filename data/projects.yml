@@ -161,7 +161,7 @@ projects:
     stack: ["GitHub Actions", "GitHub Pages", "Google Apps Script", "Static HTML"]
 
   - id: data-analyzer
-    name: "Data Analyzer (BigQuery MCP)"
+    name: "Data Analyzer"
     weight: 1.0
     doc: projects/data-analyzer.md
     url: "https://github.com/radheem/big-query"
