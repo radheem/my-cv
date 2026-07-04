@@ -56,3 +56,8 @@ A static blog CMS with **no servers, no databases, and no hosting costs** — bu
 Kubernetes-orchestrated end-to-end 5G testbed (srsRAN + Open5GS) with **Multus CNI** multi-homed networking (N2/N3/N6), ZeroMQ virtual RF, host-based UEs, an integrated **O-RAN Near-RT RIC** over E2, an **ONOS SDN** transport network, and Prometheus/Grafana. Achieved 50+ Mbps TCP throughput. ([repo](https://github.com/radheemCorp/srsRAN-dep-zmq))
 
 [:octicons-arrow-right-24: Read more](5g-testbed.md)
+
+## :material-chart-bar: Data Analyzer — MCP & BigQuery Visualization Pipeline
+An intelligent Model Context Protocol (MCP) and visualization pipeline for Google's public Political Ads transparency dataset. This project provides secure, bounded LLM access to massive BigQuery datasets while simultaneously orchestrating Grafana for rich visualizations.
+
+[:octicons-arrow-right-24: Read more](data-analyzer.md)
