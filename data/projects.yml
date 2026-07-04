@@ -159,3 +159,17 @@ projects:
     domains: ["web", "platform"]
     tags: ["web", "frontend", "static-site", "github-actions", "ci-cd", "zero-backend", "automation"]
     stack: ["GitHub Actions", "GitHub Pages", "Google Apps Script", "Static HTML"]
+
+  - id: data-analyser
+    name: "Data Analyser (BigQuery MCP)"
+    weight: 1.0
+    doc: projects/data-analyser.md
+    url: "https://github.com/radheem/big-query"
+    summary: "Model Context Protocol (MCP) server providing LLM access to Google BigQuery Political Ads dataset, integrated with Grafana."
+    highlights:
+      - "Built a FastMCP Python server exposing optimized BigQuery tools to prevent raw SQL token spikes."
+      - "Orchestrated Docker Compose synchronization between Python FastMCP, Grafana, and official Grafana MCP server."
+      - "Automated zero-touch provisioning of GCP credentials, Grafana Service Accounts, and BigQuery datasources."
+    domains: ["backend", "data", "platform"]
+    tags: ["python", "mcp", "fastmcp", "bigquery", "gcp", "docker", "grafana", "llm", "backend", "data"]
+    stack: ["Python", "FastMCP", "Google BigQuery", "Grafana", "Docker Compose"]
