@@ -37,7 +37,7 @@ programming_languages:
 # with the job's must-haves. Tags drive that relevance scoring.
 skill_groups:
   - name: Distributed Systems
-    items: ["gRPC", "NATS JetStream", "NATS KV", "Hatchet", "Kafka", "Dapr", "MCP"]
+    items: ["gRPC", "NATS JetStream", "NATS KV", "Hatchet", "Kafka", "Dapr", "MCP", "FastMCP"]
     tags: ["distributed", "microservices", "event-driven", "messaging", "grpc", "backend"]
   - name: Cloud-Native & Infra
     items: ["Kubernetes", "kustomize", "Skaffold", "Helm", "Cilium", "Docker", "Terraform", "external-dns"]
@@ -49,7 +49,7 @@ skill_groups:
     items: ["OpenTelemetry", "VictoriaMetrics", "Prometheus", "Grafana"]
     tags: ["observability", "monitoring", "reliability", "metrics", "tracing", "sre"]
   - name: AI / ML Integration
-    items: ["MCP", "Kubeflow", "KServe", "scikit-learn", "TensorFlow/Keras", "pgvector", "llama.cpp"]
+    items: ["MCP", "FastMCP", "Kubeflow", "KServe", "scikit-learn", "TensorFlow/Keras", "pgvector", "llama.cpp"]
     tags: ["ml", "ai", "llm", "rag", "mlops", "kubeflow", "data-science"]
   - name: Web & API
     items: ["ReactJS", "NodeJS", "NestJS", "Django", "Protocol Buffers", "REST", "OpenAPI"]
