@@ -56,3 +56,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Docs and Code Cleanup**
 *Link: [./tracks/docs_duckdb_cleanup/](./tracks/docs_duckdb_cleanup/)*
+- [CV Variant Matching](./tracks/cv_variant_matching_20260714/index.md)

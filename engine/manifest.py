@@ -19,6 +19,7 @@ from .shared import config
 from .domains.tailoring import llm, prompts
 from .domains.tailoring.jobspec import _SYSTEM as _JOBSPEC_SYSTEM
 from .domains.tailoring.render import _COVER_SYSTEM, _CV_SYSTEM
+from .domains.tailoring.variants import _VARIANT_SELECTION_SYSTEM
 
 SCHEMA = 1
 
@@ -68,6 +69,7 @@ def build(*, decisions: dict[str, Any], generated_at: str = "",
             "cv": prompts.meta("cv", _CV_SYSTEM, root=root),
             "cover": prompts.meta("cover", _COVER_SYSTEM, root=root),
             "jobspec": prompts.meta("jobspec", _JOBSPEC_SYSTEM, root=root),
+            "variant": prompts.meta("variant", _VARIANT_SELECTION_SYSTEM, root=root),
         },
         "inputs_sha256": inputs,
         "effective_config_sha256": sha256_of(json.dumps(eff, sort_keys=True)),

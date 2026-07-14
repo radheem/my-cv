@@ -364,7 +364,7 @@ def extract_job_details_workflow(url: str) -> str:
     return f"SUCCESS: Captured job with slug '{slug}' and saved to database."
 
 
-def create_application_from_job_workflow(slug: str) -> str:
+def create_application_from_job_workflow(slug: str, variant: str | None = None) -> str:
     """Modular workflow to generate tailored application documents (CV/CL) for a specific job slug,
     compile them into PDFs, upload them to Google Drive, and sync tracking statuses."""
     import argparse
@@ -375,7 +375,8 @@ def create_application_from_job_workflow(slug: str) -> str:
     # 1. Generate tailored markdown docs (cv.md, cover-letter.md, etc.)
     args_new = argparse.Namespace(
         source=slug, slug=slug, provider=None, model=None,
-        ollama_url=None, no_translate=False, no_save_db=False, recipient=None
+        ollama_url=None, no_translate=False, no_save_db=False, recipient=None,
+        variant=variant
     )
     try:
         cli.cmd_new(args_new)

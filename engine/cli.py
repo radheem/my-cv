@@ -289,7 +289,14 @@ def cmd_new(args: argparse.Namespace) -> int:
     print("Selecting CV variant ...", file=sys.stderr)
     from .domains.tailoring import variants
     aliases_flat = rank.invert_aliases(taxonomy.get("aliases", {}))
-    variant_name = variants.select_best_cv_variant(spec, job_text, taxonomy, aliases_flat)
+    
+    variant_override = getattr(args, "variant", None)
+    if variant_override:
+        variant_name = variant_override
+        print(f"Using manually forced CV variant: {variant_name}", file=sys.stderr)
+    else:
+        variant_name = variants.select_best_cv_variant(spec, job_text, taxonomy, aliases_flat)
+        
     variant_file = ROOT / "data" / "cv-variants" / variant_name
     if not variant_file.exists():
         raise SystemExit(
@@ -1247,6 +1254,7 @@ def main(argv: list[str] | None = None) -> int:
     p_new.add_argument("--slug", help="output dir name under applications/", default=None)
     p_new.add_argument("--recipient", default=None, help="cover-letter salutation name")
     p_new.add_argument("--no-translate", action="store_true", help="skip the German translation")
+    p_new.add_argument("--variant", default=None, help="Force a specific CV variant filename (e.g. telecommunication.md) and bypass automatic classification.")
     _add_provider_flags(p_new)
     p_new.set_defaults(func=cmd_new)
 

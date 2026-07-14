@@ -37,79 +37,34 @@ def _spec(**kw):
     return base
 
 
-def test_score_job_clusters(taxonomy_fixture):
-    spec = _spec(must_haves=["Kubernetes", "Cilium"], stack=["Go", "gRPC"])
-    # Score for platform should be positive since "Kubernetes" and "Cilium" are under platform-engineer
-    # Must-haves score weight is 3.0, so 2 matches = 2 * 3.0 = 6.0
-    scores = variants.score_job_clusters(spec, taxonomy_fixture)
-    
-    assert scores["platform-engineer"] > 0
-    assert scores["distributed-system"] > 0
-    assert scores["ai-ml"] == 0
+@patch("engine.domains.tailoring.llm.structured_json")
+def test_match_cluster_via_llm(mock_structured_json, taxonomy_fixture):
+    mock_structured_json.return_value = {
+        "summary": "This is a 6G and O-RAN cell communication thesis role.",
+        "cluster": "platform-engineer"
+    }
+    summary, cluster = variants.match_cluster_via_llm("test job text", taxonomy_fixture)
+    assert summary == "This is a 6G and O-RAN cell communication thesis role."
+    assert cluster == "platform-engineer"
+    mock_structured_json.assert_called_once()
 
 
 @patch("engine.shared.config.load")
-def test_select_best_cv_variant_single_winner(mock_config_load, taxonomy_fixture):
+@patch("engine.domains.tailoring.variants.match_cluster_via_llm")
+def test_select_best_cv_variant_llm(mock_match_cluster, mock_config_load, taxonomy_fixture):
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {
                 "platform-engineer": "platform-engineer.md",
                 "ai-ml": "ai-ml.md",
-                "distributed-system": "distributed-system.md",
-                "information-management": "information-management.md",
             }
         }
     }
-    spec = _spec(must_haves=["Kubernetes", "Cilium", "Helm"])  # strongly platform
+    mock_match_cluster.return_value = ("6G telecommunication and sensing thesis.", "platform-engineer")
     
-    selected = variants.select_best_cv_variant(spec, "Job description text", taxonomy_fixture)
+    selected = variants.select_best_cv_variant({}, "test job text", taxonomy_fixture)
     assert selected == "platform-engineer.md"
-
-
-@patch("engine.shared.config.load")
-@patch("engine.domains.tailoring.llm.stream_text")
-def test_select_best_cv_variant_tie_breaker(mock_stream_text, mock_config_load, taxonomy_fixture):
-    mock_config_load.return_value = {
-        "tailoring": {
-            "cv_variants": {
-                "platform-engineer": "platform-engineer.md",
-                "ai-ml": "ai-ml.md",
-                "distributed-system": "distributed-system.md",
-                "information-management": "information-management.md",
-            }
-        }
-    }
-    # Tying platform and ai-ml equally
-    spec = _spec(must_haves=["Kubernetes", "ml"])
-    
-    # Mock LLM choosing "ai-ml.md"
-    mock_stream_text.return_value = "ai-ml.md"
-    
-    selected = variants.select_best_cv_variant(spec, "Job description text", taxonomy_fixture)
-    assert selected == "ai-ml.md"
-    mock_stream_text.assert_called_once()
-
-
-@patch("engine.shared.config.load")
-@patch("engine.domains.tailoring.llm.stream_text")
-def test_select_best_cv_variant_tie_breaker_invalid_choice_aborts(mock_stream_text, mock_config_load, taxonomy_fixture):
-    mock_config_load.return_value = {
-        "tailoring": {
-            "cv_variants": {
-                "platform-engineer": "platform-engineer.md",
-                "ai-ml": "ai-ml.md",
-            }
-        }
-    }
-    spec = _spec(must_haves=["Kubernetes", "ml"])
-    
-    # Mock LLM returning garbage or an un-tied variant
-    mock_stream_text.return_value = "unrelated-variant.md"
-    
-    with pytest.raises(SystemExit) as excinfo:
-        variants.select_best_cv_variant(spec, "Job description text", taxonomy_fixture)
-        
-    assert "CRITICAL ERROR" in str(excinfo.value)
+    mock_match_cluster.assert_called_once_with("test job text", taxonomy_fixture)
 
 
 def test_extract_projects_from_cv():
@@ -147,11 +102,14 @@ tagline: "Test"
 @patch("engine.domains.tailoring.jobspec.extract_jobspec")
 @patch("engine.domains.tailoring.render.render_cover_letter")
 @patch("engine.cli.ROOT")
+@patch("engine.domains.tailoring.variants.match_cluster_via_llm")
 def test_cmd_new_variants_pipeline_integration(
-    mock_root, mock_render_cl, mock_extract, mock_fetch, mock_load_data, mock_jobs_dir, tmp_path
+    mock_match_cluster, mock_root, mock_render_cl, mock_extract, mock_fetch, mock_load_data, mock_jobs_dir, tmp_path
 ):
     import argparse
     from engine import cli
+    
+    mock_match_cluster.return_value = ("Test job summary.", "platform-engineer")
     
     # 1. Setup mock jobs directory
     mock_jobs_dir.return_value = tmp_path

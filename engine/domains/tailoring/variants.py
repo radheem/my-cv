@@ -12,35 +12,76 @@ from engine.domains.tailoring import llm, rank
 log = logging.getLogger("cv-tailor-variants")
 
 
-def score_job_clusters(
-    jobspec: dict[str, Any],
-    taxonomy: dict[str, Any] | None = None,
-    aliases: dict[str, str] | None = None,
-) -> dict[str, float]:
-    """Calculate match scores for each cluster against the jobspec.
+_VARIANT_SELECTION_SYSTEM = (
+    "You are an expert career strategist and technical recruiter. Your task is to analyze a "
+    "job description and select the single most relevant domain cluster for classifying "
+    "this job. You must strictly select one of the provided cluster names, and provide a "
+    "concise, one-sentence summary of the job's core technical focus."
+)
 
-    The score is the weighted overlap of jobspec terms with cluster tags.
-    """
-    if not taxonomy:
-        return {}
+VARIANT_SELECTION_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "summary": {
+            "type": "string",
+            "description": "A concise, one-sentence summary of the job's core technical focus.",
+        },
+        "cluster": {
+            "type": "string",
+            "description": "The exact name of the best matching taxonomy cluster from the available choices.",
+        },
+    },
+    "required": ["summary", "cluster"],
+    "additionalProperties": False,
+}
 
-    # Invert aliases if not already done
-    aliases_flat = rank.invert_aliases(taxonomy.get("aliases", {})) if aliases is None else aliases
 
-    scores: dict[str, float] = {}
-    for cl_name, cl_spec in taxonomy.get("clusters", {}).items():
-        # Get canonical cluster tags
-        cl_tags = rank._phrase_tokens(cl_spec.get("tags", []), aliases_flat)
-        score = 0.0
-        # Field weights match rank._FIELD_WEIGHTS
-        weights = rank._FIELD_WEIGHTS
-        for field, weight in weights.items():
-            field_toks = rank._phrase_tokens(rank._as_terms(jobspec.get(field, [])), aliases_flat)
-            overlap = cl_tags & field_toks
-            score += len(overlap) * weight
-        scores[cl_name] = score
-
-    return scores
+def match_cluster_via_llm(
+    job_text: str,
+    taxonomy: dict[str, Any],
+) -> tuple[str, str]:
+    """Analyze the job description with the LLM and match it to a taxonomy cluster."""
+    from engine.domains.tailoring import prompts
+    
+    clusters = taxonomy.get("clusters", {})
+    available_choices = list(clusters.keys())
+    
+    # Format choice descriptions for user prompt
+    choices_text = "\n".join(
+        f"- {name}: Focuses on tags {spec.get('tags', [])}"
+        for name, spec in clusters.items()
+    )
+    
+    user = (
+        f"Available taxonomy clusters to select from:\n"
+        f"{choices_text}\n\n"
+        f"Job Description:\n"
+        f"```\n{job_text.strip()}\n```\n\n"
+        f"Analyze the job, summarize its technical focus in one sentence, and select the single "
+        f"best matching cluster from the available choices (choose from: {', '.join(available_choices)})."
+    )
+    
+    system, _ = prompts.load("variant", _VARIANT_SELECTION_SYSTEM)
+    max_tokens = llm.resolve()["max_tokens"].get("variant", 1500)
+    
+    res = llm.structured_json(system, user, VARIANT_SELECTION_SCHEMA, max_tokens=max_tokens)
+    
+    summary = res.get("summary", "").strip()
+    cluster = res.get("cluster", "").strip()
+    
+    # If cluster is not one of the available ones, fallback safely
+    if cluster not in available_choices:
+        log.warning(f"LLM returned invalid cluster '{cluster}'. Expected one of {available_choices}. Finding closest match...")
+        # Simple case-insensitive matching fallback
+        for name in available_choices:
+            if name.lower() == cluster.lower():
+                cluster = name
+                break
+        else:
+            # Fallback to the first available choice
+            cluster = available_choices[0] if available_choices else "platform-engineer"
+            
+    return summary, cluster
 
 
 def select_best_cv_variant(
@@ -51,8 +92,7 @@ def select_best_cv_variant(
 ) -> str:
     """Select the best CV variant filename for a target job.
 
-    Uses deterministic weighted overlap first. If there is a tie among the top-scoring
-    clusters, calls the LLM as a tie-breaker.
+    Uses an LLM to analyze the job description, summarize it, and match it to a taxonomy cluster.
     """
     # 1. Load config and variant mappings
     cfg = config.load()
@@ -60,73 +100,19 @@ def select_best_cv_variant(
     if not cv_variants:
         raise ValueError("No cv_variants mapping found in configuration.")
 
-    # 2. Score job against each cluster
-    aliases_flat = rank.invert_aliases(taxonomy.get("aliases", {})) if aliases is None else aliases
-    scores = score_job_clusters(jobspec, taxonomy, aliases_flat)
-
-    if not scores:
-        # Fallback to general platform-cloud-native if no taxonomy defined
-        log.warning("No taxonomy scores calculated. Defaulting to platform-cloud-native.")
-        return cv_variants.get("platform-cloud-native", "platform-cloud-native.md")
-
-    # Filter scores to only include those that actually have a variant mapped
-    valid_scores = {cl: val for cl, val in scores.items() if cl in cv_variants}
-    if not valid_scores:
-        raise ValueError("None of the scored taxonomy clusters have a mapped CV variant.")
-
-    # 3. Find the maximum score and all candidates with that score
-    max_score = max(valid_scores.values())
+    # 2. Match cluster via LLM
+    summary, chosen_cluster = match_cluster_via_llm(job_text, taxonomy)
+    log.info(f"LLM Summary: {summary}")
     
-    # If the max score is 0, we have zero matches, let's treat it as a tie of all valid options
-    if max_score == 0.0:
-        candidates = list(valid_scores.keys())
-    else:
-        candidates = [cl for cl, score in valid_scores.items() if score == max_score]
-
-    # 4. Single winner -> deterministic copy
-    if len(candidates) == 1:
-        chosen_cluster = candidates[0]
-        chosen_file = cv_variants[chosen_cluster]
-        log.info(f"Deterministic CV variant selected: {chosen_file} for cluster '{chosen_cluster}' (score: {max_score})")
-        return chosen_file
-
-    # 5. Tie-breaker -> call LLM with only the tied options
-    log.info(f"CV Selection tie detected between clusters: {candidates} (score: {max_score}). Resolving with LLM...")
-    tied_options = {cl: cv_variants[cl] for cl in candidates}
-    
-    system_prompt = (
-        "You are an expert recruitment assistant and career strategist.\n"
-        "Your task is to analyze the target Job Description and select the SINGLE best CV variant "
-        "from the provided options that maximizes the candidate's relevance for this role.\n"
-        "STRICT RULES:\n"
-        "- Output ONLY the exact filename of the chosen variant (e.g. ml-ai.md).\n"
-        "- No preamble, no explanation, no markdown formatting (no backticks, no quotes)."
-    )
-
-    options_text = "\n".join(f"- {fname} (specializing in {cl})" for cl, fname in tied_options.items())
-    user_prompt = (
-        f"Target Job Description:\n"
-        f"```\n{job_text.strip()}\n```\n\n"
-        f"Available CV Variant Options:\n"
-        f"{options_text}\n\n"
-        f"Select the single best variant filename from the options above. Output ONLY the filename."
-    )
-
-    try:
-        raw_output = llm.stream_text(system_prompt, user_prompt, max_tokens=100)
-        # Sanitize output (remove quotes, markdown backticks, and whitespace)
-        chosen_file = re.sub(r"[`'\"\\n\\r]", "", raw_output).strip()
+    # Map the cluster to the variant filename
+    chosen_file = cv_variants.get(chosen_cluster)
+    if not chosen_file:
+        # Fallback if the cluster isn't mapped
+        log.warning(f"Chosen cluster '{chosen_cluster}' has no mapped CV variant. Fallback to platform-cloud-native.")
+        chosen_file = cv_variants.get("platform-cloud-native", "platform-cloud-native.md")
         
-        # Validate that the LLM returned one of our tied options
-        if chosen_file not in tied_options.values():
-            raise ValueError(f"LLM returned invalid variant name '{chosen_file}'. Expected one of: {list(tied_options.values())}")
-            
-        log.info(f"LLM successfully resolved tie-breaker. Selected: {chosen_file}")
-        return chosen_file
-    except Exception as e:
-        log.error(f"LLM tie-breaker failed: {str(e)}")
-        # Abort and alert (as specified by human-in-the-loop choices)
-        raise SystemExit(f"CRITICAL ERROR: CV selection tie-breaker failed: {str(e)}")
+    log.info(f"LLM-based CV variant selected: {chosen_file} for cluster '{chosen_cluster}'")
+    return chosen_file
 
 
 def extract_projects_from_cv(cv_text: str, projects_catalog: list[dict[str, Any]]) -> list[dict[str, Any]]:

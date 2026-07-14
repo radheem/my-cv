@@ -467,7 +467,7 @@ def test_mcp_stress_duplicate_queue_filtering(monkeypatch):
 
     # 2. Mock workflow and count calls
     calls = []
-    def mock_workflow(slug):
+    def mock_workflow(slug, *args, **kwargs):
         calls.append(slug)
         time.sleep(0.1)
         return "SUCCESS"

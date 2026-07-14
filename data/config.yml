@@ -30,6 +30,7 @@ llm:
     cv: 16000
     cover: 8000
     judge: 1200
+    variant: 1500
 
   ollama:
     base_url: http://localhost:11434/v1   # env: CV_TAILOR_OLLAMA_BASE_URL
@@ -49,6 +50,7 @@ prompts:
   cover: cover.md
   jobspec: jobspec.md
   judge: judge.md
+  variant: variant.md
   fewshot: true                  # include the gold-derived style exemplars
 
 # Ranking inputs (the pure ranker reads these — see data/ranking.yml, taxonomy.yml).

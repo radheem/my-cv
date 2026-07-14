@@ -338,8 +338,13 @@ def _tailor_consumer_worker():
     while True:
         try:
             # Block indefinitely until a job is pushed to the queue
-            slug = _tailor_queue.get()
-            log.info(f"Serially processing queued tailoring job for slug: {slug}")
+            item = _tailor_queue.get()
+            if isinstance(item, tuple):
+                slug, variant_override = item
+            else:
+                slug, variant_override = item, None
+                
+            log.info(f"Serially processing queued tailoring job for slug: {slug} (forced variant: {variant_override})")
             
             # Transition the application row status to 'generating' in the database atomically
             is_valid_task = False
@@ -366,7 +371,7 @@ def _tailor_consumer_worker():
 
             # Run the actual tailoring workflow
             try:
-                res = create_application_from_job_workflow(slug)
+                res = create_application_from_job_workflow(slug, variant_override)
                 if res.startswith("ERROR"):
                     log.error(f"Queued tailoring failed for {slug}: {res}")
                     _mark_application_failed(slug)
@@ -499,6 +504,121 @@ def create_application_from_job(slug: str) -> str:
         })
     except Exception as e:
         log.exception(f"Failed to queue application creation for slug: {slug}")
+        return json.dumps({"error": f"Failed to queue application tailoring: {str(e)}"})
+
+
+@mcp.tool()
+def preview_cv_variant(slug: str) -> str:
+    """Step 2.5 (Variant Selection Visibility). Preview which CV variant the job matches to, showing the LLM's summary and the selected cluster.
+    Use this tool before creating an application to inspect the pipeline's classification logic.
+    """
+    try:
+        from engine.domains.tailoring import variants
+        from engine.shared.config import ROOT
+        import yaml
+        
+        # 1. Fetch raw job text from database
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT description FROM jobs WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if not row or not row["description"]:
+                    return json.dumps({"error": f"Job with slug '{slug}' not found or has no description."})
+                job_text = row["description"]
+
+        # 2. Load taxonomy and config
+        cfg = config.load()
+        cv_variants = cfg.get("tailoring", {}).get("cv_variants", {})
+        taxonomy_file = ROOT / cfg.get("tailoring", {}).get("taxonomy_file", "data/taxonomy.yml")
+        if taxonomy_file.exists():
+            taxonomy = yaml.safe_load(taxonomy_file.read_text(encoding="utf-8")) or {}
+        else:
+            taxonomy = {}
+
+        # 3. Call LLM matching
+        summary, chosen_cluster = variants.match_cluster_via_llm(job_text, taxonomy)
+        predicted_file = cv_variants.get(chosen_cluster, "platform-cloud-native.md")
+
+        return json.dumps({
+            "slug": slug,
+            "llm_summary": summary,
+            "matched_cluster": chosen_cluster,
+            "predicted_variant_file": predicted_file,
+            "available_variants_map": cv_variants
+        }, indent=2)
+    except Exception as e:
+        log.exception(f"Failed to preview CV variant for slug: {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def create_application_with_variant(slug: str, variant_filename: str) -> str:
+    """Step 3.5 (Tailoring Override). Generate a tailored job application using a manually selected CV variant.
+    Use this tool to completely bypass the automatic taxonomy/tag classification logic and force a specific CV variant template (e.g. telecommunication.md or platform-engineer.md).
+    """
+    try:
+        from engine.shared.config import ROOT
+        # Validate that the variant file exists on the host
+        variant_file = ROOT / "data" / "cv-variants" / variant_filename
+        if not variant_file.exists():
+            # Get available options from config to help the user
+            cfg = config.load()
+            cv_variants = list(cfg.get("tailoring", {}).get("cv_variants", {}).values())
+            return json.dumps({
+                "error": f"CV variant file '{variant_filename}' does not exist on disk. Expected one of: {cv_variants}"
+            })
+
+        # 1. Check if the job exists in the database
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT job_id FROM jobs WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if not row:
+                    return json.dumps({"error": f"Job with slug '{slug}' not found in database. Cannot create application."})
+                job_id = row["job_id"]
+
+                # Check if an application already exists and its current status
+                cur.execute("SELECT status FROM applications WHERE job_id = %s", (job_id,))
+                app_row = cur.fetchone()
+                if app_row:
+                    status = app_row["status"]
+                    if status in ("draft", "applied", "interview", "offer", "rejected", "withdrawn"):
+                        return json.dumps({
+                            "error": f"An application for slug '{slug}' is already finished and finalized with status '{status}'. Cannot re-enqueue application tailoring."
+                        })
+                    if status == "generating":
+                        return json.dumps({
+                            "status": "generating",
+                            "slug": slug,
+                            "message": "Application tailoring is already actively generating. No new action taken."
+                        })
+                    if status == "queued":
+                        return json.dumps({
+                            "status": "queued",
+                            "slug": slug,
+                            "message": "Application tailoring is already enqueued and waiting in line. No new action taken."
+                        })
+
+                # 2. Insert or update the application row setting status to 'queued'
+                cur.execute("""
+                    INSERT INTO applications (job_id, slug, status)
+                    VALUES (%s, %s, 'queued')
+                    ON CONFLICT (job_id) DO UPDATE SET status = 'queued', updated_at = CURRENT_TIMESTAMP
+                """, (job_id, slug))
+                conn.commit()
+
+        # 3. Ensure background worker is running and push (slug, variant_filename) tuple to queue
+        _ensure_tailor_worker()
+        _tailor_queue.put((slug, variant_filename))
+
+        return json.dumps({
+            "status": "queued",
+            "slug": slug,
+            "forced_variant": variant_filename,
+            "message": "Application tailoring with manual variant override has been added to the background queue. You can monitor progress with get_application."
+        })
+    except Exception as e:
+        log.exception(f"Failed to queue manual variant application creation for slug: {slug}")
         return json.dumps({"error": f"Failed to queue application tailoring: {str(e)}"})
 
 
