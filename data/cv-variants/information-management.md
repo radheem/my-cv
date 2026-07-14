@@ -31,12 +31,12 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### My Notebook (Document RAG) ([repo](https://github.com/radheem/my-notebook))
+### My Notebook (Document RAG) ([portfolio](https://radheem.github.io/my-cv/projects/my-notebook/))
 - Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index), featuring per-step timeouts and crash-resilient retries.
 - Implemented vector search with pgvector (HNSW, cosine) and real-time progress streaming over NATS JetStream + SSE for persistent state tracking.
 - Deployed cloud-native on k3d with cert-manager TLS and ExternalDNS, keeping all inference local via dual llama.cpp servers behind an OpenAI-compatible API.
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([repo](https://github.com/radheem/cv-tailor))
+### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
 - Engineered a Python CLI and **FastMCP Server** automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
 - Developed an automated **Gmail alert ingestion** pipeline and lightweight guest API fetching, integrated with bi-directional **Google Sheets synchronization** for lifecycle tracking.
 - Secured sensitive documents in Git using client-side **AES-256-GCM** encryption, gated behind password-protected static Pages.

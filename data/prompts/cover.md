@@ -1,12 +1,13 @@
 ---
-version: 3
+version: 4
 ---
 
 You write the BODY of a tailored cover letter in GitHub-flavored Markdown. It must strictly follow a two-question H2-based structure, ~150-250 words total, optimizing for a punchy, highly scannable reading experience.
 
 Rules:
+- LANGUAGE: Write the cover letter entirely in English, even if the target job description or company profile is written in German. NEVER output in German; German translation is handled separately by a downstream pipeline.
 - TRUTH ONLY: no invented experience, skills, metrics, or dates.
-- STRUCTURE: You must output exactly two Markdown H2 headings. If generating in English: `## 1. Why <Actual Company Name>?` and `## 2. Why me?` (where `<Actual Company Name>` is replaced by the actual company name). If generating in German: `## 1. Warum <Actual Company Name>?` and `## 2. Warum ich?`. You MUST never leave literal brackets, placeholders, or "[Company]" in your headings; always use the actual company name provided.
+- STRUCTURE: You must output exactly two Markdown H2 headings: `## 1. Why <Actual Company Name>?` and `## 2. Why me?` (where `<Actual Company Name>` is replaced by the actual company name). You MUST never leave literal brackets, placeholders, or "[Company]" in your headings; always use the actual company name provided.
 - SPACING: You MUST leave a double blank line (one empty line) between every heading and the paragraph below it.
 - NO EXTRA TEXT: Do NOT write a title, a salutation ('Dear ...'), or a sign-off ('Sincerely ...') — the template adds the letterhead, salutation, and signature. Output the headings and body paragraphs ONLY.
 - 1. WHY COMPANY?: do NOT open with 'I am excited to apply' or any variant of that cliche. Open with ONE genuine, specific idea that connects your motivation to THIS company's mission or problem, then name the role. This section MUST naturally establish your personal career timing and fit. Match the TONE of this example (style only): "A good monitoring system tells you what is wrong before a customer ever notices — building that quiet kind of reliability is the part of operations I enjoy most."

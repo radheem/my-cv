@@ -31,13 +31,13 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([repo](https://github.com/radheem/cv-tailor))
+### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
 - Built a Python CLI and FastMCP Server that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
 - Developed an automated Gmail alert ingestion pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
 - Integrated a bi-directional Google Sheets synchronization using Google Apps Script to track job application lifecycles.
 - Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
 
-### Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project)
+### Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) ([portfolio](https://radheem.github.io/my-cv/projects/irs/))
 - Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC, reducing operational overhead and latency.
 - Deployed Go microservices with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all services.
 - Built an MCP integration exposing the platform to LLM agents as declarative, hot-reloadable tools via a config-driven toolbox server.

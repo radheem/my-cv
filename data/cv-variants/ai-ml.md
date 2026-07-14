@@ -31,17 +31,17 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### My Notebook (Document RAG) ([repo](https://github.com/radheem/my-notebook))
+### My Notebook (Document RAG) ([portfolio](https://radheem.github.io/my-cv/projects/my-notebook/))
 - Durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) featuring per-step timeouts, retries, and OpenTelemetry instrumentation.
 - Real-time progress streaming over NATS JetStream + SSE, with all local inference secured via two llama.cpp servers behind an OpenAI-compatible API.
 - Vector search implemented with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
-### cv-tailor (LLM CV/Cover Tailoring + Application Management) ([repo](https://github.com/radheem/cv-tailor))
+### cv-tailor (LLM CV/Cover Tailoring + Application Management) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
 - Built a Python CLI and FastMCP Server automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
 - Developed automated Gmail alert ingestion pipelines and bi-directional Google Sheets synchronization to track job application lifecycles.
 - Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
 
-### O-RAN AIML Framework ([repo](https://github.com/radheemCorp/O-RAN-AIML-deployment))
+### O-RAN AIML Framework ([portfolio](https://radheem.github.io/my-cv/projects/oran-aiml/))
 - Deployed end-to-end AIML framework on Kubernetes with Helm, featuring a config-driven Python SDK automating the full ML lifecycle (feature group → training → inference).
 - Authored Kubeflow training/retraining pipelines (kfp) with TensorFlow/Keras and scikit-learn, serving models via KServe with integrated feature stores and artifact storage.
 
