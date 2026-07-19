@@ -52,7 +52,7 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 
 ## Experience
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
 - Integrated and deployed a containerized 5G Standalone (SA) Open RAN testbed on a single Linux host, combining pre-dockerized open-source applications (Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB) and establishing fully reproducible, runbook-configured deployments.
 - Developed and integrated a custom xApp over the E2 interface to extract Key Performance Measurements (KPMs) from the gNB and publish them to a Kafka pub-sub message broker for downstream consumer applications.

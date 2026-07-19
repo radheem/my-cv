@@ -5,11 +5,12 @@ company: "Walaris"
 
 ## 1. Why Walaris?
 
-Real-time AI processing demands a precise seam between raw sensor data and actionable decisions, and designing that low-latency bridge is where I find the most engineering satisfaction. Walaris is building exactly that bridge for autonomous defense systems, and I want to bring my five years of distributed backend engineering to the Software Engineer role.
+Processing sensor streams at machine speed requires architecture that never compromises on latency or correctness. I am applying for the Software Engineer role because Walaris builds exactly that kind of deterministic edge infrastructure for mission-critical defense systems. My career has naturally converged on high-throughput data pipelines and real-time ML integration, and I want to apply that focus to autonomous air, land, and sea platforms.
 
 ## 2. Why me?
 
-- Designed a Python-based FastMCP server and event-driven data pipelines that process high-throughput streams with sub-second latency, directly aligning with your edge sensor processing goals.
-- Migrated a production microservices platform from Dapr to native NATS JetStream and gRPC, cutting message overhead by 40% and deploying the stack on Kubernetes with Cilium networking.
-- Implemented AES-256-GCM credential vaults and Ginkgo E2E test gates across a CI/CD workflow, ensuring zero-trust security and reliable delivery for mission-critical backends.
-I am available to start immediately, can relocate to Nuremberg within three weeks, and hold Blue Card eligibility so your team only needs to issue the contract with no sponsorship overhead.
+- Designed and deployed Go microservices with gRPC and NATS JetStream to process event-driven data streams across distributed clusters, reducing backend latency and enabling reliable real-time signal routing.
+- Built Python-based ML infrastructure and FastMCP servers that expose declarative, hot-reloadable tools to LLM agents, directly aligning with Walaris’s goal of integrating real-time machine learning and image processing into edge hardware.
+- Orchestrated Kubernetes deployments with kustomize and Skaffold, implemented Ginkgo E2E testing gates, and established CI/CD pipelines that ensure rigorous unit testing and rapid, safe back-end improvements.
+
+I am available full-time immediately, can relocate anywhere in Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract without sponsorship overhead.

@@ -4,7 +4,7 @@ tagline: "Senior Data & Database Systems Platform Engineer"
 
 ## Experience
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
 - Brought the database and analytics stack to operational readiness, configuring ETL into a Cassandra Feature Store.
 - Integrated xApp extracting real-time radio metrics over the E2 interface and publishing them to amessage broker.

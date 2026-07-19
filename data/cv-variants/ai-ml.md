@@ -4,7 +4,7 @@ tagline: "AI & MLOps Platform Engineer"
 
 ## Experience
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
 - Integrated and deployed a reproducible 5G Standalone (SA) testbed O RAN AI/ML Framework with runbook-configured deployments.
 - Developed xApp to extract live radio performance telemetry over E2 interface and publish it to a message broker, providing a high-fidelity data source for AI/ML extraction.

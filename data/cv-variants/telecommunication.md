@@ -4,7 +4,7 @@ tagline: "Senior O-RAN & Telecommunications Software Engineer"
 
 ## Experience
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
 - Integrated and deployed a reproducible 5G Standalone (SA) Open RAN testbed, combining pre-dockerized Open5GS 5GC, O-RAN SC RIC, and srsRAN/OCUDU gNB components.
 - Developed and integrated KPM xApp to extract real-time performance metrics over the E2 interface, fanning them out to a message broker.

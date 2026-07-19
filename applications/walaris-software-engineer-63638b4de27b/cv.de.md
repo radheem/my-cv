@@ -1,26 +1,26 @@
 ---
-tagline: "Software Engineer"
+tagline: "Softwareentwickler"
 ---
 
 ## Berufserfahrung
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
-- Integrierte und bereitete ein reproduzierbares 5G Standalone (SA) testbed O RAN AI/ML Framework mit runbook-konfigurierten Bereitstellungen.
-- Entwickelte eine xApp zur Extraktion von Echtzeit-Telemetriedaten zur Funkleistungsüberwachung über die E2-Schnittstelle und deren Veröffentlichung in einem Message Broker, um eine hochwertige Datenquelle für die AI/ML-Extraktion bereitzustellen.
+- Integrierte und bereitete ein reproduzierbares 5G-Standalone-(SA)-Testfeld-O-RAN-AI/ML-Framework mit runbook-konfigurierten Bereitstellungen.
+- Entwickelte eine xApp zur Extraktion von Echtzeit-Telemetriedaten zur Funkleistung über die E2-Schnittstelle und deren Veröffentlichung in einem Message Broker, um eine hochauflösende Datenquelle für die KI/ML-Extraktion bereitzustellen.
 - Trainierte und bereitete QoE-Durchsatzvorhersagemodelle mit Kubeflow Pipelines und KServe ein, um Echtzeit-Inferenz zu ermöglichen.
 - Tech: Kubeflow, KServe, Cassandra, Python, InfluxDB, Kafka, Kubernetes, Docker, Linux.
 
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Architektierte und containerisierte Backend-Dienste auf Kubernetes und AWS, optimierte Bereitstellungs-Pipelines für eine skalierbare Plattform-Infrastruktur.
+- Architierte und containerisierte Backend-Dienste auf Kubernetes und AWS, optimierte Bereitstellungs-Pipelines für skalierbare Plattform-Infrastrukturen.
 - Leitete Systemdesign und Code-Reviews, etablierte robuste Architekturmuster für verteilte Microservices und Cloud-Native-Bereitstellungen.
-- Entwickelte und dokumentierte hochperformante Dienste mit NodeJS, TypeScript und Docker, um zuverlässige Backend-Operationen zu gewährleisten.
+- Entwickelte und dokumentierte hochperformante Dienste mit NodeJS, TypeScript und Docker, um einen zuverlässigen Backend-Betrieb zu gewährleisten.
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
 - Integrierte OpenTelemetry, Prometheus und Grafana in verteilte Go/Python-Dienste zur Überwachung des Systemdurchsatzes und zur Reduzierung von Latenzspitzen.
-- Identifizierte und implementierte Systemdesign-Verbesserungen für Kernbörsendienste, optimierte Infrastrukturzuverlässigkeit und Observability.
+- Identifizierte und implementierte Systemdesign-Verbesserungen für Kern-Börsendienste, optimierte Infrastrukturzuverlässigkeit und Observability.
 - Pflegte Release-Prozesse und leitete Junior-Engineering-Teams, um konsistente Bereitstellungsstandards und Plattformstabilität zu gewährleisten.
 
 ## Ausbildung
@@ -34,19 +34,19 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ## Projekte
 
 ### My Notebook (Document RAG) ([portfolio](https://radheem.github.io/my-cv/projects/my-notebook/))
-- Ausfallsichere, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extract → chunk → embed → summarize → index) mit schrittweisen Timeouts, Wiederholungsversuchen und OpenTelemetry-Instrumentierung.
+- Ausfallsichere, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extrahieren → chunken → einbetten → zusammenfassen → indizieren) mit Timeout-, Retry- und OpenTelemetry-Instrumentierung pro Schritt.
 - Echtzeit-Fortschritts-Streaming über NATS JetStream + SSE, wobei alle lokalen Inferenzen über zwei llama.cpp-Server hinter einer OpenAI-kompatiblen API gesichert sind.
-- Vektorsuche implementiert mit pgvector (HNSW, cosine); Cloud-Native-Bereitstellung auf k3d mit cert-manager TLS und ExternalDNS.
+- Vektorsuche implementiert mit pgvector (HNSW, Kosinus); Cloud-Native-Bereitstellung auf k3d mit cert-manager TLS und ExternalDNS.
 
 ### Data Analyzer ([portfolio](https://radheem.github.io/my-cv/projects/data-analyzer/))
-- Entwickelte einen Python Model Context Protocol (MCP)-Server mit `FastMCP`, um optimierte BigQuery-Tools für LLM-Agents bereitzustellen, rohe SQL-Token-Spitzen zu eliminieren und den Dataset-Zugriff zu sichern.
-- Orchestrierte Docker Compose-Synchronisation zwischen dem benutzerdefinierten Python FastMCP-Server, Grafana und dem offiziellen Grafana MCP-Server, um eine deklarative, agentenbasierte Steuerung von Dashboards zu ermöglichen.
-- Automatisierte die Zero-Touch-Bereitstellung von GCP-Anmeldeinformationen, Grafana-Service-Accounts und BigQuery-Datasources beim Boot, um sofortige Betriebsbereitschaft zu gewährleisten.
+- Entwickelte einen Python Model Context Protocol (MCP) Server mit `FastMCP`, um optimierte BigQuery-Tools für LLM-Agenten bereitzustellen, SQL-Token-Spitzen bei Raw-Queries zu eliminieren und den Dataset-Zugriff zu sichern.
+- Orchestrierte Docker Compose-Synchronisation zwischen dem benutzerdefinierten Python FastMCP-Server, Grafana und dem offiziellen Grafana MCP-Server, um deklarative, agentenbasierte Steuerung von Dashboards zu ermöglichen.
+- Automatisierte Zero-Touch-Bereitstellung von GCP-Anmeldeinformationen, Grafana-Service-Accounts und BigQuery-Datenquellen beim Booten, um sofortige Betriebsbereitschaft zu gewährleisten.
 
 ## Kenntnisse
 
 - Sprachen (gesprochen): Englisch (fließend), Deutsch (A2)
-- AI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
+- KI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
 - Cloud & Infrastruktur: Kubernetes, Helm, kustomize, Skaffold, Docker, Terraform, AWS (EC2, RDS, DynamoDB), Cilium, external-dns
 - Systeme & Messaging: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
 - Datenbanken: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake

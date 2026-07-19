@@ -4,7 +4,7 @@ tagline: "Senior Backend & Distributed Systems Engineer"
 
 ## Experience
 
-### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+### AiVader GmbH - Research Engineering Intern
 Germany | 02/2026 - 04/2026
 - Assembled a reproducible ZeroMQ virtual RF lockstep pipeline for deterministic 5G Standalone RAN emulation, stabilizing lockstep reattach mechanics and container lifecycles.
 - Engineered a custom xApp that queries gNB metrics over the E2 interface and publishes real-time telemetry to a Kafka pub-sub broker, optimizing message throughput and latency.

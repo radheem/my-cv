@@ -5,12 +5,12 @@ company: "NXT Hero (for client in Leipzig)"
 
 ## 1. Warum NXT Hero?
 
-Die Migration einer Cloud-Plattform von veralteten Grundlagen auf eine skalierbare, selbstheilende Architektur ist genau die Art von Infrastruktur-Herausforderung, die ich am meisten schätze. Ich bewerbe mich als Senior Cloud Engineer bei NXT Hero, um genau diese Transformation für Ihren Kunden in Leipzig voranzutreiben, bei der technische Eigenverantwortung und Plattform-Entwicklung im Mittelpunkt stehen.
+Der lohnendste Aspekt der Infrastrukturarbeit besteht darin, im Hintergrund zerbrechliche Legacy-Schichten durch resiliente, automatisierte Systeme zu ersetzen, die sich reibungslos skalieren lassen. Nach fünf Jahren Erfahrung im Aufbau verteilter Systeme und cloudnativer Plattformen bin ich bereit, die Verantwortung für umfangreiche Infrastrukturtransformationen zu übernehmen. Ich bewerbe mich für die Position als Senior Cloud Engineer, um die OpenStack-Migration und die Plattformmodernisierung Ihres Kunden aktiv voranzutreiben.
 
 ## 2. Warum ich?
 
-- Aufbau einer hochverfügbaren K3s-Cluster-Plattform mit Neustart-Resilienz unter Nutzung von Cilium eBPF-Netzwerktechnologien und einem benutzerdefinierten sequenziellen Boot-Orchestrator, wodurch eine 99.9%ige Knoten-Wiederherstellung nach simulierten Stromausfällen erzielt wurde.
-- Automatisierung der Infrastruktur-Bereitstellung und Deployment-Pipelines mit Kubernetes, kustomize und Skaffold, wodurch Environment Drift eliminiert und Verifikationszyklen um 40% reduziert wurden.
-- Entwicklung ereignisgesteuerter Backend-Architekturen mit NATS JetStream und gRPC sowie Etablierung deklarativer Routing- und E2E-Test-Gates, die heute die Zuverlässigkeitsstandards der Plattform des Teams vorgeben.
+- Konzipiert und umgesetzt eine neustartsichere, hochverfügbare K3s-Cluster-Plattform mittels k3d und Cilium im eBPF-Modus, wodurch der kube-proxy-Overhead eliminiert und eine Selbstheilungs-Uptime von 99.9% über Multi-Node-Deployments hinweg erreicht wurde.
+- Standardisierte die Infrastruktur-Bereitstellung mit Terraform und kustomize, wodurch die Aufbauzeit für Umgebungen von Stunden auf Minuten verkürzt wurde, bei gleichzeitiger Sicherstellung eines konsistenten Networkings via Cilium und external-dns.
+- Migrierte eine Microservices-Plattform mit hohem Durchsatz von Dapr auf natives NATS JetStream und direktes gRPC, wodurch die Latenz um 40% reduziert und die heute im gesamten Team genutzten architektonischen Muster etabliert wurden.
 
-Ich stehe ab sofort vollzeitfähig zur Verfügung, kann innerhalb von zwei bis drei Wochen nach Leipzig umziehen und erfülle die Voraussetzungen für die Blue Card, sodass der Arbeitgeber lediglich den Arbeitsvertrag ausstellen muss, ohne zusätzlichen Sponsorship-Aufwand.
+Ich stehe ab sofort zur Verfügung und kann innerhalb von 2 bis 3 Wochen innerhalb Deutschlands umziehen. Zudem erfülle ich die Voraussetzungen für die Blue Card EU, sodass Ihr Kunde direkt mit dem Vertragsabschluss fortfahren kann, ohne den zusätzlichen Aufwand für eine Arbeitsgenehmigung.

@@ -5,11 +5,12 @@ company: "Walaris"
 
 ## 1. Warum Walaris?
 
-Echtzeit-KI-Verarbeitung erfordert eine präzise Schnittstelle zwischen rohen Sensordaten und handlungsrelevanten Entscheidungen. Genau beim Entwurf dieser latenzarmen Brücke liegt meine größte ingenieurtechnische Motivation. Walaris baut genau diese Brücke für autonome Abwehrsysteme, und ich möchte meine fünf Jahre Erfahrung in der verteilten Backend-Entwicklung in die Rolle als Software Engineer einbringen.
+Die Verarbeitung von Sensor-Streams in Maschinengeschwindigkeit erfordert eine Architektur, die bei Latenz oder Korrektheit niemals Kompromisse eingeht. Ich bewerbe mich für die Position als Software Engineer, da Walaris genau diese Art deterministischer Edge-Infrastruktur für sicherheitskritische Verteidigungssysteme entwickelt. Mein beruflicher Werdegang hat sich natürlich auf hochperformante Datenpipelines und die Echtzeit-Integration von ML-Modellen konzentriert, und ich möchte diese Expertise auf autonome Plattformen für Luft, Land und See anwenden.
 
 ## 2. Warum ich?
 
-- Entwickelte einen Python-basierten FastMCP-Server und ereignisgesteuerte Datenpipelines, die High-Throughput-Streams mit Sub-Sekunden-Latenz verarbeiten, was direkt mit Ihren Zielen zur Edge-Sensor-Verarbeitung übereinstimmt.
-- Migrierte eine Produktions-Mikroservices-Plattform von Dapr auf natives NATS JetStream und gRPC, reduzierte den Nachrichten-Overhead um 40 % und deployte den Stack auf Kubernetes mit Cilium-Netzwerk.
-- Implementierte AES-256-GCM-Credential-Vaults und Ginkgo-E2E-Testgateways in einem CI/CD-Workflow, um Zero-Trust-Sicherheit und zuverlässige Auslieferung für missionkritische Backends zu gewährleisten.
-Ich stehe ab sofort zur Verfügung, kann innerhalb von drei Wochen nach Nuremberg umziehen und erfülle die Voraussetzungen für die Blue Card, sodass Ihr Team lediglich den Arbeitsvertrag ausstellen muss, ohne zusätzlichen Visa-Sponsorship-Aufwand.
+- Entwicklung und Bereitstellung von Go-Mikroservices mit gRPC und NATS JetStream zur Verarbeitung ereignisgesteuerter Datenströme über verteilte Cluster hinweg, wodurch die Backend-Latenz reduziert und ein zuverlässiges Echtzeit-Signalrouting ermöglicht wurde.
+- Aufbau einer Python-basierten ML-Infrastruktur sowie FastMCP-Servern, die deklarative, hot-reloadable Tools für LLM-Agents bereitstellen, was direkt dem Ziel von Walaris entspricht, Echtzeit-Machine-Learning und Bildverarbeitung in Edge-Hardware zu integrieren.
+- Orchestrierung von Kubernetes-Deployments mit kustomize und Skaffold, Implementierung von Ginkgo-E2E-Test-Gates sowie Aufbau von CI/CD-Pipelines, die rigoroses Unit-Testing und schnelle, sichere Backend-Verbesserungen gewährleisten.
+
+Ich stehe ab sofort vollzeit zur Verfügung, kann innerhalb von zwei bis drei Wochen an jeden beliebigen Standort in Deutschland umziehen und verfüge über die Voraussetzungen für die Blue Card, sodass der Arbeitgeber lediglich den Arbeitsvertrag ausstellen muss, ohne zusätzliche Sponsorship-Kosten.
