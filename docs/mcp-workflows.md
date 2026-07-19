@@ -172,3 +172,46 @@ This section documents the exact, backend system-level execution flows behind ea
   8. Synchronizes the application status back to the Google Sheets tracker.
   9. Marks the application state in `index.md` as `'draft'` (or `'failed'` on crash).
 
+
+
+## 5. End-to-End User Story Walkthroughs
+
+### Story 1: Create Application (Standard Path)
+* **Step 1 (Ingestion & Scoring):** The user provides a job URL or Gmail text. The guest fetcher scrapers (`fetch_linkedin_job`, `fetch_indeed_job`, `fetch_public_job_url`) parse the details and save them via `save_job_description`. The job is scored.
+* **Step 2 (Stage 1 - Markdown Generation):** The user triggers the tailoring pipeline via `create_application_from_job`. The LLM runs in the background, crafts tailored markdown drafts bilingually, saves them on disk, and populates the `applications` database table with the text (`cv_en`, `cover_letter_en`, etc.). The status becomes `'draft'`.
+* **Step 3 (Stage 2 - PDF Compilation):** The user reviews the generated markdown texts and is happy. They call `create_pdf_from_markdown`. The background worker validates the markdown to ensure no leftovers or brackets exist, compiles the LaTeX PDF, uploads it to Google Drive, and syncs status. The status remains `'draft'` and `drive_url` is saved.
+* **Step 4 (Applied Sync):** The user applies to the company and calls `update_application_status` with `status="applied"`, which pushes the updated status to their central Google Sheet tracker.
+
+### Story 2: Create Application with Manual Revision (Iterative Updates)
+* **Step 1 (Generation):** The user generates an application via `create_application_from_job`.
+* **Step 2 (Iterative Cover Letter Revision):** The user is not fully satisfied with the cover letter (e.g. they want it shorter or more casual). They call `revise_cover_letter(slug, revision_instructions)` with specific feedback. The LLM reads the previous draft and user instructions, generates the revised markdown, saves it to disk and the DB, and returns the result.
+* **Step 3 (Iterative CV Revision):** The user wants to adjust a bullet point on their CV. They call `revise_cv(slug, revision_instructions)`. The LLM reads the previous `cv.md`, applies the adjustments, saves it to disk and the DB, and returns the result.
+* **Step 4 (Compilation & Sync):** The user is now satisfied. They call `create_pdf_from_markdown` to compile their customized markdown drafts into high-quality PDFs and sync with Google Drive.
+* **Step 5 (Applied Sync):** The user applies and updates status to `'applied'`.
+
+### Story 3: Incorrect PDF Generation & Regeneration
+* **Step 1 (Compilation Failure or Error):** The user compiles an application, but due to a rendering error, incorrect Markdown formatting, or a missing field, the compile fails or the PDF output contains formatting flaws.
+* **Step 2 (Markdown Adjustment):** The user modifies the markdown draft (either directly on disk, or using revision tools to address the formatting flaw).
+* **Step 3 (PDF Regeneration):** The user calls `create_pdf_from_markdown(slug)` again. Because the application status is `'draft'` or `'failed'`, the background queue picks it up, runs the LaTeX compiler to overwrite the existing PDFs on disk, uploads the corrected files to Google Drive, and updates the tracking state.
+
+---
+
+## 6. Implementation Gaps & Future Roadmap
+
+To fully satisfy the end-to-end user stories (especially Story 2 and 3), we have identified the following gaps in our current implementation:
+
+### Gap 1: Missing Revision/Editing Tools via MCP (Story 2)
+* **Current Status:** Users currently have no way to dynamically update or refine generated drafts (`cv.md` or `cover-letter.md`) via natural language feedback instructions without opening a local text editor.
+* **Roadmap Recommendation:** Expose two new MCP tools:
+  1. `revise_cover_letter(slug: str, revision_instructions: str) -> str`: Loads the current cover letter from the DB/disk, calls the LLM with the user's instructions as a revision prompt, and updates the file on disk and the DB atomically.
+  2. `revise_cv(slug: str, revision_instructions: str) -> str`: Loads the current CV markdown, uses the LLM to apply direct content revisions/updates based on user feedback, and saves/returns the updated CV draft.
+
+### Gap 2: Missing Smart Regeneration/Clearance Tool via MCP (Story 4)
+* **Current Status:** The CLI has a robust `scripts/regenerate_application.py` pipeline (which deletes local directories, purges the DB row, and starts a fresh new generation). However, this capability is not exposed via the MCP server interface.
+* **Roadmap Recommendation:** Expose a new MCP tool:
+  * `regenerate_application(slug: str) -> str`: Triggers the smart regeneration pipeline, purging local file caches and DB rows before enqueuing a fresh Stage 1 tailoring task automatically.
+
+### Gap 3: Missing In-Memory Queue Deletion / Cancel Tool
+* **Current Status:** If a user enqueues a Stage 1 or Stage 2 task by mistake (or if a compilation task hangs), there is currently no way to cancel or dequeue that item in-memory.
+* **Roadmap Recommendation:** Expose a new MCP tool:
+  * `cancel_queued_task(slug: str) -> str`: Removes any pending generation or compilation task for a given slug from the sequential queue.
