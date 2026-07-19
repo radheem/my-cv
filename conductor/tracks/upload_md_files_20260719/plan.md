@@ -9,7 +9,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Engine Collection Update' (Protocol in workflow.md) (a75611b)
 
 ## Phase 2: Apps Script MIME Type Detection
-- [ ] Task: Update Google Apps Script logic
+- [x] Task: Update Google Apps Script logic (ebab9ad)
     - [ ] Modify `apps-script/Code.gs` inside the `doPost` file processing loop.
     - [ ] Add dynamic MIME type detection: check if `f.name` ends with `.md` and assign `text/markdown`, otherwise default to `application/pdf`.
     - [ ] Verify there are no syntax errors in the JS file.
