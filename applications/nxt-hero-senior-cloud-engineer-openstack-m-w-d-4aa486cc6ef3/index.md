@@ -2,7 +2,7 @@
 job_title: "Senior Cloud Engineer"
 company: "NXT Hero (for client in Leipzig)"
 job_url: "https://www.linkedin.com/jobs/view/4439978939/"
-status: "draft"
+status: "applied"
 clusters: ["distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/1wKo_uRi5wCQYtcTjRz6D5SaASPBpfmyk"

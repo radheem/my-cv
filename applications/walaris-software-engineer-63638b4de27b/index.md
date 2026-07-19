@@ -2,7 +2,7 @@
 job_title: "Software Engineer"
 company: "Walaris"
 job_url: "https://www.linkedin.com/jobs/view/4430619867/"
-status: "draft"
+status: "applied"
 clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/1IeO4SwA--UjfdyTvM-K12NaRnrwPFPdG"
