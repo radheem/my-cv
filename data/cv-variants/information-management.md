@@ -36,10 +36,11 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Implemented vector search with pgvector (HNSW, cosine) and real-time progress streaming over NATS JetStream + SSE for persistent state tracking.
 - Deployed cloud-native on k3d with cert-manager TLS and ExternalDNS, keeping all inference local via dual llama.cpp servers behind an OpenAI-compatible API.
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
-- Engineered a Python CLI and **FastMCP Server** automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
-- Developed an automated **Gmail alert ingestion** pipeline and lightweight guest API fetching, integrated with bi-directional **Google Sheets synchronization** for lifecycle tracking.
-- Secured sensitive documents in Git using client-side **AES-256-GCM** encryption, gated behind password-protected static Pages.
+### Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) ([portfolio](https://radheem.github.io/my-cv/projects/irs/))
+- **Built a best-effort ETL side-channel** into **PostgreSQL (sqlc)**, **Dgraph** (graph database), and **DocumentDB** (NoSQL cold-archive), orchestrated by **Hatchet** with declarative routing.
+- **Migrated the platform's session state and messaging** off Dapr to native **NATS JetStream (streaming)** and **NATS KV (session state)**, with direct gRPC connections to optimize transactional latency.
+- **Integrated multiple third-party vendors** via an adaptor/anti-corruption contract featuring **CUE-based schema mapping** to enforce structural data integrity across heterogeneous sources.
+- **Deployed Go microservices** using **Kubernetes**, **kustomize**, **Skaffold**, and **Cilium**, ensuring robust, isolated routing and high-availability operations.
 
 ## Skills
 
