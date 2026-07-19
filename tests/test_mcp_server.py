@@ -831,3 +831,36 @@ def test_mcp_get_tailor_queue():
             server._tailor_queue.get_nowait()
         except Exception:
             break
+
+
+def test_mcp_preview_cv_variant(monkeypatch):
+    from engine.mcp import server
+    import json
+
+    init_db()
+
+    # Insert mock job matching taxonomy
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs WHERE slug = 'preview-test-slug'")
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, url, description, score, status, created_at)
+                VALUES ('previewid12', 'preview-test-slug', 'PreviewCorp', 'SRE', 'http://preview.com', 'Kubernetes platform engineer', 90, 'new', '2026-07-19T10:00:00Z')
+            """)
+        conn.commit()
+
+    # Mock the taxonomy matching to avoid live LLM calls
+    monkeypatch.setattr("engine.domains.tailoring.variants.match_cluster_via_llm", lambda text, tax: ("Mock summary", "platform-engineer"))
+
+    res_str = server.preview_cv_variant("preview-test-slug")
+    res = json.loads(res_str)
+
+    assert res["slug"] == "preview-test-slug"
+    assert res["matched_cluster"] == "platform-engineer"
+    assert "predicted_variant_file" in res
+
+    # Clean up
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM jobs WHERE slug = 'preview-test-slug'")
+        conn.commit()

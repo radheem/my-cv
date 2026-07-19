@@ -3,6 +3,7 @@ import logging
 import decimal
 from mcp.server.fastmcp import FastMCP
 from ..shared.db import get_conn
+from ..shared import config
 from .sqlguard import guard_and_wrap
 from ..workflows import (
     create_application_workflow,
