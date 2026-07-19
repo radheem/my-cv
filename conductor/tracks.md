@@ -66,3 +66,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: address the identified gaps**
 *Link: [./tracks/interactive_revisions_20260719/](./tracks/interactive_revisions_20260719/)*
+
+---
+
+- [ ] **Track: upload md files**
+*Link: [./tracks/upload_md_files_20260719/](./tracks/upload_md_files_20260719/)*
