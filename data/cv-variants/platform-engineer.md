@@ -31,11 +31,11 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 
 ## Projects
 
-### cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
-- Built a Python CLI and FastMCP Server that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
-- Developed an automated Gmail alert ingestion pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
-- Integrated a bi-directional Google Sheets synchronization using Google Apps Script to track job application lifecycles.
-- Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
+### Homelab (Zero-Touch LAN DNS) ([portfolio](https://radheem.github.io/my-cv/projects/homelab/))
+- Designed a **zero-touch service contract** where a workload plus an `HTTPRoute` with a `*.home.lan` hostname is all a developer writes — DNS publication and wildcard HTTPS are fully automatic.
+- Built **automatic LAN DNS** using **ExternalDNS** to watch Gateway API resources and write records to **etcd (`/skydns`)**, served by an **authoritative CoreDNS** conditional forwarder.
+- Delivered a **shared Cilium Gateway** as the single HTTP/HTTPS entrypoint on a pinned L2 `LoadBalancer` IP, terminating a `*.home.lan` wildcard certificate issued by a **cert-manager internal CA**.
+- Shipped a **selectable add-on component registry** including node-exporter, VictoriaMetrics operator, OpenTelemetry operator, Grafana, NATS, and Hatchet, toggleable from a declarative installer.
 
 ### Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) ([portfolio](https://radheem.github.io/my-cv/projects/irs/))
 - Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC, reducing operational overhead and latency.
