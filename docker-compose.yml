@@ -41,6 +41,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
+      PYTHONPATH: /app
       MCP_TRANSPORT: streamable-http
       DISPLAY: ":99"
       LINKEDIN_USER_DATA_DIR: /app/vault/profile
