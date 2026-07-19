@@ -6,7 +6,7 @@
     - [ ] Modify `engine/cli.py` -> `_build_app()` to glob all `*.md` files in the directory.
     - [ ] Implement filter to safely exclude `index.md`.
     - [ ] Ensure tests pass (Green phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Engine Collection Update' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Engine Collection Update' (Protocol in workflow.md) (a75611b)
 
 ## Phase 2: Apps Script MIME Type Detection
 - [ ] Task: Update Google Apps Script logic
