@@ -6,7 +6,7 @@ status: "draft"
 clusters: ["distributed-system", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/1wKo_uRi5wCQYtcTjRz6D5SaASPBpfmyk"
-drive_updated: "2026-07-19T17:54:37+00:00"
+drive_updated: "2026-07-19T18:03:24+00:00"
 ---
 
 # NXT Hero (for client in Leipzig) — Senior Cloud Engineer

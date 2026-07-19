@@ -5,11 +5,12 @@ company: "NXT Hero (for client in Leipzig)"
 
 ## 1. Why NXT Hero?
 
-Transitioning legacy infrastructure into a modern, self-service cloud platform requires more than just new tools; it demands a disciplined approach to platform reliability and developer experience. I am applying for the Senior Cloud Engineer role because I enjoy architecting the quiet, automated layers that let engineering teams ship faster without breaking production. Your client’s OpenStack transformation and focus on infrastructure optimization align directly with the systems work I have spent the last five years refining.
+Moving a cloud platform from legacy virtualization to OpenStack is less about replacing hardware and more about rethinking how compute, network, and storage communicate. That architectural seam is exactly where I want to focus my next phase of work. I am applying for the Senior Cloud Engineer role to help lead that transition and shape the platform’s evolution.
 
 ## 2. Why me?
 
-- Migrated a high-throughput microservices platform off Dapr to native NATS JetStream and direct gRPC, reducing message latency by 40% and cutting dependency sprawl across 12 services.
-- Automated infrastructure provisioning and deployment pipelines using Kubernetes, kustomize, Skaffold, and Cilium, enabling zero-downtime rollouts and consistent environment parity across staging and production.
-- Designed declarative IaC workflows and config-driven tooling that standardized service deployments, cutting manual configuration time by 60% and establishing clear ownership for cross-team infrastructure changes.
-I am available to start immediately, can relocate to Leipzig within two to three weeks, and am Blue Card-ready so the employer only needs to issue the contract with zero sponsorship overhead.
+- Orchestrated a production Kubernetes cluster with kustomize, Cilium, and external-dns, standardizing network policies and reducing deployment friction across distributed microservices.
+- Designed a Kubernetes-based 5G testbed using kubeadm and Multus CNI to isolate N2/N3/N6 traffic, achieving 50+ Mbps throughput while validating complex GTP tunneling and policy-based routing.
+- Built declarative automation pipelines with Go and Python, integrated Prometheus and Grafana observability, and established E2E validation gates that caught configuration drift before it reached production.
+
+I am available to start full-time immediately, can relocate to Leipzig within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the standard contract without sponsorship overhead.

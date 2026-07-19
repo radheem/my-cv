@@ -27,7 +27,7 @@
 \bullets
   \item Brought a containerized 5G Standalone platform (Open5GS, RIC, srsRAN) to operational readiness on a single host, making the entire deployment fully reproducible with clear runbooks.
   \item Integrated a custom xApp over the E2 interface, publishing gNB telemetry to a Kafka pub-sub cluster for real-time SRE metrics reporting.
-  \item Built comprehensive observability (Telegraf -> InfluxDB -> Grafana) and resolved platform bottlenecks, including priority thread pinning for real-time SDR processing and host-level AVX2 compilation crashes.
+  \item Built observability (Telegraf/Grafana) and resolved platform bottlenecks like thread pinning and AVX2 compilation crashes.
   \item Tech: Kubernetes, Docker, Prometheus, Grafana, InfluxDB, Telegraf, Linux, C++, Bash.
 \bulletsend
 \vspace{1.5pt}
@@ -101,24 +101,24 @@
 
 \role{AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G \& Open RAN)}{Germany}{02/2026 - 04/2026}
 \bullets
-  \item Machte eine containerisierte 5G-Standalone-Plattform (Open5GS, RIC, srsRAN) auf einem einzelnen Host betriebsbereit und stellte sicher, dass die gesamte Bereitstellung vollständig reproduzierbar ist, unterstützt durch klare Runbooks.
-  \item Integrierte eine benutzerdefinierte xApp über die E2-Schnittstelle und veröffentlichte gNB-Telemetriedaten in einem Kafka-Pub-Sub-Cluster für Echtzeit-SRE-Metrikenberichte.
-  \item Implementierte umfassende Observability (Telegraf -> InfluxDB -> Grafana) und behob Plattformengpässe, einschließlich Priority-Thread-Pinning für Echtzeit-SDR-Verarbeitung und Host-ebene AVX2-Kompilierungsabstürze.
+  \item Implementierte eine containerisierte 5G-Standalone-Plattform (Open5GS, RIC, srsRAN) auf einem einzelnen Host, wodurch die gesamte Bereitstellung vollständig reproduzierbar und durch klare Runbooks dokumentiert wurde.
+  \item Integrierte eine benutzerdefinierte xApp über die E2-Schnittstelle und publizierte gNB-Telemetriedaten in einem Kafka-Pub-Sub-Cluster für Echtzeit-Berichte zu SRE-Metriken.
+  \item Aufbau einer Observability-Infrastruktur (Telegraf/Grafana) und Behebung von Plattformengpässen wie Thread-Pinning sowie AVX2-Kompilierungsabstürzen.
   \item Tech: Kubernetes, Docker, Prometheus, Grafana, InfluxDB, Telegraf, Linux, C++, Bash.
 \bulletsend
 \vspace{1.5pt}
 \role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
 \bullets
-  \item Containerisierte Backend-Dienste und optimierte Deployment-Pipelines auf AWS EC2 und Kubernetes, wodurch die Plattformzuverlässigkeit und Release-Geschwindigkeit erhöht wurden.
-  \item Leitete Systemdesigns und Code-Reviews, um architektonische Standards für cloud-native Microservices und containerisierte Workloads durchzusetzen.
-  \item Integrierte Anwendungsdienste mit AWS S3, MySQL und MongoDB, um eine skalierbare und produktionsreife Auslieferung zu unterstützen.
+  \item Containerisierung von Backend-Diensten und Optimierung von Bereitstellungs-Pipelines auf AWS EC2 und Kubernetes, was die Plattformzuverlässigkeit und Release-Geschwindigkeit steigerte.
+  \item Leitung von Systemdesigns und Code-Reviews zur Durchsetzung von Architekturstandards für cloud-native Microservices und containerisierte Workloads.
+  \item Integration von Anwendungsdiensten mit AWS S3, MySQL und MongoDB zur Unterstützung skalierbarer, produktionsreifer Bereitstellungen.
 \bulletsend
 \vspace{1.5pt}
 \role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
 \bullets
-  \item Integrierte OpenTelemetry-Distributed-Tracing, Prometheus-Metriken und Grafana-Alerting, um den Durchsatz der Transaktions-Engine und den Kafka-Consumer-Lag zu überwachen, wodurch Latenzspitzen erheblich reduziert wurden.
-  \item Pflegte Release-Prozesse und cloud-native Deployment-Standards für Börsendienste unter Verwendung von Docker und Kubernetes.
-  \item Leitete Engineering-Teams bei Systemdesign-Reviews und Plattformzuverlässigkeitsinitiativen zur Optimierung der Börseninfrastruktur.
+  \item Integration von OpenTelemetry-Distributed-Tracing, Prometheus-Metriken und Grafana-Alerting zur Überwachung des Durchsatzes der Transaktions-Engine sowie des Kafka-Consumer-Lags, wodurch Latenzspitzen erheblich reduziert wurden.
+  \item Aufrechterhaltung von Release-Prozessen und cloud-nativen Bereitstellungsstandards für Exchange-Dienste unter Einsatz von Docker und Kubernetes.
+  \item Leitung von Engineering-Teams bei Systemdesign-Reviews und Initiativen zur Plattformzuverlässigkeit zur Optimierung der Exchange-Infrastruktur.
 \bulletsend
 \vspace{1.5pt}
 
@@ -132,17 +132,17 @@
 
 \role{Homelab (Zero-Touch LAN DNS) (\href{https://radheem.github.io/my-cv/projects/homelab/}{portfolio})}{}{}
 \bullets
-  \item Entwarf einen \textbf{Zero-Touch-Service-Vertrag}, bei dem ein Entwickler lediglich eine Workload sowie eine \texttt{HTTPRoute} mit einem \texttt{*.home.lan}-Hostname definiert — DNS-Publikation und Wildcard-HTTPS sind vollständig automatisiert.
-  \item Implementierte \textbf{automatisches LAN-DNS} mittels \textbf{ExternalDNS}, um Gateway-API-Ressourcen zu überwachen und Einträge in \textbf{etcd (`/skydns`)} zu schreiben, bereitgestellt durch einen \textbf{autoritativen CoreDNS}-Conditional-Forwarder.
-  \item Stellte ein \textbf{shared Cilium Gateway} als einzigen HTTP/HTTPS-Eingangspunkt auf einer fest zugewiesenen L2 \texttt{LoadBalancer}-IP bereit, das ein \texttt{*.home.lan}-Wildcard-Zertifikat einer \textbf{cert-manager-internal-CA} terminiert.
-  \item Veröffentlichte ein \textbf{auswählbares Add-On-Komponenten-Registry}, das node-exporter, VictoriaMetrics Operator, OpenTelemetry Operator, Grafana, NATS und Hatchet umfasst, welches über einen deklarativen Installer aktiviert werden kann.
+  \item Entwicklung eines \textbf{Zero-Touch-Service-Vertrags}, bei dem ein Entwickler lediglich eine Workload sowie eine \texttt{HTTPRoute} mit einem \texttt{*.home.lan}-Hostnamen implementiert — die DNS-Publikation und Wildcard-HTTPS erfolgen vollständig automatisch.
+  \item Aufbau eines \textbf{automatischen LAN-DNS} mit \textbf{ExternalDNS} zur Überwachung von Gateway-API-Ressourcen und zum Schreiben von Einträgen in \textbf{etcd (`/skydns`)}, bereitgestellt durch einen \textbf{authoritativen CoreDNS}-Conditional-Forwarder.
+  \item Bereitstellung eines \textbf{gemeinsamen Cilium Gateways} als einzigen HTTP/HTTPS-Eingangspunkt auf einer festen L2 \texttt{LoadBalancer}-IP, welches ein von einer \textbf{cert-manager-internen CA} ausgestelltes \texttt{*.home.lan}-Wildcard-Zertifikat terminiert.
+  \item Implementierung eines \textbf{auswählbaren Add-On-Komponenten-Registers} mit node-exporter, VictoriaMetrics Operator, OpenTelemetry Operator, Grafana, NATS und Hatchet, das über einen deklarativen Installer aktiviert oder deaktiviert werden kann.
 \bulletsend
 \vspace{1.0pt}
 \role{Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) (\href{https://radheem.github.io/my-cv/projects/irs/}{portfolio})}{}{}
 \bullets
-  \item Migrierte die Plattform von Dapr zu nativem NATS JetStream (Messaging), NATS KV (Session-State) und direktem gRPC, wodurch der Betriebsaufwand und die Latenz reduziert wurden.
-  \item Stellte Go-Microservices mit Kubernetes, kustomize, Skaffold, Cilium und external-dns bereit; integrierte OpenTelemetry Distributed Tracing und Prometheus-Metriksammlung über alle Dienste hinweg.
-  \item Implementierte eine MCP-Integration, die die Plattform LLM-Agenten als deklarative, hot-reloadable Tools über einen konfigurationsgetriebenen Toolbox-Server zugänglich macht.
+  \item Migration der Plattform von Dapr zu nativem NATS JetStream (Messaging), NATS KV (Session-State) und direktem gRPC, wodurch Betriebsaufwand und Latenz signifikant reduziert wurden.
+  \item Bereitstellung von Go-Microservices mit Kubernetes, kustomize, Skaffold, Cilium und external-dns; Integration von OpenTelemetry-Distributed-Tracing und Prometheus-Metrik-Sammlung über alle Dienste hinweg.
+  \item Entwicklung einer MCP-Integration zur Offenlegung der Plattform für LLM-Agenten als deklarative, hot-reloadable Tools über einen konfigurationsgetriebenen Toolbox-Server.
 \bulletsend
 
 \section{Kenntnisse}

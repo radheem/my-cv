@@ -17,7 +17,7 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Developed and integrated a custom xApp over the E2 interface to extract Key Performance Measurements (KPMs) from the gNB and publish them to a Kafka pub-sub message broker for downstream consumer applications.
 - Stabilized and brought the containerized stack to operational readiness, configuring dual RF front-ends (ZeroMQ virtual RF and USRP B210 SDR band n78) and resolving PRACH collisions and CPU starvation under multi-UE load.
 - Deployed and operated the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to execute automated model-training and serving using the testbed's published KPM telemetry.
-- Maintained an engineering troubleshooting journal to systematically resolve operational bottlenecks, including CPU performance-core scheduling under VM hypervisors, AVX2/AVX512 SIGILL compilation crashes, and container network routing.
+- Logged SRE troubleshooting runbooks to resolve VM cpu-scheduling, AVX2 SIGILL crashes, and network routing bugs.
 
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
