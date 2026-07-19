@@ -7,7 +7,7 @@
     - [ ] Expose `revise_cover_letter` and `revise_cv` as MCP tools in `engine/mcp/server.py`.
     - [ ] Ensure the database is atomically updated with revised copy, and status remains `'draft'`.
     - [ ] Ensure tests pass (Green phase).
-- [ ] Task: Implement Independent Translation Tool
+- [x] Task: Implement Independent Translation Tool (a0e0c35)
     - [ ] Write failing tests in `tests/test_mcp_revisions.py` for `translate_application` verifying CV, cover letter, or joint translation flows.
     - [ ] Expose `translate_application(slug, kind)` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it loads the current draft, calls `translate_markdown` bilingually, writes translated `.de.md` files to disk, and updates database columns (`cv_de`/`cover_letter_de`).
