@@ -6,9 +6,9 @@ tagline: "Senior Data & Database Systems Platform Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Built multi-datasource telemetry ingestion pipelines (Telegraf -> InfluxDB/MongoDB) to persistently store and index high-frequency 5G performance counters and KPM metrics.
-- Designed a Cassandra Feature Store integrated with an automated data-extraction (ETL) pipeline to feed analytical machine learning workflows.
-- Automated zero-touch provisioning of GCP credentials, Grafana Service Accounts, and database datasources on boot to establish immediate operational readiness.
+- Integrated a custom xApp extracting real-time radio metrics over the E2 interface and publishing them to a Kafka pub-sub broker to feed downstream MongoDB and InfluxDB instances.
+- Brought the database and analytics stack to operational readiness, configuring automated data extraction (ETL) into a Cassandra Feature Store for analytical machine learning models.
+- Established fully reproducible, runbook-configured deployments of the containerized database-backed stack (Open5GS, InfluxDB, Cassandra) on a single Linux host.
 - Tech: InfluxDB, MongoDB, Cassandra, Kafka, Telegraf, PostgreSQL, Python, SQL.
 
 ### Al Hilal Invest - Senior Software Engineer

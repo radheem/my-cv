@@ -6,9 +6,9 @@ tagline: "Senior O-RAN & Telecommunications Software Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Built a complete, reproducible 5G Standalone (SA) Open RAN testbed integrating Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB on a single host.
-- Deployed two RF front-end pipelines: a hardware-free ZeroMQ virtual RF lockstep loop, and an over-the-air physical USRP B210 SDR pipeline operating on band n78 (TDD, 20 MHz).
-- Developed E2SM-KPM xApps over the E2 interface to extract real-time per-UE radio metrics (CQI, RSRP, RSRQ) and feed them into the RIC and Kafka metrics bus.
+- Integrated and deployed a reproducible 5G Standalone (SA) Open RAN testbed, combining pre-dockerized Open5GS 5GC, O-RAN SC RIC, and srsRAN/OCUDU gNB components.
+- Developed and integrated a custom KPM xApp to extract real-time radio performance metrics over the E2 interface, fanning them out to a Kafka pub-sub topic bus.
+- Brought both ZeroMQ virtual RF and USRP B210 physical SDR RF pipelines to operational readiness, validating cellular attachment and over-the-air communication.
 - Tech: Open5GS, srsRAN/OCUDU, O-RAN SC near-RT RIC, USRP B210, UHD, ZeroMQ, E2SM-KPM.
 
 ### Al Hilal Invest - Senior Software Engineer

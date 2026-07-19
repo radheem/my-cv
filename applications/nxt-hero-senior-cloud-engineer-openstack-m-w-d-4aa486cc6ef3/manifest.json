@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-19T17:30:39+00:00",
+  "generated_at": "2026-07-19T17:52:51+00:00",
   "config_version": 1,
   "provider": "ollama",
   "model": "qwen3.6-35b-awq",
@@ -40,7 +40,7 @@
   },
   "inputs_sha256": {
     "data/config.yml": "959625cb6f2a",
-    "data/master-cv.md": "24e27cd402ec",
+    "data/master-cv.md": "4ce6c1ad2766",
     "data/profile.yml": "aee96f31ecd6",
     "data/projects.yml": "def746881ccf",
     "data/taxonomy.yml": "0820e8d5f068",
@@ -53,11 +53,10 @@
   "decisions": {
     "top_projects": [
       "irs",
-      "second-brain"
+      "cv-tailor"
     ],
     "clusters": [
       "distributed-system",
-      "information-management",
       "platform-engineer"
     ],
     "tagline": "Senior Cloud Engineer"

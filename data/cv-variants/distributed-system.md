@@ -6,9 +6,9 @@ tagline: "Senior Backend & Distributed Systems Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Engineered a multi-container ZeroMQ virtual RF lockstep execution pipeline for deterministic 5G RAN emulation, optimizing multi-UE synchronization and lockstep reattach state machines.
-- Developed a high-frequency publish/subscribe telemetry bus using Kafka topics to fan out gNB/UE metrics to MongoDB and InfluxDB.
-- Resolved low-level distributed race conditions, multi-UE PRACH collisions, and lockstep network reattach deadlocks through rigorous runtime debugging.
+- Assembled a reproducible ZeroMQ virtual RF lockstep pipeline for deterministic 5G Standalone RAN emulation, stabilizing lockstep reattach mechanics and container lifecycles.
+- Engineered a custom xApp that queries gNB metrics over the E2 interface and publishes real-time telemetry to a Kafka pub-sub broker, optimizing message throughput and latency.
+- Brought the multi-container open-source stack to operational readiness, debugging multi-UE PRACH collisions, lockstep reattach deadlocks, and network routing conflicts.
 - Tech: ZeroMQ, Kafka, Python, Go, MongoDB, InfluxDB, Docker, Linux, C++.
 
 ### Al Hilal Invest - Senior Software Engineer

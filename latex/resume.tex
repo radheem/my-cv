@@ -46,11 +46,11 @@ fintech and 5G / Open-RAN research. Master of Research student at TU~Ilmenau.
 
 \role{AiVader GmbH / TU Ilmenau — Research Engineering Intern}{Germany}{02/2026 – 04/2026}
 \bullets
-  \item Designed and built a containerized 5G SA Open RAN testbed (Open5GS 5GC, O-RAN SC near-RT RIC, and srsRAN/OCUDU gNB).
-  \item Configured ZeroMQ virtual RF lockstep loop for CI/CD, and over-the-air physical USRP B210 SDR pipeline on band n78 (TDD).
-  \item Engineered observability metrics (Telegraf $\rightarrow$ InfluxDB $\rightarrow$ Grafana) to monitor PDCP throughput, CQI, and RSRP/RSRQ.
-  \item Deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to automate LSTM model lifecycle.
-  \item Maintained a troubleshooting journal to resolve priority thread scheduling, AVX2 SIGILL compilation crashes, and network routing.
+  \item Integrated containerized 5G SA Open RAN (Open5GS, RIC, srsRAN), making deployments reproducible with runbooks.
+  \item Built custom xApp over E2 to extract radio performance metrics (KPMs) and publish them to a Kafka pub-sub broker.
+  \item Brought multi-container stack to operational readiness, resolving PRACH collisions and CPU starvation under multi-UE load.
+  \item Operated O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to run automated model training.
+  \item Kept SRE journal to resolve VM scheduling, AVX2 SIGILL crashes, container network routing, and InfluxDB/MongoDB indexing.
 \bulletsend
 \vspace{3pt}
 

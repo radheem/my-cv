@@ -6,9 +6,9 @@ tagline: "AI & MLOps Platform Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to automate the model-training, deployment, and inference lifecycle for a QoE throughput-prediction LSTM model.
-- Designed a durable data-extraction (ETL) pipeline collecting real-time 5G PDCP throughput telemetry from the testbed and indexing it into a Cassandra Feature Store.
-- Served trained LSTM models via KServe with integrated feature stores, enabling live, low-latency inference predictions.
+- Integrated and deployed a reproducible 5G Standalone (SA) testbed combining pre-dockerized open-source components (Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB) with runbook-configured deployments.
+- Developed a custom xApp over the E2 interface to extract live radio performance telemetry and publish it to a Kafka pub-sub message broker, providing a high-fidelity data source for AI/ML extraction.
+- Operated and deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes, securing the operational readiness of the Kubeflow, KServe, and Cassandra training/serving pipelines.
 - Tech: Kubeflow, KServe, Cassandra, Python, InfluxDB, Kafka, Kubernetes, Docker, Linux.
 
 ### Al Hilal Invest - Senior Software Engineer

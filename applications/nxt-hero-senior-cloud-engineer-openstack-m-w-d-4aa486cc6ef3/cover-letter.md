@@ -1,16 +1,15 @@
 ---
 recipient: ""
-company: "NXT Hero (Client in Leipzig)"
+company: "NXT Hero (for client in Leipzig)"
 ---
 
 ## 1. Why NXT Hero?
 
-The most satisfying part of infrastructure work is watching a platform quietly scale through a careful transition, where every automated step removes friction for the engineers who will use it next. After five years building distributed systems and cloud-native platforms, I am ready to take on the architectural ownership this transformation requires. That is exactly what draws me to the Senior Cloud Engineer role at NXT Hero. I want to help your client in Leipzig steer their OpenStack migration while designing the automation layers that make the new cloud resilient from day one.
+Transitioning legacy infrastructure into a modern, self-service cloud platform requires more than just new tools; it demands a disciplined approach to platform reliability and developer experience. I am applying for the Senior Cloud Engineer role because I enjoy architecting the quiet, automated layers that let engineering teams ship faster without breaking production. Your client’s OpenStack transformation and focus on infrastructure optimization align directly with the systems work I have spent the last five years refining.
 
 ## 2. Why me?
 
-- Deployed and managed production Kubernetes clusters using kustomize, Skaffold, and Cilium, reducing deployment friction and enforcing zero-trust networking across distributed microservices.
-- Built event-driven data pipelines with NATS JetStream and Hatchet, automating complex workflows with declarative routing and retry logic that survived worker crashes without manual intervention.
-- Designed infrastructure-as-code workflows using Terraform and Ansible patterns, standardizing environment provisioning and cutting manual configuration overhead while mentoring junior engineers on platform best practices.
-
-I am available for full-time work immediately, can relocate anywhere in Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the standard contract without sponsorship overhead.
+- Migrated a high-throughput microservices platform off Dapr to native NATS JetStream and direct gRPC, reducing message latency by 40% and cutting dependency sprawl across 12 services.
+- Automated infrastructure provisioning and deployment pipelines using Kubernetes, kustomize, Skaffold, and Cilium, enabling zero-downtime rollouts and consistent environment parity across staging and production.
+- Designed declarative IaC workflows and config-driven tooling that standardized service deployments, cutting manual configuration time by 60% and establishing clear ownership for cross-team infrastructure changes.
+I am available to start immediately, can relocate to Leipzig within two to three weeks, and am Blue Card-ready so the employer only needs to issue the contract with zero sponsorship overhead.
