@@ -6,8 +6,8 @@ tagline: "Senior Data & Database Systems Platform Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Integrated a custom xApp extracting real-time radio metrics over the E2 interface and publishing them to a Kafka pub-sub broker to feed downstream MongoDB and InfluxDB instances.
-- Brought the database and analytics stack to operational readiness, configuring automated data extraction (ETL) into a Cassandra Feature Store for analytical machine learning models.
+- Brought the database and analytics stack to operational readiness, configuring ETL into a Cassandra Feature Store.
+- Integrated xApp extracting real-time radio metrics over the E2 interface and publishing them to amessage broker.
 - Established fully reproducible, runbook-configured deployments of the containerized database-backed stack (Open5GS, InfluxDB, Cassandra) on a single Linux host.
 - Tech: InfluxDB, MongoDB, Cassandra, Kafka, Telegraf, PostgreSQL, Python, SQL.
 

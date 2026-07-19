@@ -8,7 +8,7 @@ tagline: "Senior Backend & Distributed Systems Engineer"
 Germany | 02/2026 - 04/2026
 - Assembled a reproducible ZeroMQ virtual RF lockstep pipeline for deterministic 5G Standalone RAN emulation, stabilizing lockstep reattach mechanics and container lifecycles.
 - Engineered a custom xApp that queries gNB metrics over the E2 interface and publishes real-time telemetry to a Kafka pub-sub broker, optimizing message throughput and latency.
-- Brought the multi-container open-source stack to operational readiness, debugging multi-UE PRACH collisions, lockstep reattach deadlocks, and network routing conflicts.
+- Brought the multi-container open-source stack to operational readiness, debugging and fixing several operational issues.
 - Tech: ZeroMQ, Kafka, Python, Go, MongoDB, InfluxDB, Docker, Linux, C++.
 
 ### Al Hilal Invest - Senior Software Engineer
