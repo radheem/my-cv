@@ -14,4 +14,4 @@
     - [ ] Add dynamic MIME type detection: check if `f.name` ends with `.md` and assign `text/markdown`, otherwise default to `application/pdf`.
     - [ ] Verify there are no syntax errors in the JS file.
     - [ ] Note: Since this is an external script, automated tests are skipped. Manual deployment will be required by the user.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Apps Script MIME Type Detection' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Apps Script MIME Type Detection' (Protocol in workflow.md) (ebab9ad)
