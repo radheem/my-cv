@@ -62,3 +62,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: spliting application creation**
 *Link: [./tracks/two_stage_pipeline_20260718/](./tracks/two_stage_pipeline_20260718/)*
+---
+
+- [ ] **Track: address the identified gaps**
+*Link: [./tracks/interactive_revisions_20260719/](./tracks/interactive_revisions_20260719/)*
