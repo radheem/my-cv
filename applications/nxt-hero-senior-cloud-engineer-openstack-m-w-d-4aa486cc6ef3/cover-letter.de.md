@@ -1,17 +1,16 @@
 ---
 recipient: ""
-company: "NXT Hero (for client in Leipzig)"
+company: "NXT Hero (Client in Leipzig)"
 ---
 
 ## 1. Warum NXT Hero?
 
-Der Übergang von Legacy-Infrastrukturen zu einer modernen, programmierbaren Cloud bietet mir die größte ingenieurtechnische Zufriedenheit. Ich beschäftige mich intensiv mit Open-Source-Cloud-Native-Software und erkenne in OpenStack die am weitesten verbreitete Open-Source-Cloud-Lösung. Ich möchte mich sehr gerne an der Migration auf OpenStack beteiligen und diese Transformation aktiv mitgestalten. Die Möglichkeit, Ihren Kunden in Leipzig bei dieser architektonischen Weiterentwicklung zu unterstützen, würde ich sehr schätzen.
+Der erfüllendste Teil der Infrastrukturarbeit ist es, zuzusehen, wie eine Plattform durch einen sorgfältig gestalteten Übergang nahtlos skaliert, wobei jeder automatisierte Schritt die Reibungsverluste für die nachfolgenden Ingenieurteams verringert. Nach fünf Jahren Erfahrung im Aufbau verteilter Systeme und cloud-nativer Plattformen bin ich bereit, die architektonische Verantwortung für diese Transformation zu übernehmen. Genau das spricht mich für die Position als Senior Cloud Engineer bei NXT Hero an. Ich möchte Ihren Kunden in Leipzig bei der Migration zu OpenStack unterstützen und gleichzeitig die Automatisierungsschichten entwerfen, die die neue Cloud von Anfang an widerstandsfähig machen.
 
 ## 2. Warum ich?
 
-Ich pflege ein öffentliches Homelab-Projekt, das ich eigenständig aufgesetzt habe und an dem ich gerne arbeite. Es ist speziell für eine One-Click-Bereitstellung und hohe Konfigurierbarkeit ausgelegt, sodass ich schnell Prototypen entwickeln, Infrastruktur-aus-Code-Workflows, Automatisierungsskripte und Cloud-Native-Architekturen testen und verfeinern kann. Diese praktischen Experimente halten meine Kenntnisse in Linux, Kubernetes und IaC-Tools auf dem neuesten Stand, und ich arbeite gerne daran, komplexe Infrastrukturbegriffe in optimierte, wiederholbare Bereitstellungen umzusetzen.
+- Bereitstellen und Betreiben von Produktions-Kubernetes-Clustern mit kustomize, Skaffold und Cilium, wodurch der Aufwand für Bereitstellungen reduziert und Zero-Trust-Netzwerke über verteilte Microservices hinweg durchgesetzt wurden.
+- Aufbau von ereignisgesteuerten Datenpipelines mit NATS JetStream und Hatchet zur Automatisierung komplexer Workflows mittels deklarativem Routing und Wiederholungslogik, die auch bei Worker-Ausfällen ohne manuelles Eingreifen stabil liefen.
+- Konzipierung von Infrastructure-as-Code-Workflows unter Nutzung von Terraform- und Ansible-Mustern zur Standardisierung der Umgebungsprovisionierung und Reduzierung des manuellen Konfigurationsaufwands, verbunden mit der fachlichen Betreuung von Junior-Entwicklern zu Plattform-Best-Practices.
 
-- Entwicklung von CLI-Tools in Go für den internen Einsatz, wodurch der operative Aufwand reduziert und Entwickler-Workflows optimiert wurden.
-- Umfangreiche Erfahrung im Aufbau und der Bereitstellung von Cloud-Native-Anwendungen in großem Maßstab, einschließlich der IRS (Information Retrieval System)-Plattform – ein Projekt für verteilte Systeme mit Go-Mikrodiensten, Kubernetes, NATS JetStream und OpenTelemetry-Überwachung.
-
-Ich stehe ab sofort zur Verfügung, kann innerhalb von zwei bis drei Wochen nach Leipzig umziehen und erfülle die Voraussetzungen für die Blaue Karte EU, sodass der Arbeitgeber lediglich den Arbeitsvertrag ausstellen muss.
+Ich stehe ab sofort für eine Vollzeitbeschäftigung zur Verfügung, bin innerhalb von zwei bis drei Wochen zu einem Umzug an jeden Ort in Deutschland bereit und verfüge über die Blue Card-Berechtigung, sodass der Arbeitgeber lediglich den Standardarbeitsvertrag ausstellen muss, ohne zusätzliche Sponsorship-Kosten.

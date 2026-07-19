@@ -1,17 +1,16 @@
 ---
 recipient: ""
-company: "NXT Hero (for client in Leipzig)"
+company: "NXT Hero (Client in Leipzig)"
 ---
 
 ## 1. Why NXT Hero?
 
-The transition from legacy infrastructure to a modern, programmable cloud is where I find the most engineering satisfaction. I am very interested in open-source cloud-native software, and I recognize OpenStack as the most widely deployed open-source cloud software. I would love to contribute to migrating to OpenStack and actively participate in that transformation, and I would greatly appreciate the experience of helping your client in Leipzig steer this architectural shift.
+The most satisfying part of infrastructure work is watching a platform quietly scale through a careful transition, where every automated step removes friction for the engineers who will use it next. After five years building distributed systems and cloud-native platforms, I am ready to take on the architectural ownership this transformation requires. That is exactly what draws me to the Senior Cloud Engineer role at NXT Hero. I want to help your client in Leipzig steer their OpenStack migration while designing the automation layers that make the new cloud resilient from day one.
 
 ## 2. Why me?
 
-I maintain a public homelab project that I set up and genuinely enjoy working on. I specifically made it one-click deployable and highly configurable, which allows me to rapidly prototype, test, and refine infrastructure-as-code workflows, automation scripts, and cloud-native architectures. This hands-on experimentation keeps my skills sharp in Linux, Kubernetes, and IaC tooling, and I thrive on turning complex infrastructure concepts into streamlined, repeatable deployments.
+- Deployed and managed production Kubernetes clusters using kustomize, Skaffold, and Cilium, reducing deployment friction and enforcing zero-trust networking across distributed microservices.
+- Built event-driven data pipelines with NATS JetStream and Hatchet, automating complex workflows with declarative routing and retry logic that survived worker crashes without manual intervention.
+- Designed infrastructure-as-code workflows using Terraform and Ansible patterns, standardizing environment provisioning and cutting manual configuration overhead while mentoring junior engineers on platform best practices.
 
-- Built CLI tools in Go for internal company use, reducing operational overhead and streamlining developer workflows.
-- Extensive experience building and deploying cloud-native applications at scale, including the IRS (Information Retrieval System) platform — a distributed systems project with Go microservices, Kubernetes, NATS JetStream, and OpenTelemetry observability.
-
-I am available to start immediately, can relocate to Leipzig within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract.
+I am available for full-time work immediately, can relocate anywhere in Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the standard contract without sponsorship overhead.
