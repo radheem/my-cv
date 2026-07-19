@@ -15,7 +15,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Iterative Revision Engine & Independent Translation' (Protocol in workflow.md) (8a657c0)
 
 ## Phase 2: Smart Regeneration & Queue Control Tools
-- [ ] Task: Implement Smart Regeneration
+- [x] Task: Implement Smart Regeneration (28fba91)
     - [ ] Write failing tests in `tests/test_mcp_revisions.py` for `regenerate_application`.
     - [ ] Expose `regenerate_application` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it purges local directories, deletes DuckDB application rows, and enqueues a fresh Stage 1 tailoring task.
