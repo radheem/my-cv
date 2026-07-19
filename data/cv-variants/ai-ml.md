@@ -36,10 +36,10 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Real-time progress streaming over NATS JetStream + SSE, with all local inference secured via two llama.cpp servers behind an OpenAI-compatible API.
 - Vector search implemented with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
 
-### cv-tailor (LLM CV/Cover Tailoring + Application Management) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
-- Built a Python CLI and FastMCP Server automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
-- Developed automated Gmail alert ingestion pipelines and bi-directional Google Sheets synchronization to track job application lifecycles.
-- Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
+### Data Analyzer ([portfolio](https://radheem.github.io/my-cv/projects/data-analyzer/))
+- Built a Python Model Context Protocol (MCP) server using `FastMCP` to expose optimized BigQuery tools to LLM agents, eliminating raw SQL token spikes and securing dataset access.
+- Orchestrated Docker Compose synchronization between the custom Python FastMCP server, Grafana, and the official Grafana MCP server to enable declarative, agentic control over dashboards.
+- Automated zero-touch provisioning of GCP credentials, Grafana Service Accounts, and BigQuery datasources on boot to establish immediate operational readiness.
 
 ### O-RAN AIML Framework ([portfolio](https://radheem.github.io/my-cv/projects/oran-aiml/))
 - Deployed end-to-end AIML framework on Kubernetes with Helm, featuring a config-driven Python SDK automating the full ML lifecycle (feature group → training → inference).
