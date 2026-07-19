@@ -241,10 +241,12 @@ def _compile(app: pathlib.Path) -> None:
 
 
 def _build_app(slug: str) -> list[pathlib.Path]:
-    """Render .tex + compile to PDFs; return the (existing) PDF paths."""
+    """Render .tex + compile to PDFs; return the PDF paths along with their source Markdown files."""
     app = _render_tex(slug)
     _compile(app)
-    return [p for p in (app / "cv.pdf", app / "cover-letter.pdf") if p.exists()]
+    targets = [app / "cv.pdf", app / "cover-letter.pdf"]
+    targets.extend(list(app.glob("*.md")))
+    return [p for p in targets if p.exists() and p.name != "index.md"]
 
 
 # ---- commands ---------------------------------------------------------------

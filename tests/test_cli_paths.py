@@ -42,3 +42,33 @@ def test_status_missing_hub(monkeypatch, tmp_path):
     monkeypatch.setenv("CV_TAILOR_JOBS_DIR", str(tmp_path))
     with pytest.raises(SystemExit):
         cli.cmd_status(argparse.Namespace(slug="nope", state="applied"))
+
+
+def test_build_app_collects_markdown_and_pdfs(monkeypatch, tmp_path):
+    mock_app_dir = tmp_path / "mock-slug"
+    mock_app_dir.mkdir()
+
+    # Create mock target files
+    (mock_app_dir / "cv.pdf").write_bytes(b"pdf cv")
+    (mock_app_dir / "cover-letter.pdf").write_bytes(b"pdf letter")
+    (mock_app_dir / "cv.md").write_text("markdown cv")
+    (mock_app_dir / "cover-letter.md").write_text("markdown letter")
+    (mock_app_dir / "cv.de.md").write_text("markdown cv de")
+    (mock_app_dir / "index.md").write_text("index")
+    (mock_app_dir / "other.json").write_text("{}")
+
+    monkeypatch.setattr("engine.cli._render_tex", lambda slug: mock_app_dir)
+    monkeypatch.setattr("engine.cli._compile", lambda app: None)
+
+    results = cli._build_app("mock-slug")
+    result_names = {p.name for p in results}
+
+    assert "cv.pdf" in result_names
+    assert "cover-letter.pdf" in result_names
+    assert "cv.md" in result_names
+    assert "cover-letter.md" in result_names
+    assert "cv.de.md" in result_names
+
+    assert "index.md" not in result_names
+    assert "other.json" not in result_names
+    assert len(results) == 5
