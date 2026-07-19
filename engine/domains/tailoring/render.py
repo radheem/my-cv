@@ -223,3 +223,40 @@ def translate_markdown(markdown: str, kind: str = "cv") -> str:
     budget = llm.resolve()["max_tokens"].get("cv" if kind == "cv" else "cover", 8000)
     user = f"Translate this {kind} Markdown into German:\n\n{markdown.strip()}\n"
     return llm.stream_text(_TRANSLATE_SYSTEM, user, max_tokens=budget).strip() + "\n"
+
+
+_REVISE_SYSTEM = (
+    "You are an expert resume writer and editor. Your task is to edit and revise the provided job-application Markdown document (either a CV or a Cover Letter) "
+    "according to the user's feedback/revision instructions while maintaining compatibility with the target Job Description.\n"
+    "STRICT RULES:\n"
+    "- Read the current draft and the feedback instructions carefully.\n"
+    "- Apply the revision instructions precisely, editing the text where necessary.\n"
+    "- Ensure the tone, style, and structure remain professional, cohesive, and perfectly aligned with the Job Description.\n"
+    "- Preserve the original Markdown structure, headings, bold styling, and formatting as much as possible.\n"
+    "- Output ONLY the revised Markdown text — absolutely no preamble, no explanations, and no markdown code block fences (e.g., do not wrap in ```markdown ... ```)."
+)
+
+
+def revise_document(
+    draft: str,
+    revision_instructions: str,
+    job_text: str,
+    job_title: str,
+    company: str,
+    kind: str = "cover"
+) -> str:
+    """Revise an existing CV or cover letter markdown using natural language feedback."""
+    user_prompt = (
+        f"## Target Job\n"
+        f"Title: {job_title}\n"
+        f"Company: {company}\n\n"
+        f"## Job Description\n"
+        f"{job_text.strip()}\n\n"
+        f"## Current Draft\n"
+        f"{draft.strip()}\n\n"
+        f"## Revision Instructions\n"
+        f"{revision_instructions.strip()}\n\n"
+        f"Apply the revision instructions to the draft and return the final, fully revised Markdown text."
+    )
+    budget = llm.resolve()["max_tokens"].get("cv" if kind == "cv" else "cover", 8000)
+    return llm.stream_text(_REVISE_SYSTEM, user_prompt, max_tokens=budget).strip() + "\n"

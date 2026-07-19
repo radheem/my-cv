@@ -947,6 +947,146 @@ def search_jobs(keywords: str, limit: int = 10) -> str:
 
 
 @mcp.tool()
+def revise_cover_letter(slug: str, revision_instructions: str) -> str:
+    """Revise the English cover letter draft of an application using natural language instructions.
+    
+    This preserves previous cover letter context and updates the file and DuckDB column atomically.
+    """
+    try:
+        from engine.domains.tailoring.render import revise_document
+        import pathlib
+
+        # 1. Verify files exist
+        app_dir = pathlib.Path("applications") / slug
+        cover_letter_path = app_dir / "cover-letter.md"
+        if not cover_letter_path.exists():
+            return json.dumps({"error": f"Cover letter not found for slug {slug}"})
+
+        current_draft = cover_letter_path.read_text(encoding="utf-8")
+
+        # 2. Get Job details for context
+        job_desc = ""
+        job_title = ""
+        company = ""
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT description, title, company 
+                    FROM jobs 
+                    WHERE slug = ? OR job_id = (SELECT job_id FROM applications WHERE slug = ?)
+                """, (slug, slug))
+                row = cur.fetchone()
+                if row:
+                    job_desc = row["description"]
+                    job_title = row["title"]
+                    company = row["company"]
+
+        # 3. Call LLM to revise
+        revised_text = revise_document(
+            draft=current_draft,
+            revision_instructions=revision_instructions,
+            job_text=job_desc,
+            job_title=job_title,
+            company=company,
+            kind="cover"
+        )
+
+        # 4. Save to disk
+        cover_letter_path.write_text(revised_text, encoding="utf-8")
+
+        # 5. Save to database and update timestamp
+        import datetime
+        timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE applications 
+                    SET cover_letter_en = ?, updated_at = ? 
+                    WHERE slug = ?
+                """, (revised_text, timestamp, slug))
+            conn.commit()
+
+        return json.dumps({
+            "status": "success",
+            "slug": slug,
+            "cover_letter_en": revised_text
+        })
+    except Exception as e:
+        log.exception(f"Failed to revise cover letter for {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def revise_cv(slug: str, revision_instructions: str) -> str:
+    """Revise the English CV draft of an application using natural language instructions.
+    
+    This preserves previous CV context and updates the file and DuckDB column atomically.
+    """
+    try:
+        from engine.domains.tailoring.render import revise_document
+        import pathlib
+
+        # 1. Verify files exist
+        app_dir = pathlib.Path("applications") / slug
+        cv_path = app_dir / "cv.md"
+        if not cv_path.exists():
+            return json.dumps({"error": f"CV not found for slug {slug}"})
+
+        current_draft = cv_path.read_text(encoding="utf-8")
+
+        # 2. Get Job details for context
+        job_desc = ""
+        job_title = ""
+        company = ""
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT description, title, company 
+                    FROM jobs 
+                    WHERE slug = ? OR job_id = (SELECT job_id FROM applications WHERE slug = ?)
+                """, (slug, slug))
+                row = cur.fetchone()
+                if row:
+                    job_desc = row["description"]
+                    job_title = row["title"]
+                    company = row["company"]
+
+        # 3. Call LLM to revise
+        revised_text = revise_document(
+            draft=current_draft,
+            revision_instructions=revision_instructions,
+            job_text=job_desc,
+            job_title=job_title,
+            company=company,
+            kind="cv"
+        )
+
+        # 4. Save to disk
+        cv_path.write_text(revised_text, encoding="utf-8")
+
+        # 5. Save to database and update timestamp
+        import datetime
+        timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE applications 
+                    SET cv_en = ?, updated_at = ? 
+                    WHERE slug = ?
+                """, (revised_text, timestamp, slug))
+            conn.commit()
+
+        return json.dumps({
+            "status": "success",
+            "slug": slug,
+            "cv_en": revised_text
+        })
+    except Exception as e:
+        log.exception(f"Failed to revise CV for {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
 def create_application(source: str) -> str:
     """Generate a tailored application (CV + Cover Letter in EN/DE) for a specific job source.
     `source` can be a URL, a local file path, or an existing job slug."""
