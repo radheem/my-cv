@@ -18,3 +18,4 @@ The `cv-tailor` project is a localized Python CLI tool and static site generator
 4. **LaTeX to PDF Rendering:** Transforms Markdown content into polished `.tex` and `.pdf` files utilizing local `latexmk` or a Docker-based TeX Live environment.
 5. **Google Drive Integration:** Uploads completed application packages securely via an Apps Script proxy.
 6. **Public Portfolio Generation:** Runs MkDocs to build an attractive, public-facing portfolio website independent of the private job application data.
+7. **Interactive Agentic Revision & Queue Control:** Exposes advanced, thread-safe MCP tools to revise existing cover letter/CV drafts via natural-language feedback, trigger on-demand German translations, perform smart full-purge regenerations, and cancel queued tasks in-memory.
