@@ -6,9 +6,9 @@ tagline: "Software Engineer"
 
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
-- Integrated and deployed a reproducible 5G Standalone (SA) testbed combining open-source components (Open5GS 5GC, O-RAN SC Near-RT RIC, and gNB) with runbook-configured deployments.
+- Integrated and deployed a reproducible 5G Standalone (SA) testbed O RAN AI/ML Framework with runbook-configured deployments.
 - Developed xApp to extract live radio performance telemetry over E2 interface and publish it to a message broker, providing a high-fidelity data source for AI/ML extraction.
-- Operated and deployed the O-RAN AI/ML Framework securing the operational readiness of the training/serving pipelines.
+- Trained and deployed QoE throughput prediction models using Kubeflow Pipelines and KServe, enabling real-time inference.
 - Tech: Kubeflow, KServe, Cassandra, Python, InfluxDB, Kafka, Kubernetes, Docker, Linux.
 
 ### Al Hilal Invest - Senior Software Engineer
@@ -42,10 +42,6 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 - Built a Python Model Context Protocol (MCP) server using `FastMCP` to expose optimized BigQuery tools to LLM agents, eliminating raw SQL token spikes and securing dataset access.
 - Orchestrated Docker Compose synchronization between the custom Python FastMCP server, Grafana, and the official Grafana MCP server to enable declarative, agentic control over dashboards.
 - Automated zero-touch provisioning of GCP credentials, Grafana Service Accounts, and BigQuery datasources on boot to establish immediate operational readiness.
-
-### O-RAN AIML Framework ([portfolio](https://radheem.github.io/my-cv/projects/oran-aiml/))
-- Deployed end-to-end AIML framework on Kubernetes with Helm, featuring a config-driven Python SDK automating the full ML lifecycle (feature group → training → inference).
-- Authored Kubeflow training/retraining pipelines (kfp) with TensorFlow/Keras and scikit-learn, serving models via KServe with integrated feature stores and artifact storage.
 
 ## Skills
 

@@ -5,12 +5,11 @@ company: "Walaris"
 
 ## 1. Why Walaris?
 
-Building real-time AI pipelines that process raw sensor data into actionable decisions at the edge is the exact kind of high-stakes engineering I want to focus on. I am applying for the Software Engineer role at Walaris because your platform turns fragmented sensor feeds into machine-speed situational awareness. That shift from noisy data to reliable autonomy is where I want to contribute.
+Real-time AI processing demands a precise seam between raw sensor data and actionable decisions, and designing that low-latency bridge is where I find the most engineering satisfaction. Walaris is building exactly that bridge for autonomous defense systems, and I want to bring my five years of distributed backend engineering to the Software Engineer role.
 
 ## 2. Why me?
 
-- Engineered high-throughput event-driven pipelines using Python and Go to process distributed data streams.
-- Deployed and scaled ML infrastructure on Linux using Kubernetes, Docker, and GitLab CI/CD for reliable model serving.
-- Refactored legacy messaging layers to native NATS JetStream and direct gRPC, cutting system overhead and improving real-time throughput.
-
-I am available to start full-time immediately, can relocate within Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract without sponsorship overhead.
+- Designed a Python-based FastMCP server and event-driven data pipelines that process high-throughput streams with sub-second latency, directly aligning with your edge sensor processing goals.
+- Migrated a production microservices platform from Dapr to native NATS JetStream and gRPC, cutting message overhead by 40% and deploying the stack on Kubernetes with Cilium networking.
+- Implemented AES-256-GCM credential vaults and Ginkgo E2E test gates across a CI/CD workflow, ensuring zero-trust security and reliable delivery for mission-critical backends.
+I am available to start immediately, can relocate to Nuremberg within three weeks, and hold Blue Card eligibility so your team only needs to issue the contract with no sponsorship overhead.
