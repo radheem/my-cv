@@ -4,6 +4,13 @@ tagline: "AI & MLOps Platform Engineer"
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to automate the model-training, deployment, and inference lifecycle for a QoE throughput-prediction LSTM model.
+- Designed a durable data-extraction (ETL) pipeline collecting real-time 5G PDCP throughput telemetry from the testbed and indexing it into a Cassandra Feature Store.
+- Served trained LSTM models via KServe with integrated feature stores, enabling live, low-latency inference predictions.
+- Tech: Kubeflow, KServe, Cassandra, Python, InfluxDB, Kafka, Kubernetes, Docker, Linux.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Architected and containerized backend services on Kubernetes and AWS, streamlining deployment pipelines for scalable platform infrastructure.
@@ -15,11 +22,6 @@ Pakistan | 06/2021 - 08/2023
 - Integrated OpenTelemetry, Prometheus, and Grafana across distributed Go/Python services to monitor system throughput and reduce latency spikes.
 - Identified and implemented system design improvements for core exchange services, optimizing infrastructure reliability and observability.
 - Maintained release processes and led junior engineering teams, ensuring consistent deployment standards and platform stability.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Developed and trained machine learning models using Python, TensorFlow, and scikit-learn, focusing on data-driven predictive solutions.
-- Analyzed, cleaned, and visualized complex datasets to extract actionable insights, supporting stakeholder decision-making and model validation.
 
 ## Education
 

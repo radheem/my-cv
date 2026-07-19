@@ -4,6 +4,13 @@ tagline: "Senior Cloud Platform & Observability Engineer"
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Designed a containerized 5G Standalone platform on a single host, managing CPU/memory allocations, resource limits, and network routing (macvlan/OVS and UPF masquerading).
+- Integrated Telegraf, InfluxDB, and Grafana to build SRE dashboards monitoring real-time gNB/UE metrics, CPU starvation under load, and CQI/RSRP reporting.
+- Resolved low-level platform bottlenecks including priority thread pinning for real-time SDR processing and AVX2/AVX512 SIGILL compilation mismatches on host.
+- Tech: Kubernetes, Docker, Prometheus, Grafana, InfluxDB, Telegraf, Linux, C++, Bash.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Dockerized backend services and streamlined deployment pipelines on AWS EC2 and Kubernetes, enhancing platform reliability and release velocity.
@@ -15,11 +22,6 @@ Pakistan | 06/2021 - 08/2023
 - Integrated OpenTelemetry distributed tracing, Prometheus metrics, and Grafana alerting to monitor transaction engine throughput and Kafka consumer lag, significantly reducing latency spikes.
 - Maintained release processes and cloud-native deployment standards across exchange services using Docker and Kubernetes.
 - Led engineering teams in system design reviews and platform reliability initiatives to optimize exchange infrastructure.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Containerized data processing workloads using Docker and deployed them on AWS EC2, establishing foundational cloud-native deployment practices.
-- Analyzed and visualized complex datasets to drive engineering decisions and platform optimization.
 
 ## Education
 

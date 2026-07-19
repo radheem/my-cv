@@ -52,6 +52,15 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Designed and built a complete, reproducible 5G Standalone (SA) Open RAN testbed integrating Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB on a single Linux host.
+- Configured dual RF front-end pipelines: a hardware-free, deterministic ZeroMQ virtual RF lockstep loop for CI/CD, and a physical over-the-air UHD USRP B210 SDR pipeline serving COTS smartphones on band n78 (TDD, 20 MHz).
+- Engineered comprehensive observability and alerting (Telegraf -> InfluxDB -> Grafana) to monitor PDCP throughput, CQI, and RSRP/RSRQ metrics, resolving CPU starvation and PRACH collision bottlenecks.
+- Deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to automate the model-training, deployment, and inference lifecycle for a QoE throughput-prediction LSTM model.
+- Kept a technical troubleshooting journal to document and solve critical low-level and high-level platform bugs, such as performance core scheduling, AVX2 SIGILL compilation crashes, and UPF network masquerade failures.
+- Tech: Kubernetes, Docker, Open5GS, srsRAN/OCUDU, O-RAN SC near-RT RIC, UHD, USRP B210, ZeroMQ, Kafka, InfluxDB, Grafana, Telegraf, Kubeflow, KServe, Cassandra, Python, Linux.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Developed and documented new services and features.

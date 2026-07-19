@@ -4,6 +4,13 @@ tagline: "Senior O-RAN & Telecommunications Software Engineer"
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Built a complete, reproducible 5G Standalone (SA) Open RAN testbed integrating Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB on a single host.
+- Deployed two RF front-end pipelines: a hardware-free ZeroMQ virtual RF lockstep loop, and an over-the-air physical USRP B210 SDR pipeline operating on band n78 (TDD, 20 MHz).
+- Developed E2SM-KPM xApps over the E2 interface to extract real-time per-UE radio metrics (CQI, RSRP, RSRQ) and feed them into the RIC and Kafka metrics bus.
+- Tech: Open5GS, srsRAN/OCUDU, O-RAN SC near-RT RIC, USRP B210, UHD, ZeroMQ, E2SM-KPM.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Led system design and code reviews while dockerizing backend services to standardize deployment workflows on Kubernetes and AWS EC2.
@@ -15,11 +22,6 @@ Pakistan | 06/2021 - 08/2023
 - Integrated Prometheus logging, OpenTelemetry metrics, and Grafana alerts to monitor transaction engine throughput and Kafka consumer group lag, reducing latency spikes.
 - Identified system design improvements and proposed independent solutions while reviewing code and architecture as a senior system expert.
 - Maintained release processes and documentation for core exchange services while mentoring junior engineers on project initiatives.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Researched and proposed scalable system designs for implementation, delivering solutions in cross-functional teams under senior mentorship.
-- Analyzed, cleaned, and visualized complex datasets using Python, scikit-learn, and TensorFlow to drive data-informed stakeholder decisions.
 
 ## Education
 

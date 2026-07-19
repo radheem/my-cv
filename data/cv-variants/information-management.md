@@ -4,6 +4,13 @@ tagline: "Senior Data & Database Systems Platform Engineer"
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Built multi-datasource telemetry ingestion pipelines (Telegraf -> InfluxDB/MongoDB) to persistently store and index high-frequency 5G performance counters and KPM metrics.
+- Designed a Cassandra Feature Store integrated with an automated data-extraction (ETL) pipeline to feed analytical machine learning workflows.
+- Automated zero-touch provisioning of GCP credentials, Grafana Service Accounts, and database datasources on boot to establish immediate operational readiness.
+- Tech: InfluxDB, MongoDB, Cassandra, Kafka, Telegraf, PostgreSQL, Python, SQL.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Architected and dockerized backend services, leading system design reviews to optimize data persistence and transactional workflows across MySQL and MongoDB.
@@ -15,11 +22,6 @@ Pakistan | 06/2021 - 08/2023
 - Optimized transactional engine performance and data persistence by integrating PostgreSQL and DynamoDB, directly reducing latency spikes in high-throughput exchange services.
 - Designed and implemented comprehensive data analytics and monitoring dashboards using Grafana, Prometheus, and OpenTelemetry to track transactional throughput and Kafka consumer lag.
 - Led system design reviews and code architecture for critical database-backed services, mentoring junior engineers on scalable data persistence patterns.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Engineered data ETL pipelines and analytical workflows using Python and SQL, cleaning and transforming raw datasets for stakeholder reporting.
-- Developed data visualization charts and insights dashboards to communicate analytical findings, leveraging MySQL and MongoDB for persistent data storage.
 
 ## Education
 

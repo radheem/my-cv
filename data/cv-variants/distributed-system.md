@@ -4,6 +4,13 @@ tagline: "Senior Backend & Distributed Systems Engineer"
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Engineered a multi-container ZeroMQ virtual RF lockstep execution pipeline for deterministic 5G RAN emulation, optimizing multi-UE synchronization and lockstep reattach state machines.
+- Developed a high-frequency publish/subscribe telemetry bus using Kafka topics to fan out gNB/UE metrics to MongoDB and InfluxDB.
+- Resolved low-level distributed race conditions, multi-UE PRACH collisions, and lockstep network reattach deadlocks through rigorous runtime debugging.
+- Tech: ZeroMQ, Kafka, Python, Go, MongoDB, InfluxDB, Docker, Linux, C++.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
 - Architected and containerized backend services using NodeJS, TypeScript, and Docker, streamlining deployment pipelines on AWS EC2 and Kubernetes.
@@ -15,11 +22,6 @@ Pakistan | 06/2021 - 08/2023
 - Engineered high-throughput transaction services in Go and NodeJS, implementing distributed system design improvements to eliminate latency spikes.
 - Integrated OpenTelemetry metrics, Prometheus logging, and Grafana alerts to monitor Kafka consumer group lag and backend throughput across microservices.
 - Mentored junior engineers and maintained release processes for core exchange services, ensuring robust API architecture and system observability.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Researched and designed data-driven backend solutions, delivering scalable implementations in Python and NodeJS under senior engineering mentorship.
-- Analyzed and visualized complex datasets to drive architectural decisions and stakeholder reporting for distributed data pipelines.
 
 ## Education
 

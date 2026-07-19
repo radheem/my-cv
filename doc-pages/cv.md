@@ -10,6 +10,15 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 
 ## Experience
 
+### AiVader GmbH / TU Ilmenau — Research Engineering Intern (5G & Open RAN)
+*Germany · 02/2026 – 04/2026*
+
+- Designed and built a complete, reproducible 5G Standalone (SA) Open RAN testbed integrating Open5GS 5GC, O-RAN SC Near-RT RIC, and srsRAN/OCUDU gNB on a single host.
+- Configured dual RF front-end pipelines: a hardware-free, deterministic ZeroMQ virtual RF lockstep loop for CI/CD, and a physical over-the-air UHD USRP B210 SDR pipeline serving COTS smartphones on band n78 (TDD, 20 MHz).
+- Engineered comprehensive observability and SRE metrics (Telegraf -> InfluxDB -> Grafana) to monitor PDCP throughput, CQI, and RSRP/RSRQ, resolving CPU starvation and PRACH bottlenecks.
+- Deployed the O-RAN AI/ML Framework (AIMLFW) on Kubernetes (Kubeflow, KServe, Cassandra) to automate the model-training, deployment, and inference lifecycle for a QoE throughput-prediction LSTM model.
+- Kept a technical troubleshooting journal to document and solve critical low-level and high-level platform bugs, such as performance core scheduling, AVX2 SIGILL compilation crashes, and UPF network masquerade failures.
+
 ### Al Hilal Invest — Senior Software Engineer
 *Pakistan · 11/2023 – 03/2024*
 
@@ -24,12 +33,6 @@ Software engineer with 5 years of experience across distributed systems, cloud-n
 - Independently identified system-design weaknesses and proposed, justified, and drove the solutions.
 - Led and mentored teams of junior engineers across project initiatives.
 - Owned release processes and technical documentation for multiple production services.
-
-### Seed Labs — Software Engineer
-*Pakistan · 06/2020 – 06/2021*
-
-- Researched solutions and proposed designs, then delivered them in small teams under the mentorship of senior engineers.
-- Partnered with stakeholders, translating data analysis and visualization into decisions and insights.
 
 ## Education
 
