@@ -2,7 +2,7 @@
 job_title: "Master's Thesis Opportunity"
 company: "TU Ilmenau, Electronic Measurements and Signal Processing (EMS) Group / Prof. Thomas Dallmann"
 job_url: "https://www.tu-ilmenau.de"
-status: "draft"
+status: "applied"
 clusters: ["distributed-system"]
 date_found: "2026-07-14"
 drive_url: "https://drive.google.com/drive/folders/1wT83YyzzeEDc4e5iz9YBOFNEDs1fdsLu"

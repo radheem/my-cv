@@ -3,5 +3,15 @@
     "disabled": [
       "using-superpowers"
     ]
+  },
+  "tools": {
+    "core": [
+      "run_shell_command"
+    ],
+    "rules": {
+      "run_shell_command": {
+        "allowed_commands": ["pytest", "python", "git", "echo"]
+      }
+    }
   }
 }

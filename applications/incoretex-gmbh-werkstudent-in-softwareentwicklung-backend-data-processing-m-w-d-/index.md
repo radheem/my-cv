@@ -2,7 +2,7 @@
 job_title: "Student Software Developer Backend & Data Processing"
 company: "Incoretex"
 job_url: "https://www.linkedin.com/jobs/view/4438791327/"
-status: "draft"
+status: "applied"
 clusters: ["distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/14M4cijil351zDHV3nS7yuBGoNWbi5m8l"
