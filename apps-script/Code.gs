@@ -99,7 +99,8 @@ function doPost(e) {
       // Idempotent: trash an existing same-name file before re-creating.
       var ex = folder.getFilesByName(f.name);
       while (ex.hasNext()) ex.next().setTrashed(true);
-      var blob = Utilities.newBlob(Utilities.base64Decode(f.b64), 'application/pdf', f.name);
+      var mimeType = f.name.endsWith('.md') ? 'text/markdown' : 'application/pdf';
+      var blob = Utilities.newBlob(Utilities.base64Decode(f.b64), mimeType, f.name);
       out.push({ name: f.name, url: folder.createFile(blob).getUrl() });
     });
     return json({ ok: true, folderUrl: folder.getUrl(), files: out });
