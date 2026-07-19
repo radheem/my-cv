@@ -69,5 +69,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: upload md files**
+- [x] **Track: upload md files**
 *Link: [./tracks/upload_md_files_20260719/](./tracks/upload_md_files_20260719/)*
