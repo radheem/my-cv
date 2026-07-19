@@ -20,7 +20,7 @@
     - [ ] Expose `regenerate_application` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it purges local directories, deletes DuckDB application rows, and enqueues a fresh Stage 1 tailoring task.
     - [ ] Ensure tests pass (Green phase).
-- [ ] Task: Implement Queue Control
+- [x] Task: Implement Queue Control (d026cc9)
     - [ ] Write failing tests in `tests/test_mcp_revisions.py` for `cancel_queued_task`.
     - [ ] Expose `cancel_queued_task` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it safely removes pending tasks from `_tailor_queue` in-memory and resets their DB states.
