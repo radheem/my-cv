@@ -4,22 +4,24 @@ tagline: "Software Engineer"
 
 ## Berufserfahrung
 
+### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
+Germany | 02/2026 - 04/2026
+- Integrierte und bereitstellte ein reproduzierbares 5G-Standalone-(SA)-Testbed, das Open-Source-Komponenten (Open5GS 5GC, O-RAN SC Near-RT RIC und gNB) mit runbook-konfigurierten Bereitstellungen kombinierte.
+- Entwickelte eine xApp zur Extraktion von Live-Funkleistungs-Telemetriedaten über die E2-Schnittstelle und deren Veröffentlichung in einem Message Broker, um eine hochauflösende Datenquelle für AI/ML-Extraktionen bereitzustellen.
+- Betrieb und bereitstellte das O-RAN AI/ML Framework, um die Betriebsbereitschaft der Trainings-/Serving-Pipelines zu gewährleisten.
+- Tech: Kubeflow, KServe, Cassandra, Python, InfluxDB, Kafka, Kubernetes, Docker, Linux.
+
 ### Al Hilal Invest - Senior Software Engineer
 Pakistan | 11/2023 - 03/2024
-- Backend-Dienste auf Kubernetes und AWS entworfen und containerisiert, Bereitstellungs-Pipelines für skalierbare Plattform-Infrastrukturen optimiert.
-- Systemdesign und Code-Reviews geleitet, robuste Architekturmuster für verteilte Microservices und Cloud-Native-Deployments etabliert.
-- Hochperformante Dienste mit NodeJS, TypeScript und Docker entwickelt und dokumentiert, zuverlässige Backend-Betriebssicherheit gewährleistet.
+- Architektierte und containerisierte Backend-Dienste auf Kubernetes und AWS, optimierte Bereitstellungs-Pipelines für skalierbare Plattform-Infrastrukturen.
+- Leitete Systemdesign und Code-Reviews, etablierte robuste Architekturmuster für verteilte Microservices und Cloud-Native-Bereitstellungen.
+- Entwickelte und dokumentierte hochperformante Dienste mit NodeJS, TypeScript und Docker, um zuverlässige Backend-Betriebprozesse zu gewährleisten.
 
 ### Bluefin Exchange - Senior Software Engineer
 Pakistan | 06/2021 - 08/2023
-- OpenTelemetry, Prometheus und Grafana in verteilten Go/Python-Diensten integriert, um Systemdurchsatz zu überwachen und Latenzspitzen zu reduzieren.
-- Systemdesign-Verbesserungen für Kern-Börsendienste identifiziert und implementiert, Infrastrukturzuverlässigkeit und Observability optimiert.
-- Release-Prozesse gepflegt und Junior-Engineering-Teams geleitet, konsistente Deployment-Standards und Plattformstabilität gewährleistet.
-
-### Seed Labs - Software Engineer
-Pakistan | 06/2020 - 06/2021
-- Machine-Learning-Modelle mit Python, TensorFlow und scikit-learn entwickelt und trainiert, Fokus auf datengetriebene prädiktive Lösungen.
-- Komplexe Datensätze analysiert, bereinigt und visualisiert, um umsetzbare Erkenntnisse zu gewinnen, Entscheidungsfindung der Stakeholder und Modellvalidierung unterstützt.
+- Integrierte OpenTelemetry, Prometheus und Grafana in verteilte Go/Python-Dienste zur Überwachung des Systemdurchsatzes und zur Reduzierung von Latenzspitzen.
+- Identifizierte und implementierte Systemdesign-Verbesserungen für Core-Exchange-Dienste, optimierte Infrastrukturzuverlässigkeit und Observability.
+- Pflegte Release-Prozesse und leitete Junior-Engineering-Teams, um konsistente Bereitstellungsstandards und Plattformstabilität zu gewährleisten.
 
 ## Ausbildung
 
@@ -32,23 +34,23 @@ Bachelor of Science, Computer Science | 06/2016 - 08/2020
 ## Projekte
 
 ### My Notebook (Document RAG) ([portfolio](https://radheem.github.io/my-cv/projects/my-notebook/))
-- Dauerhafte, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extract → chunk → embed → summarize → index) mit Timeout- und Retry-Steuerung pro Schritt sowie OpenTelemetry-Instrumentierung.
-- Echtzeit-Fortschritts-Streaming über NATS JetStream + SSE, alle lokalen Inference-Prozesse gesichert über zwei llama.cpp-Server hinter einer OpenAI-kompatiblen API.
-- Vektorsuche mit pgvector (HNSW, cosine) implementiert; cloud-nativ auf k3d mit cert-manager TLS und ExternalDNS deployed.
+- Robuste, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extract → chunk → embed → summarize → index) mit Schritt-zu-Schritt-Timeouts, Wiederholungsmechanismen und OpenTelemetry-Instrumentierung.
+- Echtzeit-Fortschritts-Streaming über NATS JetStream + SSE, wobei alle lokalen Inferenzen über zwei llama.cpp-Server hinter einer OpenAI-kompatiblen API abgesichert sind.
+- Vektorsuche implementiert mit pgvector (HNSW, cosine); Cloud-Native-Bereitstellung auf k3d mit cert-manager TLS und ExternalDNS.
 
-### cv-tailor (LLM CV/Cover Tailoring + Application Management) ([portfolio](https://radheem.github.io/my-cv/projects/cv-tailor/))
-- Python-CLI und FastMCP-Server entwickelt, die CV/Anschreiben-Anpassung mit unit-getesteter Projekt-Ranking (Anthropic/Ollama) und Halluzinations-Schutz automatisieren.
-- Automatisierte Gmail-Alert-Ingestion-Pipelines und bidirektionale Google-Sheets-Synchronisation entwickelt, um Lebenszyklen von Stellenbewerbungen zu verfolgen.
-- Dokumente in Git mittels clientseitiger AES-256-GCM-Verschlüsselung gesichert, zugänglich über passwortgeschützte statische Pages.
+### Data Analyzer ([portfolio](https://radheem.github.io/my-cv/projects/data-analyzer/))
+- Entwickelte einen Python Model Context Protocol (MCP) Server mit `FastMCP`, um optimierte BigQuery-Tools für LLM-Agents bereitzustellen, rohe SQL-Token-Spitzen zu eliminieren und den Dataset-Zugriff abzusichern.
+- Koordinierte Docker Compose-Synchronisation zwischen dem benutzerdefinierten Python FastMCP Server, Grafana und dem offiziellen Grafana MCP Server, um deklarative, agentische Steuerung von Dashboards zu ermöglichen.
+- Automatisierte Zero-Touch-Provisioning von GCP-Anmeldeinformationen, Grafana Service Accounts und BigQuery-Datasources beim Booten, um sofortige Betriebsbereitschaft zu gewährleisten.
 
 ### O-RAN AIML Framework ([portfolio](https://radheem.github.io/my-cv/projects/oran-aiml/))
-- End-to-End-AIML-Framework auf Kubernetes mit Helm deployed, mit einem konfigurationsgetriebenen Python-SDK zur Automatisierung des vollständigen ML-Lebenszyklus (feature group → training → inference).
-- Kubeflow-Training/Retraining-Pipelines (kfp) mit TensorFlow/Keras und scikit-learn erstellt, Modellserving über KServe mit integrierten Feature Stores und Artifact Storage.
+- Bereitgestellt ein End-to-End-AIML-Framework auf Kubernetes mit Helm, mit einer konfigurationsgetriebenen Python SDK, die den vollständigen ML-Lebenszyklus automatisiert (feature group → training → inference).
+- Entwickelte Kubeflow-Trainings-/Retraining-Pipelines (kfp) mit TensorFlow/Keras und scikit-learn, bereitstellte Modelle über KServe mit integrierten Feature Stores und Artifact Storage.
 
 ## Kenntnisse
 
 - Sprachen (gesprochen): Englisch (fließend), Deutsch (A2)
-- KI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
+- AI/ML & MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
 - Cloud & Infrastruktur: Kubernetes, Helm, kustomize, Skaffold, Docker, Terraform, AWS (EC2, RDS, DynamoDB), Cilium, external-dns
 - Systeme & Messaging: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
 - Datenbanken: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake

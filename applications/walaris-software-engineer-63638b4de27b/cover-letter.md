@@ -5,12 +5,12 @@ company: "Walaris"
 
 ## 1. Why Walaris?
 
-Seeing a raw sensor feed transformed into actionable intelligence at the edge is where I want to spend my next five years. Walaris is engineering exactly that kind of real-time autonomy for defense and security, and I am applying for the Software Engineer role to help scale your edge processing platform. My experience shipping high-throughput data pipelines and distributed backends positions me to tackle the performance constraints your team faces daily.
+Building real-time AI pipelines that process raw sensor data into actionable decisions at the edge is the exact kind of high-stakes engineering I want to focus on. I am applying for the Software Engineer role at Walaris because your platform turns fragmented sensor feeds into machine-speed situational awareness. That shift from noisy data to reliable autonomy is where I want to contribute.
 
 ## 2. Why me?
 
-- Designed a Python-based FastMCP server that processes and ranks incoming data streams using unit-tested Anthropic/Ollama pipelines, cutting manual review time by 70% while enforcing strict hallucination guards.
-- Built Go microservices with gRPC and NATS JetStream to route high-volume events, scaling to support thousands of concurrent sessions with zero downtime during live deployments.
-- Containerized backend services with Docker and automated CI/CD via GitLab pipelines, enforcing rigorous unit test coverage and rolling out updates across Kubernetes clusters with automated rollback triggers.
+- Engineered high-throughput event-driven pipelines using Python and Go to process distributed data streams.
+- Deployed and scaled ML infrastructure on Linux using Kubernetes, Docker, and GitLab CI/CD for reliable model serving.
+- Refactored legacy messaging layers to native NATS JetStream and direct gRPC, cutting system overhead and improving real-time throughput.
 
-I am available to start full-time immediately, can relocate to Nuremberg within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract without sponsorship overhead.
+I am available to start full-time immediately, can relocate within Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract without sponsorship overhead.
