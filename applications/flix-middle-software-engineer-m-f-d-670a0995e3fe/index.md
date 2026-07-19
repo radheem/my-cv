@@ -2,7 +2,7 @@
 job_title: "Backend Engineer"
 company: "Supply Division"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-29"
 drive_url: ""

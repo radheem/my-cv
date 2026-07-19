@@ -2,7 +2,7 @@
 job_title: "Fullstack Engineer (Data Focus)"
 company: "Analytics & BI Platform for Temp-Staffing Industry"
 job_url: "https://www.linkedin.com/jobs/view/4434955311/"
-status: "draft"
+status: "rejected"
 clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-01"
 drive_url: "https://drive.google.com/drive/folders/1_zFvFDnjjNSQIm_6ksKaVkTbyMApFXhi"

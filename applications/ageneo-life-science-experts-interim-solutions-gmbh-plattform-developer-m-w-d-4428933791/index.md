@@ -2,7 +2,7 @@
 job_title: "Plattform Developer (m/w/d)"
 company: "ageneo Life Science Experts (Interim Solutions) GmbH"
 job_url: "https://www.linkedin.com/jobs/view/4428933791/"
-status: "draft"
+status: "rejected"
 clusters: ["distributed-systems", "observability", "platform-cloud-native"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1241fMlldu75x0WJSH3a1fvf0p-JDym8b"

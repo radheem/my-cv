@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Vattenfall"
 job_url: "https://www.linkedin.com/jobs/view/4429677796/"
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "observability"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1TOw77H_KeSM43Dq4FYqw62dwY5XvqRtY"

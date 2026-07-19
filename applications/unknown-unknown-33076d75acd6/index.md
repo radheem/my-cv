@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Sievert SE"
 job_url: ""
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-27"
 drive_url: "https://drive.google.com/drive/folders/1T7jGK5MMD_OV0bx0XcWCWpdPez0nJLZ3"

@@ -2,7 +2,7 @@
 job_title: "IoT Platform Engineer - Energy Systems"
 company: "FION Energy"
 job_url: "https://www.linkedin.com/jobs/view/4422580779/"
-status: "draft"
+status: "rejected"
 clusters: ["observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1Y5AM2xacMn6ti1tWkG8wnsriqdZqYuOb"

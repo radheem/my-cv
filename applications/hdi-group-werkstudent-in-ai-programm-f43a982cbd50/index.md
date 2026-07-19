@@ -2,7 +2,7 @@
 job_title: "AI Research & Analysis Support (Student/Working Student)"
 company: "Insurance Industry (implied)"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "observability"]
 date_found: "2026-06-29"
 drive_url: "https://drive.google.com/drive/folders/1YfuJCltn4U30T8m7APbPITQ1j-MYrFJw"

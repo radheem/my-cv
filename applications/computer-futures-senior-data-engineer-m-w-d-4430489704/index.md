@@ -2,7 +2,7 @@
 job_title: "Senior Data Engineer"
 company: "Computer Futures"
 job_url: "https://www.linkedin.com/jobs/view/4430489704/"
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1j6_eUyDHiiC-uNM3_jz2Z9CZRPoJISxE"

@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "HIBA GmbH (for client)"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1ei05i5meEHrrEsBaC77Mey4xHdSrcyaa"

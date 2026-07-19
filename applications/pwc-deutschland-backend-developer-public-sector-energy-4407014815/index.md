@@ -2,7 +2,7 @@
 job_title: "Backend-Developer – Public Sector & Energy"
 company: "PwC Deutschland"
 job_url: ""
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native", "web-api"]
 date_found: "2026-06-24"
 drive_url: "https://drive.google.com/drive/folders/1dYjAkBe4tVPskGfmsltirljMJ0cLo8JI"

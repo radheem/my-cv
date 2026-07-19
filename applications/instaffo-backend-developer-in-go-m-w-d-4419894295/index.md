@@ -2,7 +2,7 @@
 job_title: "Backend Developer:in (Go)"
 company: "Enginsight GmbH"
 job_url: "https://www.linkedin.com/jobs/view/4419894295/"
-status: "applied"
+status: "rejected"
 clusters: ["distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1w7a1eg17X19ryzdhJT1Yr0ziy1tmBJ--"

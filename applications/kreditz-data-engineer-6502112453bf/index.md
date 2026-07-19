@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Kreditz"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-28"
 drive_url: ""

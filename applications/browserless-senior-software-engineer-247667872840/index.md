@@ -2,7 +2,7 @@
 job_title: "Platform Engineer (Mid–Senior)"
 company: "Not specified"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1yg_Wl2H2JfNGPaLFLkK-OOnfJtU4iJrO"

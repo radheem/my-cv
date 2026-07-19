@@ -2,7 +2,7 @@
 job_title: "Backend Developer"
 company: "ALD Vacuum Technologies GmbH"
 job_url: "https://www.linkedin.com/jobs/view/4429650140/"
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1jSAheie1fVR0MtFw2hTfpj5V8fI2Lwio"

@@ -2,7 +2,7 @@
 job_title: "Working Student in AI Engineering"
 company: "Not specified"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "web-api"]
 date_found: "2026-06-29"
 drive_url: "https://drive.google.com/drive/folders/1W2z2cCf1KaFH9rYbHMMUU8NCORAvahmg"

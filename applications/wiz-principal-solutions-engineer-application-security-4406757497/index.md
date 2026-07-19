@@ -2,7 +2,7 @@
 job_title: "Principal Solutions Engineer - Application Security"
 company: "Wiz"
 job_url: "https://www.linkedin.com/jobs/view/4406757497/"
-status: "draft"
+status: "rejected"
 clusters: ["platform-cloud-native"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1fyq52RAfqTMfQvfJfXAPp7_UTjLlsZZg"

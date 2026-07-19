@@ -2,7 +2,7 @@
 job_title: "Back-End Developer (all genders)"
 company: "Fraunhofer"
 job_url: "https://jobs.fraunhofer.de/job/Kaiserslautern-BACK-END-ENTWICKLERIN-%28all-genders%29-67663/1392421633/"
-status: "applied"
+status: "rejected"
 clusters: ["ml-ai"]
 date_found: "2026-06-23"
 drive_url: ""

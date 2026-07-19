@@ -2,7 +2,7 @@
 job_title: "Senior Security Engineer"
 company: "Wire"
 job_url: "https://www.linkedin.com/jobs/view/4428859728/"
-status: "draft"
+status: "rejected"
 clusters: ["distributed-systems", "platform-cloud-native"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1JsTxHdedYvARa7kUgM8N420zU_7MgJ_b"

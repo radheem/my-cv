@@ -2,7 +2,7 @@
 job_title: "Software Engineer, Infrastructure Platform"
 company: "Docker, Inc"
 job_url: "https://www.linkedin.com/jobs/view/4390380980/"
-status: "draft"
+status: "rejected"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-26"
 drive_url: "https://drive.google.com/drive/folders/1ZJvJMFzmhjENQv0tFwv220COjvpukulM"

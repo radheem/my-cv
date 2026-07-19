@@ -2,7 +2,7 @@
 job_title: "Software Engineer (Java/Kotlin)"
 company: "Flix"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-29"
 drive_url: ""

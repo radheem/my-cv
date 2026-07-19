@@ -2,7 +2,7 @@
 job_title: "AI/GenAI Engineer"
 company: "Telco Provider (DACH)"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-29"
 drive_url: "https://drive.google.com/drive/folders/1qm3lhBTGPjBHJdTeEcnTHd8GmNbq32Eu"

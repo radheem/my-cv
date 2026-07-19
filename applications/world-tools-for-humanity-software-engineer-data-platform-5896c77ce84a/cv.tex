@@ -1,0 +1,156 @@
+\documentclass[10pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Software Engineer, Data Platform}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Dockerized backend services and streamlined deployment pipelines on AWS EC2 and Kubernetes, enhancing platform reliability and release velocity.
+  \item Led system design and code reviews to enforce architectural standards for cloud-native microservices and containerized workloads.
+  \item Integrated application services with AWS S3, MySQL, and MongoDB to support scalable, production-ready delivery.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Integrated OpenTelemetry distributed tracing, Prometheus metrics, and Grafana alerting to monitor transaction engine throughput and Kafka consumer lag, significantly reducing latency spikes.
+  \item Maintained release processes and cloud-native deployment standards across exchange services using Docker and Kubernetes.
+  \item Led engineering teams in system design reviews and platform reliability initiatives to optimize exchange infrastructure.
+\bulletsend
+\vspace{1.5pt}
+\role{Seed Labs - Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Containerized data processing workloads using Docker and deployed them on AWS EC2, establishing foundational cloud-native deployment practices.
+  \item Analyzed and visualized complex datasets to drive engineering decisions and platform optimization.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projects}
+
+\role{\href{https://github.com/radheem/cv-tailor}{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}}{}{}
+\bullets
+  \item Built a Python CLI and FastMCP Server that automates CV/Cover letter tailoring using unit-tested project ranking (Anthropic/Ollama) and guards against hallucinations.
+  \item Developed an automated Gmail alert ingestion pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) and lightweight guest API fetching.
+  \item Integrated a bi-directional Google Sheets synchronization using Google Apps Script to track job application lifecycles.
+  \item Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
+\bulletsend
+\vspace{1.0pt}
+\role{Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project)}{}{}
+\bullets
+  \item Migrated the platform off Dapr to native NATS JetStream (messaging), NATS KV (session state), and direct gRPC, reducing operational overhead and latency.
+  \item Deployed Go microservices with Kubernetes, kustomize, Skaffold, Cilium, and external-dns; integrated OpenTelemetry distributed tracing and Prometheus metric collection across all services.
+  \item Built an MCP integration exposing the platform to LLM agents as declarative, hot-reloadable tools via a config-driven toolbox server.
+\bulletsend
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Languages (spoken): English (fluent), German / Deutsch (A2)
+  \item Cloud \& Platform Infra: Kubernetes, Cilium, Docker, Helm, external-dns, Terraform, AWS (EC2, RDS, DynamoDB), kustomize, Skaffold
+  \item Observability \& SRE: OpenTelemetry, Prometheus, VictoriaMetrics, Grafana, distributed tracing, metrics, alerting
+  \item Systems \& Networking: NATS (JetStream + KV), Kafka, gRPC, Dapr, MCP (FastMCP), ZeroMQ, policy-based routing
+  \item Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
+  \item Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item ML/Data \& Web: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Software Engineer, Data Platform}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Containerisierte Backend-Dienste und optimierte Deployment-Pipelines auf AWS EC2 und Kubernetes, wodurch die Plattformzuverlässigkeit und Release-Geschwindigkeit erhöht wurden.
+  \item Leitete Systemdesign- und Code-Reviews, um architektonische Standards für cloud-native Microservices und containerisierte Workloads durchzusetzen.
+  \item Integrierte Anwendungsdienste mit AWS S3, MySQL und MongoDB, um eine skalierbare, produktionsreife Auslieferung zu ermöglichen.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Integrierte OpenTelemetry-Distributed-Tracing, Prometheus-Metriken und Grafana-Alerting zur Überwachung des Durchsatzes der Transaktions-Engine sowie des Kafka-Consumer-Lags, was Latenzspitzen erheblich reduzierte.
+  \item Pflegte Release-Prozesse und cloud-native Deployment-Standards für Börsendienste unter Verwendung von Docker und Kubernetes.
+  \item Leitete Engineering-Teams bei Systemdesign-Reviews und Plattformzuverlässigkeitsinitiativen zur Optimierung der Börseninfrastruktur.
+\bulletsend
+\vspace{1.5pt}
+\role{Seed Labs - Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Containerisierte Datenverarbeitungs-Workloads mit Docker und bereitete diese auf AWS EC2 vor, wodurch grundlegende cloud-native Deployment-Praktiken etabliert wurden.
+  \item Analysierte und visualisierte komplexe Datensätze, um Engineering-Entscheidungen und Plattformoptimierungen voranzutreiben.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Heute}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projekte}
+
+\role{\href{https://github.com/radheem/cv-tailor}{cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)}}{}{}
+\bullets
+  \item Entwickelte eine Python-CLI und einen FastMCP-Server, der die Anpassung von Lebenslauf und Anschreiben automatisiert, indem ein unit-getestetes Projekt-Ranking (Anthropic/Ollama) genutzt wird, und schützt vor Halluzinationen.
+  \item Entwickelte eine automatisierte Gmail-Alert-Ingestion-Pipeline (LinkedIn, Glassdoor, Indeed, Fraunhofer) sowie ein leichtgewichtiges Gast-API-Fetching.
+  \item Integrierte eine bidirektionale Google Sheets-Synchronisation mittels Google Apps Script zur Nachverfolgung von Bewerbungslebenszyklen.
+  \item Sicherte Dokumente in Git mittels clientseitiger AES-256-GCM-Verschlüsselung, die über passwortgeschützte statische Pages freigeschaltet wird.
+\bulletsend
+\vspace{1.0pt}
+\role{Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project)}{}{}
+\bullets
+  \item Migrierte die Plattform von Dapr zu nativem NATS JetStream (Messaging), NATS KV (Session-State) und direktem gRPC, wodurch der operative Aufwand und die Latenz reduziert wurden.
+  \item Bereitgestellte Go-Microservices mit Kubernetes, kustomize, Skaffold, Cilium und external-dns; integrierte OpenTelemetry-Distributed-Tracing und Prometheus-Metriksammlung über alle Dienste hinweg.
+  \item Entwickelte eine MCP-Integration, die die Plattform LLM-Agenten als deklarative, hot-reloadable Tools über einen konfigurationsgetriebenen Toolbox-Server zugänglich macht.
+\bulletsend
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Sprachen (gesprochen): Englisch (fließend), Deutsch (A2)
+  \item Cloud- \& Platform-Infra: Kubernetes, Cilium, Docker, Helm, external-dns, Terraform, AWS (EC2, RDS, DynamoDB), kustomize, Skaffold
+  \item Observability \& SRE: OpenTelemetry, Prometheus, VictoriaMetrics, Grafana, Distributed Tracing, Metriken, Alerting
+  \item Systems \& Networking: NATS (JetStream + KV), Kafka, gRPC, Dapr, MCP (FastMCP), ZeroMQ, policy-based Routing
+  \item Programmiersprachen: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
+  \item Datenbanken: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item ML/Data \& Web: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\end{document}

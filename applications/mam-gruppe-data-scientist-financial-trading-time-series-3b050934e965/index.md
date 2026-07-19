@@ -2,7 +2,7 @@
 job_title: "Data Scientist (Financial Trading - Time-Series)"
 company: "MAM Gruppe"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1fj1GV45ZnIO6wqcTUH-gjx9zwOSACKLK"

@@ -2,7 +2,7 @@
 job_title: "Backend Engineer"
 company: "Air Apps"
 job_url: "https://www.linkedin.com/jobs/view/4428254276/"
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1dySQrORMCLAmMxRWIlDChONnUpU-aOvv"

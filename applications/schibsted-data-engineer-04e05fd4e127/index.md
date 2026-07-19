@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Schibsted Media"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-28"
 drive_url: ""

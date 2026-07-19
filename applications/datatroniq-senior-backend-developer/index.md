@@ -2,7 +2,7 @@
 job_title: "(Senior) Backend Developer"
 company: "DATATRONiQ"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-26"
 drive_url: ""

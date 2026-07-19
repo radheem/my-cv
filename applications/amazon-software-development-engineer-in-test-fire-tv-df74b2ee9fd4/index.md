@@ -2,7 +2,7 @@
 job_title: "SDET"
 company: "Amazon"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["observability", "platform-cloud-native"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1DgZFxdQgkDBgyDF0C5XuyvToQDkG8xE6"

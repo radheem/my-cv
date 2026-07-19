@@ -2,7 +2,7 @@
 job_title: "IoT Cloud Platform Engineer"
 company: "1KOMMA5°"
 job_url: ""
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-27"
 drive_url: "https://drive.google.com/drive/folders/1pXj1fFy1F0f_kWlJkfzChjjYOFq2rOHL"

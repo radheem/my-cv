@@ -2,7 +2,7 @@
 job_title: "Senior Platform Engineer - Cloud Infrastructure"
 company: "Scout24 SE"
 job_url: "https://www.linkedin.com/jobs/view/4339062900/"
-status: "applied"
+status: "rejected"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1lv1RvGNWEEhie3qbDaQR0WHYsKAOKOMV"

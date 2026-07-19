@@ -2,7 +2,7 @@
 job_title: "Backend Engineer"
 company: "Deutsche Börse Group"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-28"
 drive_url: "https://drive.google.com/drive/folders/1Ry7exrXWgYeBSiGEtqBITWTq4isHdBAQ"

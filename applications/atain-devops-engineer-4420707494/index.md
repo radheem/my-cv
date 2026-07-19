@@ -2,7 +2,7 @@
 job_title: "DevOps Engineer"
 company: "Atain"
 job_url: "https://www.linkedin.com/jobs/view/4420707494/"
-status: "draft"
+status: "rejected"
 clusters: ["distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1fJSjaEKOSveEsJ6m3-kmFow5vhq0OH-i"

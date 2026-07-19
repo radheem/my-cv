@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "generated_at": "2026-07-19T04:33:15+00:00",
+  "config_version": 1,
+  "provider": "ollama",
+  "model": "qwen3.6-35b-awq",
+  "temperature": {
+    "json": 0.0,
+    "text": 0.4
+  },
+  "max_tokens": {
+    "jobspec": 2000,
+    "cv": 16000,
+    "cover": 8000,
+    "judge": 1200,
+    "variant": 1500
+  },
+  "seed": null,
+  "prompts": {
+    "cv": {
+      "version": 4,
+      "sha256": "c1f257a09f8e",
+      "source": "data/prompts/cv.md"
+    },
+    "cover": {
+      "version": 4,
+      "sha256": "03cc1ca63ddc",
+      "source": "data/prompts/cover.md"
+    },
+    "jobspec": {
+      "version": 1,
+      "sha256": "6e93487e8b18",
+      "source": "data/prompts/jobspec.md"
+    },
+    "variant": {
+      "version": 1,
+      "sha256": "960ee84e471c",
+      "source": "data/prompts/variant.md"
+    }
+  },
+  "inputs_sha256": {
+    "data/config.yml": "959625cb6f2a",
+    "data/master-cv.md": "fcd1c7dc1674",
+    "data/profile.yml": "aee96f31ecd6",
+    "data/projects.yml": "7096f79563b5",
+    "data/taxonomy.yml": "0820e8d5f068",
+    "data/ranking.yml": "44c4784a656f",
+    "data/guides/how-to-write-a-cv.md": "3ec2e508423f",
+    "data/guides/how-to-write-a-cover-letter.md": "8552acbdab3f",
+    "data/prompts/exemplars/cover.yml": "c85e0eeaa44a"
+  },
+  "effective_config_sha256": "02c20632e0fc",
+  "decisions": {
+    "top_projects": [
+      "irs",
+      "cv-tailor"
+    ],
+    "clusters": [
+      "distributed-system",
+      "information-management",
+      "platform-engineer"
+    ],
+    "tagline": "Student Software Developer Backend & Data Processing"
+  }
+}

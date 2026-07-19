@@ -2,7 +2,7 @@
 job_title: "Data Infrastructure Engineer"
 company: ""
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-29"
 drive_url: "https://drive.google.com/drive/folders/19QSZZgJr91tq_iR9ajtMJSJW9YpCdlxx"

@@ -2,7 +2,7 @@
 job_title: "Full Stack Developer"
 company: "Eye-Able"
 job_url: "https://www.indeed.com/viewjob?jk=web-inclusion-gmbh-fullstack"
-status: "draft"
+status: "rejected"
 clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-02"
 drive_url: "https://drive.google.com/drive/folders/1NZc0k8T3w-bdxnntaa5SBRFK1oQOrCLl"

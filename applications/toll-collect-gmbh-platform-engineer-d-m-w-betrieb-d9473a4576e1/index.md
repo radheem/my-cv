@@ -2,7 +2,7 @@
 job_title: "Platform & DevOps Engineer"
 company: "Toll Collect GmbH"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["ml-ai", "observability", "platform-cloud-native"]
 date_found: "2026-06-28"
 drive_url: ""

@@ -1,0 +1,166 @@
+\documentclass[10pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Working Student Engineer / Full-Stack Developer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Architected and containerized backend services on Kubernetes and AWS, streamlining deployment pipelines for scalable platform infrastructure.
+  \item Led system design and code reviews, establishing robust architectural patterns for distributed microservices and cloud-native deployments.
+  \item Developed and documented high-performance services using NodeJS, TypeScript, and Docker, ensuring reliable backend operations.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Integrated OpenTelemetry, Prometheus, and Grafana across distributed Go/Python services to monitor system throughput and reduce latency spikes.
+  \item Identified and implemented system design improvements for core exchange services, optimizing infrastructure reliability and observability.
+  \item Maintained release processes and led junior engineering teams, ensuring consistent deployment standards and platform stability.
+\bulletsend
+\vspace{1.5pt}
+\role{Seed Labs - Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Developed and trained machine learning models using Python, TensorFlow, and scikit-learn, focusing on data-driven predictive solutions.
+  \item Analyzed, cleaned, and visualized complex datasets to extract actionable insights, supporting stakeholder decision-making and model validation.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projects}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index) featuring per-step timeouts, retries, and OpenTelemetry instrumentation.
+  \item Real-time progress streaming over NATS JetStream + SSE, with all local inference secured via two llama.cpp servers behind an OpenAI-compatible API.
+  \item Vector search implemented with pgvector (HNSW, cosine); deployed cloud-native on k3d with cert-manager TLS and ExternalDNS.
+\bulletsend
+\vspace{1.0pt}
+\role{cv-tailor (LLM CV/Cover Tailoring + Application Management) (\href{https://radheem.github.io/my-cv/projects/cv-tailor/}{portfolio})}{}{}
+\bullets
+  \item Built a Python CLI and FastMCP Server automating CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama) and hallucination guards.
+  \item Developed automated Gmail alert ingestion pipelines and bi-directional Google Sheets synchronization to track job application lifecycles.
+  \item Secured documents in Git using client-side AES-256-GCM encryption gated on password-protected static Pages.
+\bulletsend
+\vspace{1.0pt}
+\role{O-RAN AIML Framework (\href{https://radheem.github.io/my-cv/projects/oran-aiml/}{portfolio})}{}{}
+\bullets
+  \item Deployed end-to-end AIML framework on Kubernetes with Helm, featuring a config-driven Python SDK automating the full ML lifecycle (feature group → training → inference).
+  \item Authored Kubeflow training/retraining pipelines (kfp) with TensorFlow/Keras and scikit-learn, serving models via KServe with integrated feature stores and artifact storage.
+\bulletsend
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Languages (spoken): English (fluent), German / Deutsch (A2)
+  \item AI/ML \& MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
+  \item Cloud \& Infrastructure: Kubernetes, Helm, kustomize, Skaffold, Docker, Terraform, AWS (EC2, RDS, DynamoDB), Cilium, external-dns
+  \item Systems \& Messaging: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
+  \item Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item Programming Languages: Python, Go, SQL, TypeScript, JavaScript, Bash, PHP
+  \item Web \& Frameworks: ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Working Student Engineer / Full-Stack Developer}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Entwickelte und containerisierte Backend-Dienste auf Kubernetes und AWS, optimierte Bereitstellungs-Pipelines für eine skalierbare Plattform-Infrastruktur.
+  \item Leitete Systemdesign und Code-Reviews, etablierte robuste Architekturmuster für verteilte Microservices und cloud-native Bereitstellungen.
+  \item Entwickelte und dokumentierte hochperformante Dienste mit NodeJS, TypeScript und Docker, um zuverlässigen Backend-Betrieb zu gewährleisten.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Integrierte OpenTelemetry, Prometheus und Grafana in verteilte Go/Python-Dienste zur Überwachung der Systemdurchsatzleistung und zur Reduzierung von Latenzspitzen.
+  \item Identifizierte und implementierte Systemdesign-Verbesserungen für Kernbörsendienste, optimierte die Zuverlässigkeit und Beobachtbarkeit der Infrastruktur.
+  \item Pflegte Release-Prozesse und leitete Junior-Engineering-Teams, um konsistente Bereitstellungsstandards und Plattformstabilität zu gewährleisten.
+\bulletsend
+\vspace{1.5pt}
+\role{Seed Labs - Software Engineer}{Pakistan}{06/2020 - 06/2021}
+\bullets
+  \item Entwickelte und trainierte Machine-Learning-Modelle mit Python, TensorFlow und scikit-learn, mit Fokus auf datengetriebene Vorhersagelösungen.
+  \item Analysierte, bereinigte und visualisierte komplexe Datensätze, um umsetzbare Erkenntnisse zu gewinnen, und unterstützte damit die Entscheidungsfindung der Stakeholder sowie die Modellvalidierung.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Aktuell}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projekte}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Ausfallsichere, wiederholbare Dokumenten-Ingestion-Pipeline mit Hatchet (extract → chunk → embed → summarize → index) mit schrittweisen Timeouts, Wiederholungsmechanismen und OpenTelemetry-Instrumentierung.
+  \item Echtzeit-Fortschritts-Streaming über NATS JetStream + SSE, wobei alle lokalen Inferenzen über zwei llama.cpp-Server hinter einer OpenAI-kompatiblen API gesichert sind.
+  \item Vektorsuche implementiert mit pgvector (HNSW, cosine); cloud-native auf k3d bereitgestellt mit cert-manager TLS und ExternalDNS.
+\bulletsend
+\vspace{1.0pt}
+\role{cv-tailor (LLM CV/Cover Tailoring + Application Management) (\href{https://radheem.github.io/my-cv/projects/cv-tailor/}{portfolio})}{}{}
+\bullets
+  \item Entwickelte eine Python-CLI und einen FastMCP-Server zur Automatisierung der CV/Anschreiben-Anpassung mit unit-getesteter Projekt-Ranking (Anthropic/Ollama) und Halluzionsfiltern.
+  \item Entwickelte automatisierte Gmail-Alert-Ingestion-Pipelines und bidirektionale Google-Sheets-Synchronisation zur Verfolgung von Bewerbungslebenszyklen.
+  \item Sicherte Dokumente in Git mittels clientseitiger AES-256-GCM-Verschlüsselung, die durch passwortgeschützte statische Pages geschützt wird.
+\bulletsend
+\vspace{1.0pt}
+\role{O-RAN AIML Framework (\href{https://radheem.github.io/my-cv/projects/oran-aiml/}{portfolio})}{}{}
+\bullets
+  \item Bereitete ein End-to-End-AIML-Framework auf Kubernetes mit Helm, mit einem konfigurationsgetriebenen Python-SDK zur Automatisierung des vollständigen ML-Lebenszyklus (feature group → training → inference).
+  \item Verfasste Kubeflow-Trainings-/Retraining-Pipelines (kfp) mit TensorFlow/Keras und scikit-learn, stellte Modelle über KServe bereit mit integrierten Feature Stores und Artifact Storage.
+\bulletsend
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Sprachen (gesprochen): Englisch (fließend), Deutsch (A2)
+  \item AI/ML \& MLOps: Kubeflow Pipelines, KServe, scikit-learn, TensorFlow/Keras, pandas, pgvector, vector-search, inference, model-training, agentic agents, LLM orchestration, RAG pipelines
+  \item Cloud \& Infrastruktur: Kubernetes, Helm, kustomize, Skaffold, Docker, Terraform, AWS (EC2, RDS, DynamoDB), Cilium, external-dns
+  \item Systeme \& Messaging: gRPC, NATS (JetStream + KV), Hatchet, MCP (FastMCP), Kafka, Dapr, OpenTelemetry, VictoriaMetrics, Grafana
+  \item Datenbanken: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item Programmiersprachen: Python, Go, SQL, TypeScript, JavaScript, Bash, PHP
+  \item Web \& Frameworks: ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\end{document}

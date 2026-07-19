@@ -2,7 +2,7 @@
 job_title: "DevOps / Cloud Infrastructure Engineer"
 company: "BWI GmbH"
 job_url: ""
-status: "applied"
+status: "rejected"
 clusters: ["distributed-systems", "platform-cloud-native"]
 date_found: "2026-06-27"
 drive_url: "https://drive.google.com/drive/folders/1wmbJ9tJFh3dfUedZNksdn5NRIt1PwS2K"

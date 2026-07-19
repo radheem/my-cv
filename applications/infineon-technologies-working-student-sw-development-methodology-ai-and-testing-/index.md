@@ -2,7 +2,7 @@
 job_title: "Part-time Student Researcher / Developer"
 company: "Infineon Technologies"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["distributed-systems", "ml-ai"]
 date_found: "2026-06-29"
 drive_url: ""

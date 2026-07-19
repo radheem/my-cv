@@ -2,7 +2,7 @@
 job_title: "Backend Engineer T Cloud Public – Container"
 company: "T-Systems International"
 job_url: "https://www.linkedin.com/jobs/view/4429738029/"
-status: "draft"
+status: "rejected"
 clusters: ["5g-oran", "distributed-systems", "observability", "platform-cloud-native"]
 date_found: "2026-06-22"
 drive_url: "https://drive.google.com/drive/folders/1VTpMiXNCREog8-3naY-jZiwwYT6vUK07"

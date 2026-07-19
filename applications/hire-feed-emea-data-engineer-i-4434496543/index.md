@@ -2,7 +2,7 @@
 job_title: "Data Engineer I"
 company: "Hire Feed EMEA"
 job_url: "https://www.linkedin.com/jobs/view/4434496543/"
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "platform-cloud-native"]
 date_found: "2026-06-29"
 drive_url: ""

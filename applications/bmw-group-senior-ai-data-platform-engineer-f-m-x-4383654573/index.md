@@ -1,7 +1,7 @@
 ---
 job_title: "Senior AI & Data Platform Engineer (f/m/x)"
 company: "BMW Group"
-status: "applied"
+status: "rejected"
 clusters: ["ml-ai", "platform-cloud-native", "data-persistence", "distributed-systems"]
 date_found: "2026-06-21"
 drive_url: "https://drive.google.com/drive/folders/1JWFf7xf099OTGYQFsyJTYZWm9ZUeAlSc"

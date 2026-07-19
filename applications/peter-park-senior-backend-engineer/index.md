@@ -2,7 +2,7 @@
 job_title: "Senior Backend Engineer"
 company: "Peter Park"
 job_url: ""
-status: "applied"
+status: "rejected"
 clusters: ["distributed-systems", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-24"
 drive_url: "https://drive.google.com/drive/folders/1FjPbkOg1EEV_FOLnaA0zMxV5KY4qBsgq"

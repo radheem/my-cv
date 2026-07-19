@@ -2,7 +2,7 @@
 job_title: "Master Thesis: Machine Learning (ML)-Based Methods as Surrogate for Finite Element Modelling"
 company: "Fraunhofer Institute for Production Technology (IPT)"
 job_url: "https://jobs.fraunhofer.de/job/Aachen-Master-Thesis-%C2%BBMachine-Learning-%28ML%29-Based-Methods-as-Surrogate-for-Finite-Element-Modelling%C2%AB-52074/1233786101/"
-status: "applied"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai"]
 date_found: "2026-06-23"
 drive_url: "https://drive.google.com/drive/folders/1DJCZTf621O1P9QhaHEsoyCvDKF0vwdFG"

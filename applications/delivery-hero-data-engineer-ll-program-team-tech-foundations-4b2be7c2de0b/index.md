@@ -2,7 +2,7 @@
 job_title: "Data Engineer II"
 company: "Delivery Hero"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "ml-ai", "observability"]
 date_found: "2026-06-29"
 drive_url: "https://drive.google.com/drive/folders/1CEyJ4An66u3zSVlgCAHGkArkAoW_acfL"

@@ -2,7 +2,7 @@
 job_title: "Data Engineer"
 company: "Lovable"
 job_url: ""
-status: "draft"
+status: "rejected"
 clusters: ["data-persistence", "distributed-systems", "ml-ai", "observability", "platform-cloud-native", "web-api"]
 date_found: "2026-06-29"
 drive_url: ""
