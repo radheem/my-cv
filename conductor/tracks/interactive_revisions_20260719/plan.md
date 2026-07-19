@@ -1,7 +1,7 @@
 # Implementation Plan: Interactive Revision, Smart Regeneration, Queue Control, & Translation
 
 ## Phase 1: Iterative Revision Engine & Independent Translation
-- [ ] Task: Implement revision logic
+- [x] Task: Implement revision logic (1fcf435)
     - [ ] Write failing tests in `tests/test_mcp_revisions.py` for `revise_cover_letter` and `revise_cv` checking LLM prompt injection, file writing, and DB updates.
     - [ ] Implement revision helper functions in `engine/domains/tailoring/render.py` to read previous drafts, combine them with feedback, and call the LLM.
     - [ ] Expose `revise_cover_letter` and `revise_cv` as MCP tools in `engine/mcp/server.py`.
