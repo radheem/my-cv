@@ -7,8 +7,8 @@ tagline: "Senior Cloud Engineer"
 ### AiVader GmbH / TU Ilmenau (ICS Group) - Research Engineering Intern (5G & Open RAN)
 Germany | 02/2026 - 04/2026
 - Brought a containerized 5G Standalone platform (Open5GS, RIC, srsRAN) to operational readiness on a single host, making the entire deployment fully reproducible with clear runbooks.
-- Integrated a custom xApp over the E2 interface, publishing gNB telemetry to a Kafka pub-sub cluster for real-time SRE metrics reporting.
-- Built observability (Telegraf/Grafana) and resolved platform bottlenecks like thread pinning and AVX2 compilation crashes.
+- Integrated xApp over the E2 interface, publishing gNB telemetry to message broker for real-time SRE metrics reporting.
+- Built observability and resolved platform bottlenecks.
 - Tech: Kubernetes, Docker, Prometheus, Grafana, InfluxDB, Telegraf, Linux, C++, Bash.
 
 ### Al Hilal Invest - Senior Software Engineer

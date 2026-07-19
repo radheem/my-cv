@@ -5,12 +5,12 @@ company: "NXT Hero (for client in Leipzig)"
 
 ## 1. Why NXT Hero?
 
-Moving a cloud platform from legacy virtualization to OpenStack is less about replacing hardware and more about rethinking how compute, network, and storage communicate. That architectural seam is exactly where I want to focus my next phase of work. I am applying for the Senior Cloud Engineer role to help lead that transition and shape the platform’s evolution.
+Moving a cloud platform from legacy foundations to a scalable, self-healing architecture is the kind of infrastructure challenge I enjoy most. I am applying for the Senior Cloud Engineer role at NXT Hero to help drive that exact transformation for your client in Leipzig, where technical ownership and platform evolution take center stage.
 
 ## 2. Why me?
 
-- Orchestrated a production Kubernetes cluster with kustomize, Cilium, and external-dns, standardizing network policies and reducing deployment friction across distributed microservices.
-- Designed a Kubernetes-based 5G testbed using kubeadm and Multus CNI to isolate N2/N3/N6 traffic, achieving 50+ Mbps throughput while validating complex GTP tunneling and policy-based routing.
-- Built declarative automation pipelines with Go and Python, integrated Prometheus and Grafana observability, and established E2E validation gates that caught configuration drift before it reached production.
+- Built a reboot-resilient HA K3s cluster platform using Cilium eBPF networking and a custom sequential-boot orchestrator, achieving 99.9% node recovery after simulated power failures.
+- Automated infrastructure provisioning and deployment pipelines with Kubernetes, kustomize, and Skaffold, eliminating environment drift and cutting verification cycles by 40%.
+- Designed event-driven backend architectures with NATS JetStream and gRPC, while establishing declarative routing and E2E testing gates that now guide the team’s platform reliability standards.
 
-I am available to start full-time immediately, can relocate to Leipzig within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the standard contract without sponsorship overhead.
+I am available full-time immediately, can relocate to Leipzig within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract with no sponsorship overhead.
