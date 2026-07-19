@@ -784,3 +784,50 @@ def test_mcp_queue_dictionary_payloads(monkeypatch):
             cur.execute("SELECT status FROM applications WHERE slug = 'mock-payload-slug'")
             row = cur.fetchone()
             assert row["status"] == "compiling"
+
+
+def test_mcp_get_tailor_queue():
+    from engine.mcp import server
+    import json
+
+    # Clear queue
+    while not server._tailor_queue.empty():
+        try:
+            server._tailor_queue.get_nowait()
+        except Exception:
+            break
+
+    # Push various styles of payloads to the queue
+    server._tailor_queue.put("string-slug")
+    server._tailor_queue.put(("tuple-slug", "variant.md"))
+    server._tailor_queue.put({
+        "slug": "dict-slug",
+        "stage": "compile",
+        "custom_instructions": "Focus on Kubernetes",
+        "variant": None
+    })
+
+    # Retrieve and parse queue status
+    res_str = server.get_tailor_queue()
+    res = json.loads(res_str)
+
+    assert res["queue_depth"] == 3
+    assert len(res["queued_tasks"]) == 3
+
+    assert res["queued_tasks"][0]["slug"] == "string-slug"
+    assert res["queued_tasks"][0]["stage"] == "generate"
+
+    assert res["queued_tasks"][1]["slug"] == "tuple-slug"
+    assert res["queued_tasks"][1]["stage"] == "generate"
+    assert res["queued_tasks"][1]["variant"] == "variant.md"
+
+    assert res["queued_tasks"][2]["slug"] == "dict-slug"
+    assert res["queued_tasks"][2]["stage"] == "compile"
+    assert res["queued_tasks"][2]["custom_instructions"] is True
+
+    # Clear queue again so it doesn't leak into subsequent runs
+    while not server._tailor_queue.empty():
+        try:
+            server._tailor_queue.get_nowait()
+        except Exception:
+            break

@@ -680,6 +680,48 @@ def create_application_with_variant(slug: str, variant_filename: str, custom_ins
 
 
 @mcp.tool()
+def get_tailor_queue() -> str:
+    """Get the list of active tailoring and compilation tasks currently waiting in the sequential in-memory background queue.
+    This returns the list of task payloads (showing their slug, stage, and parameters) and the total queue depth.
+    """
+    try:
+        # Accessing queue.queue is thread-safe for read-only copies
+        items = list(_tailor_queue.queue)
+        
+        formatted_items = []
+        for idx, item in enumerate(items, start=1):
+            if isinstance(item, dict):
+                formatted_items.append({
+                    "position": idx,
+                    "slug": item.get("slug"),
+                    "stage": item.get("stage"),
+                    "custom_instructions": item.get("custom_instructions") is not None,
+                    "variant": item.get("variant")
+                })
+            elif isinstance(item, tuple):
+                formatted_items.append({
+                    "position": idx,
+                    "slug": item[0],
+                    "stage": "generate",
+                    "variant": item[1]
+                })
+            else:
+                formatted_items.append({
+                    "position": idx,
+                    "slug": item,
+                    "stage": "generate"
+                })
+                
+        return json.dumps({
+            "queue_depth": len(items),
+            "queued_tasks": formatted_items
+        }, indent=2)
+    except Exception as e:
+        log.exception("Failed to get tailor queue status")
+        return json.dumps({"error": f"Failed to retrieve queue: {str(e)}"})
+
+
+@mcp.tool()
 def create_pdf_from_markdown(slug: str) -> str:
     """Step 4 (PDF Rendering & Cloud Sync Path). Enqueue verification, PDF compilation, Google Drive upload, and tracking sheets synchronization for an existing tailored markdown draft.
     Because LaTeX rendering and Drive uploads can take significant CPU/network resources, requests are executed asynchronously in our background sequential queue. You can monitor the state (compiling -> draft) by calling get_application.
