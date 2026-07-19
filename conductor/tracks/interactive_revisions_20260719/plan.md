@@ -25,4 +25,4 @@
     - [ ] Expose `cancel_queued_task` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it safely removes pending tasks from `_tailor_queue` in-memory and resets their DB states.
     - [ ] Ensure tests pass (Green phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Smart Regeneration & Queue Control Tools' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Smart Regeneration & Queue Control Tools' (Protocol in workflow.md) (d026cc9)
