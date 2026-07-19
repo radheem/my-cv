@@ -5,12 +5,16 @@ company: "Walaris"
 
 ## 1. Why Walaris?
 
-Processing sensor streams at machine speed requires architecture that never compromises on latency or correctness. I am applying for the Software Engineer role because Walaris builds exactly that kind of deterministic edge infrastructure for mission-critical defense systems. My career has naturally converged on high-throughput data pipelines and real-time ML integration, and I want to apply that focus to autonomous air, land, and sea platforms.
+Processing high-frequency sensor streams at machine speed—where milliseconds decide between detection and failure—is the engineering challenge I enjoy most. I am applying for the Software Engineer role because Walaris is building the quiet reliability that lets computer vision and real-time AI run smoothly on edge hardware in mission-critical defense domains.
+
+While my professional background has primarily centered on high-throughput distributed systems and data platforms, I am incredibly enthusiastic about bringing my systems integration and SRE skills to physical hardware integrations. Transitioning into defense-tech and edge signal processing—specifically drone detection and automated target recognition—is exactly where I want to focus my technical passion next.
 
 ## 2. Why me?
 
-- Designed and deployed Go microservices with gRPC and NATS JetStream to process event-driven data streams across distributed clusters, reducing backend latency and enabling reliable real-time signal routing.
-- Built Python-based ML infrastructure and FastMCP servers that expose declarative, hot-reloadable tools to LLM agents, directly aligning with Walaris’s goal of integrating real-time machine learning and image processing into edge hardware.
-- Orchestrated Kubernetes deployments with kustomize and Skaffold, implemented Ginkgo E2E testing gates, and established CI/CD pipelines that ensure rigorous unit testing and rapid, safe back-end improvements.
+I have extensive experience taking full ownership of backend services and real-time telemetry pipelines, designing, developing, and deploying them in high-throughput Linux environments.
 
-I am available full-time immediately, can relocate anywhere in Germany within two to three weeks, and hold Blue Card eligibility so the employer only needs to issue the contract without sponsorship overhead.
+- **Engineered real-time data ingestion pipelines and custom xApps** in Python and C++ to capture high-frequency metrics over the **E2 interface**, fanning out streams to **Kafka pub-sub message brokers**.
+- **Stabilized multi-container open-source cellular stacks** (including srsRAN and Open5GS) to operational readiness on Linux, systematically resolving priority thread pinning for real-time SDR processing and AVX2 compilation crashes.
+- **Implemented rigorous unit testing and E2E testing gates** (Ginkgo/pytest) alongside CI/CD pipelines to ensure rapid, safe, and quality-controlled back-end architectural improvements.
+
+I am available to start immediately, can relocate to Nuremberg within two to three weeks, and hold Blue Card eligibility so your team only needs to issue the contract without sponsorship overhead.
