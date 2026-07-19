@@ -1087,6 +1087,69 @@ def revise_cv(slug: str, revision_instructions: str) -> str:
 
 
 @mcp.tool()
+def translate_application(slug: str, kind: str = "both") -> str:
+    """Translate the English drafts of an application into professional German on demand.
+    
+    `kind` can be: "cv", "cover-letter", or "both".
+    This updates the corresponding `.de.md` files and DB columns atomically.
+    """
+    try:
+        from engine.domains.tailoring.render import translate_markdown
+        import pathlib
+        import datetime
+
+        app_dir = pathlib.Path("applications") / slug
+        if not app_dir.exists():
+            return json.dumps({"error": f"Application folder not found for slug {slug}"})
+
+        timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        results = {}
+
+        if kind in ("cv", "both"):
+            cv_path = app_dir / "cv.md"
+            if not cv_path.exists():
+                return json.dumps({"error": f"English CV not found for slug {slug}"})
+            cv_en = cv_path.read_text(encoding="utf-8")
+            cv_de = translate_markdown(cv_en, kind="cv")
+            (app_dir / "cv.de.md").write_text(cv_de, encoding="utf-8")
+            results["cv_de"] = cv_de
+
+            with get_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE applications 
+                        SET cv_de = ?, updated_at = ? 
+                        WHERE slug = ?
+                    """, (cv_de, timestamp, slug))
+                conn.commit()
+
+        if kind in ("cover-letter", "both"):
+            cover_path = app_dir / "cover-letter.md"
+            if not cover_path.exists():
+                return json.dumps({"error": f"English cover letter not found for slug {slug}"})
+            cover_en = cover_path.read_text(encoding="utf-8")
+            cover_de = translate_markdown(cover_en, kind="cover")
+            (app_dir / "cover-letter.de.md").write_text(cover_de, encoding="utf-8")
+            results["cover_letter_de"] = cover_de
+
+            with get_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE applications 
+                        SET cover_letter_de = ?, updated_at = ? 
+                        WHERE slug = ?
+                    """, (cover_de, timestamp, slug))
+                conn.commit()
+
+        results["status"] = "success"
+        results["slug"] = slug
+        return json.dumps(results)
+    except Exception as e:
+        log.exception(f"Failed to translate application for {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
 def create_application(source: str) -> str:
     """Generate a tailored application (CV + Cover Letter in EN/DE) for a specific job source.
     `source` can be a URL, a local file path, or an existing job slug."""
