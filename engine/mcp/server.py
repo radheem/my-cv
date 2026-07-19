@@ -1184,6 +1184,70 @@ def regenerate_application(slug: str) -> str:
 
 
 @mcp.tool()
+def cancel_queued_task(slug: str) -> str:
+    """Safely cancel any pending background tailoring or compilation task for a given slug in-memory.
+    
+    If the task was a fresh generation (status was 'queued'), it purges the DB row.
+    If it was a PDF compile (status was 'compiling'), it resets the status back to 'draft'.
+    """
+    try:
+        # 1. Safely extract and recreate the queue without the target slug under queue mutex
+        removed = False
+        cancelled_stage = "generate"
+        with _tailor_queue.mutex:
+            items = list(_tailor_queue.queue)
+            filtered_items = []
+            for item in items:
+                item_slug = ""
+                item_stage = "generate"
+                if isinstance(item, dict):
+                    item_slug = item.get("slug")
+                    item_stage = item.get("stage", "generate")
+                elif isinstance(item, tuple):
+                    item_slug = item[0]
+                else:
+                    item_slug = item
+                
+                if item_slug == slug:
+                    removed = True
+                    cancelled_stage = item_stage
+                else:
+                    filtered_items.append(item)
+            
+            if removed:
+                _tailor_queue.queue.clear()
+                _tailor_queue.queue.extend(filtered_items)
+
+        if not removed:
+            return json.dumps({
+                "status": "not_found",
+                "slug": slug,
+                "message": f"No pending task found in-memory matching slug '{slug}'."
+            })
+
+        # 2. Check and reset DB status based on cancelled task stage
+        if cancelled_stage == "generate":
+            with get_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("DELETE FROM applications WHERE slug = ?", (slug,))
+                conn.commit()
+        elif cancelled_stage == "compile":
+            with get_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE applications SET status = 'draft' WHERE slug = ?", (slug,))
+                conn.commit()
+
+        return json.dumps({
+            "status": "success",
+            "slug": slug,
+            "message": f"Successfully cancelled pending background task for slug '{slug}' and updated database state."
+        })
+    except Exception as e:
+        log.exception(f"Failed to cancel queued task for {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
 def create_application(source: str) -> str:
     """Generate a tailored application (CV + Cover Letter in EN/DE) for a specific job source.
     `source` can be a URL, a local file path, or an existing job slug."""
