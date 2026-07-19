@@ -1150,6 +1150,40 @@ def translate_application(slug: str, kind: str = "both") -> str:
 
 
 @mcp.tool()
+def regenerate_application(slug: str) -> str:
+    """Completely delete the existing application filesystem directory and DB row, then trigger a fresh tailoring run.
+    
+    This is useful to reset a stale or broken application and regenerate it from scratch bilingually.
+    """
+    try:
+        import shutil
+        import pathlib
+
+        # 1. Delete application row from DuckDB
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM applications WHERE slug = ?", (slug,))
+            conn.commit()
+
+        # 2. Delete filesystem directory recursively
+        app_dir = pathlib.Path("applications") / slug
+        if app_dir.exists():
+            shutil.rmtree(app_dir)
+
+        # 3. Call create_application_from_job to enqueue fresh generation
+        create_application_from_job(slug)
+
+        return json.dumps({
+            "status": "success",
+            "slug": slug,
+            "message": f"Successfully purged existing application '{slug}' and enqueued a fresh tailoring generation."
+        })
+    except Exception as e:
+        log.exception(f"Failed to regenerate application for {slug}")
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
 def create_application(source: str) -> str:
     """Generate a tailored application (CV + Cover Letter in EN/DE) for a specific job source.
     `source` can be a URL, a local file path, or an existing job slug."""
