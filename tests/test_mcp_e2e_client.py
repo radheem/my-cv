@@ -11,7 +11,7 @@ def server_params():
     """Returns the local stdio launch parameters for the cv-tailor MCP server."""
     return StdioServerParameters(
         command="uv",
-        args=["run", "cv-tailor-mcp"],
+        args=["run", "--no-project", "python", "-m", "engine.mcp.server"],
         env=os.environ
     )
 
@@ -93,7 +93,7 @@ async def run_standalone():
     
     params = StdioServerParameters(
         command="uv",
-        args=["run", "cv-tailor-mcp"],
+        args=["run", "--no-project", "python", "-m", "engine.mcp.server"],
         env=os.environ
     )
     

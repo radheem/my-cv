@@ -166,12 +166,19 @@ def render_cover_letter(
     guide: str,
     availability: str = "",
     relocation: str = "",
+    custom_instructions: str = "",
 ) -> str:
     logistics = ""
     if availability or relocation:
         logistics = (
             "Logistics to weave naturally into the close (availability / relocation / work authorization):\n"
             f"{availability}\n{relocation}\n\n"
+        )
+    custom_block = ""
+    if custom_instructions.strip():
+        custom_block = (
+            "## Custom Focus & Tailoring Instructions (High Priority - FOLLOW STRICTLY):\n"
+            f"{custom_instructions.strip()}\n\n"
         )
     user = (
         f"## Target job\nTitle: {jobspec.get('title')}\n"
@@ -181,6 +188,7 @@ def render_cover_letter(
         f"## Proof points (top projects — source facts; weave a couple in, do not list)\n"
         f"{_projects_block(tailoring['top_projects'], detailed=True)}\n\n"
         f"{logistics}"
+        f"{custom_block}"
         f"{_cover_exemplars()}"
         f"## House guide\n{guide}\n\n"
         "Write the tailored cover letter now."

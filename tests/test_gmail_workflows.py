@@ -119,6 +119,8 @@ def test_extract_job_details_workflow_invalid_url():
 def test_create_application_from_job_workflow_success(monkeypatch):
     from engine import cli
     calls = []
+    from engine.domains.gmail import ingest
+    monkeypatch.setattr(ingest, "verify_markdown_documents", lambda slug: (True, []))
     
     # Mock core CLI execution actions
     monkeypatch.setattr(cli, "cmd_new", lambda args: calls.append("new"))
@@ -216,3 +218,83 @@ def test_check_application_updates_workflow(monkeypatch):
     assert "Polymodal" in searches[0]
     assert "after:2026/06/30" in searches[0]
 
+
+
+def test_verify_markdown_documents_exhaustive(tmp_path, monkeypatch):
+    from engine.domains.gmail.ingest import verify_markdown_documents
+    monkeypatch.setenv("CV_TAILOR_JOBS_DIR", str(tmp_path))
+    
+    # 1. Non-existent slug
+    is_valid, errors = verify_markdown_documents("no-such-slug")
+    assert not is_valid
+    assert any("does not exist" in err for err in errors)
+    
+    # 2. Folder exists but missing files
+    app_dir = tmp_path / "test-slug"
+    app_dir.mkdir()
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert not is_valid
+    assert any("missing" in err for err in errors)
+    
+    # 3. Files too short
+    (app_dir / "cv.md").write_text("too short")
+    (app_dir / "cover-letter.md").write_text("also too short")
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert not is_valid
+    assert any("empty or too short" in err for err in errors)
+    
+    # 4. English placeholder
+    (app_dir / "cv.md").write_text("A" * 150 + " [Your Name] " + "B" * 150)
+    (app_dir / "cover-letter.md").write_text("C" * 150)
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert not is_valid
+    assert any("placeholder" in err for err in errors)
+    
+    # 5. German placeholder
+    (app_dir / "cv.md").write_text("A" * 150)
+    (app_dir / "cover-letter.md").write_text("C" * 150 + " [Ihr Name] " + "D" * 150)
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert not is_valid
+    assert any("placeholder" in err for err in errors)
+
+    # 6. Strict bracket uppercase (but not a markdown link)
+    (app_dir / "cover-letter.md").write_text("C" * 150 + " [ROLE_NAME] " + "D" * 150)
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert not is_valid
+    assert any("placeholder" in err or "ROLE_NAME" in err for err in errors)
+
+    # 7. Valid markdown link with brackets (should NOT be flagged)
+    (app_dir / "cover-letter.md").write_text("C" * 150 + " [Polymodal](https://polymodal.com) " + "D" * 150)
+    is_valid, errors = verify_markdown_documents("test-slug")
+    assert is_valid
+    assert not errors
+
+
+def test_decomposed_workflows_exhaustive(monkeypatch):
+    from engine import cli
+    calls = []
+    
+    # Mock CLI actions
+    monkeypatch.setattr(cli, "cmd_new", lambda args: calls.append("new"))
+    monkeypatch.setattr(cli, "cmd_pdf", lambda args: calls.append("pdf"))
+    monkeypatch.setattr(cli, "cmd_upload", lambda args: calls.append("upload"))
+    monkeypatch.setattr(cli, "cmd_status", lambda args: calls.append("status"))
+    
+    # Mock verify_markdown_documents to bypass file existence checks
+    from engine.domains.gmail import ingest
+    monkeypatch.setattr(ingest, "verify_markdown_documents", lambda slug: (True, []))
+    
+    # Test generate_markdown_workflow (Stage 1)
+    res1 = ingest.generate_markdown_workflow("test-slug")
+    assert "SUCCESS" in res1
+    assert "generated" in res1
+    assert calls == ["new"]
+    
+    # Test create_pdf_from_markdown_workflow (Stage 2)
+    res2 = ingest.create_pdf_from_markdown_workflow("test-slug")
+    assert "Complete" in res2
+    assert "Successfully" in res2
+    assert "rendered PDFs" in res2
+    assert "uploaded compiled" in res2
+    assert "synchronized application" in res2
+    assert calls == ["new", "pdf", "upload", "status"]

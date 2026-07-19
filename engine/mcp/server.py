@@ -12,6 +12,8 @@ from ..workflows import (
     list_gmail_jobs_workflow,
     extract_job_details_workflow,
     create_application_from_job_workflow,
+    generate_markdown_workflow,
+    create_pdf_from_markdown_workflow,
     generic_search_workflow,
     check_application_updates_workflow,
 )
@@ -339,13 +341,29 @@ def _tailor_consumer_worker():
         try:
             # Block indefinitely until a job is pushed to the queue
             item = _tailor_queue.get()
-            if isinstance(item, tuple):
+            if isinstance(item, dict):
+                slug = item.get("slug")
+                variant_override = item.get("variant")
+                custom_instructions = item.get("custom_instructions")
+                stage = item.get("stage", "generate")
+            elif isinstance(item, tuple):
                 slug, variant_override = item
+                custom_instructions = None
+                stage = "generate"
             else:
-                slug, variant_override = item, None
+                slug = item
+                variant_override = None
+                custom_instructions = None
+                stage = "generate"
                 
-            log.info(f"Serially processing queued tailoring job for slug: {slug} (forced variant: {variant_override})")
+            log.info(f"Serially processing queued tailoring job for slug: {slug} (stage: {stage})")
             
+            # Decide allowed statuses
+            if stage == "generate":
+                allowed_statuses = ('queued', 'failed')
+            else:
+                allowed_statuses = ('compiling', 'failed')
+
             # Transition the application row status to 'generating' in the database atomically
             is_valid_task = False
             try:
@@ -354,9 +372,9 @@ def _tailor_consumer_worker():
                         cur.execute("""
                             UPDATE applications 
                             SET status = 'generating', updated_at = CURRENT_TIMESTAMP 
-                            WHERE slug = %s AND status IN ('queued', 'failed')
+                            WHERE slug = %s AND status IN %s
                             RETURNING status
-                        """, (slug,))
+                        """, (slug, allowed_statuses))
                         row = cur.fetchone()
                         if row:
                             is_valid_task = True
@@ -371,13 +389,19 @@ def _tailor_consumer_worker():
 
             # Run the actual tailoring workflow
             try:
-                res = create_application_from_job_workflow(slug, variant_override)
+                if stage == "generate":
+                    res = generate_markdown_workflow(slug, variant_override, custom_instructions)
+                elif stage == "compile":
+                    res = create_pdf_from_markdown_workflow(slug)
+                else:
+                    res = f"ERROR: Unsupported stage {stage}"
+
                 if res.startswith("ERROR"):
                     log.error(f"Queued tailoring failed for {slug}: {res}")
                     _mark_application_failed(slug)
                 else:
                     log.info(f"Queued tailoring succeeded for {slug}: {res}")
-                    # Transition status to 'draft' and set drive_url atomically in database
+                    # Transition status to 'draft' and update records atomically in database
                     try:
                         from engine.cli import _jobs_dir
                         from engine import documents
@@ -391,17 +415,40 @@ def _tailor_consumer_worker():
                             except Exception:
                                 log.exception(f"Failed to parse index.md for drive_url extraction: {slug}")
 
+                        def read_file_safe(filename):
+                            p = app_dir / filename
+                            return p.read_text(encoding="utf-8") if p.exists() else None
+
+                        cv_en = read_file_safe("cv.md")
+                        cv_de = read_file_safe("cv.de.md")
+                        cover_letter_en = read_file_safe("cover-letter.md")
+                        cover_letter_de = read_file_safe("cover-letter.de.md")
+
+                        recipient = None
+                        if cover_letter_en:
+                            try:
+                                cl_meta, _ = documents.split_front_matter(cover_letter_en)
+                                recipient = cl_meta.get("recipient")
+                            except Exception:
+                                pass
+
                         with get_conn() as conn:
                             with conn.cursor() as cur:
-                                # 1. Update the original application row setting status to 'draft' and drive_url
+                                # Update fields
                                 cur.execute("""
                                     UPDATE applications
-                                    SET status = 'draft', drive_url = %s, updated_at = CURRENT_TIMESTAMP
+                                    SET status = 'draft',
+                                        drive_url = COALESCE(%s, drive_url),
+                                        cv_en = COALESCE(%s, cv_en),
+                                        cv_de = COALESCE(%s, cv_de),
+                                        cover_letter_en = COALESCE(%s, cover_letter_en),
+                                        cover_letter_de = COALESCE(%s, cover_letter_de),
+                                        recipient = COALESCE(%s, recipient),
+                                        updated_at = CURRENT_TIMESTAMP
                                     WHERE slug = %s AND status = 'generating'
-                                """, (drive_url or None, slug))
+                                """, (drive_url or None, cv_en, cv_de, cover_letter_en, cover_letter_de, recipient, slug))
                                 
-                                # 2. Delete any duplicate/orphaned rows created by migrate_legacy_data
-                                # where the slug matches but status is 'draft' and job_id doesn't match original
+                                # Delete any duplicate/orphaned rows
                                 cur.execute("""
                                     DELETE FROM applications
                                     WHERE slug = %s AND status = 'draft' AND job_id != (
@@ -411,7 +458,7 @@ def _tailor_consumer_worker():
                                 
                                 conn.commit()
                     except Exception as e:
-                        log.exception(f"Failed to update status to draft and set drive_url for slug: {slug}")
+                        log.exception(f"Failed to update status to draft and set details for slug: {slug}")
             except Exception as bg_e:
                 log.exception(f"Queued tailoring worker crashed for slug: {slug}")
                 _mark_application_failed(slug)
@@ -449,7 +496,7 @@ def _ensure_tailor_worker():
 
 
 @mcp.tool()
-def create_application_from_job(slug: str) -> str:
+def create_application_from_job(slug: str, custom_instructions: str = None) -> str:
     """Step 3 (Tailoring & PDF Rendering Path). Generate tailored job application documents (CV/CL in English and German) for a specific job slug.
     Use this tool to trigger the tailoring pipeline. It ranks your projects/skills, calls the LLM, compiles LaTeX PDFs bilingually, uploads them to Google Drive, and syncs status back to Google Sheets. Because LLM generation and PDF compilation are resource-intensive, requests are placed in an asynchronous in-memory background FIFO queue to process sequentially. You can monitor the application state (queued -> generating -> draft) on subsequent turns by calling 'get_application'.
     """
@@ -495,7 +542,12 @@ def create_application_from_job(slug: str) -> str:
 
         # 3. Ensure background worker is running and push to queue
         _ensure_tailor_worker()
-        _tailor_queue.put(slug)
+        _tailor_queue.put({
+            "slug": slug,
+            "variant": None,
+            "custom_instructions": custom_instructions,
+            "stage": "generate"
+        })
 
         return json.dumps({
             "status": "queued",
@@ -552,7 +604,7 @@ def preview_cv_variant(slug: str) -> str:
 
 
 @mcp.tool()
-def create_application_with_variant(slug: str, variant_filename: str) -> str:
+def create_application_with_variant(slug: str, variant_filename: str, custom_instructions: str = None) -> str:
     """Step 3.5 (Tailoring Override). Generate a tailored job application using a manually selected CV variant.
     Use this tool to completely bypass the automatic taxonomy/tag classification logic and force a specific CV variant template (e.g. telecommunication.md or platform-engineer.md).
     """
@@ -607,9 +659,14 @@ def create_application_with_variant(slug: str, variant_filename: str) -> str:
                 """, (job_id, slug))
                 conn.commit()
 
-        # 3. Ensure background worker is running and push (slug, variant_filename) tuple to queue
+        # 3. Ensure background worker is running and push dictionary payload to queue
         _ensure_tailor_worker()
-        _tailor_queue.put((slug, variant_filename))
+        _tailor_queue.put({
+            "slug": slug,
+            "variant": variant_filename,
+            "custom_instructions": custom_instructions,
+            "stage": "generate"
+        })
 
         return json.dumps({
             "status": "queued",
@@ -620,6 +677,69 @@ def create_application_with_variant(slug: str, variant_filename: str) -> str:
     except Exception as e:
         log.exception(f"Failed to queue manual variant application creation for slug: {slug}")
         return json.dumps({"error": f"Failed to queue application tailoring: {str(e)}"})
+
+
+@mcp.tool()
+def create_pdf_from_markdown(slug: str) -> str:
+    """Step 4 (PDF Rendering & Cloud Sync Path). Enqueue verification, PDF compilation, Google Drive upload, and tracking sheets synchronization for an existing tailored markdown draft.
+    Because LaTeX rendering and Drive uploads can take significant CPU/network resources, requests are executed asynchronously in our background sequential queue. You can monitor the state (compiling -> draft) by calling get_application.
+    """
+    try:
+        # 1. Check if the job exists in the database
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT job_id FROM jobs WHERE slug = %s", (slug,))
+                row = cur.fetchone()
+                if not row:
+                    return json.dumps({"error": f"Job with slug '{slug}' not found in database. Cannot compile PDFs."})
+                job_id = row["job_id"]
+
+                # Check if an application already exists and its current status
+                cur.execute("SELECT status FROM applications WHERE job_id = %s", (job_id,))
+                app_row = cur.fetchone()
+                if not app_row:
+                    return json.dumps({"error": f"No active application found for slug '{slug}'. Please generate markdown documents first using create_application_from_job."})
+                
+                status = app_row["status"]
+                # We can compile from 'draft' or 'failed' or other active states. If status is already compiling or generating, reject.
+                if status == "generating":
+                    return json.dumps({
+                        "status": "generating",
+                        "slug": slug,
+                        "message": "Application is already actively generating or compiling. No new action taken."
+                    })
+                if status == "compiling":
+                    return json.dumps({
+                        "status": "compiling",
+                        "slug": slug,
+                        "message": "Application compilation is already enqueued and waiting in line. No new action taken."
+                    })
+
+                # 2. Update status to 'compiling'
+                cur.execute("""
+                    UPDATE applications
+                    SET status = 'compiling', updated_at = CURRENT_TIMESTAMP
+                    WHERE job_id = %s
+                """, (job_id,))
+                conn.commit()
+
+        # 3. Ensure background worker is running and push to queue
+        _ensure_tailor_worker()
+        _tailor_queue.put({
+            "slug": slug,
+            "variant": None,
+            "custom_instructions": None,
+            "stage": "compile"
+        })
+
+        return json.dumps({
+            "status": "compiling",
+            "slug": slug,
+            "message": "Application compilation (Stage 2) has been added to the sequential background queue. You can monitor progress with get_application."
+        })
+    except Exception as e:
+        log.exception(f"Failed to queue PDF compilation for slug: {slug}")
+        return json.dumps({"error": f"Failed to queue PDF compilation: {str(e)}"})
 
 
 @mcp.tool()

@@ -364,28 +364,103 @@ def extract_job_details_workflow(url: str) -> str:
     return f"SUCCESS: Captured job with slug '{slug}' and saved to database."
 
 
-def create_application_from_job_workflow(slug: str, variant: str | None = None) -> str:
-    """Modular workflow to generate tailored application documents (CV/CL) for a specific job slug,
-    compile them into PDFs, upload them to Google Drive, and sync tracking statuses."""
+def verify_markdown_documents(slug: str) -> tuple[bool, list[str]]:
+    """Verify generated Markdown files are complete, non-empty, and free of placeholder artifacts."""
+    from engine.cli import _jobs_dir
+    from engine import documents
+    import re
+
+    app_dir = _jobs_dir() / slug
+    if not app_dir.is_dir():
+        return False, [f"Application directory '{app_dir}' does not exist."]
+
+    errors = []
+    required_files = ["cv.md", "cover-letter.md"]
+    
+    # Check optional translation files if present
+    if (app_dir / "cv.de.md").exists() or (app_dir / "cover-letter.de.md").exists():
+        required_files.extend(["cv.de.md", "cover-letter.de.md"])
+
+    placeholder_patterns = [
+        r"\[[Yy]our\s+[Nn]ame\]",
+        r"\[[Cc]ompany\s+[Nn]ame\]",
+        r"\[[Rr]ecipient\s+[Nn]ame\]",
+        r"\[[Dd]ate\]",
+        r"\[[Aa]ddress\]",
+        r"INSERT\s+HERE",
+        r"TODO",
+        # German equivalents
+        r"\[[Ii]hr\s+[Nn]ame\]",
+        r"\[[Dd]atum\]",
+        r"\[[Aa]nschrift\]",
+        r"\[[Nn]ame\s+des\s+[Ee]mpf[äa]ngers\]",
+        # Strict bracket uppercase (but not a markdown link)
+        r"\[[A-Z_]{2,}\](?!\()"
+    ]
+
+    for fname in required_files:
+        file_path = app_dir / fname
+        if not file_path.exists():
+            errors.append(f"Required markdown file '{fname}' is missing.")
+            continue
+            
+        content = file_path.read_text(encoding="utf-8")
+        if len(content.strip()) < 100:
+            errors.append(f"Markdown file '{fname}' is empty or too short.")
+            continue
+
+        # Front-matter validation
+        try:
+            meta, body = documents.split_front_matter(content)
+        except Exception as e:
+            errors.append(f"Failed to parse front-matter for '{fname}': {str(e)}")
+            body = content
+
+        for pattern in placeholder_patterns:
+            matches = re.findall(pattern, content)
+            if matches:
+                errors.append(f"File '{fname}' contains placeholder artifact: {', '.join(matches)}")
+
+    if errors:
+        return False, errors
+    return True, []
+
+
+def generate_markdown_workflow(
+    slug: str,
+    variant: str | None = None,
+    custom_instructions: str | None = None,
+) -> str:
+    """Stage 1: Generate tailored Markdown documents (CV/CL in EN and DE)."""
     import argparse
     from engine import cli
-    
-    logs = [f"=== Processing application tailoring for: {slug} ==="]
-    
-    # 1. Generate tailored markdown docs (cv.md, cover-letter.md, etc.)
+
     args_new = argparse.Namespace(
         source=slug, slug=slug, provider=None, model=None,
         ollama_url=None, no_translate=False, no_save_db=False, recipient=None,
-        variant=variant
+        variant=variant, instructions=custom_instructions
     )
     try:
         cli.cmd_new(args_new)
-        logs.append("  -> Successfully generated tailored cv.md and cover-letter.md")
+        return f"SUCCESS: Tailored markdown cv.md and cover-letter.md generated for {slug}."
     except Exception as e:
-        log.exception(f"Tailoring generation failed for slug {slug}")
+        log.exception(f"Tailoring markdown generation failed for slug {slug}")
         return f"ERROR: Tailoring generation failed: {str(e)}"
-        
-    # 2. Render Markdown docs to PDF via LaTeX
+
+
+def create_pdf_from_markdown_workflow(slug: str) -> str:
+    """Stage 2: Verify Markdown files, compile them to PDFs, upload to Drive, and sync Sheet status."""
+    import argparse
+    from engine import cli
+
+    logs = [f"=== Processing Stage 2 (PDF Compilation) for: {slug} ==="]
+
+    # 1. Verification Step
+    is_valid, verify_errors = verify_markdown_documents(slug)
+    if not is_valid:
+        return "ERROR: Markdown verification failed:\n" + "\n".join(f"- {err}" for err in verify_errors)
+
+    # 2. Render Markdown to LaTeX and compile PDFs
     try:
         args_pdf = argparse.Namespace(slug=slug)
         cli.cmd_pdf(args_pdf)
@@ -393,7 +468,7 @@ def create_application_from_job_workflow(slug: str, variant: str | None = None) 
     except Exception as e:
         log.exception(f"LaTeX PDF rendering failed for slug {slug}")
         return f"ERROR: PDF rendering failed: {str(e)}"
-        
+
     # 3. Upload compiled PDFs to Google Drive
     try:
         args_upload = argparse.Namespace(slug=slug)
@@ -402,17 +477,26 @@ def create_application_from_job_workflow(slug: str, variant: str | None = None) 
     except Exception as e:
         log.exception(f"Google Drive upload failed for slug {slug}")
         return f"ERROR: Google Drive upload failed: {str(e)}"
-        
-    # 4. Synchronize statuses to Google Sheets
+
+    # 4. Synchronize status to Google Sheets
     try:
         args_push = argparse.Namespace(slug="push", state=None)
         cli.cmd_status(args_push)
         logs.append("  -> Successfully synchronized application sheets!")
     except Exception as e:
         logs.append(f"WARNING: Sheets sync skipped or failed: {str(e)}")
-        
-    logs.append("=== Application Tailoring Pipeline Complete ===")
+
+    logs.append("=== PDF Compilation Pipeline Complete ===")
     return "\n".join(logs)
+
+
+def create_application_from_job_workflow(slug: str, variant: str | None = None) -> str:
+    """Compose Stage 1 and Stage 2 sequentially for backward compatibility."""
+    res1 = generate_markdown_workflow(slug, variant)
+    if res1.startswith("ERROR"):
+        return res1
+    res2 = create_pdf_from_markdown_workflow(slug)
+    return f"{res1}\n\n{res2}"
 
 
 def generic_search_workflow(query: str, limit: int = 10, include_bodies: bool = True) -> str:

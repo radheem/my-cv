@@ -146,6 +146,7 @@ def test_mcp_new_gmail_modular_tools(monkeypatch):
     import multiprocessing
     monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "SUCCESS")
     
     res_extract = server.extract_job_details("https://www.linkedin.com/jobs/view/12345/")
     assert "SUCCESS" in res_extract
@@ -225,6 +226,7 @@ def test_mcp_3step_pipeline_e2e(monkeypatch):
             
     monkeypatch.setattr(multiprocessing, "get_context", lambda method: MockContext())
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "SUCCESS")
 
     # --- STEP 3 Mocking ---
     cli_calls = []
@@ -352,6 +354,7 @@ def test_mcp_direct_pipeline_e2e(monkeypatch):
     monkeypatch.setattr(cli, "cmd_upload", lambda args: cli_calls.append("upload"))
     monkeypatch.setattr(cli, "cmd_status", lambda args: cli_calls.append("status"))
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "SUCCESS")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "SUCCESS")
 
     # --- PIPELINE RUN ---
 
@@ -450,6 +453,8 @@ def test_mcp_create_application_idempotency():
 
 def test_mcp_stress_duplicate_queue_filtering(monkeypatch):
     from engine.mcp import server
+    server._tailor_worker_started = False
+    from engine.mcp import server
     from engine.shared.db import get_conn
     import json
     import time
@@ -473,6 +478,7 @@ def test_mcp_stress_duplicate_queue_filtering(monkeypatch):
         return "SUCCESS"
 
     monkeypatch.setattr(server, "create_application_from_job_workflow", mock_workflow)
+    monkeypatch.setattr(server, "generate_markdown_workflow", mock_workflow)
 
     # Empty the queue to ensure zero interference from previous tests
     while not server._tailor_queue.empty():
@@ -518,6 +524,7 @@ def test_mcp_create_application_async_success(monkeypatch):
 
     # Mock workflow to simulate a fast success
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "Complete success!")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "Complete success!")
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-acme-slug"))
@@ -547,6 +554,7 @@ def test_mcp_create_application_async_failure(monkeypatch):
 
     # Mock workflow to simulate a failure
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "ERROR: Something went wrong")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "ERROR: Something went wrong")
 
     # 1. Trigger generation
     res = json.loads(server.create_application_from_job("mock-fail-slug"))
@@ -595,6 +603,7 @@ def test_mcp_stress_batch_creation_delete(monkeypatch):
 
     # Mock workflow to avoid slow actual compilation during this stress test
     monkeypatch.setattr(server, "create_application_from_job_workflow", lambda slug: "Complete success!")
+    monkeypatch.setattr(server, "generate_markdown_workflow", lambda slug, *a, **kw: "Complete success!")
 
     # 1. Save 3 dummy jobs
     slugs = []
@@ -719,3 +728,59 @@ def test_mcp_gmail_search_tools(monkeypatch):
 
 
 
+
+
+def test_mcp_queue_dictionary_payloads(monkeypatch):
+    from engine.mcp import server
+    from engine.shared.db import get_conn
+    import json
+
+    # Ensure background worker doesn't run during this test to inspect queue manually
+    monkeypatch.setattr(server, "_ensure_tailor_worker", lambda: None)
+
+    # Insert mock job
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO jobs (job_id, slug, company, title, source, platform, description)
+                VALUES ('payload-job-123', 'mock-payload-slug', 'Acme Payload', 'Engineer', 'file', 'other', 'JD')
+                ON CONFLICT (job_id) DO UPDATE SET slug = EXCLUDED.slug
+            """)
+            cur.execute("DELETE FROM applications WHERE slug = 'mock-payload-slug'")
+            conn.commit()
+
+    # Clear queue
+    while not server._tailor_queue.empty():
+        try:
+            server._tailor_queue.get_nowait()
+        except Exception:
+            break
+
+    # 1. Test create_application_from_job enqueues a dictionary with generate stage
+    res_str = server.create_application_from_job("mock-payload-slug", custom_instructions="Focus on Python")
+    res = json.loads(res_str)
+    assert res["status"] == "queued"
+
+    assert not server._tailor_queue.empty()
+    item = server._tailor_queue.get_nowait()
+    assert isinstance(item, dict)
+    assert item["slug"] == "mock-payload-slug"
+    assert item["stage"] == "generate"
+    assert item["custom_instructions"] == "Focus on Python"
+
+    # 2. Test create_pdf_from_markdown enqueues a compile stage and sets compiling status
+    res_compile_str = server.create_pdf_from_markdown("mock-payload-slug")
+    res_compile = json.loads(res_compile_str)
+    assert res_compile["status"] == "compiling"
+
+    assert not server._tailor_queue.empty()
+    item_compile = server._tailor_queue.get_nowait()
+    assert isinstance(item_compile, dict)
+    assert item_compile["slug"] == "mock-payload-slug"
+    assert item_compile["stage"] == "compile"
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT status FROM applications WHERE slug = 'mock-payload-slug'")
+            row = cur.fetchone()
+            assert row["status"] == "compiling"

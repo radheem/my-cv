@@ -312,10 +312,12 @@ def cmd_new(args: argparse.Namespace) -> int:
         tailoring["top_projects"] = cv_projects
 
     print("Rendering cover letter ...", file=sys.stderr)
+    instructions = getattr(args, "instructions", None) or ""
     cl_body = render.render_cover_letter(
         spec, tailoring, profile.get("summary", ""), job_text, cl_guide,
         availability=profile.get("availability", ""),
         relocation=_student_relocation(spec.get("title", ""), profile.get("relocation", "")),
+        custom_instructions=instructions,
     )
 
     cv_fm = f"---\ntagline: {_yaml(tagline)}\n---\n\n"
@@ -1255,6 +1257,7 @@ def main(argv: list[str] | None = None) -> int:
     p_new.add_argument("--recipient", default=None, help="cover-letter salutation name")
     p_new.add_argument("--no-translate", action="store_true", help="skip the German translation")
     p_new.add_argument("--variant", default=None, help="Force a specific CV variant filename (e.g. telecommunication.md) and bypass automatic classification.")
+    p_new.add_argument("--instructions", default=None, help="Custom instructions or guidance for tailoring.")
     _add_provider_flags(p_new)
     p_new.set_defaults(func=cmd_new)
 

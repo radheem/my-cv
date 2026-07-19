@@ -8,6 +8,8 @@ from ..domains.gmail.ingest import (
     list_gmail_jobs_workflow,
     extract_job_details_workflow,
     create_application_from_job_workflow,
+    generate_markdown_workflow,
+    create_pdf_from_markdown_workflow,
     generic_search_workflow,
     check_application_updates_workflow,
 )
@@ -20,6 +22,8 @@ __all__ = [
     "list_gmail_jobs_workflow",
     "extract_job_details_workflow",
     "create_application_from_job_workflow",
+    "generate_markdown_workflow",
+    "create_pdf_from_markdown_workflow",
     "generic_search_workflow",
     "check_application_updates_workflow",
 ]
