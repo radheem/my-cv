@@ -12,7 +12,7 @@
     - [ ] Expose `translate_application(slug, kind)` as an MCP tool in `engine/mcp/server.py`.
     - [ ] Ensure it loads the current draft, calls `translate_markdown` bilingually, writes translated `.de.md` files to disk, and updates database columns (`cv_de`/`cover_letter_de`).
     - [ ] Ensure tests pass (Green phase).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Iterative Revision Engine & Independent Translation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Iterative Revision Engine & Independent Translation' (Protocol in workflow.md) (8a657c0)
 
 ## Phase 2: Smart Regeneration & Queue Control Tools
 - [ ] Task: Implement Smart Regeneration
