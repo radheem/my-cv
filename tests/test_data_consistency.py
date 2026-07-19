@@ -70,3 +70,17 @@ def test_project_highlights_are_subsets_of_master_or_summary():
     for p in projects:
         if p.get("highlights"):
             assert isinstance(p["highlights"], list) and p["highlights"], p["id"]
+
+
+def test_project_doc_urls_are_consistent():
+    """Verify that every project has a valid doc_url matching the expected pattern."""
+    _, _, projects = _load()
+    for p in projects:
+        assert "doc_url" in p, f"Project {p["id"]} is missing doc_url"
+        doc = p.get("doc", "")
+        doc_url = p.get("doc_url", "")
+        assert doc_url.startswith("https://radheem.github.io/my-cv/"), f"doc_url for {p["id"]} is invalid: {doc_url}"
+        if doc.endswith(".md"):
+            slug = doc[:-3]
+            expected_url = f"https://radheem.github.io/my-cv/{slug}/"
+            assert doc_url == expected_url, f"doc_url for {p["id"]} mismatch: expected {expected_url}, got {doc_url}"

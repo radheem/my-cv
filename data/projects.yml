@@ -21,6 +21,7 @@ projects:
     name: "IRS Platform (Stealth)"
     weight: 1.4
     doc: projects/irs.md
+    doc_url: "https://radheem.github.io/my-cv/projects/irs/"
     url: ""
     summary: "Distributed Go microservices on native NATS (JetStream + KV) and gRPC, with MCP tooling for LLM agents and a Hatchet-orchestrated ETL pipeline."
     # Role-neutral facts (verbatim from master-cv.md "Selected Work"). The CV
@@ -41,6 +42,7 @@ projects:
     name: "My Notebook (Document RAG)"
     weight: 1.2
     doc: projects/my-notebook.md
+    doc_url: "https://radheem.github.io/my-cv/projects/my-notebook/"
     url: "https://github.com/radheem/my-notebook"
     summary: "Self-hosted RAG document-intelligence service: durable Hatchet ingestion, local llama.cpp inference, pgvector semantic search, NATS JetStream progress streaming on a k3d homelab."
     highlights:
@@ -56,6 +58,7 @@ projects:
     name: "cv-tailor (LLM CV/Cover Tailoring + LinkedIn Automation)"
     weight: 1.1
     doc: projects/cv-tailor.md
+    doc_url: "https://radheem.github.io/my-cv/projects/cv-tailor/"
     url: "https://github.com/radheem/cv-tailor"
     summary: "Python CLI tool and FastMCP server that turns a job posting into a tailored CV + cover letter: pure ranker picks facts and LLM only writes prose, with automated multi-source Gmail alert ingestion (LinkedIn, Indeed, Glassdoor, Fraunhofer), and Google Sheets lifecycle syncing."
     highlights:
@@ -71,6 +74,7 @@ projects:
     name: "HA K3s Cluster Platform (k3d + Cilium)"
     weight: 0.85
     doc: projects/k3d.md
+    doc_url: "https://radheem.github.io/my-cv/projects/k3d/"
     url: "https://github.com/radheem/home-lab"
     summary: "Reboot-resilient HA K3s clusters in Docker, kube-proxy-free in eBPF mode with Cilium L2 LoadBalancer, a sequential-boot orchestrator, and self-healing CNI."
     domains: ["platform", "devops", "infra"]
@@ -81,6 +85,7 @@ projects:
     name: "Homelab (Zero-Touch LAN DNS)"
     weight: 0.85
     doc: projects/homelab.md
+    doc_url: "https://radheem.github.io/my-cv/projects/homelab/"
     url: "https://github.com/radheem/home-lab"
     summary: "Declarative k3d home lab where a Service + HTTPRoute with a *.home.lan host is reachable by name with automatic HTTPS — ExternalDNS + authoritative CoreDNS, Cilium Gateway, cert-manager."
     domains: ["platform", "devops", "infra"]
@@ -90,6 +95,7 @@ projects:
   - id: oran-aiml
     name: "O-RAN AIML Framework"
     doc: projects/oran-aiml.md
+    doc_url: "https://radheem.github.io/my-cv/projects/oran-aiml/"
     url: "https://github.com/radheemCorp/O-RAN-AIML-deployment"
     summary: "End-to-end AI/ML platform for O-RAN 5G networks (Kubeflow + KServe) driven by a custom Python client/SDK. 15-credit research project, graded 1.0 (A)."
     highlights:
@@ -105,6 +111,7 @@ projects:
   - id: oran-testbed
     name: "O-RAN Testbed (Open5GS + RIC + OCUDU gNB)"
     doc: projects/oran-testbed.md
+    doc_url: "https://radheem.github.io/my-cv/projects/oran-testbed/"
     url: "https://github.com/radheemCorp/oran-testbed"
     summary: "Composable single-host 5G SA testbed (Open5GS 5GC + O-RAN SC Near-RT RIC + OCUDU/srsRAN gNB, ZMQ/UHD) with Python xApps over E2 and a Kafka metrics pub/sub fan-out to InfluxDB, MongoDB, and an AIMLFW store."
     highlights:
@@ -119,6 +126,7 @@ projects:
   - id: 5g-testbed
     name: "5G srsRAN Testbed (Kubernetes)"
     doc: projects/5g-testbed.md
+    doc_url: "https://radheem.github.io/my-cv/projects/5g-testbed/"
     url: "https://github.com/radheemCorp/srsRAN-dep-zmq"
     summary: "Kubernetes 5G testbed (srsRAN + Open5GS) with Multus CNI, an O-RAN RIC over E2, ONOS SDN, and 50+ Mbps throughput."
     highlights:
@@ -134,6 +142,7 @@ projects:
     name: "Infinite Stickman (Arcade Runner)"
     weight: 0.6
     doc: projects/stickman.md
+    doc_url: "https://radheem.github.io/my-cv/projects/stickman/"
     url: "https://github.com/radheem/stickman"
     summary: "Endless monochrome arcade runner in vanilla JS + HTML5 Canvas — no framework, no build step — with a Google Sheets + Apps Script global leaderboard."
     domains: ["frontend", "web"]
@@ -144,6 +153,7 @@ projects:
     name: "Sheet Dashboard (Google Sheets)"
     weight: 0.6
     doc: projects/csv-dashboard.md
+    doc_url: "https://radheem.github.io/my-cv/projects/csv-dashboard/"
     url: "https://github.com/radheem/csv-dashboard"
     summary: "Zero-backend web app that turns any link-shared Google Sheet into a live dashboard — client-side CSV parsing, KPI cards, charts, and an extensible data-type registry."
     domains: ["frontend", "web", "data"]
@@ -154,6 +164,7 @@ projects:
     name: "Gitpress (Zero-Server Blog)"
     weight: 0.6
     doc: projects/gitpress.md
+    doc_url: "https://radheem.github.io/my-cv/projects/gitpress/"
     url: "https://github.com/radheem/gitpress"
     summary: "Static blog CMS with no servers or databases — Google Docs as content source, GitHub Actions build pipeline, GitHub Pages hosting, Apps Script for forms/analytics."
     domains: ["web", "platform"]
@@ -164,6 +175,7 @@ projects:
     name: "Data Analyzer"
     weight: 1.0
     doc: projects/data-analyzer.md
+    doc_url: "https://radheem.github.io/my-cv/projects/data-analyzer/"
     url: "https://github.com/radheem/big-query"
     summary: "Model Context Protocol (MCP) server providing LLM access to Google BigQuery Political Ads dataset, integrated with Grafana."
     highlights:
