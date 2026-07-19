@@ -1,7 +1,7 @@
 # Implementation Plan: Upload Markdown Source Files to Google Drive
 
 ## Phase 1: Engine Collection Update
-- [ ] Task: Update local file collection
+- [x] Task: Update local file collection (a75611b)
     - [ ] Write failing unit tests in `tests/test_cli_paths.py` (or similar) ensuring `_build_app` collects `.md` files alongside `.pdf` files, while explicitly ignoring `index.md`.
     - [ ] Modify `engine/cli.py` -> `_build_app()` to glob all `*.md` files in the directory.
     - [ ] Implement filter to safely exclude `index.md`.
