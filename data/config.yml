@@ -48,6 +48,7 @@ prompts:
   dir: data/prompts
   cv: cv.md
   cover: cover.md
+  translate: translate.md
   jobspec: jobspec.md
   judge: judge.md
   variant: variant.md
