@@ -47,14 +47,14 @@ def generate_one(slug: str) -> dict:
     from engine import cli, jobspec as jobspec_mod, manifest as manifest_mod, rank, render, llm
 
     case = harness.load_case(slug)
-    profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking = cli._load_data()
+    profile, projects, master_cv, taxonomy, ranking = cli._load_data()
 
     t0 = time.time()
     spec = jobspec_mod.extract_jobspec(case.job_text)
     tailoring = rank.tailor(spec, profile, projects, taxonomy=taxonomy, ranking=ranking)
-    tagline, cv_body = render.render_cv(spec, tailoring, master_cv, cv_guide)
+    tagline, cv_body = render.render_cv(spec, tailoring, master_cv)
     cl_body = render.render_cover_letter(
-        spec, tailoring, profile.get("summary", ""), case.job_text, cl_guide,
+        spec, tailoring, profile.get("summary", ""), case.job_text,
         availability=profile.get("availability", ""),
         relocation=profile.get("relocation", ""),
     )

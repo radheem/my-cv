@@ -61,16 +61,14 @@ def _load_optional_yaml(path: pathlib.Path) -> dict:
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
-def _load_data(data: pathlib.Path | None = None) -> tuple[dict, list, str, str, str, dict, dict]:
+def _load_data(data: pathlib.Path | None = None) -> tuple[dict, list, str, dict, dict]:
     data = data or _data_dir()
     profile = yaml.safe_load((data / "profile.yml").read_text(encoding="utf-8"))
     projects = yaml.safe_load((data / "projects.yml").read_text(encoding="utf-8"))["projects"]
     master_cv = (data / "master-cv.md").read_text(encoding="utf-8")
-    cv_guide = (data / "guides" / "how-to-write-a-cv.md").read_text(encoding="utf-8")
-    cl_guide = (data / "guides" / "how-to-write-a-cover-letter.md").read_text(encoding="utf-8")
     taxonomy = _load_optional_yaml(data / "taxonomy.yml")
     ranking = _load_optional_yaml(data / "ranking.yml")
-    return profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking
+    return profile, projects, master_cv, taxonomy, ranking
 
 
 def _yaml(value: str) -> str:
@@ -253,7 +251,7 @@ def _build_app(slug: str) -> list[pathlib.Path]:
 
 def cmd_new(args: argparse.Namespace) -> int:
     _apply_provider_flags(args)
-    profile, projects, master_cv, cv_guide, cl_guide, taxonomy, ranking = _load_data()
+    profile, projects, master_cv, taxonomy, ranking = _load_data()
 
     print(f"Fetching job from {args.source} ...", file=sys.stderr)
     job_text = fetch.fetch_job_text(args.source)
@@ -316,7 +314,7 @@ def cmd_new(args: argparse.Namespace) -> int:
     print("Rendering cover letter ...", file=sys.stderr)
     instructions = getattr(args, "instructions", None) or ""
     cl_body = render.render_cover_letter(
-        spec, tailoring, profile.get("summary", ""), job_text, cl_guide,
+        spec, tailoring, profile.get("summary", ""), job_text,
         availability=profile.get("availability", ""),
         relocation=_student_relocation(spec.get("title", ""), profile.get("relocation", "")),
         custom_instructions=instructions,
@@ -1163,7 +1161,7 @@ def cmd_gmail_send(args: argparse.Namespace) -> int:
 
 
 def cmd_analyze(args: argparse.Namespace) -> int:
-    profile, _, _, _, _, taxonomy, _ = _load_data()
+    profile, _, _, taxonomy, _ = _load_data()
     from .domains.tailoring import analysis
     from engine.shared import config
 

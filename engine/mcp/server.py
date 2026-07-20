@@ -1361,9 +1361,9 @@ def get_cv_guide() -> str:
     try:
         import pathlib
         root = pathlib.Path(__file__).resolve().parent.parent.parent
-        cv_guide_path = root / "data" / "guides" / "how-to-write-a-cv.md"
+        cv_guide_path = root / "data" / "prompts" / "cv.md"
         if not cv_guide_path.exists():
-            return "ERROR: CV writing guide not found at data/guides/how-to-write-a-cv.md"
+            return "ERROR: CV writing guide not found at data/prompts/cv.md"
         return cv_guide_path.read_text(encoding="utf-8")
     except Exception as e:
         log.exception("Failed to load CV guide")
@@ -1376,9 +1376,9 @@ def get_cover_letter_guide() -> str:
     try:
         import pathlib
         root = pathlib.Path(__file__).resolve().parent.parent.parent
-        cover_guide_path = root / "data" / "guides" / "how-to-write-a-cover-letter.md"
+        cover_guide_path = root / "data" / "prompts" / "cover.md"
         if not cover_guide_path.exists():
-            return "ERROR: Cover letter guide not found at data/guides/how-to-write-a-cover-letter.md"
+            return "ERROR: Cover letter guide not found at data/prompts/cover.md"
         return cover_guide_path.read_text(encoding="utf-8")
     except Exception as e:
         log.exception("Failed to load cover letter guide")

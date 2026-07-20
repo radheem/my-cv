@@ -194,7 +194,7 @@ def test_cmd_analyze(mock_config_load, mock_load_data, taxonomy_fixture, profile
 
     seed_jobs_db()
     
-    mock_load_data.return_value = (profile_fixture, [], "", "", "", taxonomy_fixture, {})
+    mock_load_data.return_value = (profile_fixture, [], "", taxonomy_fixture, {})
     mock_config_load.return_value = {
         "tailoring": {
             "cv_variants": {

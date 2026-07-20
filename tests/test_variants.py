@@ -121,7 +121,7 @@ def test_cmd_new_variants_pipeline_integration(
         "aliases": {},
         "clusters": {"platform-engineer": {"tags": ["kubernetes"]}}
     }
-    mock_load_data.return_value = (profile, projects_cat, "master cv", "cv guide", "cl guide", taxonomy, {})
+    mock_load_data.return_value = (profile, projects_cat, "master cv", taxonomy, {})
     
     # 3. Setup mock webpage fetch and jobspec extraction
     mock_fetch.return_value = "Wanted: Kubernetes expert."
