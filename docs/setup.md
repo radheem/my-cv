@@ -99,6 +99,22 @@ One-time: **Settings → Pages → Source: GitHub Actions**. No secrets are need
 the generic CV PDF and builds the portfolio (`.github/workflows/deploy.yml`). Generation, PDF
 rendering, and Drive upload are always local steps.
 
+## Startup Scraper & Login Control
+
+When deploying the container stack (`docker compose up -d`), you can control the active background crawler and automated LinkedIn credential login behavior using `.env` parameters to prevent bot detection and facilitate manual VNC logins.
+
+### Auto-Crawler Boot (`SCRAPE_JOBS`)
+- **Variable:** `SCRAPE_JOBS=false` (Default: `false`)
+- **Behavior:**
+  - **`true`:** The container automatically triggers `cv-tailor hunt` on boot.
+  - **`false`:** The container skips the auto-hunt crawl, prints a clean status message, and enters an idle state (`sleep infinity`), keeping the container alive. You can trigger hunts manually anytime with `docker compose exec -it ingest cv-tailor hunt`.
+
+### Automated Login Override (`LOGIN_ON_START`)
+- **Variable:** `LOGIN_ON_START=true` (Default: `true`)
+- **Behavior:**
+  - **`true`:** Automatically types credentials for cold sessions.
+  - **`false`:** If not authenticated, the crawler suspends automated credential typing (avoiding CAPTCHA traps) and halts. It emits warning JSON logs and enters a 5-minute polling loop waiting for you to connect via VNC (port 5900) and log in manually. Once logged in, it resumes crawling automatically. If 5 minutes pass without login, the Python script exits gracefully, and the container idles.
+
 ## Environment variables
 
 | Variable | Where | Purpose |
@@ -107,5 +123,7 @@ rendering, and Drive upload are always local steps.
 | `CV_TAILOR_PROVIDER` / `CV_TAILOR_MODEL` | local | provider + model |
 | `CV_TAILOR_OLLAMA_BASE_URL` / `CV_TAILOR_OLLAMA_API_KEY` | local | local endpoint |
 | `APPS_SCRIPT_URL` / `APPS_SCRIPT_TOKEN` / `GDRIVE_FOLDER_ID` | local | Google Drive upload |
+| `SCRAPE_JOBS` | container | If true, auto-starts crawler on startup (default: false) |
+| `LOGIN_ON_START` | container | If false, pauses and polls for manual VNC login (default: true) |
 
 See [Architecture](architecture.md) for how the pieces fit together.

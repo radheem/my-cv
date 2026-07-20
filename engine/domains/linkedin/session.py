@@ -233,6 +233,36 @@ class LinkedInSession:
         if classify_page(page.url, page.content()) == PageState.LOGGED_IN:
             log.info("already authenticated (warm profile)")
             return
+
+        login_on_start = os.environ.get("LOGIN_ON_START", "true").lower() in ("true", "1", "yes")
+        if not login_on_start:
+            import json
+            log.warning("Not authenticated on LinkedIn, and LOGIN_ON_START is set to false.")
+            log.warning("Bypassing automated credential login. Please connect to VNC (port 5900) and log in manually.")
+            log.warning(json.dumps({"event": "manual_login_wait", "status": "waiting_on_vnc"}))
+            print("\n⏰ Waiting for manual login via VNC viewer... Press Ctrl+C to cancel.\n", flush=True)
+            
+            timeout = 300  # 5 minutes
+            interval = 5
+            elapsed = 0
+            authenticated = False
+            
+            while elapsed < timeout:
+                page.goto(FEED_URL, wait_until="domcontentloaded")
+                settle(page)
+                if classify_page(page.url, page.content()) == PageState.LOGGED_IN:
+                    authenticated = True
+                    break
+                time.sleep(interval)
+                elapsed += interval
+                
+            if not authenticated:
+                log.error(json.dumps({"event": "manual_login_timeout", "status": "failed"}))
+                raise SystemExit("Manual login timed out. LOGIN_ON_START is false and no manual login was detected within 300 seconds.")
+                
+            log.info("Authenticated successfully via manual VNC login!")
+            return
+
         self._login(page)
 
     def _login(self, page) -> None:
