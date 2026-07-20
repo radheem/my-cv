@@ -18,7 +18,7 @@ from typing import Any
 from .shared import config
 from .domains.tailoring import llm, prompts
 from .domains.tailoring.jobspec import _SYSTEM as _JOBSPEC_SYSTEM
-from .domains.tailoring.render import _COVER_SYSTEM, _CV_SYSTEM
+from .domains.tailoring.render import _CV_SYSTEM_FALLBACK, _COVER_SYSTEM_FALLBACK, _TRANSLATE_SYSTEM_FALLBACK
 from .domains.tailoring.variants import _VARIANT_SELECTION_SYSTEM
 
 SCHEMA = 1
@@ -32,8 +32,6 @@ _INPUT_FILES = (
     "data/projects.yml",
     "data/taxonomy.yml",
     "data/ranking.yml",
-    "data/guides/how-to-write-a-cv.md",
-    "data/guides/how-to-write-a-cover-letter.md",
     "data/prompts/exemplars/cover.yml",
 )
 
@@ -66,8 +64,9 @@ def build(*, decisions: dict[str, Any], generated_at: str = "",
         "max_tokens": cfg["max_tokens"],
         "seed": cfg["seed"],
         "prompts": {
-            "cv": prompts.meta("cv", _CV_SYSTEM, root=root),
-            "cover": prompts.meta("cover", _COVER_SYSTEM, root=root),
+            "cv": prompts.meta("cv", _CV_SYSTEM_FALLBACK, root=root),
+            "cover": prompts.meta("cover", _COVER_SYSTEM_FALLBACK, root=root),
+            "translate": prompts.meta("translate", _TRANSLATE_SYSTEM_FALLBACK, root=root),
             "jobspec": prompts.meta("jobspec", _JOBSPEC_SYSTEM, root=root),
             "variant": prompts.meta("variant", _VARIANT_SELECTION_SYSTEM, root=root),
         },
