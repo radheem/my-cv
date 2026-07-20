@@ -25,13 +25,13 @@
 - [x] **Task: Conductor - User Manual Verification 'Phase 2: Refactor Rendering Engine (render.py and manifest.py)' (Protocol in workflow.md)** (3daf400)
 
 ## Phase 3: Refactor Core Data Loader (cli.py), Caller Adjustments, and TDD/E2E Verification
-- [ ] **Task: Refactor CLI Data Loader**
-    - [ ] Refactor `_load_data()` in `engine/cli.py` to remove the deprecated guides, change signature to return 5 elements: `profile, projects, master_cv, taxonomy, ranking`.
-- [ ] **Task: Refactor Callers and Tests to Match New Signature**
-    - [ ] Update all references to `_load_data` in `engine/cli.py` to match the 5-element signature.
-    - [ ] Update test files `tests/test_variants.py`, `tests/test_analysis.py`, and `tests/experiments/run.py` to match the 5-element signature.
-- [ ] **Task: Run Test Suite and Verify Correctness (TDD Verification)**
-    - [ ] Run the complete test suite `uv run --no-sync python3 -m pytest` and resolve any signature, compilation, or mock issues.
-- [ ] **Task: Perform End-to-End Visual & Tone Verification**
-    - [ ] Run a test application generation to verify that cover letters are generated with the new subtle, mature engineering tone with zero dramatic clichés.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 3: Refactor Core Data Loader (cli.py), Caller Adjustments, and TDD/E2E Verification' (Protocol in workflow.md)**
+- [x] **Task: Refactor CLI Data Loader** (615f33a)
+    - [x] Refactor `_load_data()` in `engine/cli.py` to remove the deprecated guides, change signature to return 5 elements: `profile, projects, master_cv, taxonomy, ranking`. (615f33a)
+- [x] **Task: Refactor Callers and Tests to Match New Signature** (615f33a)
+    - [x] Update all references to `_load_data` in `engine/cli.py` to match the 5-element signature. (615f33a)
+    - [x] Update test files `tests/test_variants.py`, `tests/test_analysis.py`, and `tests/experiments/run.py` to match the 5-element signature. (615f33a)
+- [x] **Task: Run Test Suite and Verify Correctness (TDD Verification)** (615f33a)
+    - [x] Run the complete test suite `uv run --no-sync python3 -m pytest` and resolve any signature, compilation, or mock issues. (615f33a)
+- [x] **Task: Perform End-to-End Visual & Tone Verification** (615f33a)
+    - [x] Run a test application generation to verify that cover letters are generated with the new subtle, mature engineering tone with zero dramatic clichés. (615f33a)
+- [x] **Task: Conductor - User Manual Verification 'Phase 3: Refactor Core Data Loader (cli.py), Caller Adjustments, and TDD/E2E Verification' (Protocol in workflow.md)** (615f33a)
