@@ -1,7 +1,7 @@
 # How to write a tailored cover letter
 
 The per-job cover letter (`docs/jobs/<slug>/cover-letter.md`) is **~2 short sections,
-~150-250 words**, optimized for a punchy, highly scannable reading experience.
+~250-300 words**, optimized for a punchy, highly scannable reading experience.
 Written for a non-technical first reader (HR / recruiter) — keep it light; the CV
 and portfolio carry the technical depth.
 
@@ -13,9 +13,9 @@ Source material: `data/profile.yml` (situation, narrative, logistics),
 The cover letter must strictly follow this H2-based structured template. **Always leave a double blank line between a heading and the paragraph text below it.**
 
 - `## 1. Why <Actual Company Name>?`
-  State the role and a brief professional intro. State one clear, genuine hook connecting professional motivation/personal interest to the company's mission/problem. Avoid cliché openings like "I am excited to apply".
+  State the role and a brief professional intro. State one clear, genuine hook connecting professional motivation/personal interest to the company's mission/problem. Avoid cliché openings like "I am excited to apply" or saying XYZ is exactly the thing I want to do. Lean in the direction of the company's mission/problem and your personal/professional motivation. Avoid repeating the job description or listing skills; this is about **why you** are drawn to this company and role.
 - `## 2. Why me?`
-  Use exactly 3 punchy bullets. **Complement the CV — don't repeat it in paragraph form.** Name the strongest matching achievements and connect each back to the target role. Add specifics/numbers where you have them.
+  Use exactly 3 punchy bullets. **Complement the CV — don't repeat it in paragraph form.** Name the strongest matching achievements and connect each back to the target role. Add specifics/numbers where you have them. The first bullet should always be "Took end to end ownership of <project> and shipped it to production," or a close variant highlighting ownership and delivery. The second bullet should always be "Collaborated with <team> to <outcome>," or a close variant to highlight crossfunctional team collaboration. The third bullet should always be domain related work: "Built <system/feature> to <outcome>," or a close variant.
 - Logistics should be woven naturally into the close after the 3 bullets; do not add a third heading.
 
 ## The opening line (hook)

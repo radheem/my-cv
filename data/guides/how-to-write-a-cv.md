@@ -19,8 +19,8 @@ A summary paragraph is optional and usually omitted to keep it tight; the cover 
 carries the narrative.
 
 ## Standing rules
-- **Projects: top 2 only**, highest-relevance first. Rank candidate projects against the
-  JD; drop the rest. (`engine/rank.py` produces this ranking.)
+- **Projects: top 2 only**, highest-relevance first. Pick the Top two candidate projects against the
+  JD; drop the rest.
 - **Skills order:** `Languages` (spoken) first — always **English (fluent), Deutsch (A2)** —
   then `Programming Languages`, then exactly 3 job-tailored technical lines matching the
   prompt contract (e.g. Languages & Core, Systems & Infrastructure, Databases & Data Engineering).
