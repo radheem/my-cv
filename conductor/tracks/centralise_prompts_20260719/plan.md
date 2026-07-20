@@ -14,15 +14,15 @@
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Create and Refine Prompt Templates on Disk' (Protocol in workflow.md)** (d5722da)
 
 ## Phase 2: Refactor Rendering Engine (render.py and manifest.py)
-- [ ] **Task: Refactor CV and Cover Letter Rendering Core**
-    - [ ] Update `render_cv()` in `engine/domains/tailoring/render.py` to load `"cv"` from disk, remove hardcoded fallback, and stop guide file injection.
-    - [ ] Update `render_cover_letter()` in `engine/domains/tailoring/render.py` to load `"cover"` from disk, remove hardcoded fallback, and stop guide file injection.
-- [ ] **Task: Refactor Translation Core**
-    - [ ] Update `translate_markdown()` in `engine/domains/tailoring/render.py` to load `"translate"` from disk and remove the old hardcoded `_TRANSLATE_SYSTEM` fallback.
-- [ ] **Task: Refactor Manifest Logging**
-    - [ ] Update `engine/manifest.py` to reference `_CV_SYSTEM_FALLBACK`, `_COVER_SYSTEM_FALLBACK`, and `_TRANSLATE_SYSTEM_FALLBACK` from `render.py`.
-    - [ ] Update manifest build dictionary to log `translate` prompt metadata.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: Refactor Rendering Engine (render.py and manifest.py)' (Protocol in workflow.md)**
+- [x] **Task: Refactor CV and Cover Letter Rendering Core** (3daf400)
+    - [x] Update `render_cv()` in `engine/domains/tailoring/render.py` to load `"cv"` from disk, remove hardcoded fallback, and stop guide file injection. (3daf400)
+    - [x] Update `render_cover_letter()` in `engine/domains/tailoring/render.py` to load `"cover"` from disk, remove hardcoded fallback, and stop guide file injection. (3daf400)
+- [x] **Task: Refactor Translation Core** (3daf400)
+    - [x] Update `translate_markdown()` in `engine/domains/tailoring/render.py` to load `"translate"` from disk and remove the old hardcoded `_TRANSLATE_SYSTEM` fallback. (3daf400)
+- [x] **Task: Refactor Manifest Logging** (3daf400)
+    - [x] Update `engine/manifest.py` to reference `_CV_SYSTEM_FALLBACK`, `_COVER_SYSTEM_FALLBACK`, and `_TRANSLATE_SYSTEM_FALLBACK` from `render.py`. (3daf400)
+    - [x] Update manifest build dictionary to log `translate` prompt metadata. (3daf400)
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: Refactor Rendering Engine (render.py and manifest.py)' (Protocol in workflow.md)** (3daf400)
 
 ## Phase 3: Refactor Core Data Loader (cli.py), Caller Adjustments, and TDD/E2E Verification
 - [ ] **Task: Refactor CLI Data Loader**
