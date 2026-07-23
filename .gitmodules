@@ -1,0 +1,3 @@
+[submodule "PixelRAG"]
+	path = PixelRAG
+	url = https://github.com/StarTrail-org/PixelRAG.git

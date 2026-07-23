@@ -356,7 +356,7 @@ requires-dist = [
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "openai", marker = "extra == 'ollama'", specifier = ">=1.40" },
     { name = "openai", marker = "extra == 'screenshot'", specifier = ">=1.40" },
-    { name = "pixelrag", marker = "extra == 'screenshot'", directory = "../PixelRAG" },
+    { name = "pixelrag", marker = "extra == 'screenshot'", editable = "PixelRAG" },
     { name = "playwright", marker = "extra == 'fetch'", specifier = ">=1.45" },
     { name = "playwright-stealth", marker = "extra == 'fetch'", specifier = ">=1.0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
@@ -1037,14 +1037,17 @@ wheels = [
 
 [[package]]
 name = "pixelrag"
-version = "0.3.0"
-source = { directory = "../PixelRAG" }
+version = "0.4.0"
+source = { editable = "PixelRAG" }
 dependencies = [
     { name = "anthropic" },
     { name = "cef-capi-py" },
+    { name = "numpy" },
     { name = "pillow" },
     { name = "pymupdf" },
     { name = "pyturbojpeg" },
+    { name = "pyyaml" },
+    { name = "tqdm" },
     { name = "websockets" },
 ]
 
@@ -1061,37 +1064,39 @@ requires-dist = [
     { name = "fastapi", marker = "extra == 'serve'", specifier = ">=0.115.0" },
     { name = "huggingface-hub", marker = "extra == 'eval'", specifier = ">=0.20" },
     { name = "libzim", marker = "extra == 'kiwix'", specifier = ">=3.6.0" },
-    { name = "numpy", marker = "extra == 'embed'", specifier = ">=1.26.0" },
-    { name = "numpy", marker = "extra == 'serve'", specifier = ">=1.26.0" },
+    { name = "markdown", marker = "extra == 'index'", specifier = ">=3.4" },
+    { name = "numpy", specifier = ">=1.26.0" },
     { name = "openai", marker = "extra == 'eval'", specifier = ">=1.0" },
     { name = "pandas", marker = "extra == 'eval'", specifier = ">=2.0" },
     { name = "pdf2image", marker = "extra == 'pdf'", specifier = ">=1.16.0" },
     { name = "pillow", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'eval'", specifier = ">=10.0" },
     { name = "pixelrag", extras = ["embed"], marker = "extra == 'index'" },
-    { name = "pixelrag", extras = ["embed", "serve", "index"], marker = "extra == 'all'" },
+    { name = "pixelrag", extras = ["embed", "serve", "index", "qdrant"], marker = "extra == 'all'" },
     { name = "playwright", marker = "extra == 'playwright'", specifier = ">=1.40.0" },
     { name = "pydantic", marker = "extra == 'serve'", specifier = ">=2.0.0" },
     { name = "pymupdf", specifier = ">=1.27.2.3" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pyturbojpeg", specifier = ">=2.2.0" },
-    { name = "pyyaml", marker = "extra == 'index'", specifier = ">=6.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "qdrant-client", marker = "extra == 'qdrant'", specifier = ">=1.18.0" },
     { name = "qwen-vl-utils", marker = "extra == 'serve'" },
     { name = "torch", marker = "sys_platform == 'linux' and extra == 'embed'", specifier = ">=2.9.0", index = "https://download.pytorch.org/whl/cu129" },
     { name = "torch", marker = "sys_platform == 'linux' and extra == 'serve'", specifier = ">=2.9.0", index = "https://download.pytorch.org/whl/cu129" },
     { name = "torch", marker = "sys_platform != 'linux' and extra == 'embed'", specifier = ">=2.9.0" },
     { name = "torch", marker = "sys_platform != 'linux' and extra == 'serve'", specifier = ">=2.9.0" },
     { name = "torchvision", marker = "sys_platform == 'linux' and extra == 'embed'", specifier = ">=0.24.0", index = "https://download.pytorch.org/whl/cu129" },
+    { name = "torchvision", marker = "sys_platform == 'linux' and extra == 'serve'", specifier = ">=0.24.0", index = "https://download.pytorch.org/whl/cu129" },
     { name = "torchvision", marker = "sys_platform != 'linux' and extra == 'embed'", specifier = ">=0.24.0" },
-    { name = "tqdm", marker = "extra == 'embed'", specifier = ">=4.60.0" },
-    { name = "tqdm", marker = "extra == 'eval'", specifier = ">=4.60" },
+    { name = "torchvision", marker = "sys_platform != 'linux' and extra == 'serve'", specifier = ">=0.24.0" },
+    { name = "tqdm", specifier = ">=4.60.0" },
     { name = "trafilatura", marker = "extra == 'eval'", specifier = ">=1.6" },
     { name = "transformers", marker = "extra == 'embed'", specifier = ">=4.57.0" },
     { name = "transformers", marker = "extra == 'serve'", specifier = ">=4.57.0" },
     { name = "uvicorn", marker = "extra == 'serve'", specifier = ">=0.30.0" },
     { name = "websockets", specifier = ">=12.0" },
 ]
-provides-extras = ["embed", "serve", "index", "all", "gpu", "playwright", "pdf", "kiwix", "distributed", "eval", "dev"]
+provides-extras = ["embed", "serve", "index", "qdrant", "all", "gpu", "playwright", "pdf", "kiwix", "distributed", "eval", "dev"]
 
 [[package]]
 name = "platformdirs"

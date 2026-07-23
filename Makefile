@@ -64,6 +64,10 @@ capture: ## Capture ONE job link inside the ingest container: make capture URL="
 
 VISION_MODEL ?= qwen3-vl:32b
 
+.PHONY: install-screenshot
+install-screenshot: ## Initialize PixelRAG submodule and install screenshot deps
+	git submodule update --init PixelRAG && uv sync --extra screenshot --frozen
+
 .PHONY: screenshot
 screenshot: ## Capture a job posting via screenshot + Ollama vision (no session) in-container: make screenshot SOURCE=<url-or-file>
 	@test -n "$(SOURCE)" || { echo 'SOURCE required, e.g. make screenshot SOURCE="https://example.com/jobs/123"'; exit 2; }
