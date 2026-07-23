@@ -33,3 +33,5 @@ clusters:
     tags: [distributed, microservices, grpc, nats, event-driven, messaging, mcp, backend, fullstack, web, react, node, api, architecture]
   telecommunication:
     tags: [5g, oran, telecom, sdn, multus, open5gs, radio, ran, wireless]
+  fullstack-engineer:
+    tags: [fullstack, web, frontend, react, node, nestjs, typescript, javascript, ng, angular, next, vue, django, fastapi, css, html, responsive]
