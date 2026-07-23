@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-06-28T02:34:17+00:00",
+  "generated_at": "2026-07-23T02:48:39+00:00",
   "config_version": 1,
   "provider": "ollama",
   "model": "qwen3.6-35b-awq",
@@ -12,50 +12,58 @@
     "jobspec": 2000,
     "cv": 16000,
     "cover": 8000,
-    "judge": 1200
+    "judge": 1200,
+    "variant": 1500
   },
   "seed": null,
   "prompts": {
     "cv": {
-      "version": 3,
-      "sha256": "5b7df06839eb",
+      "version": 5,
+      "sha256": "df5f080d5fdb",
       "source": "data/prompts/cv.md"
     },
     "cover": {
-      "version": 2,
-      "sha256": "45aec8b7f449",
+      "version": 5,
+      "sha256": "b2bca9ac862c",
       "source": "data/prompts/cover.md"
+    },
+    "translate": {
+      "version": 1,
+      "sha256": "79726a96bc6e",
+      "source": "data/prompts/translate.md"
     },
     "jobspec": {
       "version": 1,
       "sha256": "6e93487e8b18",
       "source": "data/prompts/jobspec.md"
+    },
+    "variant": {
+      "version": 1,
+      "sha256": "960ee84e471c",
+      "source": "data/prompts/variant.md"
     }
   },
   "inputs_sha256": {
-    "data/config.yml": "b0ca71eb98b3",
-    "data/master-cv.md": "a02595fade32",
-    "data/profile.yml": "61b216490594",
-    "data/projects.yml": "a4aa5fc51197",
-    "data/taxonomy.yml": "065c4bd1655b",
-    "data/ranking.yml": "1da51796d17e",
-    "data/guides/how-to-write-a-cv.md": "3148f77eb3b2",
-    "data/guides/how-to-write-a-cover-letter.md": "18e8331f6d97",
+    "data/config.yml": "dcf58a70a5a1",
+    "data/master-cv.md": "3405c4a2a76c",
+    "data/profile.yml": "aee96f31ecd6",
+    "data/projects.yml": "def746881ccf",
+    "data/taxonomy.yml": "0820e8d5f068",
+    "data/ranking.yml": "44c4784a656f",
     "data/prompts/exemplars/cover.yml": "c85e0eeaa44a"
   },
-  "effective_config_sha256": "74c5d26ea08c",
+  "effective_config_sha256": "181c1e50f793",
   "decisions": {
     "top_projects": [
       "cv-tailor",
-      "oran-aiml",
-      "oran-testbed"
+      "oran-aiml"
     ],
     "clusters": [
-      "data-persistence",
-      "ml-ai",
-      "platform-cloud-native",
-      "web-api"
+      "ai-ml",
+      "distributed-system",
+      "information-management",
+      "platform-engineer"
     ],
-    "tagline": "Research & Software Engineer"
+    "tagline": "Student Assistant in Media Distribution and Security"
   }
 }

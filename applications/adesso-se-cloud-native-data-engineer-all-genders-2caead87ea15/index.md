@@ -2,7 +2,7 @@
 job_title: "Cloud Native Data Engineer"
 company: ""
 job_url: "https://www.linkedin.com/jobs/view/4441974062"
-status: "draft"
+status: "applied"
 clusters: ["ai-ml", "information-management", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/1hs-Z0ZC3HicN_dSo1MyjgC-wxTvEreX2"

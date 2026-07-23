@@ -3,16 +3,16 @@ recipient: ""
 company: "Fraunhofer Institute for Digital Media Technology IDMT"
 ---
 
-## 1. Warum Fraunhofer IDMT?
+## 1. Warum das Fraunhofer Institute for Digital Media Technology IDMT?
 
-Vertrauenswürdige KI erfordert mehr als präzise Vorhersagen; sie verlangt nach Systemen, die Daten im Ruhezustand und während der Übertragung schützen, während komplexe Signale analysiert werden. Die Media Distribution and Security group am Fraunhofer IDMT entwickelt genau diese Art von verantwortungsvoller Infrastruktur. Ich bewerbe mich für die Position als Research/Software Engineer, um an Projekten mitzuwirken, die fortschrittliches Machine Learning mit strengen Datenschutzstandards in Einklang bringen.
+Die Verbreitung synthetischer Medien macht vertrauenswürdige KI zu einem kritischen Infrastrukturproblem. Ich möchte mein Know-how im System Engineering einbringen, um Ihre Arbeiten in den Bereichen Media Forensics und datenschutzorientierte Analyse weiter auszubauen. Dies entspricht meinen beruflichen Zielen, sichere und überprüfbare KI-Pipelines aufzubauen. Als Masterstudent an der TU Ilmenau ermöglicht mir der Campus-Standort, Ihre MDS-Gruppe zu unterstützen, während ich mein Studium abschließe.
 
 ## 2. Warum ich?
 
-Mein Hintergrund verbindet Machine-Learning-Pipelines mit strengen Sicherheitspraktiken. Ich entwickelte eine containerisierte Anwendung, die Dokumente mithilfe eines lokalen Sprachmodells generiert und jede Ausgabe vor der Speicherung mit AES-256-GCM verschlüsselt. Dieses System protokolliert zudem jeden Generierungsschritt über Versionskontrolle und Qualitätsbenchmarks, wodurch Reproduzierbarkeit gewährleistet wird, ohne API-Schlüssel preiszugeben. Dieselbe Ausrichtung auf sichere, überprüfbare Workflows leitete meine Arbeit an einem O-RAN AIML framework, bei der ich den gesamten Trainingslebenszyklus mit Python und Kubernetes automatisierte. Das Projekt erhielt eine hervorragende Bewertung und erforderte einen sorgfältigen Umgang mit Feature Stores und Model Artifacts.
+Mein Hintergrund verbindet Machine-Learning-Infrastruktur, sichere Datenverarbeitung und interaktive Web-Tools. Die Arbeit mit InfluxDB-Zeitreihendaten und QoE-Metriken hat mir eine praktische Grundlage in Signalanalyse-Konzepten vermittelt, die für die Audio- und Videobearbeitung relevant sind. Gerne bring ich folgende technische Erfahrungen in Ihr Team ein:
 
-Darüber hinaus entwickle ich ereignisgesteuerte Backends, die Rohmetriken in umsetzbare Erkenntnisse umwandeln. Ich konfigurierte eine Kafka pipeline, die Leistungsdaten an mehrere Datenbanken und Visualisierungstools weiterleitet, und verpackte diese Datenflüsse anschließend in einen Docker Compose stack für eine einfache Bereitstellung. Ich bin erfahren darin, diese Backend-Systeme mit Python und JavaScript in Web-Demonstratoren zu übersetzen, und verpacke Dienste regelmäßig mit Git und Docker für eine konsistente Auslieferung. Diese Erfahrungen entsprechen direkt Ihren Anforderungen an KI-Softwareentwicklung, Unterstützung bei der Signalanalyse und datenschutzorientierte Ingenieursarbeit.
+- Übernahm die End-to-End-Verantwortung für ein O-RAN AIML-Framework und lieferte eine produktionsreife, Helm-verwaltete Kubernetes-Bereitstellung, die den gesamten ML-Lebenszyklus von der Feature-Extraktion bis zur KServe-Inferenz automatisierte.
+- Arbeitete mit Forschungsteams zusammen, um InfluxDB-Zeitreihendaten und Cassandra-Feature-Stores zu integrieren und so zuverlässige Datenpipelines für QoE-Vorhersagemodelle zu gewährleisten.
+- Entwickelte datenschutzkonforme Datenverarbeitungssysteme unter Verwendung von AES-256-GCM-Verschlüsselung und sicheren Telemetrie-Pipelines sowie interaktive Web-Demonstratoren mit ReactJS und NodeJS.
 
-## 3. Warum jetzt?
-
-Ich bin bereit, in die angewandte Forschung und Softwareentwicklung in einem Umfang einzusteigen, der meiner aktuellen Erfahrung entspricht. Mein Karriereweg war stets darauf ausgerichtet, sichere, datengetriebene Systeme aufzubauen, und das Fraunhofer IDMT bietet genau das Umfeld, um diese Arbeit zu vertiefen. Ich stehe ab sofort in Vollzeit zur Verfügung und bin auch an Werkstudentenmodellen oder Teilzeitregelungen interessiert, falls dies bevorzugt wird. Ich befinde mich derzeit in Deutschland und kann innerhalb von zwei bis drei Wochen innerhalb des Landes umziehen. Ein entsprechendes Angebot würde lediglich einen regulären Arbeitsvertrag erfordern, da ich bereits Blue Card-ready bin und keine zusätzlichen Sponsorship steps notwendig sind.
+Ich stehe ab sofort vollzeit zur Verfügung und kann innerhalb von zwei bis drei Wochen innerhalb Deutschlands umziehen. Für die Beantragung der Blue Card ist lediglich ein regulärer Arbeitsvertrag erforderlich.

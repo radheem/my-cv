@@ -1,14 +1,14 @@
 ---
-job_title: "Research/Software Engineer (Implied)"
+job_title: "Student Assistant in Media Distribution and Security"
 company: "Fraunhofer Institute for Digital Media Technology IDMT"
-job_url: ""
-status: "rejected"
-clusters: ["data-persistence", "ml-ai", "platform-cloud-native", "web-api"]
-date_found: "2026-06-28"
-drive_url: "https://drive.google.com/drive/folders/1MqTAfgDU032xuBEcsD2arRv2oc-2IbfH"
-drive_updated: "2026-06-28T02:36:08+00:00"
+job_url: "https://jobs.fraunhofer.de/job/Ilmenau-Student-assistant-in-the-field-of-Media-Distribution-and-Security-98693/968987201/?from=email&refid=28584820701&source=2&eid=146901-202628220828-32606822101&locale=en_US"
+status: "draft"
+clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
+date_found: "2026-07-23"
+drive_url: ""
+drive_updated: ""
 ---
 
-# Fraunhofer Institute for Digital Media Technology IDMT — Research/Software Engineer (Implied)
+# Fraunhofer Institute for Digital Media Technology IDMT — Student Assistant in Media Distribution and Security
 
 Tailored application. Source of truth: `cv.md` / `cover-letter.md` (+ `.de` German). PDFs are rendered with the LaTeX template and stored in Google Drive (`drive_url`).
