@@ -2,7 +2,7 @@
 job_title: "Software Engineer"
 company: "Walaris"
 job_url: ""
-status: "draft"
+status: "applied"
 clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: ""

@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/playwright/python:v1.60.0-noble
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       xvfb x11vnc x11-utils tini \
+       xvfb x11vnc x11-utils tini gosu \
        latexmk texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-lang-german lmodern \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,7 +35,6 @@ ENV DISPLAY=:99 \
     CV_TAILOR_SEARCH_CONFIG=/app/config/search.yml \
     SCREEN_GEOMETRY=1440x900x24
 
-# tini reaps Xvfb/x11vnc children cleanly.
-ENTRYPOINT ["tini", "--", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 # Default: run every search in the mounted config/search.yml.
 CMD ["cv-tailor", "hunt"]

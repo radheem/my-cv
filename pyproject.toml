@@ -37,7 +37,7 @@ screenshot = [
     "openai>=1.40",
 ]
 mcp = [
-    "mcp[cli]>=1.2.0",
+    "mcp[cli]>=1.25.0,<2.0.0",
 ]
 dev = [
     "pytest>=8",

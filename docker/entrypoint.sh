@@ -1,9 +1,32 @@
 #!/usr/bin/env bash
 # Start a virtual display + VNC, then exec the command (default: cv-tailor hunt).
+# Runs as root, chown's all mounted volumes, then gosu-switches to a non-root user.
 set -euo pipefail
 
 : "${DISPLAY:=:99}"
 : "${SCREEN_GEOMETRY:=1440x900x24}"
+: "${DOCKER_UID:=1000}"
+: "${DOCKER_GID:=1000}"
+: "${APP_USER:=cvuser}"
+
+# Create the app user/group matching the desired UID/GID (idempotent)
+if ! id "$APP_USER" &>/dev/null; then
+  groupadd -g "$DOCKER_GID" "$APP_USER"
+  useradd -m -u "$DOCKER_UID" -g "$DOCKER_GID" -s /bin/false "$APP_USER"
+fi
+
+# Only chown writable volumes (vault, applications, engine).
+# /app/data and /app/config are mounted :read-only — skip them entirely.
+VOL_DIRS=(
+  /app/vault
+  /app/applications
+  /app/engine
+)
+for d in "${VOL_DIRS[@]}"; do
+  if [ -d "$d" ]; then
+    chown -R "$APP_USER:$APP_USER" "$d" 2>/dev/null || true
+  fi
+done
 
 Xvfb "$DISPLAY" -screen 0 "$SCREEN_GEOMETRY" >/tmp/xvfb.log 2>&1 &
 # Wait for the display to come up (x11-utils provides xdpyinfo).
@@ -30,24 +53,12 @@ if [ "${SCRAPE_JOBS:-false}" != "true" ] && [ "${SCRAPE_JOBS:-false}" != "1" ] &
     echo "or run the crawl manually with:"
     echo "  docker compose exec -it ingest cv-tailor hunt"
     echo "========================================================================"
+    # sleep continues running as root (background processes remain up)
     exec sleep infinity
   fi
 fi
 
-# Run the command and capture its exit status
-set +e
-"$@"
-status=$?
-set -e
-
-# If the hunt command exits or fails (e.g. timeout), keep the container alive for VNC investigation
-if [ "$#" -ge 2 ] && [ "$1" = "cv-tailor" ] && [ "$2" = "hunt" ]; then
-  if [ "$status" -ne 0 ]; then
-    echo "========================================================================"
-    echo "The hunt crawler exited (status $status). Keeping container alive..."
-    echo "========================================================================"
-    exec sleep infinity
-  fi
-fi
-
-exit "$status"
+# Run the actual command as the non-root user via gosu
+# gosu reaps children cleanly like tini; no need for both.
+set -- gosu "$APP_USER" "$@"
+exec "$@"

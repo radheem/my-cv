@@ -4,7 +4,6 @@ services:
   ingest:
     build: .
     image: my-cv-ingest:latest
-    user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
     env_file: .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -35,7 +34,6 @@ services:
   mcp:
     build: .
     image: my-cv-ingest:latest
-    user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
     env_file: .env
     restart: always
     extra_hosts:
