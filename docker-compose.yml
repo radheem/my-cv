@@ -26,6 +26,8 @@ services:
       # Tailscale, bind to the tailnet IP: `VNC_BIND=<tailnet-ip> make docker-ingest`.
       # Do NOT use 0.0.0.0 — that also exposes it on the box's public interface.
       - "${VNC_BIND:-127.0.0.1}:5900:5900"
+      # Scraper server (Playwright browser pool)
+      - "8000:8000"
     stdin_open: true             # interactive OTP prompt (StdinResolver)
     tty: true
     # extra_hosts:               # uncomment if the generation endpoint host needs a static map

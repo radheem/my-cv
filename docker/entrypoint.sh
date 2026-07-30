@@ -43,6 +43,15 @@ else
   x11vnc -display "$DISPLAY" -forever -shared -rfbport 5900 -nopw >/tmp/x11vnc.log 2>&1 &
 fi
 
+# Scraper FastAPI server — runs as the app (non-root) user.
+# Exposed on port 8000; reachable from outside via host.docker.internal:8000
+# or from MCP container via localhost:8000 (since both share the same bridge network).
+if [ "${START_SCRAPER_SERVER:-true}" = "true" ]; then
+  PYTHONPATH=/app uvicorn engine.scraper_server:app --host 0.0.0.0 --port 8000 \
+    >/tmp/scraper.log 2>&1 &
+  echo "Scraper server started in background (PID=$!)"
+fi
+
 # Intercept cv-tailor hunt if SCRAPE_JOBS is not set to true
 if [ "${SCRAPE_JOBS:-false}" != "true" ] && [ "${SCRAPE_JOBS:-false}" != "1" ] && [ "${SCRAPE_JOBS:-false}" != "yes" ]; then
   if [ "$#" -ge 2 ] && [ "$1" = "cv-tailor" ] && [ "$2" = "hunt" ]; then

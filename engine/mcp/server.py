@@ -22,6 +22,61 @@ from ..workflows import (
 log = logging.getLogger("cv-tailor-mcp")
 mcp = FastMCP("cv-tailor", host="0.0.0.0", port=5000)
 
+# Scraper server container endpoint
+SCRAPER_SERVER_URL = "http://localhost:8000"
+
+
+def _container_scrape(url: str, timeout: int = 35) -> str:
+    """Scrape a URL through the container's scraper server.
+
+    Falls back gracefully when the scraper server is unreachable.
+    Returns cleaned text on success, or an error string on failure.
+    """
+    try:
+        import httpx
+
+        http_timeout = httpx.Timeout(timeout=timeout)
+        with httpx.Client(timeout=http_timeout) as client:
+            resp = client.get(
+                f"{SCRAPER_SERVER_URL}/scrape/text",
+                params={"url": url},
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get("success"):
+                    import re
+                    import html
+
+                    text = data.get("text", "")
+                    text = re.sub(
+                        r"<(script|style|head|header|footer|nav)\b[^>]*>([\s\S]*?)</\1>",
+                        "",
+                        text,
+                        flags=re.IGNORECASE,
+                    )
+                    text = re.sub(
+                        r"</?(p|div|br|h[1-6]|li|tr|th|td|blockquote)\b[^>]*>",
+                        "\n",
+                        text,
+                        flags=re.IGNORECASE,
+                    )
+                    text = re.sub(r"<[^>]+>", " ", text, flags=re.IGNORECASE)
+                    text = html.unescape(text)
+                    lines = [
+                        line.strip() for line in text.splitlines() if line.strip()
+                    ]
+                    return "\n".join(lines)
+                else:
+                    return f"ERROR: Scraper server returned error: {data.get('error', 'unknown')}"
+            else:
+                return f"ERROR: Scraper server returned status {resp.status_code}"
+    except ImportError:
+        log.warning("httpx not available for container scrape")
+        return "ERROR: httpx not installed"
+    except Exception as e:
+        log.debug("Container scraper unreachable: %s", str(e))
+        return f"ERROR: Container scraper unreachable: {str(e)}"
+
 
 class CustomEncoder(json.JSONEncoder):
     """Custom JSON encoder to gracefully handle PostgreSQL/psycopg data types.
@@ -223,6 +278,14 @@ def fetch_indeed_job(job_id: str) -> str:
             
     except Exception as e:
         log.exception(f"Failed to fetch Indeed job ID: {job_id}")
+        # Fallback: try container scraper when direct API fails
+        log.info("Direct API failed for Indeed job_id=%s, trying container scraper fallback", job_id)
+        try:
+            container_text = _container_scrape(url)
+            if container_text and not container_text.startswith("ERROR:"):
+                return f"SUCCESS (via container scraper):\n{container_text}"
+        except Exception:
+            log.warning("Container scraper fallback also failed for Indeed job_id=%s", job_id)
         return f"ERROR: Failed to fetch Indeed job: {str(e)}"
 
 
