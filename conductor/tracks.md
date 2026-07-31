@@ -11,5 +11,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Playwright Scraper Endpoint**
+- [~] **Track: Playwright Scraper Endpoint**
 *Link: [./tracks/playwright_scraper_endpoint_20260730/](./tracks/playwright_scraper_endpoint_20260730/)*

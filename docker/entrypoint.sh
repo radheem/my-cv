@@ -46,7 +46,9 @@ fi
 # Scraper FastAPI server — runs as the app (non-root) user.
 # Exposed on port 8000; reachable from outside via host.docker.internal:8000
 # or from MCP container via localhost:8000 (since both share the same bridge network).
+# Must export DISPLAY so Chromium can connect to Xvfb when headless=False.
 if [ "${START_SCRAPER_SERVER:-true}" = "true" ]; then
+  export DISPLAY="${DISPLAY:-:99}"
   PYTHONPATH=/app uvicorn engine.scraper_server:app --host 0.0.0.0 --port 8000 \
     >/tmp/scraper.log 2>&1 &
   echo "Scraper server started in background (PID=$!)"

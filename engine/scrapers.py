@@ -93,7 +93,7 @@ class BrowserPool:
             log.info("Launching Chromium.")
             pw = await self._ensure_pw()
             self._browser = await pw.chromium.launch(
-                headless=True,
+                headless=False,
                 args=BROWSER_ARGS,
             )
         return self._browser

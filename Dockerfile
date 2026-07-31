@@ -17,6 +17,7 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY engine ./engine
 RUN pip install --no-cache-dir -e '.[fetch,generate,ollama,mcp]' \
+    && pip install --no-cache-dir pytest pytest-asyncio httpx fastapi \
     && playwright install chromium
 
 # Persona data (John Doe sample); mounted read-only at runtime, copied for standalone runs.
