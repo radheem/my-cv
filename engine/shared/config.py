@@ -56,6 +56,7 @@ _DEFAULTS: dict[str, Any] = {
             "platform-engineer": "platform-engineer.md",
             "distributed-system": "distributed-system.md",
             "telecommunication": "telecommunication.md",
+            "fullstack-engineer": "full-stack-engineer.md",
         },
     },
 }

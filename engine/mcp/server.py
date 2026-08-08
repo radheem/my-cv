@@ -653,7 +653,7 @@ def preview_cv_variant(slug: str) -> str:
 
         # 3. Call LLM matching
         summary, chosen_cluster = variants.match_cluster_via_llm(job_text, taxonomy)
-        predicted_file = cv_variants.get(chosen_cluster, "platform-cloud-native.md")
+        predicted_file = cv_variants.get(chosen_cluster, "platform-engineer.md")
 
         return json.dumps({
             "slug": slug,

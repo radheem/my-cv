@@ -9,10 +9,12 @@ set -euo pipefail
 : "${DOCKER_GID:=1000}"
 : "${APP_USER:=cvuser}"
 
-# Create the app user/group matching the desired UID/GID (idempotent)
+# Create the app user/group matching the desired UID/GID (idempotent).
+# The base image ships its own uid-1000 'ubuntu' user, so allow APP_USER to
+# share the same UID/GID (-o) instead of colliding on it.
 if ! id "$APP_USER" &>/dev/null; then
-  groupadd -g "$DOCKER_GID" "$APP_USER"
-  useradd -m -u "$DOCKER_UID" -g "$DOCKER_GID" -s /bin/false "$APP_USER"
+  groupadd -o -g "$DOCKER_GID" "$APP_USER" 2>/dev/null || true
+  useradd -o -m -u "$DOCKER_UID" -g "$DOCKER_GID" -s /bin/false "$APP_USER"
 fi
 
 # Only chown writable volumes (vault, applications, engine).

@@ -108,8 +108,8 @@ def select_best_cv_variant(
     chosen_file = cv_variants.get(chosen_cluster)
     if not chosen_file:
         # Fallback if the cluster isn't mapped
-        log.warning(f"Chosen cluster '{chosen_cluster}' has no mapped CV variant. Fallback to platform-cloud-native.")
-        chosen_file = cv_variants.get("platform-cloud-native", "platform-cloud-native.md")
+        log.warning(f"Chosen cluster '{chosen_cluster}' has no mapped CV variant. Fallback to platform-engineer.")
+        chosen_file = cv_variants.get("platform-engineer", "platform-engineer.md")
         
     log.info(f"LLM-based CV variant selected: {chosen_file} for cluster '{chosen_cluster}'")
     return chosen_file

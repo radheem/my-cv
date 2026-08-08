@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "generated_at": "2026-08-08T00:17:27+00:00",
+  "config_version": 1,
+  "provider": "ollama",
+  "model": "qwen3.6-35b-awq",
+  "temperature": {
+    "json": 0.0,
+    "text": 0.4
+  },
+  "max_tokens": {
+    "jobspec": 2000,
+    "cv": 16000,
+    "cover": 8000,
+    "judge": 1200,
+    "variant": 1500
+  },
+  "seed": null,
+  "prompts": {
+    "cv": {
+      "version": 5,
+      "sha256": "df5f080d5fdb",
+      "source": "data/prompts/cv.md"
+    },
+    "cover": {
+      "version": 5,
+      "sha256": "b2bca9ac862c",
+      "source": "data/prompts/cover.md"
+    },
+    "translate": {
+      "version": 1,
+      "sha256": "79726a96bc6e",
+      "source": "data/prompts/translate.md"
+    },
+    "jobspec": {
+      "version": 1,
+      "sha256": "6e93487e8b18",
+      "source": "data/prompts/jobspec.md"
+    },
+    "variant": {
+      "version": 1,
+      "sha256": "960ee84e471c",
+      "source": "data/prompts/variant.md"
+    }
+  },
+  "inputs_sha256": {
+    "data/config.yml": "dcf58a70a5a1",
+    "data/master-cv.md": "3405c4a2a76c",
+    "data/profile.yml": "aee96f31ecd6",
+    "data/projects.yml": "def746881ccf",
+    "data/taxonomy.yml": "16da03511d69",
+    "data/ranking.yml": "44c4784a656f",
+    "data/prompts/exemplars/cover.yml": "c85e0eeaa44a"
+  },
+  "effective_config_sha256": "492768f05327",
+  "decisions": {
+    "top_projects": [
+      "second-brain",
+      "cv-tailor"
+    ],
+    "clusters": [
+      "ai-ml",
+      "distributed-system",
+      "fullstack-engineer"
+    ],
+    "tagline": "Senior Software Engineer Full Stack"
+  }
+}

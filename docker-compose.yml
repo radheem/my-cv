@@ -53,6 +53,7 @@ services:
       - ./vault:/app/vault
       - ./data:/app/data:ro
       - ./config:/app/config:ro
+      - ./docker/entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
     ports:
       - "5000:5000"
     command: ["python", "-m", "engine.mcp.server"]
