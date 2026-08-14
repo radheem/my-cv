@@ -1,0 +1,160 @@
+\documentclass[10pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Database Engineer}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{AiVader GmbH - Research Engineering Intern}{Germany}{02/2026 - 04/2026}
+\bullets
+  \item Brought the database and analytics stack to operational readiness, configuring ETL into a Cassandra Feature Store.
+  \item Integrated xApp extracting real-time radio metrics over the E2 interface and publishing them to amessage broker.
+  \item Established fully reproducible, runbook-configured deployments of the containerized database-backed stack (Open5GS, InfluxDB, Cassandra) on a single Linux host.
+  \item Tech: InfluxDB, MongoDB, Cassandra, Kafka, Telegraf, PostgreSQL, Python, SQL.
+\bulletsend
+\vspace{1.5pt}
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Architected and dockerized backend services, leading system design reviews to optimize data persistence and transactional workflows across MySQL and MongoDB.
+  \item Engineered new data-driven features and APIs, establishing robust documentation standards for scalable information management systems.
+  \item Streamlined deployment pipelines and infrastructure provisioning on AWS EC2 and Kubernetes to support high-availability data services.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Optimized transactional engine performance and data persistence by integrating PostgreSQL and DynamoDB, directly reducing latency spikes in high-throughput exchange services.
+  \item Designed and implemented comprehensive data analytics and monitoring dashboards using Grafana, Prometheus, and OpenTelemetry to track transactional throughput and Kafka consumer lag.
+  \item Led system design reviews and code architecture for critical database-backed services, mentoring junior engineers on scalable data persistence patterns.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projects}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Built a durable, retryable document-ingestion pipeline with Hatchet (extract → chunk → embed → summarize → index), featuring per-step timeouts and crash-resilient retries.
+  \item Implemented vector search with pgvector (HNSW, cosine) and real-time progress streaming over NATS JetStream + SSE for persistent state tracking.
+  \item Deployed cloud-native on k3d with cert-manager TLS and ExternalDNS, keeping all inference local via dual llama.cpp servers behind an OpenAI-compatible API.
+\bulletsend
+\vspace{1.0pt}
+\role{Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) (\href{https://radheem.github.io/my-cv/projects/irs/}{portfolio})}{}{}
+\bullets
+  \item \textbf{Built a best-effort ETL side-channel} into \textbf{PostgreSQL (sqlc)}, \textbf{Dgraph} (graph database), and \textbf{DocumentDB} (NoSQL cold-archive), orchestrated by \textbf{Hatchet} with declarative routing.
+  \item \textbf{Migrated the platform's session state and messaging} off Dapr to native \textbf{NATS JetStream (streaming)} and \textbf{NATS KV (session state)}, with direct gRPC connections to optimize transactional latency.
+  \item \textbf{Integrated multiple third-party vendors} via an adaptor/anti-corruption contract featuring \textbf{CUE-based schema mapping} to enforce structural data integrity across heterogeneous sources.
+  \item \textbf{Deployed Go microservices} using \textbf{Kubernetes}, \textbf{kustomize}, \textbf{Skaffold}, and \textbf{Cilium}, ensuring robust, isolated routing and high-availability operations.
+\bulletsend
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Languages (spoken): English (fluent), German / Deutsch (A2)
+  \item Databases \& Persistence: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item Data \& Analytics: pandas, scikit-learn, Kubeflow Pipelines, KServe, Grafana, VictoriaMetrics
+  \item Programming Languages: Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item Systems \& ETL/Streaming: Kafka, NATS (JetStream + KV), Hatchet, MCP (FastMCP), gRPC, Dapr, OpenTelemetry
+  \item Cloud/Infra \& Architecture: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
+  \item Web: ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Database Engineer}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{AiVader GmbH - Research Engineering Intern}{Germany}{02/2026 - 04/2026}
+\bullets
+  \item Bereitstellung der Datenbank- und Analytics-Stacks für den produktiven Einsatz, Konfiguration des ETL-Prozesses in einen Cassandra Feature Store.
+  \item Integration einer xApp zur Extrahierung von Echtzeit-Funkmetriken über die E2-Schnittstelle und Veröffentlichung über einen Message Broker.
+  \item Aufbau vollständig reproduzierbarer, runbook-konfigurierter Bereitstellungen des containerisierten, datenbankgestützten Stacks (Open5GS, InfluxDB, Cassandra) auf einem einzelnen Linux-Host.
+  \item Tech: InfluxDB, MongoDB, Cassandra, Kafka, Telegraf, PostgreSQL, Python, SQL.
+\bulletsend
+\vspace{1.5pt}
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Architektur und Dockerisierung von Backend-Services, Leitung von Systemdesign-Reviews zur Optimierung der Datenspeicherung und transaktionaler Workflows über MySQL und MongoDB.
+  \item Entwicklung datengetriebener Features und APIs, Etablierung robuster Dokumentationsstandards für skalierbare Informationsverwaltungssysteme.
+  \item Optimierung von Deployment-Pipelines und Infrastruktur-Bereitstellung auf AWS EC2 und Kubernetes zur Unterstützung hochverfügbarer Daten-Services.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Optimierung der Performance der Transaktions-Engine und der Datenspeicherung durch Integration von PostgreSQL und DynamoDB, wodurch Latenzspitzen in hochdurchsatzstarken Börsen-Services direkt reduziert wurden.
+  \item Konzeption und Implementierung umfassender Datenanalyse- und Monitoring-Dashboards mit Grafana, Prometheus und OpenTelemetry zur Überwachung des Transaktionsdurchsatzes und des Kafka Consumer Lag.
+  \item Leitung von Systemdesign-Reviews und Code-Architektur für kritische datenbankgestützte Services, Mentoring von Junior-Entwicklern zu skalierbaren Mustern der Datenspeicherung.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projekte}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Aufbau eines robusten, wiederholbaren Dokumenten-Ingestion-Pipelines mit Hatchet (extract → chunk → embed → summarize → index), mit Timeout-Konfiguration pro Schritt und absturzsicheren Wiederholungen.
+  \item Implementierung der Vektorsuche mit pgvector (HNSW, cosine) und Echtzeit-Status-Streaming über NATS JetStream + SSE zur persistenten Zustandsverfolgung.
+  \item Cloud-native Bereitstellung auf k3d mit cert-manager TLS und ExternalDNS, wobei alle Inferenzen lokal über zwei llama.cpp-Server hinter einer OpenAI-kompatiblen API ausgeführt werden.
+\bulletsend
+\vspace{1.0pt}
+\role{Information Retrieval System (IRS) - Distributed Systems Platform (Stealth Project) (\href{https://radheem.github.io/my-cv/projects/irs/}{portfolio})}{}{}
+\bullets
+  \item \textbf{Aufbau eines best-effort ETL-Side-Channels} in \textbf{PostgreSQL (sqlc)}, \textbf{Dgraph} (Graphdatenbank) und \textbf{DocumentDB} (NoSQL Cold-Archive), orchestriert von \textbf{Hatchet} mit deklarativem Routing.
+  \item \textbf{Migration des Session-State und der Messaging-Komponenten} der Plattform von Dapr zu nativen \textbf{NATS JetStream (Streaming)} und \textbf{NATS KV (Session-State)}, mit direkten gRPC-Verbindungen zur Optimierung der Transaktionslatenz.
+  \item \textbf{Integration mehrerer Drittanbieter} über einen Adaptor/Anti-Corruption-Contract mit \textbf{CUE-basierter Schema-Mapping}, um die strukturelle Datenintegrität über heterogene Quellen hinweg durchzusetzen.
+  \item \textbf{Bereitstellung von Go-Mikroservices} mit \textbf{Kubernetes}, \textbf{kustomize}, \textbf{Skaffold} und \textbf{Cilium}, um robustes, isoliertes Routing und hochverfügbare Betriebsabläufe zu gewährleisten.
+\bulletsend
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Sprachen (gesprochen): Englisch (fließend), Deutsch (A2)
+  \item Datenbanken \& Persistenz: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake
+  \item Daten \& Analytics: pandas, scikit-learn, Kubeflow Pipelines, KServe, Grafana, VictoriaMetrics
+  \item Programmiersprachen: Python, SQL, Go, TypeScript, JavaScript, Bash, PHP
+  \item Systeme \& ETL/Streaming: Kafka, NATS (JetStream + KV), Hatchet, MCP (FastMCP), gRPC, Dapr, OpenTelemetry
+  \item Cloud/Infra \& Architektur: Kubernetes, kustomize, Skaffold, Cilium, external-dns, Docker, Helm, Terraform, AWS (EC2, RDS, DynamoDB)
+  \item Web: ReactJS, NodeJS, NestJS, Django
+\end{itemize}
+
+\end{document}
