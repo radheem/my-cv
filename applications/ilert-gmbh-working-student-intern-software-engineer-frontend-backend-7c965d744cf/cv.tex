@@ -1,0 +1,170 @@
+\documentclass[10pt,a4paper]{resume}
+
+\newcommand{\Portfolio}{https://radheem.github.io/my-cv}
+\newcommand{\PortfolioText}{portfolio}
+\newcommand{\GitHub}{https://github.com/radheem}
+\newcommand{\LinkedIn}{https://www.linkedin.com/in/radheem-razi}
+\newcommand{\Email}{sheikh.radheem@gmail.com}
+
+\begin{document}
+
+%% ===== ENGLISH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Working Student / Intern (Engineering)}\\[6pt]
+  \small
+  Ilmenau, Germany \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Experience}
+
+\role{AiVader GmbH - Research Engineering Intern}{Germany}{02/2026 - 04/2026}
+\bullets
+  \item Containerized and deployed a full-stack 5G testbed with Docker Compose, integrating Open5GS 5GC, O-RAN SC RIC, and srsRAN/OCUDU gNB components.
+  \item Built the Kafka-to-InfluxDB-MongoDB fan-out data pipeline and Grafana dashboards for real-time KPM visualization.
+  \item Tech: Docker, Docker Compose, Kafka, InfluxDB, Grafana, Python, Kubernetes, Linux, C++.
+\bulletsend
+\vspace{1.5pt}
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Developed and shipped fullstack features using ReactJS, NodeJS, TypeScript, NestJS, and PHP, connecting the UI through REST APIs to MySQL and MongoDB.
+  \item Dockerized backend services and streamlined deployment pipelines on AWS EC2 and Kubernetes.
+  \item Led system design and code reviews across frontend and backend teams.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Built and maintained ReactJS frontend and NodeJS/Go backend services for a high-throughput trading platform.
+  \item Integrated OpenTelemetry, Prometheus, and Grafana to monitor engine throughput and Kafka consumer lag.
+  \item Mentored junior engineers and maintained release coordination for frontend and backend teams.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Education}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projects}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Built and shipped a fullstack RAG application: FastAPI backend (Python) with Next.js frontend for document upload, semantic search, and chat.
+  \item Designed a durable, retryable ingestion pipeline (Hatchet → extract → chunk → embed → summarize → index) streaming progress via NATS JetStream + SSE.
+  \item Implemented pgvector (HNSW, cosine) for semantic search; all inference served privately by llama.cpp.
+\bulletsend
+\vspace{1.0pt}
+\role{cv-tailor (LLM CV/Cover Tailoring) (\href{https://radheem.github.io/my-cv/projects/cv-tailor/}{portfolio})}{}{}
+\bullets
+  \item Built a Python CLI and FastMCP Server that automates CV/Cover letter tailoring with unit-tested project ranking (Anthropic/Ollama).
+  \item Developed automated Gmail alert ingestion pipelines (LinkedIn, Glassdoor, Indeed) and bi-directional Google Sheets lifecycle tracking.
+  \item Integrated MkDocs Material static site, GitHub Actions CI/CD, and client-side AES-256-GCM document encryption.
+\bulletsend
+\vspace{1.0pt}
+\role{Sheet Dashboard (\href{https://radheem.github.io/my-cv/projects/csv-dashboard/}{portfolio})}{}{}
+\bullets
+  \item Built a zero-backend web app that turns any Google Sheet into a live dashboard with client-side CSV parsing, KPI cards, and charts.
+  \item Implemented an extensible data-type registry and charting components entirely in vanilla JavaScript.
+\bulletsend
+
+\section{Skills}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Languages: English (fluent), Deutsch (A2)
+  \item Frontend: ReactJS, Next.js, TypeScript, JavaScript, Vanilla JS, HTML5, CSS
+  \item Backend: Go, Python, NodeJS, NestJS, Django, FastAPI, REST, gRPC
+  \item Databases: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
+  \item Cloud/Infra: Kubernetes, Docker, Helm, kustomize, Skaffold, CI/CD (GitHub Actions), Terraform, AWS (EC2, S3)
+  \item Messaging \& Observability: NATS, OpenTelemetry, Prometheus, VictoriaMetrics, Grafana, DataDog
+  \item ML/Data: Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pandas
+  \item Programming Languages: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
+\end{itemize}
+
+\clearpage
+\selectlanguage{ngerman}
+
+%% ===== DEUTSCH =====
+\begin{center}
+  {\huge\bfseries Radheem Bin Razi}\\[3pt]
+  {\large Werkstudent / Praktikant (Ingenieurwesen)}\\[6pt]
+  \small
+  Ilmenau, Deutschland \,\textbar\,
+  \href{mailto:\Email}{\Email} \,\textbar\,
+  \href{\Portfolio}{\PortfolioText} \,\textbar\,
+  \href{\LinkedIn}{linkedin} \,\textbar\,
+  \href{\GitHub}{github}
+\end{center}
+\vspace{2pt}
+
+\section{Berufserfahrung}
+
+\role{AiVader GmbH - Research Engineering Intern}{Germany}{02/2026 - 04/2026}
+\bullets
+  \item Containerisierung und Bereitstellung eines Full-Stack-5G-Testbeds mit Docker Compose; Integration von Open5GS 5GC, O-RAN SC RIC sowie srsRAN/OCUDU gNB-Komponenten.
+  \item Aufbau der Kafka-zu-InfluxDB-MongoDB-Fan-out-Datenpipeline sowie Grafana-Dashboards zur Echtzeit-KPM-Visualisierung.
+  \item Tech: Docker, Docker Compose, Kafka, InfluxDB, Grafana, Python, Kubernetes, Linux, C++.
+\bulletsend
+\vspace{1.5pt}
+\role{Al Hilal Invest - Senior Software Engineer}{Pakistan}{11/2023 - 03/2024}
+\bullets
+  \item Entwicklung und Bereitstellung von Fullstack-Features mit ReactJS, NodeJS, TypeScript, NestJS und PHP; Anbindung der UI über REST-APIs an MySQL und MongoDB.
+  \item Containerisierung von Backend-Diensten und Optimierung der Deployment-Pipelines auf AWS EC2 und Kubernetes.
+  \item Leitung des Systemdesigns und der Code-Reviews in Frontend- und Backend-Teams.
+\bulletsend
+\vspace{1.5pt}
+\role{Bluefin Exchange - Senior Software Engineer}{Pakistan}{06/2021 - 08/2023}
+\bullets
+  \item Aufbau und Wartung von ReactJS-Frontend- und NodeJS/Go-Backend-Diensten für eine hochperformante Handelsplattform.
+  \item Integration von OpenTelemetry, Prometheus und Grafana zur Überwachung der Engine-Durchsatzrate und des Kafka-Consumer-Lags.
+  \item Mentoring von Junior-Entwicklern und Koordination der Releases für Frontend- und Backend-Teams.
+\bulletsend
+\vspace{1.5pt}
+
+\section{Ausbildung}
+
+\edu{Technical University of Ilmenau}{Master of Research, Computer Systems and Engineering}{04/2024 - Present}
+\vspace{2pt}
+\edu{National University of Computer and Engineering Sciences}{Bachelor of Science, Computer Science}{06/2016 - 08/2020}
+
+\section{Projekte}
+
+\role{My Notebook (Document RAG) (\href{https://radheem.github.io/my-cv/projects/my-notebook/}{portfolio})}{}{}
+\bullets
+  \item Aufbau und Bereitstellung einer Fullstack-RAG-Anwendung: FastAPI-Backend (Python) mit Next.js-Frontend für Dokumenten-Upload, semantische Suche und Chat.
+  \item Entwicklung einer robusten, wiederholbaren Ingestion-Pipeline (Hatchet → extract → chunk → embed → summarize → index) mit Fortschrittsstreaming über NATS JetStream + SSE.
+  \item Implementierung von pgvector (HNSW, cosine) für semantische Suche; alle Inferences werden privat über llama.cpp bereitgestellt.
+\bulletsend
+\vspace{1.0pt}
+\role{cv-tailor (LLM CV/Cover Tailoring) (\href{https://radheem.github.io/my-cv/projects/cv-tailor/}{portfolio})}{}{}
+\bullets
+  \item Entwicklung einer Python-CLI und eines FastMCP-Servers zur Automatisierung der CV-/Anschreiben-Anpassung mit unit-getesteter Projekt-Ranking (Anthropic/Ollama).
+  \item Entwicklung automatisierter Gmail-Alert-Ingestion-Pipelines (LinkedIn, Glassdoor, Indeed) sowie bidirektionaler Google-Sheets-Lifecycle-Verfolgung.
+  \item Integration von MkDocs Material Static Site, GitHub Actions CI/CD sowie clientseitiger AES-256-GCM-Dokumentenverschlüsselung.
+\bulletsend
+\vspace{1.0pt}
+\role{Sheet Dashboard (\href{https://radheem.github.io/my-cv/projects/csv-dashboard/}{portfolio})}{}{}
+\bullets
+  \item Entwicklung einer Zero-Backend-Web-App, die beliebige Google Sheets in Live-Dashboards mit clientseitiger CSV-Parsing, KPI-Karten und Diagrammen umwandelt.
+  \item Implementierung eines erweiterbaren Datentyp-Registries und Diagramm-Komponenten ausschließlich in Vanilla JavaScript.
+\bulletsend
+
+\section{Kenntnisse}
+
+\begin{itemize}[leftmargin=1.4em,nosep,topsep=2pt]
+  \item Sprachen: Englisch (fließend), Deutsch (A2)
+  \item Frontend: ReactJS, Next.js, TypeScript, JavaScript, Vanilla JS, HTML5, CSS
+  \item Backend: Go, Python, NodeJS, NestJS, Django, FastAPI, REST, gRPC
+  \item Datenbanken: PostgreSQL (sqlc), MySQL, MongoDB/DocumentDB, Dgraph, DynamoDB, BigQuery, Snowflake, pgvector
+  \item Cloud/Infra: Kubernetes, Docker, Helm, kustomize, Skaffold, CI/CD (GitHub Actions), Terraform, AWS (EC2, S3)
+  \item Messaging \& Observability: NATS, OpenTelemetry, Prometheus, VictoriaMetrics, Grafana, DataDog
+  \item ML/Data: Kubeflow, KServe, scikit-learn, TensorFlow/Keras, pandas
+  \item Programmiersprachen: Go, Python, SQL, TypeScript, JavaScript, Bash, PHP
+\end{itemize}
+
+\end{document}

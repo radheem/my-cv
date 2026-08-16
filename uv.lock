@@ -352,7 +352,7 @@ requires-dist = [
     { name = "duckdb", specifier = ">=1.0.0" },
     { name = "jinja2", marker = "extra == 'generate'", specifier = ">=3.1" },
     { name = "markdown", specifier = ">=3.6" },
-    { name = "mcp", extras = ["cli"], marker = "extra == 'mcp'", specifier = ">=1.2.0" },
+    { name = "mcp", extras = ["cli"], marker = "extra == 'mcp'", specifier = ">=1.25.0,<2.0.0" },
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "openai", marker = "extra == 'ollama'", specifier = ">=1.40" },
     { name = "openai", marker = "extra == 'screenshot'", specifier = ">=1.40" },
