@@ -2,7 +2,7 @@
 job_title: "Working Student Engineer / Full-Stack Developer"
 company: "VoiceLine"
 job_url: "https://www.linkedin.com/jobs/view/4425792203/"
-status: "applied"
+status: "rejected"
 clusters: ["ai-ml", "distributed-system"]
 date_found: "2026-07-17"
 drive_url: "https://drive.google.com/drive/folders/1nZbXlz_4x2_YAkLNHvPSbLkb75LKUFuq"

@@ -2,7 +2,7 @@
 job_title: "Software Engineer, Data Platform"
 company: "World (Tools for Humanity)"
 job_url: "https://www.linkedin.com/jobs/view/4402644609/"
-status: "applied"
+status: "rejected"
 clusters: ["ai-ml", "distributed-system", "information-management", "platform-engineer"]
 date_found: "2026-07-14"
 drive_url: "https://drive.google.com/drive/folders/1E91__iiOBhAnqt05OYHJv4TtYnDhMcOP"

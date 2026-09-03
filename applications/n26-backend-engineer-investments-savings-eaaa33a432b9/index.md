@@ -2,7 +2,7 @@
 job_title: "Backend Engineer"
 company: "N26"
 job_url: "https://www.linkedin.com/comm/jobs/view/4432969843/"
-status: "applied"
+status: "rejected"
 clusters: ["distributed-system", "platform-engineer"]
 date_found: "2026-08-09"
 drive_url: "https://drive.google.com/drive/folders/1JrP87oR-w5zG-ofv5Fe9ntku7LuvQqME"

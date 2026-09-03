@@ -1,0 +1,9 @@
+## 1. Warum Deutsche Börse AG?
+Die Entwicklung von production-grade APIs für kritische Finanzmärkte erfordert eine Architektur, die Datenintegrität und unaufgeregte Zuverlässigkeit in den Mittelpunkt stellt. Das Ziel der Deutschen Börse, dauerhaftes Vertrauen in die globale Marktinfrastruktur aufzubauen, entspricht direkt meinem ingenieurtechnischen Schwerpunkt. Ich möchte skalierbare Go-Services entwerfen, die hochsensible Transaktionen abwickeln, ohne die Entwicklungsgeschwindigkeit zu beeinträchtigen. Mit meiner Erfahrung in verteilten Systemen und produktbewusster Softwareentwicklung möchte ich Ihr Team dabei unterstützen, vorhersehbare und gut beobachtbare Plattformfunktionen bereitzustellen.
+
+## 2. Warum ich?
+- Verantwortete die End-to-End-Lieferung von Go-Mikrodiensten für die IRS Platform, einschließlich der Implementierung authentifizierter Browsersitzungen zur Datenaufnahme von externen Anbietern, des Aufbaus von Messaging- und Cache-Infrastruktur auf NATS JetStream sowie der Bereitstellung auf Kubernetes über kustomize und Cilium.
+- Arbeitete eng mit Product Owners zusammen, um technische Anforderungen und Machbarkeit zu klären, dokumentierte Architekturentscheidungen und leitete Sprint Planning, Code Reviews sowie Backlog Refinement, wodurch vorhersehbare Lieferzyklen mit hoher Qualität etabliert wurden.
+- Entwickelte eine production-grade ETL-Pipeline mit sqlc und PostgreSQL, implementierte Ginkgo E2E Gates zur Durchsetzung strikter Datenkonsistenz und Abfrageperformance über komplexe Servicegrenzen hinweg.
+
+Ich stehe ab sofort in Vollzeit zur Verfügung, kann innerhalb von zwei bis drei Wochen innerhalb Deutschlands umziehen und erfülle die Voraussetzungen für die Blue Card. Ihr Team kann mich daher mit einem regulären Arbeitsvertrag onboarden, ohne zusätzliche Sponsorship-Aufwände.

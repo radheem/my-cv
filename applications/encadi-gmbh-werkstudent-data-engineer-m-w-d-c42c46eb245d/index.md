@@ -2,7 +2,7 @@
 job_title: "Data Analyst / Data Engineer"
 company: "encadi"
 job_url: "https://www.indeed.com/viewjob?from=appsharedroid&jk=10f1cabe8b5fc223"
-status: "applied"
+status: "rejected"
 clusters: ["information-management"]
 date_found: "2026-07-29"
 drive_url: "https://drive.google.com/drive/folders/1dNQALTAV9BJ_ahr1VyhG0hC9wzGxIPSR"

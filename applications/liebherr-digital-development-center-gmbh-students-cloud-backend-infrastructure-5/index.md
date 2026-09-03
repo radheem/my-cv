@@ -2,7 +2,7 @@
 job_title: "Student in Cloud Applications"
 company: "Liebherr Group"
 job_url: "https://careers.liebherr.com/job/Ulm-Students-Cloud-Backend-&-Infrastructure/1141251001/"
-status: "applied"
+status: "rejected"
 clusters: ["distributed-system", "platform-engineer"]
 date_found: "2026-07-19"
 drive_url: "https://drive.google.com/drive/folders/14rsvnT53be5ie3uDKK9sq7i5ENTYY81c"
